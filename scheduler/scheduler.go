@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
-	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/internal/gotenberg"
+	"github.com/simpledms/simpledms/internal/ocr"
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
@@ -25,7 +25,7 @@ type Scheduler struct {
 	tenantDBs              *tenantdbs.TenantDBs
 	s3Client               *minio.Client
 	bucketName             string
-	tikaClientNilable      *tika.Client
+	textExtractorNilable   *ocr.TextExtractor
 	gotenbergClientNilable *gotenberg.GotenbergClient
 	previewDiscoveryCursor map[*sqlx.TenantDB]int64
 	lastOrphanObjectScan   time.Time
@@ -37,7 +37,7 @@ func NewScheduler(
 	tenantDBs *tenantdbs.TenantDBs,
 	s3Client *minio.Client,
 	bucketName string,
-	tikaClient *tika.Client,
+	textExtractor *ocr.TextExtractor,
 	gotenbergClient *gotenberg.GotenbergClient,
 ) *Scheduler {
 	return &Scheduler{
@@ -46,7 +46,7 @@ func NewScheduler(
 		tenantDBs:              tenantDBs,
 		s3Client:               s3Client,
 		bucketName:             bucketName,
-		tikaClientNilable:      tikaClient,
+		textExtractorNilable:   textExtractor,
 		gotenbergClientNilable: gotenbergClient,
 		previewDiscoveryCursor: make(map[*sqlx.TenantDB]int64),
 	}

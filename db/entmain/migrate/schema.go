@@ -244,6 +244,7 @@ var (
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
+		{Name: "ocr_xberg_url", Type: field.TypeString, Nullable: true},
 		{Name: "gotenberg_url", Type: field.TypeString, Default: ""},
 		{Name: "ocr_max_file_size_mib", Type: field.TypeInt64, Default: 25},
 		{Name: "max_upload_size_mib", Type: field.TypeInt64, Default: 0},
@@ -259,13 +260,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[27]},
+				Columns:    []*schema.Column{SystemConfigsColumns[28]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[28]},
+				Columns:    []*schema.Column{SystemConfigsColumns[29]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

@@ -38,7 +38,7 @@ func (qq *SystemPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
-	return qq.Render(rw, req, ctx, qq.infra, "System", widget)
+	return qq.Render(rw, req, ctx, qq.infra, "System settings", widget)
 }
 
 func (qq *SystemPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
@@ -66,7 +66,7 @@ func (qq *SystemPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.T("System"),
+			Text: widget.T("System settings"),
 		},
 	}
 }

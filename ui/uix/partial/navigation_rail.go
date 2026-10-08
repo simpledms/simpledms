@@ -51,7 +51,7 @@ func NewNavigationRail(
 		return rail
 	}
 
-	rail.Items = primaryNavigationRailItems(ctx, infra)
+	rail.Items = primaryNavigationRailItems(ctx, infra, active)
 	if ctx.IsSpaceCtx() {
 		rail.CompactItems = spaceCompactNavigationRailItems(ctx, active)
 	}
@@ -89,7 +89,11 @@ func TenantSettingsNavigationRailValue(tenantID string) string {
 	return "tenant-settings-" + tenantID
 }
 
-func primaryNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widget.NavigationRailItem {
+func primaryNavigationRailItems(
+	ctx ctxx.Context,
+	infra *common.Infra,
+	active string,
+) []*widget.NavigationRailItem {
 	if !ctx.IsMainCtx() {
 		return []*widget.NavigationRailItem{signInNavigationRailItem(ctx)}
 	}
@@ -98,7 +102,7 @@ func primaryNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widget
 		return spaceNavigationRailItems(ctx)
 	}
 
-	items := mainNavigationRailItems(ctx)
+	items := mainNavigationRailItems(ctx, active)
 	items = appendNavigationDestinationItems(ctx, infra, items)
 	return infra.PluginRegistry().ExtendNavigationRailItems(ctx, items)
 }
@@ -119,6 +123,9 @@ func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widge
 		if ctx.IsSpaceCtx() {
 			items = append(items, pluginMenuNavigationRailItems(ctx, infra)...)
 		} else {
+			if ctx.MainCtx().Account.Role == mainrole.Admin {
+				items = append(items, systemNavigationRailGroup(ctx))
+			}
 			items = append(
 				items,
 				accountTenantNavigationRailItems(ctx, pluginMenuNavigationRailItems(ctx, infra))...,
@@ -150,7 +157,7 @@ func footerNavigationRailItems(
 	)
 }
 
-func mainNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
+func mainNavigationRailItems(ctx ctxx.Context, active string) []*widget.NavigationRailItem {
 	var items []*widget.NavigationRailItem
 	if ctx.IsSpaceCtx() {
 		return items
@@ -163,7 +170,7 @@ func mainNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 		items = append(items, mcpCredentialsNavigationRailItem(ctx))
 	}
 	if ctx.MainCtx().Account.Role == mainrole.Admin {
-		items = append(items, systemNavigationRailItem(ctx))
+		items = append(items, systemNavigationRailItem(ctx, active))
 	}
 
 	return items
@@ -532,13 +539,49 @@ func mcpCredentialsNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailIt
 	)
 }
 
-func systemNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
-	return pageNavigationRailItem(
+// systemNavigationRailItem is the only System destination in the collapsed rail and the
+// navigation bar, which do not show groups. It stays active on all System sub-pages, which are
+// listed in the expanded rail by systemNavigationRailGroup.
+func systemNavigationRailItem(ctx ctxx.Context, active string) *widget.NavigationRailItem {
+	item := pageNavigationRailItem(
 		"system",
 		widget.T("System").String(ctx),
 		"settings",
 		route2.System(),
 	)
+	if isSystemNavigationRailActive(active) {
+		item.Value = active
+	}
+	item.IsCollapsedOnly = true
+	return item
+}
+
+func systemNavigationRailGroup(ctx ctxx.Context) *widget.NavigationRailItem {
+	return &widget.NavigationRailItem{
+		Key:   "system-group",
+		Label: widget.T("System").String(ctx),
+		Icon:  "settings",
+		// same behavior as the organization groups
+		IsCollapsible: true,
+		Children: []*widget.NavigationRailItem{
+			pageNavigationRailItem(
+				"system",
+				widget.T("Settings").String(ctx),
+				"tune",
+				route2.System(),
+			),
+			pageNavigationRailItem(
+				"system-status",
+				widget.T("Status").String(ctx),
+				"monitor_heart",
+				route2.SystemStatus(),
+			),
+		},
+	}
+}
+
+func isSystemNavigationRailActive(active string) bool {
+	return active == "system" || active == "system-status"
 }
 
 func signInNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {

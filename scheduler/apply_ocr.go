@@ -2,16 +2,14 @@ package scheduler
 
 import (
 	"context"
+	"io"
 	"log"
-	"regexp"
 	"runtime/debug"
-	"strings"
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
-	"github.com/marcobeierer/go-tika"
 
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -27,8 +25,8 @@ import (
 )
 
 func (qq *Scheduler) applyOCR() {
-	if qq.tikaClientNilable == nil {
-		log.Println("tika client not initialized")
+	if qq.textExtractorNilable == nil {
+		log.Println("neither Xberg nor Tika configured, OCR disabled")
 		return
 	}
 
@@ -173,9 +171,6 @@ func (qq *Scheduler) applyOCROneFile(
 	tenantIdentity *age.X25519Identity,
 	currentVersion *storedfilemodel.StoredFile,
 ) (string, bool, bool, error) {
-	// TODO use language of user?
-	tikaHeader := tika.NewHeader().AcceptText().SetOCRLanguage("eng+deu+fra+ita+spa")
-
 	if ocrutil.IsFileTooLarge(currentVersion.Data.Size) {
 		return "", false, true, nil
 	}
@@ -184,52 +179,21 @@ func (qq *Scheduler) applyOCROneFile(
 		return "", true, false, nil
 	}
 
-	openedFile, err := qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, currentVersion)
+	openFile := func() (io.ReadCloser, error) {
+		return qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, currentVersion)
+	}
+	parsedContent, err := qq.textExtractorNilable.ExtractText(
+		ctx,
+		currentVersion.Data.Filename,
+		currentVersion.Data.MimeType,
+		openFile,
+	)
 	if err != nil {
 		log.Println(err)
 		return "", false, false, err
 	}
-	defer func() {
-		err := openedFile.Close()
-		if err != nil {
-			log.Println(err)
-		}
-	}()
 
-	parsedContent, err := qq.tikaClientNilable.Parse(context.Background(), openedFile, tikaHeader)
-	if err != nil {
-		log.Println(err)
-		return "", false, false, err
-	}
-
-	return removeAllWhitespace(parsedContent), false, false, nil
-}
-
-var regexpEndsAlphanumeric = regexp.MustCompile("[a-zA-Z0-9]$")
-
-func removeAllWhitespace(text string) string {
-	parsedContentSlice := strings.Split(text, "\n")
-	var contentSlice []string
-
-	// remove all whitespace
-	for _, paragraph := range parsedContentSlice {
-		trimmed := strings.TrimSpace(paragraph)
-
-		if trimmed == "" {
-			continue
-		}
-
-		// add dot if last char is alphanumeric
-		// TODO not a perfect solution, sometimes to many dots are added,
-		// 		for example if paragraph was not detected correctly by OCR
-		if regexpEndsAlphanumeric.MatchString(trimmed) {
-			trimmed += "."
-		}
-
-		contentSlice = append(contentSlice, trimmed)
-	}
-
-	return strings.Join(contentSlice, " ")
+	return parsedContent, false, false, nil
 }
 
 // hasVersionAtFinalDestination is file.HasVersionsWith(

@@ -1,93 +1,107 @@
 volumes:
-    mailpit_data:
-    versitygw_data:
-    #garage_meta:
-    #garage_data:
+  mailpit_data:
+  versitygw_data:
+  #garage_meta:
+  #garage_data:
 
 name: simpledms-dev
 
 services:
-    #docling:
-        #image: ghcr.io/docling-project/docling-serve-cpu
-        #container_name: docling-serve
-        #ports:
-            #- 5001:5001
-        #environment:
-            #- DOCLING_SERVE_ENABLE_UI=true
-    tika:
-        image: apache/tika:latest-full
-        #command: -c /tika-config.xml
-        ports:
-            - "9998:9998"
-        #volumes:
-            #- ./tika-config.xml:/tika-config.xml
-        restart: unless-stopped
+  #docling:
+  #image: ghcr.io/docling-project/docling-serve-cpu
+  #container_name: docling-serve
+  #ports:
+  #- 5001:5001
+  #environment:
+  #- DOCLING_SERVE_ENABLE_UI=true
+  tika:
+    image: apache/tika:latest-full
+    #command: -c /tika-config.xml
+    ports:
+      - "9998:9998"
+    #volumes:
+    #- ./tika-config.xml:/tika-config.xml
+    restart: unless-stopped
 
-    gotenberg:
-        image: gotenberg/gotenberg:8
-        command:
-            - "gotenberg"
-            - "--chromium-auto-start=true"
-            - "--chromium-deny-private-ips=true"
-            - "--libreoffice-deny-private-ips=true"
-            - "--api-disable-download-from=true"
-        ports:
-            - "3000:3000"
-        restart: unless-stopped
+  # preferred over Tika for OCR if both are configured; Tika is used as fallback for formats
+  # not supported by Xberg and for empty Xberg results
+  xberg:
+    # core is sufficient because SimpleDMS only uses Tesseract; pinned because the OCR options
+    # SimpleDMS sends are validated strictly and were verified with this version
+    image: ghcr.io/xberg-io/xberg:1.3.6-core
+    ports:
+      - "7072:8000"
+    environment:
+      # blocks Hugging Face model downloads; SimpleDMS needs no models
+      HF_HUB_OFFLINE: "1"
+    restart: unless-stopped
 
-    # TODO not in production
-    mailpit:
-        image: axllent/mailpit
-        restart: unless-stopped
-        volumes:
-            - mailpit_data:/var/lib/mailpit/data
-            - type: bind
-              source: ./.secrets
-              target: /srv/.secrets
-              read_only: true
-        ports:
-            - "8025:8025" # web-client
-            - "1025:1025" # smtp
-        environment:
-            MP_MAX_MESSAGES: 500000
-            MP_DATABASE: /var/lib/mailpit/data/mailpit.db
-            MP_SMTP_AUTH_ACCEPT_ANY: 1
-            MP_SMTP_TLS_CERT: /srv/.secrets/tls_certificate.pem
-            MP_SMTP_TLS_KEY: /srv/.secrets/tls_private_key.pem
-            MP_SMTP_REQUIRE_TLS: true
-            MP_SMTP_AUTH_ALLOW_INSECURE: 0
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    command:
+      - "gotenberg"
+      - "--chromium-auto-start=true"
+      - "--chromium-deny-private-ips=true"
+      - "--libreoffice-deny-private-ips=true"
+      - "--api-disable-download-from=true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
 
-    versitygw:
-      image: versity/versitygw:latest
-      restart: unless-stopped
-      ports:
-        - "3900:7070" # 3900 is default port of garage
-      volumes:
-        - versitygw_data:/data
-      environment:
-        ROOT_ACCESS_KEY_ID: unsafe-placeholder-access-key-id
-        ROOT_SECRET_ACCESS_KEY: unsafe-placeholder-secret-access-key
-        VGW_BACKEND: posix
-        VGW_BACKEND_ARG: /data
+  # TODO not in production
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit_data:/var/lib/mailpit/data
+      - type: bind
+        source: ./.secrets
+        target: /srv/.secrets
+        read_only: true
+    ports:
+      - "8025:8025" # web-client
+      - "1025:1025" # smtp
+    environment:
+      MP_MAX_MESSAGES: 500000
+      MP_DATABASE: /var/lib/mailpit/data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_TLS_CERT: /srv/.secrets/tls_certificate.pem
+      MP_SMTP_TLS_KEY: /srv/.secrets/tls_private_key.pem
+      MP_SMTP_REQUIRE_TLS: true
+      MP_SMTP_AUTH_ALLOW_INSECURE: 0
 
-    toxiproxy:
-      image: shopify/toxiproxy:latest
-      restart: unless-stopped
-      depends_on:
-        - versitygw
-      ports:
-        - "8474:8474" # API
-        - "7071:7071" # s3 proxy listen port for tests
+  versitygw:
+    image: versity/versitygw:latest
+    restart: unless-stopped
+    ports:
+      - "3900:7070" # 3900 is default port of garage
+    volumes:
+      - versitygw_data:/data
+    environment:
+      ROOT_ACCESS_KEY_ID: unsafe-placeholder-access-key-id
+      ROOT_SECRET_ACCESS_KEY: unsafe-placeholder-secret-access-key
+      VGW_BACKEND: posix
+      VGW_BACKEND_ARG: /data
 
-    #garage:
-      #image: dxflrs/garage:v2.1.0
-      #restart: unless-stopped
-      #volumes:
-        #- ./garage.toml:/etc/garage.toml
-        #- garage_meta:/var/lib/garage/meta
-        #- garage_data:/var/lib/garage/data
-      #ports: # TODO all necessary?
-        #- "3900:3900"
-        #- "3901:3901"
-        #- "3902:3902"
-        #- "3903:3903"
+  toxiproxy:
+    image: shopify/toxiproxy:latest
+    restart: unless-stopped
+    depends_on:
+      - versitygw
+    ports:
+      - "8474:8474" # API
+      - "7071:7071" # s3 proxy listen port for tests
+
+
+  #garage:
+  #image: dxflrs/garage:v2.1.0
+  #restart: unless-stopped
+  #volumes:
+  #- ./garage.toml:/etc/garage.toml
+  #- garage_meta:/var/lib/garage/meta
+  #- garage_data:/var/lib/garage/data
+  #ports: # TODO all necessary?
+  #- "3900:3900"
+  #- "3901:3901"
+  #- "3902:3902"
+  #- "3903:3903"

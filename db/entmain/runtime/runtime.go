@@ -272,15 +272,15 @@ func init() {
 	// systemconfig.DefaultOcrTikaURL holds the default value on creation for the ocr_tika_url field.
 	systemconfig.DefaultOcrTikaURL = systemconfigDescOcrTikaURL.Default.(string)
 	// systemconfigDescGotenbergURL is the schema descriptor for gotenberg_url field.
-	systemconfigDescGotenbergURL := systemconfigFields[21].Descriptor()
+	systemconfigDescGotenbergURL := systemconfigFields[22].Descriptor()
 	// systemconfig.DefaultGotenbergURL holds the default value on creation for the gotenberg_url field.
 	systemconfig.DefaultGotenbergURL = systemconfigDescGotenbergURL.Default.(string)
 	// systemconfigDescOcrMaxFileSizeMib is the schema descriptor for ocr_max_file_size_mib field.
-	systemconfigDescOcrMaxFileSizeMib := systemconfigFields[22].Descriptor()
+	systemconfigDescOcrMaxFileSizeMib := systemconfigFields[23].Descriptor()
 	// systemconfig.DefaultOcrMaxFileSizeMib holds the default value on creation for the ocr_max_file_size_mib field.
 	systemconfig.DefaultOcrMaxFileSizeMib = systemconfigDescOcrMaxFileSizeMib.Default.(int64)
 	// systemconfigDescMaxUploadSizeMib is the schema descriptor for max_upload_size_mib field.
-	systemconfigDescMaxUploadSizeMib := systemconfigFields[23].Descriptor()
+	systemconfigDescMaxUploadSizeMib := systemconfigFields[24].Descriptor()
 	// systemconfig.DefaultMaxUploadSizeMib holds the default value on creation for the max_upload_size_mib field.
 	systemconfig.DefaultMaxUploadSizeMib = systemconfigDescMaxUploadSizeMib.Default.(int64)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()

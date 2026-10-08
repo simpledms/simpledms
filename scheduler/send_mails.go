@@ -2,7 +2,6 @@ package scheduler
 
 import (
 	"context"
-	"crypto/tls"
 	"log"
 	"runtime/debug"
 	"time"
@@ -13,6 +12,8 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain/mail"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
+	mailermodel "github.com/simpledms/simpledms/model/main/mailer"
 )
 
 func (qq *Scheduler) sendMails() {
@@ -49,39 +50,19 @@ func (qq *Scheduler) sendMails() {
 			continue
 		}
 
-		// TODO make safe for production use
-		mailClient, err := mailer.NewClient(
-			systemConfigx.MailerHost,
-			mailer.WithPort(systemConfigx.MailerPort),
-			mailer.WithUsername(systemConfigx.MailerUsername),
-			mailer.WithPassword(systemConfigx.MailerPassword.String()),
-			mailer.WithSMTPAuth(mailer.SMTPAuthAutoDiscover),
-			// TODO is there a default timeout?
-			// mailer.WithTimeout()
-		)
+		mailClient, err := mailermodel.NewSMTPClient(&appmodel.MailerConfig{
+			MailerHost:               systemConfigx.MailerHost,
+			MailerPort:               systemConfigx.MailerPort,
+			MailerUsername:           systemConfigx.MailerUsername,
+			MailerPassword:           systemConfigx.MailerPassword.String(),
+			MailerFrom:               systemConfigx.MailerFrom,
+			MailerInsecureSkipVerify: systemConfigx.MailerInsecureSkipVerify,
+			MailerUseImplicitSSLTLS:  systemConfigx.MailerUseImplicitSslTLS,
+		})
 		if err != nil {
 			log.Println(err)
 			time.Sleep(1 * time.Minute)
 			continue
-		}
-		if systemConfigx.MailerInsecureSkipVerify {
-			err = mailClient.SetTLSConfig(&tls.Config{
-				// ServerName and MinVersion are set in mailer.NewClient() too;
-				// could not find a way to modify default tlsConfig
-				ServerName:         systemConfigx.MailerHost,
-				MinVersion:         mailer.DefaultTLSMinVersion,
-				InsecureSkipVerify: true,
-			})
-			if err != nil {
-				log.Println(err)
-				time.Sleep(1 * time.Minute)
-				continue
-			}
-		}
-		if systemConfigx.MailerUseImplicitSslTLS {
-			// cannot use WithSSL in initialization because it doesn't
-			// accept a value as input
-			mailClient.SetSSL(true)
 		}
 
 		ctx := context.Background()

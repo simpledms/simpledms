@@ -855,6 +855,11 @@
             ]
         },
         {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": ""
+        },
+        {
             "id": "Move",
             "message": "Move",
             "translation": ""
@@ -1342,8 +1347,7 @@
         {
             "id": "Open folder",
             "message": "Open folder",
-            "translation": "",
-            "comment": "TODO Go to, open, show?"
+            "translation": ""
         },
         {
             "id": "Only allowed in folder mode.",
@@ -1353,8 +1357,7 @@
         {
             "id": "Open file",
             "message": "Open file",
-            "translation": "",
-            "comment": "TODO Go to, or Open?"
+            "translation": ""
         },
         {
             "id": "Moved to «{Name}».",
@@ -2262,6 +2265,26 @@
             "translation": ""
         },
         {
+            "id": "System settings",
+            "message": "System settings",
+            "translation": ""
+        },
+        {
+            "id": "You must be an admin to access the system status.",
+            "message": "You must be an admin to access the system status.",
+            "translation": ""
+        },
+        {
+            "id": "System status",
+            "message": "System status",
+            "translation": ""
+        },
+        {
+            "id": "Check again",
+            "message": "Check again",
+            "translation": ""
+        },
+        {
             "id": "You must be signed in to manage organizations.",
             "message": "You must be signed in to manage organizations.",
             "translation": ""
@@ -2659,11 +2682,6 @@
         {
             "id": "Filter by source",
             "message": "Filter by source",
-            "translation": ""
-        },
-        {
-            "id": "File not found.",
-            "message": "File not found.",
             "translation": ""
         },
         {
@@ -4668,7 +4686,10 @@
             "translation": ""
         },
         {
-            "id": "Please sign in and change your password as soon as possible.",
+            "id": [
+                "changePasswordReminder",
+                "Please sign in and change your password as soon as possible."
+            ],
             "message": "Please sign in and change your password as soon as possible.",
             "translation": ""
         },
@@ -4773,6 +4794,452 @@
         {
             "id": "Max upload size must be greater than or equal to 0.",
             "message": "Max upload size must be greater than or equal to 0.",
+            "translation": ""
+        },
+        {
+            "id": "General",
+            "message": "General",
+            "translation": ""
+        },
+        {
+            "id": "Public origin",
+            "message": "Public origin",
+            "translation": ""
+        },
+        {
+            "id": "WebAuthn relying party ID",
+            "message": "WebAuthn relying party ID",
+            "translation": ""
+        },
+        {
+            "id": "Passphrase protection",
+            "message": "Passphrase protection",
+            "translation": ""
+        },
+        {
+            "id": "File encryption",
+            "message": "File encryption",
+            "translation": ""
+        },
+        {
+            "id": "Insecure cookies",
+            "message": "Insecure cookies",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size",
+            "message": "Max upload size",
+            "translation": ""
+        },
+        {
+            "id": "Override stored config on startup",
+            "message": "Override stored config on startup",
+            "translation": ""
+        },
+        {
+            "id": "Development mode",
+            "message": "Development mode",
+            "translation": ""
+        },
+        {
+            "id": "Development mode is enabled. Do not use it in production.",
+            "message": "Development mode is enabled. Do not use it in production.",
+            "translation": ""
+        },
+        {
+            "id": "No public origin is set. Emails cannot link to the app.",
+            "message": "No public origin is set. Emails cannot link to the app.",
+            "translation": ""
+        },
+        {
+            "id": "The public origin is not a valid URL.",
+            "message": "The public origin is not a valid URL.",
+            "translation": ""
+        },
+        {
+            "id": "The public origin does not use HTTPS.",
+            "message": "The public origin does not use HTTPS.",
+            "translation": ""
+        },
+        {
+            "id": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "message": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "translation": ""
+        },
+        {
+            "id": "Session cookies are also sent over unencrypted connections.",
+            "message": "Session cookies are also sent over unencrypted connections.",
+            "translation": ""
+        },
+        {
+            "id": "Storage",
+            "message": "Storage",
+            "translation": ""
+        },
+        {
+            "id": "Endpoint",
+            "message": "Endpoint",
+            "translation": ""
+        },
+        {
+            "id": "Bucket",
+            "message": "Bucket",
+            "translation": ""
+        },
+        {
+            "id": "Access key ID",
+            "message": "Access key ID",
+            "translation": ""
+        },
+        {
+            "id": "Secret access key",
+            "message": "Secret access key",
+            "translation": ""
+        },
+        {
+            "id": "SSL/TLS",
+            "message": "SSL/TLS",
+            "translation": ""
+        },
+        {
+            "id": "No storage is configured. Files cannot be uploaded.",
+            "message": "No storage is configured. Files cannot be uploaded.",
+            "translation": ""
+        },
+        {
+            "id": "Connection",
+            "message": "Connection",
+            "translation": ""
+        },
+        {
+            "id": "The connection to the storage is not encrypted.",
+            "message": "The connection to the storage is not encrypted.",
+            "translation": ""
+        },
+        {
+            "id": "OCR",
+            "message": "OCR",
+            "translation": ""
+        },
+        {
+            "id": "Text extraction",
+            "message": "Text extraction",
+            "translation": ""
+        },
+        {
+            "id": "Xberg, Tika for unsupported formats",
+            "message": "Xberg, Tika for unsupported formats",
+            "translation": ""
+        },
+        {
+            "id": "Disabled",
+            "message": "Disabled",
+            "translation": ""
+        },
+        {
+            "id": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "message": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "translation": ""
+        },
+        {
+            "id": "Max file size",
+            "message": "Max file size",
+            "translation": ""
+        },
+        {
+            "id": "Xberg URL",
+            "message": "Xberg URL",
+            "translation": ""
+        },
+        {
+            "id": "The Xberg URL is not valid.",
+            "message": "The Xberg URL is not valid.",
+            "translation": ""
+        },
+        {
+            "id": "Xberg connection",
+            "message": "Xberg connection",
+            "translation": ""
+        },
+        {
+            "id": "Tika URL",
+            "message": "Tika URL",
+            "translation": ""
+        },
+        {
+            "id": "The Tika URL is not valid.",
+            "message": "The Tika URL is not valid.",
+            "translation": ""
+        },
+        {
+            "id": "Tika connection",
+            "message": "Tika connection",
+            "translation": ""
+        },
+        {
+            "id": "PDF previews",
+            "message": "PDF previews",
+            "translation": ""
+        },
+        {
+            "id": "Gotenberg URL",
+            "message": "Gotenberg URL",
+            "translation": ""
+        },
+        {
+            "id": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "message": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "translation": ""
+        },
+        {
+            "id": "The Gotenberg URL is not valid.",
+            "message": "The Gotenberg URL is not valid.",
+            "translation": ""
+        },
+        {
+            "id": "Host",
+            "message": "Host",
+            "translation": ""
+        },
+        {
+            "id": "Port",
+            "message": "Port",
+            "translation": ""
+        },
+        {
+            "id": "Sender address",
+            "message": "Sender address",
+            "translation": ""
+        },
+        {
+            "id": "Implicit SSL/TLS",
+            "message": "Implicit SSL/TLS",
+            "translation": ""
+        },
+        {
+            "id": "Certificate verification",
+            "message": "Certificate verification",
+            "translation": ""
+        },
+        {
+            "id": "Emails waiting to be sent",
+            "message": "Emails waiting to be sent",
+            "translation": ""
+        },
+        {
+            "id": "Emails that could not be sent",
+            "message": "Emails that could not be sent",
+            "translation": ""
+        },
+        {
+            "id": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "message": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "translation": ""
+        },
+        {
+            "id": "No sender address is configured. Emails cannot be sent.",
+            "message": "No sender address is configured. Emails cannot be sent.",
+            "translation": ""
+        },
+        {
+            "id": "The certificate of the mail server is not verified.",
+            "message": "The certificate of the mail server is not verified.",
+            "translation": ""
+        },
+        {
+            "id": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "message": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "FailedMailCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "failedMailCount"
+                },
+                {
+                    "id": "MaxMailAttempts",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "maxMailAttempts"
+                }
+            ]
+        },
+        {
+            "id": "TLS",
+            "message": "TLS",
+            "translation": ""
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": ""
+        },
+        {
+            "id": "Automatic certificates from Let's Encrypt",
+            "message": "Automatic certificates from Let's Encrypt",
+            "translation": ""
+        },
+        {
+            "id": "Hosts",
+            "message": "Hosts",
+            "translation": ""
+        },
+        {
+            "id": "No hosts are configured for automatic certificates.",
+            "message": "No hosts are configured for automatic certificates.",
+            "translation": ""
+        },
+        {
+            "id": "HTTP, HTTPS must be provided by a reverse proxy",
+            "message": "HTTP, HTTPS must be provided by a reverse proxy",
+            "translation": ""
+        },
+        {
+            "id": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "message": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "translation": ""
+        },
+        {
+            "id": "Certificate files",
+            "message": "Certificate files",
+            "translation": ""
+        },
+        {
+            "id": "Certificate file",
+            "message": "Certificate file",
+            "translation": ""
+        },
+        {
+            "id": "Private key file",
+            "message": "Private key file",
+            "translation": ""
+        },
+        {
+            "id": "The certificate could not be loaded: {Error}",
+            "message": "The certificate could not be loaded: {Error}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Error",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "err.Error()"
+                }
+            ]
+        },
+        {
+            "id": "Certificate valid until",
+            "message": "Certificate valid until",
+            "translation": ""
+        },
+        {
+            "id": "The certificate expired on {ValidUntil}.",
+            "message": "The certificate expired on {ValidUntil}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "validUntil"
+                }
+            ]
+        },
+        {
+            "id": "The certificate expires on {ValidUntil}.",
+            "message": "The certificate expires on {ValidUntil}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "validUntil"
+                }
+            ]
+        },
+        {
+            "id": "Not reachable",
+            "message": "Not reachable",
+            "translation": ""
+        },
+        {
+            "id": "{ServiceName} is not reachable: {Error}",
+            "message": "{ServiceName} is not reachable: {Error}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ServiceName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "serviceName"
+                },
+                {
+                    "id": "Error",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "err.Error()"
+                }
+            ]
+        },
+        {
+            "id": "Connected",
+            "message": "Connected",
+            "translation": ""
+        },
+        {
+            "id": "Connected ({Detail})",
+            "message": "Connected ({Detail})",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Detail",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "detail"
+                }
+            ]
+        },
+        {
+            "id": "Not set",
+            "message": "Not set",
+            "translation": ""
+        },
+        {
+            "id": "Set",
+            "message": "Set",
+            "translation": ""
+        },
+        {
+            "id": "Enabled",
+            "message": "Enabled",
+            "translation": ""
+        },
+        {
+            "id": "Allowed",
+            "message": "Allowed",
+            "translation": ""
+        },
+        {
+            "id": "Not allowed",
+            "message": "Not allowed",
             "translation": ""
         },
         {
@@ -5099,26 +5566,6 @@
             "translation": ""
         },
         {
-            "id": "File does not belong to the current Space.",
-            "message": "File does not belong to the current Space.",
-            "translation": ""
-        },
-        {
-            "id": "Cannot merge folders.",
-            "message": "Cannot merge folders.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is not in the Inbox.",
-            "message": "Source file is not in the Inbox.",
-            "translation": ""
-        },
-        {
             "id": "Source file has no versions.",
             "message": "Source file has no versions.",
             "translation": ""
@@ -5151,6 +5598,26 @@
         {
             "id": "Could not delete source file.",
             "message": "Could not delete source file.",
+            "translation": ""
+        },
+        {
+            "id": "File does not belong to the current Space.",
+            "message": "File does not belong to the current Space.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot merge folders.",
+            "message": "Cannot merge folders.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is not in the Inbox.",
+            "message": "Source file is not in the Inbox.",
             "translation": ""
         },
         {
@@ -5264,7 +5731,10 @@
             "translation": ""
         },
         {
-            "id": "Detected cycle in folder tree.",
+            "id": [
+                "folderTreeCycleMessage",
+                "Detected cycle in folder tree."
+            ],
             "message": "Detected cycle in folder tree.",
             "translation": ""
         },
@@ -5886,6 +6356,11 @@
             "translation": ""
         },
         {
+            "id": "Tag is still assigned to files.",
+            "message": "Tag is still assigned to files.",
+            "translation": ""
+        },
+        {
             "id": "File or Tag not found.",
             "message": "File or Tag not found.",
             "translation": ""
@@ -6153,6 +6628,66 @@
         {
             "id": "About SimpleDMS",
             "message": "About SimpleDMS",
+            "translation": ""
+        },
+        {
+            "id": "No problems found",
+            "message": "No problems found",
+            "translation": ""
+        },
+        {
+            "id": "1 problem needs attention",
+            "message": "1 problem needs attention",
+            "translation": ""
+        },
+        {
+            "id": "{ProblemCount} problems need attention",
+            "message": "{ProblemCount} problems need attention",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ProblemCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "problemCount"
+                }
+            ]
+        },
+        {
+            "id": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "message": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "CheckedAt",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "qq.CheckedAt"
+                }
+            ]
+        },
+        {
+            "id": "Error",
+            "message": "Error",
+            "translation": ""
+        },
+        {
+            "id": "Warning",
+            "message": "Warning",
+            "translation": ""
+        },
+        {
+            "id": "Not configured",
+            "message": "Not configured",
+            "translation": ""
+        },
+        {
+            "id": "OK",
+            "message": "OK",
             "translation": ""
         },
         {

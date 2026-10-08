@@ -49,6 +49,44 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	}
 	assertNavigationRailLabelsExclude(t, adminRail.GetItems(), "Dashboard")
 	assertNavigationRailItemActive(t, adminRail.GetItems(), "System")
+	assertNavigationRailItemActiveRecursive(t, adminRail.TopItems, "Settings")
+}
+
+func TestNavigationRailShowsSystemStatusAsSubItemOfSystem(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "rail-status@example.com"
+	createAccountWithRole(t, harness.mainDB, email, "supersecret", mainrole.Admin)
+	_, adminCtx, adminRollback := newNavigationRailMainContext(t, harness, email)
+	defer adminRollback()
+
+	rail := partial2.NewNavigationRail(adminCtx, harness.infra, "system-status", nil)
+
+	// the collapsed rail and the navigation bar show no groups, thus only System
+	assertNavigationRailLabelsExclude(t, rail.CollapsedItems(), "Status")
+	assertNavigationRailItemActive(t, rail.CollapsedItems(), "System")
+	assertNavigationRailItemActive(t, rail.CompactNavigationItems(), "System")
+
+	var systemGroup *widget.NavigationRailItem
+	for _, item := range rail.TopItems {
+		if item.Label == "System" {
+			systemGroup = item
+		}
+	}
+	if systemGroup == nil {
+		t.Fatalf("expected System group, got %v", navigationRailLabels(rail.TopItems))
+	}
+	if !systemGroup.IsCollapsible {
+		t.Fatal("expected System group to be collapsible like the organization groups")
+	}
+	if got := navigationRailLabels(systemGroup.Children); !reflect.DeepEqual(
+		got,
+		[]string{"Settings", "Status"},
+	) {
+		t.Fatalf("expected System sub-items Settings and Status, got %v", got)
+	}
+	assertNavigationRailItemActive(t, systemGroup.Children, "Status")
+	assertNavigationRailLabelsExclude(t, rail.ExpandedItems(), "System", "Status")
 }
 
 func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {

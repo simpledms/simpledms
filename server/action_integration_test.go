@@ -41,6 +41,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/model/main/systemstatus"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/pluginx"
@@ -183,7 +184,14 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 
 	tenantDBs := tenantdbs.NewTenantDBs()
 	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx, nil)
-	actions := action.NewActions(infra, tenantDBs, true)
+	systemStatusChecker := systemstatus.NewSystemStatusChecker(
+		systemConfig,
+		nil,
+		true,
+		s3FileSystem.IsFileEncryptionDisabled(),
+		false,
+	)
+	actions := action.NewActions(infra, tenantDBs, true, systemStatusChecker)
 	router.RegisterActions(actions)
 
 	err = infra.PluginRegistry().RegisterActions(router)

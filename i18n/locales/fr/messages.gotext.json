@@ -9279,6 +9279,694 @@
             "translation": "Vous vous êtes connecté avec un mot de passe temporaire. Veuillez définir un mot de passe pour sécuriser votre compte et utiliser l'app.",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access the system status.",
+            "message": "You must be an admin to access the system status.",
+            "translation": "Vous devez être administrateur pour accéder à l’état du système.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "System status",
+            "message": "System status",
+            "translation": "État du système",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Check again",
+            "message": "Check again",
+            "translation": "Vérifier à nouveau",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No problems found",
+            "message": "No problems found",
+            "translation": "Aucun problème trouvé",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Error",
+            "message": "Error",
+            "translation": "Erreur",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Warning",
+            "message": "Warning",
+            "translation": "Avertissement",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Not configured",
+            "message": "Not configured",
+            "translation": "Non configuré",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "OK",
+            "message": "OK",
+            "translation": "OK",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "General",
+            "message": "General",
+            "translation": "Général",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Public origin",
+            "message": "Public origin",
+            "translation": "Origine publique",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "WebAuthn relying party ID",
+            "message": "WebAuthn relying party ID",
+            "translation": "ID de la partie de confiance WebAuthn",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase protection",
+            "message": "Passphrase protection",
+            "translation": "Protection par phrase secrète",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "File encryption",
+            "message": "File encryption",
+            "translation": "Chiffrement des fichiers",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Insecure cookies",
+            "message": "Insecure cookies",
+            "translation": "Cookies non sécurisés",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size",
+            "message": "Max upload size",
+            "translation": "Taille maximale de téléversement",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Override stored config on startup",
+            "message": "Override stored config on startup",
+            "translation": "Remplacer la configuration enregistrée au démarrage",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Development mode",
+            "message": "Development mode",
+            "translation": "Mode développement",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Development mode is enabled. Do not use it in production.",
+            "message": "Development mode is enabled. Do not use it in production.",
+            "translation": "Le mode développement est activé. Ne l’utilisez pas en production.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No public origin is set. Emails cannot link to the app.",
+            "message": "No public origin is set. Emails cannot link to the app.",
+            "translation": "Aucune origine publique n’est définie. Les e-mails ne peuvent pas contenir de lien vers l’application.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The public origin is not a valid URL.",
+            "message": "The public origin is not a valid URL.",
+            "translation": "L’origine publique n’est pas une URL valide.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The public origin does not use HTTPS.",
+            "message": "The public origin does not use HTTPS.",
+            "translation": "L’origine publique n’utilise pas HTTPS.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "message": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "translation": "L’ID de la partie de confiance WebAuthn ne correspond pas à l’origine publique. Les passkeys ne fonctionnent pas.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Session cookies are also sent over unencrypted connections.",
+            "message": "Session cookies are also sent over unencrypted connections.",
+            "translation": "Les cookies de Session sont aussi envoyés via des connexions non chiffrées.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage",
+            "message": "Storage",
+            "translation": "Stockage",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Endpoint",
+            "message": "Endpoint",
+            "translation": "Point de terminaison",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Bucket",
+            "message": "Bucket",
+            "translation": "Bucket",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Access key ID",
+            "message": "Access key ID",
+            "translation": "ID de clé d’accès",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret access key",
+            "message": "Secret access key",
+            "translation": "Clé d’accès secrète",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "SSL/TLS",
+            "message": "SSL/TLS",
+            "translation": "SSL/TLS",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No storage is configured. Files cannot be uploaded.",
+            "message": "No storage is configured. Files cannot be uploaded.",
+            "translation": "Aucun stockage n’est configuré. Les fichiers ne peuvent pas être téléversés.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Connection",
+            "message": "Connection",
+            "translation": "Connexion",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The connection to the storage is not encrypted.",
+            "message": "The connection to the storage is not encrypted.",
+            "translation": "La connexion au stockage n’est pas chiffrée.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "OCR",
+            "message": "OCR",
+            "translation": "OCR",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Text extraction",
+            "message": "Text extraction",
+            "translation": "Extraction de texte",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg, Tika for unsupported formats",
+            "message": "Xberg, Tika for unsupported formats",
+            "translation": "Xberg, Tika pour les formats non pris en charge",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Disabled",
+            "message": "Disabled",
+            "translation": "Désactivé",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "message": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "translation": "Ni Xberg ni Tika n’est configuré. Le texte des documents n’est pas extrait et ne peut pas être recherché.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Max file size",
+            "message": "Max file size",
+            "translation": "Taille maximale de fichier",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg URL",
+            "message": "Xberg URL",
+            "translation": "URL Xberg",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The Xberg URL is not valid.",
+            "message": "The Xberg URL is not valid.",
+            "translation": "L’URL Xberg n’est pas valide.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg connection",
+            "message": "Xberg connection",
+            "translation": "Connexion Xberg",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Tika URL",
+            "message": "Tika URL",
+            "translation": "URL Tika",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The Tika URL is not valid.",
+            "message": "The Tika URL is not valid.",
+            "translation": "L’URL Tika n’est pas valide.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Tika connection",
+            "message": "Tika connection",
+            "translation": "Connexion Tika",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF previews",
+            "message": "PDF previews",
+            "translation": "Aperçus PDF",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Gotenberg URL",
+            "message": "Gotenberg URL",
+            "translation": "URL Gotenberg",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "message": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "translation": "Gotenberg n’est pas configuré. Les aperçus PDF des fichiers Office, HTML et Markdown sont désactivés.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The Gotenberg URL is not valid.",
+            "message": "The Gotenberg URL is not valid.",
+            "translation": "L’URL Gotenberg n’est pas valide.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Host",
+            "message": "Host",
+            "translation": "Hôte",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Port",
+            "message": "Port",
+            "translation": "Port",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Sender address",
+            "message": "Sender address",
+            "translation": "Adresse de l’expéditeur",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Implicit SSL/TLS",
+            "message": "Implicit SSL/TLS",
+            "translation": "SSL/TLS implicite",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate verification",
+            "message": "Certificate verification",
+            "translation": "Vérification du certificat",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Emails waiting to be sent",
+            "message": "Emails waiting to be sent",
+            "translation": "E-mails en attente d’envoi",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Emails that could not be sent",
+            "message": "Emails that could not be sent",
+            "translation": "E-mails qui n’ont pas pu être envoyés",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "message": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "translation": "Aucun serveur de messagerie n’est configuré. Les e-mails, par exemple pour réinitialiser un mot de passe, ne sont pas envoyés.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No sender address is configured. Emails cannot be sent.",
+            "message": "No sender address is configured. Emails cannot be sent.",
+            "translation": "Aucune adresse d’expéditeur n’est configurée. Les e-mails ne peuvent pas être envoyés.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate of the mail server is not verified.",
+            "message": "The certificate of the mail server is not verified.",
+            "translation": "Le certificat du serveur de messagerie n’est pas vérifié.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "message": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "translation": "{FailedMailCount} e-mails n’ont pas pu être envoyés après {MaxMailAttempts} tentatives.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "FailedMailCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1
+                },
+                {
+                    "id": "MaxMailAttempts",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2
+                }
+            ]
+        },
+        {
+            "id": "TLS",
+            "message": "TLS",
+            "translation": "TLS",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": "Mode",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Automatic certificates from Let's Encrypt",
+            "message": "Automatic certificates from Let's Encrypt",
+            "translation": "Certificats automatiques de Let's Encrypt",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Hosts",
+            "message": "Hosts",
+            "translation": "Hôtes",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "No hosts are configured for automatic certificates.",
+            "message": "No hosts are configured for automatic certificates.",
+            "translation": "Aucun hôte n’est configuré pour les certificats automatiques.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "HTTP, HTTPS must be provided by a reverse proxy",
+            "message": "HTTP, HTTPS must be provided by a reverse proxy",
+            "translation": "HTTP, HTTPS doit être fourni par un reverse proxy",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "message": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "translation": "Seul le fichier de certificat ou le fichier de clé privée est défini. TLS est désactivé.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate files",
+            "message": "Certificate files",
+            "translation": "Fichiers de certificat",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate file",
+            "message": "Certificate file",
+            "translation": "Fichier de certificat",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Private key file",
+            "message": "Private key file",
+            "translation": "Fichier de clé privée",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate could not be loaded: {Error}",
+            "message": "The certificate could not be loaded: {Error}",
+            "translation": "Le certificat n’a pas pu être chargé : {Error}",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "Error",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "Certificate valid until",
+            "message": "Certificate valid until",
+            "translation": "Certificat valide jusqu’au",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate expired on {ValidUntil}.",
+            "message": "The certificate expired on {ValidUntil}.",
+            "translation": "Le certificat a expiré le {ValidUntil}.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "The certificate expires on {ValidUntil}.",
+            "message": "The certificate expires on {ValidUntil}.",
+            "translation": "Le certificat expire le {ValidUntil}.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "Not reachable",
+            "message": "Not reachable",
+            "translation": "Inaccessible",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "{ServiceName} is not reachable: {Error}",
+            "message": "{ServiceName} is not reachable: {Error}",
+            "translation": "{ServiceName} est inaccessible : {Error}",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "ServiceName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                },
+                {
+                    "id": "Error",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2
+                }
+            ]
+        },
+        {
+            "id": "Connected",
+            "message": "Connected",
+            "translation": "Connecté",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Connected ({Detail})",
+            "message": "Connected ({Detail})",
+            "translation": "Connecté ({Detail})",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "Detail",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "Not set",
+            "message": "Not set",
+            "translation": "Non défini",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Set",
+            "message": "Set",
+            "translation": "Défini",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Enabled",
+            "message": "Enabled",
+            "translation": "Activé",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Allowed",
+            "message": "Allowed",
+            "translation": "Autorisé",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Not allowed",
+            "message": "Not allowed",
+            "translation": "Non autorisé",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "1 problem needs attention",
+            "message": "1 problem needs attention",
+            "translation": "1 problème nécessite votre attention",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "{ProblemCount} problems need attention",
+            "message": "{ProblemCount} problems need attention",
+            "translation": "{ProblemCount} problèmes nécessitent votre attention",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "ProblemCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "message": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "translation": "Dernière vérification : {CheckedAt}. Les modifications de la configuration prennent effet après un redémarrage.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "CheckedAt",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "System settings",
+            "message": "System settings",
+            "translation": "Paramètres système",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
         }
     ]
 }

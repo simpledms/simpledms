@@ -68,6 +68,8 @@ type SystemConfig struct {
 	MailerUseImplicitSslTLS bool `json:"mailer_use_implicit_ssl_tls,omitempty"`
 	// OcrTikaURL holds the value of the "ocr_tika_url" field.
 	OcrTikaURL string `json:"ocr_tika_url,omitempty"`
+	// OcrXbergURL holds the value of the "ocr_xberg_url" field.
+	OcrXbergURL string `json:"ocr_xberg_url,omitempty"`
 	// GotenbergURL holds the value of the "gotenberg_url" field.
 	GotenbergURL string `json:"gotenberg_url,omitempty"`
 	// OcrMaxFileSizeMib holds the value of the "ocr_max_file_size_mib" field.
@@ -128,7 +130,7 @@ func (*SystemConfig) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case systemconfig.FieldID, systemconfig.FieldCreatedBy, systemconfig.FieldUpdatedBy, systemconfig.FieldMailerPort, systemconfig.FieldOcrMaxFileSizeMib, systemconfig.FieldMaxUploadSizeMib:
 			values[i] = new(sql.NullInt64)
-		case systemconfig.FieldS3Endpoint, systemconfig.FieldS3AccessKeyID, systemconfig.FieldS3BucketName, systemconfig.FieldTLSCertFilepath, systemconfig.FieldTLSPrivateKeyFilepath, systemconfig.FieldTLSAutocertEmail, systemconfig.FieldMailerHost, systemconfig.FieldMailerUsername, systemconfig.FieldMailerFrom, systemconfig.FieldOcrTikaURL, systemconfig.FieldGotenbergURL:
+		case systemconfig.FieldS3Endpoint, systemconfig.FieldS3AccessKeyID, systemconfig.FieldS3BucketName, systemconfig.FieldTLSCertFilepath, systemconfig.FieldTLSPrivateKeyFilepath, systemconfig.FieldTLSAutocertEmail, systemconfig.FieldMailerHost, systemconfig.FieldMailerUsername, systemconfig.FieldMailerFrom, systemconfig.FieldOcrTikaURL, systemconfig.FieldOcrXbergURL, systemconfig.FieldGotenbergURL:
 			values[i] = new(sql.NullString)
 		case systemconfig.FieldCreatedAt, systemconfig.FieldUpdatedAt, systemconfig.FieldInitializedAt:
 			values[i] = new(sql.NullTime)
@@ -299,6 +301,12 @@ func (_m *SystemConfig) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OcrTikaURL = value.String
 			}
+		case systemconfig.FieldOcrXbergURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_xberg_url", values[i])
+			} else if value.Valid {
+				_m.OcrXbergURL = value.String
+			}
 		case systemconfig.FieldGotenbergURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gotenberg_url", values[i])
@@ -438,6 +446,9 @@ func (_m *SystemConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ocr_tika_url=")
 	builder.WriteString(_m.OcrTikaURL)
+	builder.WriteString(", ")
+	builder.WriteString("ocr_xberg_url=")
+	builder.WriteString(_m.OcrXbergURL)
 	builder.WriteString(", ")
 	builder.WriteString("gotenberg_url=")
 	builder.WriteString(_m.GotenbergURL)

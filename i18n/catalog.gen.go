@@ -42,1082 +42,1169 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"%d backup codes left":        314,
-	"%s (%s)":                     515,
-	"%s copied to clipboard.":     296,
-	"%s · %s":                     490,
-	"%s · Created: %s":            353,
-	"%s · Revoked: %s":            354,
-	"02-01-2006 at 15:04 o'clock": 769,
-	"A database constraint violation happened. Please contact the support.":                                      979,
-	"A file shared from OpenCloud is ready to import.":                                                           1005,
-	"A file with this name already exists in the destination.":                                                   1030,
-	"A file with this name already exists.":                                                                      1065,
-	"A folder with this name already exists.":                                                                    859,
-	"A full Session is required.":                                                                                270,
-	"A password is already set. Please use the change password form instead.":                                    744,
-	"A password reset has been requested for your account.":                                                      774,
-	"A public metadata ID is required.":                                                                          1054,
-	"A similar entity already exists.":                                                                           822,
-	"A user with this email address already exists, please contact support if you want to add this user anyway.": 812,
-	"A version number is required for download continuation.":                                                    1027,
-	"About SimpleDMS":                996,
-	"Accept privacy policy":          731,
-	"Accept terms of service":        730,
-	"Accepts inbox transfers":        607,
-	"Account":                        269,
-	"Account not found.":             756,
+	"%d backup codes left":                           315,
+	"%d emails could not be sent after %d attempts.": 841,
+	"%d problems need attention":                     1077,
+	"%s (%s)":                                        519,
+	"%s copied to clipboard.":                        297,
+	"%s is not reachable: %s":                        857,
+	"%s · %s":                                        494,
+	"%s · Created: %s":                               354,
+	"%s · Revoked: %s":                               355,
+	"02-01-2006 at 15:04 o'clock":                    773,
+	"1 problem needs attention":                      1076,
+	"A database constraint violation happened. Please contact the support.":                                      1057,
+	"A file shared from OpenCloud is ready to import.":                                                           1091,
+	"A file with this name already exists in the destination.":                                                   1116,
+	"A file with this name already exists.":                                                                      1152,
+	"A folder with this name already exists.":                                                                    937,
+	"A full Session is required.":                                                                                271,
+	"A password is already set. Please use the change password form instead.":                                    748,
+	"A password reset has been requested for your account.":                                                      778,
+	"A public metadata ID is required.":                                                                          1141,
+	"A similar entity already exists.":                                                                           900,
+	"A user with this email address already exists, please contact support if you want to add this user anyway.": 890,
+	"A version number is required for download continuation.":                                                    1113,
+	"About SimpleDMS":                1074,
+	"Accept privacy policy":          735,
+	"Accept terms of service":        734,
+	"Accepts inbox transfers":        611,
+	"Access key ID":                  809,
+	"Account":                        270,
+	"Account not found.":             760,
 	"Account updated.":               41,
-	"Account «%s»":                   309,
-	"Account «%s», owned by «%s»":    310,
-	"Actions":                        587,
-	"Active":                         344,
-	"Active tab":                     608,
-	"Active temporary password":      325,
+	"Account «%s»":                   310,
+	"Account «%s», owned by «%s»":    311,
+	"Actions":                        591,
+	"Active":                         345,
+	"Active tab":                     612,
+	"Active temporary password":      326,
 	"Add":                            82,
-	"Add a backup passkey":           304,
-	"Add attribute":                  398,
+	"Add a backup passkey":           305,
+	"Add attribute":                  403,
 	"Add field":                      76,
-	"Add field attribute":            391,
-	"Add list attribute (tag group)": 395,
-	"Add me as space owner":          609,
-	"Add new version":                202,
-	"Add new version from Inbox":     191,
+	"Add field attribute":            396,
+	"Add list attribute (tag group)": 400,
+	"Add me as space owner":          613,
+	"Add new version":                203,
+	"Add new version from Inbox":     192,
 	"Add note":                       101,
-	"Add to inbox":                   610,
-	"Added new version from Inbox.":  188,
-	"Admin":                          611,
-	"After registration, printable backup codes will be shown once. Save them before closing.":           590,
-	"After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.": 591,
+	"Add to inbox":                   614,
+	"Added new version from Inbox.":  189,
+	"Admin":                          615,
+	"After registration, printable backup codes will be shown once. Save them before closing.":           594,
+	"After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.": 595,
 	"All passkeys were removed.": 33,
-	"Allow writes":               274,
+	"Allow writes":               275,
+	"Allowed":                    863,
 	"An organization requires passkey sign-in, so at least one passkey must remain.": 37,
-	"App already initialized.":                      763,
+	"App already initialized.":                      767,
 	"App initialized.":                              7,
-	"App is already unlocked.":                      780,
-	"App is not encrypted with passphrase.":         781,
-	"App not unlocked yet.":                         884,
-	"App not unlocked yet. Please try again later.": 809,
-	"App status":                                    335,
+	"App is already unlocked.":                      784,
+	"App is not encrypted with passphrase.":         785,
+	"App not unlocked yet.":                         962,
+	"App not unlocked yet. Please try again later.": 887,
+	"App status":                                    336,
 	"App unlocked.":                                 23,
-	"Application passphrase":                        581,
-	"Application unlocked. Starting up.":            586,
-	"Approved":                                      931,
-	"Archive is too large.":                         253,
-	"Archive unzipped.":                             252,
-	"Archived":                                      937,
-	"Assign":                                        423,
-	"Assign file":                                   422,
-	"Assign tags":                                   469,
-	"Assign user":                                   459,
-	"Assign user to Space":                          451,
-	"Attribute deleted.":                            404,
-	"Attribute must reference a Tag group.":         826,
-	"Attribute updated.":                            392,
-	"Attribute «%s» created.":                       399,
-	"Attribute «%s» updated.":                       409,
-	"Austria":                                       612,
-	"Auth cookie already set.":                      997,
+	"Application passphrase":                        585,
+	"Application unlocked. Starting up.":            590,
+	"Approved":                                      1009,
+	"Archive is too large.":                         254,
+	"Archive unzipped.":                             253,
+	"Archived":                                      1015,
+	"Assign":                                        428,
+	"Assign file":                                   427,
+	"Assign tags":                                   473,
+	"Assign user":                                   463,
+	"Assign user to Space":                          455,
+	"Attribute deleted.":                            409,
+	"Attribute must reference a Tag group.":         904,
+	"Attribute updated.":                            397,
+	"Attribute «%s» created.":                       404,
+	"Attribute «%s» updated.":                       414,
+	"Austria":                                       616,
+	"Auth cookie already set.":                      1083,
 	"Author: %s":                                    116,
 	"Author: Unknown":                               114,
-	"Back to parent folder":                         206,
-	"Backup code":                                   613,
-	"Belgium":                                       614,
-	"Best match":                                    241,
-	"Between":                                       220,
-	"Body":                                          615,
-	"Bucket name is empty.":                         876,
-	"Built in column":                               616,
-	"Bulgaria":                                      617,
-	"Cannot add a tag group as child.":              975,
-	"Cannot decode form.":                           564,
-	"Cannot decode url query.":                      567,
-	"Cannot delete an entity still in use.":         978,
-	"Cannot merge folders.":                         839,
-	"Cannot move a folder into itself.":             862,
-	"Cannot move a folder into one of its subfolders.": 864,
-	"Cannot organize the Space root folder.":           854,
-	"Cannot parse current URL.":                        566,
-	"Cannot parse file.":                               562,
-	"Cannot parse form.":                               563,
-	"Cannot upload versions for folders.":              263,
-	"Cannot validate form.":                            565,
+	"Automatic certificates from Let's Encrypt":     844,
+	"Back to parent folder":                         207,
+	"Backup code":                                   617,
+	"Belgium":                                       618,
+	"Best match":                                    242,
+	"Between":                                       221,
+	"Body":                                          619,
+	"Bucket":                                        808,
+	"Bucket name is empty.":                         954,
+	"Built in column":                               620,
+	"Bulgaria":                                      621,
+	"Cannot add a tag group as child.":              1053,
+	"Cannot decode form.":                           568,
+	"Cannot decode url query.":                      571,
+	"Cannot delete an entity still in use.":         1056,
+	"Cannot merge folders.":                         924,
+	"Cannot move a folder into itself.":             940,
+	"Cannot move a folder into one of its subfolders.": 942,
+	"Cannot organize the Space root folder.":           932,
+	"Cannot parse current URL.":                        570,
+	"Cannot parse file.":                               566,
+	"Cannot parse form.":                               567,
+	"Cannot upload versions for folders.":              264,
+	"Cannot validate form.":                            569,
+	"Certificate file":                                 850,
+	"Certificate files":                                849,
+	"Certificate valid until":                          853,
+	"Certificate verification":                         835,
 	"Change":                                           27,
-	"Change file list view":                            210,
+	"Change file list view":                            211,
 	"Change passphrase":                                0,
 	"Change password":                                  26,
-	"Changes saved.":                                   341,
-	"Checkbox":                                         618,
-	"Checkbox value":                                   619,
-	"Choose an Inbox":                                  444,
-	"Cleanup pending":                                  1006,
+	"Changes saved.":                                   342,
+	"Check again":                                      379,
+	"Checkbox":                                         622,
+	"Checkbox value":                                   623,
+	"Choose an Inbox":                                  448,
+	"Cleanup pending":                                  1092,
 	"Clear":                                            35,
 	"Clear temporary password":                         34,
-	"Client":                                           961,
-	"Client label":                                     273,
-	"Close":                                            576,
-	"Close details":                                    406,
-	"Close dialog":                                     575,
-	"Close preview":                                    167,
-	"Codes":                                            600,
-	"Compatibility mode":                               285,
-	"Complete":                                         949,
-	"Composed of %s":                                   528,
-	"Composition requires a composed Tag and a simple sub-Tag.": 977,
-	"Confirm new passphrase":                                    620,
-	"Confirm passphrase":                                        621,
-	"Confirm password":                                          622,
-	"Confirm warning":                                           623,
-	"Contains":                                                  215,
-	"Contract":                                                  913,
-	"Contract name":                                             914,
-	"Contract status":                                           921,
-	"Contract type":                                             922,
-	"Cookie set but empty.":                                     986,
-	"Cookie set but not valid.":                                 985,
-	"Copy %s":                                                   295,
-	"Copy MCP URL":                                              348,
-	"Copy WebDAV URL":                                           383,
-	"Copy codes":                                                606,
-	"Copy the secret now. It will not be shown again.": 279,
-	"Could not claim uploaded file.":                   882,
-	"Could not convert id to integer.":                 416,
-	"Could not copy %s.":                               297,
-	"Could not copy MCP URL.":                          350,
-	"Could not copy WebDAV URL.":                       385,
-	"Could not copy backup codes automatically.":       603,
-	"Could not copy temporary file.":                   889,
-	"Could not create credential.":                     821,
-	"Could not create folder structure.":               250,
-	"Could not delete source file.":                    848,
-	"Could not determine filename.":                    792,
-	"Could not download file from URL.":                787,
-	"Could not download the file from OpenCloud. Try again, or ask your administrator for help.": 802,
-	"Could not extract all files from archive.":                                                  251,
-	"Could not generate backup codes.":                                                           738,
-	"Could not generate salt.":                                                                   741,
-	"Could not generate session id.":                                                             998,
-	"Could not generate temporary password.":                                                     740,
-	"Could not get object name.":                                                                 869,
-	"Could not get x25519 identity.":                                                             880,
-	"Could not initialize passkey service.":                                                      759,
-	"Could not load duplicates.":                                                                 184,
+	"Client":                                           1039,
+	"Client label":                                     274,
+	"Close":                                            580,
+	"Close details":                                    411,
+	"Close dialog":                                     579,
+	"Close preview":                                    168,
+	"Codes":                                            604,
+	"Compatibility mode":                               286,
+	"Complete":                                         1027,
+	"Composed of %s":                                   532,
+	"Composition requires a composed Tag and a simple sub-Tag.": 1055,
+	"Confirm new passphrase":                                    624,
+	"Confirm passphrase":                                        625,
+	"Confirm password":                                          626,
+	"Confirm warning":                                           627,
+	"Connected":                                                 858,
+	"Connected (%s)":                                            859,
+	"Connection":                                                813,
+	"Contains":                                                  216,
+	"Contract":                                                  991,
+	"Contract name":                                             992,
+	"Contract status":                                           999,
+	"Contract type":                                             1000,
+	"Cookie set but empty.":                                     1064,
+	"Cookie set but not valid.":                                 1063,
+	"Copy %s":                                                   296,
+	"Copy MCP URL":                                              349,
+	"Copy WebDAV URL":                                           388,
+	"Copy codes":                                                610,
+	"Copy the secret now. It will not be shown again.": 280,
+	"Could not claim uploaded file.":                   960,
+	"Could not convert id to integer.":                 421,
+	"Could not copy %s.":                               298,
+	"Could not copy MCP URL.":                          351,
+	"Could not copy WebDAV URL.":                       390,
+	"Could not copy backup codes automatically.":       607,
+	"Could not copy temporary file.":                   967,
+	"Could not create credential.":                     899,
+	"Could not create folder structure.":               251,
+	"Could not delete source file.":                    922,
+	"Could not determine filename.":                    870,
+	"Could not download file from URL.":                865,
+	"Could not download the file from OpenCloud. Try again, or ask your administrator for help.": 880,
+	"Could not extract all files from archive.":                                                  252,
+	"Could not generate backup codes.":                                                           742,
+	"Could not generate salt.":                                                                   745,
+	"Could not generate session id.":                                                             1084,
+	"Could not generate temporary password.":                                                     744,
+	"Could not get object name.":                                                                 947,
+	"Could not get x25519 identity.":                                                             958,
+	"Could not initialize passkey service.":                                                      763,
+	"Could not load duplicates.":                                                                 185,
 	"Could not load notes.":                                                                      110,
-	"Could not load path of file.":                                                               868,
-	"Could not load users.":                                                                      455,
-	"Could not open ZIP archive.":                                                                247,
-	"Could not open file.":                                                                       870,
-	"Could not parse url.":                                                                       982,
-	"Could not read ZIP archive.":                                                                249,
-	"Could not read cookie.":                                                                     984,
-	"Could not read data.":                                                                       1001,
-	"Could not read file.":                                                                       421,
-	"Could not read source version.":                                                             843,
-	"Could not read target versions.":                                                            845,
-	"Could not regenerate backup codes.":                                                         574,
-	"Could not remove source versions.":                                                          847,
+	"Could not load path of file.":                                                               946,
+	"Could not load users.":                                                                      459,
+	"Could not open ZIP archive.":                                                                248,
+	"Could not open file.":                                                                       948,
+	"Could not parse url.":                                                                       1060,
+	"Could not read ZIP archive.":                                                                250,
+	"Could not read cookie.":                                                                     1062,
+	"Could not read data.":                                                                       1087,
+	"Could not read file.":                                                                       426,
+	"Could not read source version.":                                                             917,
+	"Could not read target versions.":                                                            919,
+	"Could not regenerate backup codes.":                                                         578,
+	"Could not remove source versions.":                                                          921,
 	"Could not render widget.":                                                                   84,
-	"Could not save file.":                                                                       877,
-	"Could not start transaction.":                                                               1000,
-	"Could not unzip the archive.":                                                               248,
-	"Could not update target file.":                                                              846,
-	"Could not verify access.":                                                                   1072,
-	"Could not verify archive size.":                                                             254,
+	"Could not save file.":                                                                       955,
+	"Could not start transaction.":                                                               1086,
+	"Could not unzip the archive.":                                                               249,
+	"Could not update target file.":                                                              920,
+	"Could not verify access.":                                                                   1159,
+	"Could not verify archive size.":                                                             255,
 	"Could not verify organization access.":                                                      67,
-	"Could not verify staged file.":                                                              883,
-	"Could not verify storage limit.":                                                            892,
-	"Could not verify stored file.":                                                              879,
-	"Could not verify upload size limit.":                                                        890,
-	"Country":                                                                                    729,
-	"Create":                                                                                     226,
-	"Create MCP credential":                                                                      277,
-	"Create Space":                                                                               511,
-	"Create WebDAV credential":                                                                   287,
-	"Create a credential to connect an MCP client to a Space.":                                   347,
-	"Create a device credential to upload files to an Inbox over WebDAV.":                        382,
-	"Create and assign tag":                                                                      522,
-	"Create document type":                                                                       402,
-	"Create field":                                                                               504,
+	"Could not verify staged file.":                                                              961,
+	"Could not verify storage limit.":                                                            970,
+	"Could not verify stored file.":                                                              957,
+	"Could not verify upload size limit.":                                                        968,
+	"Country":                                                                                    733,
+	"Create":                                                                                     227,
+	"Create MCP credential":                                                                      278,
+	"Create Space":                                                                               515,
+	"Create WebDAV credential":                                                                   288,
+	"Create a credential to connect an MCP client to a Space.":                                   348,
+	"Create a device credential to upload files to an Inbox over WebDAV.":                        387,
+	"Create and assign tag":                                                                      526,
+	"Create document type":                                                                       407,
+	"Create field":                                                                               508,
 	"Create folder":                                                                              87,
-	"Create group":                                                                               530,
-	"Create tag":                                                                                 473,
-	"Create tag or group":                                                                        467,
-	"Create user":                                                                                477,
-	"Created %s":                                                                                 155,
-	"Created at":                                                                                 543,
-	"Created destination":                                                                        1007,
+	"Create group":                                                                               534,
+	"Create tag":                                                                                 477,
+	"Create tag or group":                                                                        471,
+	"Create user":                                                                                481,
+	"Created %s":                                                                                 156,
+	"Created at":                                                                                 547,
+	"Created destination":                                                                        1093,
 	"Created: %s":                                                                                117,
 	"Created: Unknown":                                                                           115,
-	"Credential label is required.":                                                              820,
-	"Credential not found.":                                                                      778,
-	"Credential status values":                                                                   624,
-	"Croatia":                                                                                    625,
-	"Current or temporary password":                                                              626,
-	"Current passphrase":                                                                         627,
-	"Current password is invalid.":                                                               742,
+	"Credential label is required.":                                                              898,
+	"Credential not found.":                                                                      782,
+	"Credential status values":                                                                   628,
+	"Croatia":                                                                                    629,
+	"Current or temporary password":                                                              630,
+	"Current passphrase":                                                                         631,
+	"Current password is invalid.":                                                               746,
 	"Current version %d":                                                                         139,
-	"Current version uploaded at":                                                                153,
-	"Cyprus":                                                                                     628,
-	"Czech republic":                                                                             629,
-	"Dashboard":                                                                                  339,
-	"Data validation failed.":                                                                    980,
-	"Date":                                                                                       175,
-	"Date must use YYYY-MM-DD.":                                                                  1069,
-	"Date value":                                                                                 630,
-	"Date value is required.":                                                                    1034,
+	"Current version uploaded at":                                                                154,
+	"Cyprus":                                                                                     632,
+	"Czech republic":                                                                             633,
+	"Dashboard":                                                                                  340,
+	"Data validation failed.":                                                                    1058,
+	"Date":                                                                                       176,
+	"Date must use YYYY-MM-DD.":                                                                  1156,
+	"Date value":                                                                                 634,
+	"Date value is required.":                                                                    1120,
 	"Delete":                                                                                     106,
-	"Delete from Inbox":                                                                          428,
+	"Delete from Inbox":                                                                          433,
 	"Delete note":                                                                                105,
-	"Delete on success":                                                                          631,
-	"Delete organization":                                                                        364,
-	"Delete this Space?":                                                                         517,
-	"Delete this attribute?":                                                                     394,
-	"Delete this document type?":                                                                 397,
-	"Delete this field?":                                                                         509,
-	"Delete this file? You can restore it from the Trash.":                                       143,
-	"Delete this folder? Its files can be restored from the Trash.":                144,
+	"Delete on success":                                                                          635,
+	"Delete organization":                                                                        365,
+	"Delete this Space?":                                                                         521,
+	"Delete this attribute?":                                                                     399,
+	"Delete this document type?":                                                                 402,
+	"Delete this field?":                                                                         513,
+	"Delete this file? You can restore it from the Trash.":                                       144,
+	"Delete this folder? Its files can be restored from the Trash.":                145,
 	"Delete this note? It will remain available in the note history.":              107,
-	"Delete this organization? All accounts owned by it will be deleted globally.": 365,
-	"Delete this passkey?": 367,
-	"Delete this tag entirely? It will be unassigned from all files, not only from this one.": 541,
-	"Delete this tag? It will be unassigned from all files.":                                  468,
+	"Delete this organization? All accounts owned by it will be deleted globally.": 366,
+	"Delete this passkey?": 368,
+	"Delete this tag entirely? It will be unassigned from all files, not only from this one.": 545,
+	"Delete this tag? It will be unassigned from all files.":                                  472,
 	"Deleted":                           120,
-	"Deleted at":                        154,
-	"Deleted: %s":                       554,
-	"Denmark":                           632,
-	"Department":                        940,
-	"Description":                       633,
-	"Deselect group":                    540,
-	"Destination":                       634,
-	"Destination Inbox":                 445,
-	"Destination Inbox is unavailable.": 850,
-	"Destination is current location.":  863,
-	"Destination is not a folder.":      860,
-	"Destination must be a Tag group.":  976,
-	"Destination unavailable.":          293,
-	"Details":                           145,
-	"Detected cycle in folder tree.":    867,
-	"Device label":                      282,
-	"Disable passkey enforcement":       362,
-	"Disable passkey enforcement for this organization? Members can use passwords again if allowed.": 363,
-	"Document and note IDs are required.": 1063,
-	"Document not found.":                 833,
+	"Deleted at":                        155,
+	"Deleted: %s":                       558,
+	"Denmark":                           636,
+	"Department":                        1018,
+	"Description":                       637,
+	"Deselect group":                    544,
+	"Destination":                       638,
+	"Destination Inbox":                 449,
+	"Destination Inbox is unavailable.": 928,
+	"Destination is current location.":  941,
+	"Destination is not a folder.":      938,
+	"Destination must be a Tag group.":  1054,
+	"Destination unavailable.":          294,
+	"Details":                           146,
+	"Detected cycle in folder tree.":    945,
+	"Development mode":                  799,
+	"Development mode is enabled. Do not use it in production.": 800,
+	"Device label":                283,
+	"Disable passkey enforcement": 363,
+	"Disable passkey enforcement for this organization? Members can use passwords again if allowed.": 364,
+	"Disabled":                            818,
+	"Document and note IDs are required.": 1150,
+	"Document not found.":                 911,
 	"Document type":                       131,
-	"Document type ID is required.":       1051,
-	"Document type attribute not found.":  1060,
-	"Document type created.":              403,
-	"Document type deleted.":              405,
-	"Document type deselected.":           239,
-	"Document type not found.":            1047,
-	"Document type renamed to «%s».":      418,
-	"Document type selected.":             240,
+	"Document type ID is required.":       1138,
+	"Document type attribute not found.":  1147,
+	"Document type created.":              408,
+	"Document type deleted.":              410,
+	"Document type deselected.":           240,
+	"Document type not found.":            1134,
+	"Document type renamed to «%s».":      423,
+	"Document type selected.":             241,
 	"Document type | Filter":              125,
-	"Document types":                      372,
-	"Document types imported.":            410,
-	"Download":                            161,
-	"Download PDF":                        158,
-	"Download and continue":               503,
-	"Download backup":                     366,
-	"Draft":                               918,
-	"Due date":                            898,
+	"Document types":                      373,
+	"Document types imported.":            415,
+	"Download":                            162,
+	"Download PDF":                        159,
+	"Download and continue":               507,
+	"Download backup":                     367,
+	"Draft":                               996,
+	"Due date":                            976,
 	"Duplicate check is still being prepared for this file.": 132,
-	"Duplicates":                 183,
-	"Duplicates found":           134,
-	"Edit":                       124,
-	"Edit MCP credential":        340,
-	"Edit Space":                 514,
-	"Edit WebDAV credential":     342,
-	"Edit account":               39,
-	"Edit assigned tags":         535,
-	"Edit field":                 507,
-	"Edit field attribute":       407,
-	"Edit in «Spaces» view":      371,
-	"Edit note":                  102,
-	"Edit tag":                   532,
-	"Edit tag attribute":         408,
-	"Edited by %s: %s":           119,
-	"Effective date":             936,
-	"Email":                      635,
-	"Employee":                   967,
-	"Enable passkey enforcement": 360,
-	"Enable passkey enforcement for this organization? Members will need passkeys to sign in.": 361,
-	"End date":                           917,
-	"End date is before the start date.": 255,
-	"English":                            636,
-	"Equals":                             217,
-	"Error opening organization database. Please try again later.": 811,
-	"Estonia": 637,
-	"Exactly one Tag ID or field ID is required.": 1059,
-	"Exactly one typed value is required.":        1068,
-	"Expense department":                          972,
-	"Expense report":                              965,
-	"Expense status":                              971,
-	"Expired":                                     919,
-	"Failed":                                      1008,
-	"Field":                                       638,
-	"Field deleted.":                              506,
-	"Field filter text is too long.":              1043,
-	"Field not found.":                            1055,
-	"Field unit is too long.":                     1057,
-	"Field updated.":                              508,
-	"Field «%s» created.":                         505,
-	"Field «%s» is already added to this document type.": 828,
+	"Duplicates":                    184,
+	"Duplicates found":              134,
+	"Edit":                          124,
+	"Edit MCP credential":           341,
+	"Edit Space":                    518,
+	"Edit WebDAV credential":        343,
+	"Edit account":                  39,
+	"Edit assigned tags":            539,
+	"Edit field":                    511,
+	"Edit field attribute":          412,
+	"Edit in «Spaces» view":         372,
+	"Edit note":                     102,
+	"Edit tag":                      536,
+	"Edit tag attribute":            413,
+	"Edited by %s: %s":              119,
+	"Effective date":                1014,
+	"Email":                         639,
+	"Emails that could not be sent": 837,
+	"Emails waiting to be sent":     836,
+	"Employee":                      1045,
+	"Enable passkey enforcement":    361,
+	"Enable passkey enforcement for this organization? Members will need passkeys to sign in.": 362,
+	"Enabled":                            862,
+	"End date":                           995,
+	"End date is before the start date.": 256,
+	"Endpoint":                           807,
+	"English":                            640,
+	"Equals":                             218,
+	"Error":                              1079,
+	"Error opening organization database. Please try again later.": 889,
+	"Estonia": 641,
+	"Exactly one Tag ID or field ID is required.": 1146,
+	"Exactly one typed value is required.":        1155,
+	"Expense department":                          1050,
+	"Expense report":                              1043,
+	"Expense status":                              1049,
+	"Expired":                                     997,
+	"Failed":                                      1094,
+	"Field":                                       642,
+	"Field deleted.":                              510,
+	"Field filter text is too long.":              1130,
+	"Field not found.":                            1142,
+	"Field unit is too long.":                     1144,
+	"Field updated.":                              512,
+	"Field «%s» created.":                         509,
+	"Field «%s» is already added to this document type.": 906,
 	"Fields":                           128,
-	"File":                             639,
-	"File ID and Tag ID are required.": 1066,
-	"File ID and document type ID are required.":  1070,
-	"File ID and field ID are required.":          1067,
-	"File ID is required.":                        990,
-	"File already exists.":                        872,
+	"File":                             643,
+	"File ID and Tag ID are required.": 1153,
+	"File ID and document type ID are required.":  1157,
+	"File ID and field ID are required.":          1154,
+	"File ID is required.":                        1068,
+	"File already exists.":                        950,
 	"File deleted.":                               92,
-	"File does not belong to the current Space.":  838,
-	"File has changed. Please reload.":            852,
-	"File has no parent.":                         836,
-	"File is a folder.":                           824,
+	"File does not belong to the current Space.":  923,
+	"File encryption":                             795,
+	"File has changed. Please reload.":            930,
+	"File has no parent.":                         914,
+	"File is a folder.":                           902,
 	"File is not a folder.":                       83,
-	"File is not deleted.":                        547,
-	"File is not in the Inbox.":                   439,
-	"File must be filed before organization.":     1029,
-	"File must be in the Inbox.":                  194,
-	"File not found.":                             438,
-	"File or Tag not found.":                      1038,
-	"File preview is not available for folders.":  556,
-	"File restored.":                              549,
-	"File size":                                   147,
-	"File upload":                                 185,
-	"File uploaded, please select a Space.":       499,
-	"File version not found.":                     1028,
-	"Filename":                                    640,
-	"Filename already exists.":                    878,
+	"File is not deleted.":                        551,
+	"File is not in the Inbox.":                   443,
+	"File must be filed before organization.":     1115,
+	"File must be in the Inbox.":                  195,
+	"File not found.":                             141,
+	"File or Tag not found.":                      1125,
+	"File preview is not available for folders.":  560,
+	"File restored.":                              553,
+	"File size":                                   148,
+	"File upload":                                 186,
+	"File uploaded, please select a Space.":       503,
+	"File version not found.":                     1114,
+	"Filename":                                    644,
+	"Filename already exists.":                    956,
 	"Files":                                       85,
-	"Files uploaded, please select a Space.":      496,
-	"Files uploaded.":                             425,
-	"Filter MCP credentials":                      343,
-	"Filter WebDAV credentials":                   380,
-	"Filter by source":                            437,
-	"Filters":                                     203,
-	"Filters reset.":                              235,
-	"Final":                                       962,
-	"Finance":                                     943,
-	"Finland":                                     641,
-	"First name":                                  642,
-	"Folder deleted":                              552,
+	"Files uploaded, please select a Space.":      500,
+	"Files uploaded.":                             430,
+	"Filter MCP credentials":                      344,
+	"Filter WebDAV credentials":                   385,
+	"Filter by source":                            442,
+	"Filters":                                     204,
+	"Filters reset.":                              236,
+	"Final":                                       1040,
+	"Finance":                                     1021,
+	"Finland":                                     645,
+	"First name":                                  646,
+	"Folder deleted":                              556,
 	"Folder deleted.":                             91,
-	"Folder deleted: %s":                          553,
+	"Folder deleted: %s":                          557,
 	"Folder isn't empty.":                         90,
-	"Folder mode is not enabled.":                 855,
-	"Folder name":                                 643,
+	"Folder mode is not enabled.":                 933,
+	"Folder name":                                 647,
 	"Folder: %s":                                  137,
-	"Folders cannot be downloaded.":               264,
-	"Folders cannot be previewed.":                419,
-	"Folders cannot be restored.":                 546,
+	"Folders cannot be downloaded.":               265,
+	"Folders cannot be previewed.":                424,
+	"Folders cannot be restored.":                 550,
 	"Forgot password?":                            74,
-	"Form validation failed.":                     271,
-	"France":                                      644,
-	"Free 30-day trial, no credit card required.": 727,
-	"French":    645,
-	"Fulfilled": 932,
-	"Generated": 597,
-	"German":    646,
-	"Germany":   647,
-	"Give this passkey an optional name so you can recognize it later.": 589,
+	"Form validation failed.":                     272,
+	"France":                                      648,
+	"Free 30-day trial, no credit card required.": 731,
+	"French":    649,
+	"Fulfilled": 1010,
+	"General":   791,
+	"Generated": 601,
+	"German":    650,
+	"Germany":   651,
+	"Give this passkey an optional name so you can recognize it later.": 593,
 	"Global upload limit updated to %s.":                                12,
-	"Greater than":                                                      218,
-	"Greece":                                                            648,
-	"Group":                                                             649,
-	"Group «%s»":                                                        536,
-	"Group, %d tag":                                                     471,
-	"Group, %d tag, %d selected":                                        527,
-	"Group, %d tags":                                                    472,
-	"Group, %d tags, %d selected":                                       526,
-	"HR":                                                                941,
-	"Historical notes cannot be changed.":                               99,
-	"Home":                                                              268,
-	"Hungary":                                                           650,
-	"I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.": 189,
-	"IT":      942,
-	"Iceland": 651,
+	"Gotenberg URL":                                                     828,
+	"Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.": 829,
+	"Greater than":                219,
+	"Greece":                      652,
+	"Group":                       653,
+	"Group «%s»":                  540,
+	"Group, %d tag":               475,
+	"Group, %d tag, %d selected":  531,
+	"Group, %d tags":              476,
+	"Group, %d tags, %d selected": 530,
+	"HR":                          1019,
+	"HTTP, HTTPS must be provided by a reverse proxy": 847,
+	"Historical notes cannot be changed.":             99,
+	"Home":                                            269,
+	"Host":                                            831,
+	"Hosts":                                           845,
+	"Hungary":                                         654,
+	"I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.": 190,
+	"IT":      1020,
+	"Iceland": 655,
 	"If an account with this email exists, a new temporary password was sent.":                     62,
-	"If you cannot open the destination Space, you will lose access to this file after moving it.": 450,
-	"If you lose these codes and your passkey, account recovery may no longer be possible.":        595,
-	"Import":               412,
-	"Import URL":           500,
-	"Import file":          501,
-	"Import file from URL": 502,
-	"Import from library":  411,
-	"Import is only available for empty Spaces.": 413,
-	"Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.": 594,
-	"Imprint":                                    733,
-	"In progress":                                948,
-	"Inbox":                                      435,
-	"Inbox transfer":                             851,
-	"Info":                                       181,
+	"If you cannot open the destination Space, you will lose access to this file after moving it.": 454,
+	"If you lose these codes and your passkey, account recovery may no longer be possible.":        599,
+	"Implicit SSL/TLS":     834,
+	"Import":               417,
+	"Import URL":           504,
+	"Import file":          505,
+	"Import file from URL": 506,
+	"Import from library":  416,
+	"Import is only available for empty Spaces.": 418,
+	"Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.": 598,
+	"Imprint":                                    737,
+	"In progress":                                1026,
+	"Inbox":                                      440,
+	"Inbox transfer":                             929,
+	"Info":                                       182,
 	"Initialize":                                 5,
 	"Initialize app":                             4,
-	"Internal":                                   960,
-	"Invalid MCP credential.":                    779,
-	"Invalid OpenCloud callback origin.":         1025,
-	"Invalid OpenCloud permission ID.":           1003,
-	"Invalid OpenCloud public link.":             1004,
-	"Invalid Tag filter.":                        1045,
-	"Invalid Tag type.":                          1056,
-	"Invalid URL.":                               790,
-	"Invalid backup sign-in credentials.":        752,
-	"Invalid base64 content.":                    1048,
+	"Insecure cookies":                           796,
+	"Internal":                                   1038,
+	"Invalid MCP credential.":                    783,
+	"Invalid OpenCloud callback origin.":         1111,
+	"Invalid OpenCloud permission ID.":           1089,
+	"Invalid OpenCloud public link.":             1090,
+	"Invalid Tag filter.":                        1132,
+	"Invalid Tag type.":                          1143,
+	"Invalid URL.":                               868,
+	"Invalid backup sign-in credentials.":        756,
+	"Invalid base64 content.":                    1135,
 	"Invalid credentials. Please try again.":     66,
-	"Invalid download range.":                    1026,
-	"Invalid field filter range.":                1033,
-	"Invalid field filter.":                      1032,
-	"Invalid field type.":                        1058,
-	"Invalid filename.":                          861,
-	"Invalid filing input.":                      1041,
-	"Invalid folder ID.":                         991,
-	"Invalid note text range.":                   1062,
-	"Invalid page or search range.":              989,
-	"Invalid page range.":                        1044,
-	"Invalid passkey origin configuration.":      757,
+	"Invalid download range.":                    1112,
+	"Invalid field filter range.":                1119,
+	"Invalid field filter.":                      1118,
+	"Invalid field type.":                        1145,
+	"Invalid filename.":                          939,
+	"Invalid filing input.":                      1128,
+	"Invalid folder ID.":                         1069,
+	"Invalid note text range.":                   1149,
+	"Invalid page or search range.":              1067,
+	"Invalid page range.":                        1131,
+	"Invalid passkey origin configuration.":      761,
 	"Invalid passkey registration payload.":      51,
 	"Invalid passkey response payload.":          53,
-	"Invalid passkey sign-in.":                   747,
-	"Invalid passphrase.":                        583,
+	"Invalid passkey sign-in.":                   751,
+	"Invalid passphrase.":                        587,
 	"Invalid request payload.":                   42,
-	"Invalid search input.":                      1042,
+	"Invalid search input.":                      1129,
 	"Invalid session cookie.":                    29,
-	"Invalid sort order.":                        849,
-	"Invalid source filter.":                     434,
-	"Invalid text range.":                        837,
-	"Invalid upload size.":                       1002,
-	"Invalid version number.":                    197,
-	"Invoice":                                    894,
-	"Invoice date":                               896,
-	"Invoice number":                             895,
-	"Invoice status":                             903,
-	"Ireland":                                    652,
-	"Is name giving":                             653,
-	"Is unlimited":                               654,
-	"It expires at":                              765,
-	"Italian":                                    655,
-	"Italy":                                      656,
-	"Keep these backup codes in a secure place.": 598,
-	"Label":                        657,
-	"Language":                     658,
-	"Last name":                    659,
-	"Last used: %s":                336,
-	"Latvia":                       660,
-	"Layout":                       661,
-	"Layout not supported.":        534,
-	"Less than":                    219,
-	"Library template keys":        662,
-	"Liechtenstein":                663,
-	"List":                         211,
-	"Lithuania":                    664,
-	"Loading more…":                171,
-	"Loading…":                     593,
-	"Local":                        665,
-	"Local URLs are not allowed.":  806,
-	"Luxembourg":                   666,
-	"MCP":                          994,
-	"MCP URL":                      280,
-	"MCP URL copied to clipboard.": 349,
-	"MCP credential cannot write.": 1019,
-	"MCP credential created":       278,
-	"MCP credential revoked.":      368,
-	"MCP credentials":              357,
-	"MIME type":                    148,
-	"Maintenance mode":             987,
-	"Maintenance mode is enabled. Please wait until the app is ready again.": 988,
-	"Malformed upload body.":        497,
-	"Malta":                         667,
-	"Manage Space":                  992,
-	"Manage Spaces":                 330,
+	"Invalid sort order.":                        927,
+	"Invalid source filter.":                     439,
+	"Invalid text range.":                        915,
+	"Invalid upload size.":                       1088,
+	"Invalid version number.":                    198,
+	"Invoice":                                    972,
+	"Invoice date":                               974,
+	"Invoice number":                             973,
+	"Invoice status":                             981,
+	"Ireland":                                    656,
+	"Is name giving":                             657,
+	"Is unlimited":                               658,
+	"It expires at":                              769,
+	"Italian":                                    659,
+	"Italy":                                      660,
+	"Keep these backup codes in a secure place.": 602,
+	"Label":    661,
+	"Language": 662,
+	"Last checked: %s. Configuration changes take effect after a restart.": 1078,
+	"Last name":                    663,
+	"Last used: %s":                337,
+	"Latvia":                       664,
+	"Layout":                       665,
+	"Layout not supported.":        538,
+	"Less than":                    220,
+	"Library template keys":        666,
+	"Liechtenstein":                667,
+	"List":                         212,
+	"Lithuania":                    668,
+	"Loading more…":                172,
+	"Loading…":                     597,
+	"Local":                        669,
+	"Local URLs are not allowed.":  884,
+	"Luxembourg":                   670,
+	"MCP":                          1072,
+	"MCP URL":                      281,
+	"MCP URL copied to clipboard.": 350,
+	"MCP credential cannot write.": 1105,
+	"MCP credential created":       279,
+	"MCP credential revoked.":      369,
+	"MCP credentials":              358,
+	"MIME type":                    149,
+	"Maintenance mode":             1065,
+	"Maintenance mode is enabled. Please wait until the app is ready again.": 1066,
+	"Malformed upload body.":        501,
+	"Malta":                         671,
+	"Manage Space":                  1070,
+	"Manage Spaces":                 331,
 	"Manage document types":         127,
 	"Manage fields":                 78,
-	"Manage tags":                   225,
-	"Manage upload limit":           338,
-	"Mark as done":                  429,
-	"Marked file «%s» as done.":     440,
+	"Manage tags":                   226,
+	"Manage upload limit":           339,
+	"Mark as done":                  434,
+	"Marked file «%s» as done.":     444,
+	"Max file size":                 820,
+	"Max upload size":               797,
 	"Max upload size (MiB)":         15,
-	"Max upload size is too large.": 815,
-	"Max upload size mib":           668,
-	"Max upload size must be greater than 0 MiB when unlimited is disabled.": 816,
-	"Max upload size must be greater than or equal to 0 MiB.":                814,
-	"Max upload size must be greater than or equal to 0.":                    786,
-	"Mcp":                1009,
-	"Meals":              910,
-	"Meeting date":       957,
-	"Meeting notes":      956,
-	"Meeting status":     964,
-	"Meeting type":       963,
-	"Member account":     488,
-	"Message":            669,
-	"Message (optional)": 447,
-	"Metadata":           174,
-	"Metadata already exists or is still in use.": 1039,
-	"Metadata identifiers are unavailable.":       1052,
-	"Metadata upgrade is still in progress.":      1049,
-	"Missing passkey rp id configuration.":        758,
-	"Missing version number.":                     196,
-	"Modified at":                                 544,
-	"Money":                                       670,
-	"Money value":                                 671,
-	"Money value is out of range.":                1035,
-	"Move":                                        141,
-	"Move file":                                   265,
-	"Move file to «%s»":                           266,
-	"Move tag to group":                           537,
-	"Move to another Inbox":                       426,
-	"Move to group":                               470,
-	"Moved to group «%s».":                        539,
-	"Moved to the Inbox of «%s».":                 442,
-	"Moved to «%s».":                              231,
-	"Moving clears the document type, tags, and custom fields. Versions and notes are kept.": 449,
-	"NDA":                                    925,
-	"Name":                                   172,
-	"Name must contain 1 to 300 characters.": 1053,
-	"Netherlands":                            672,
-	"New filename":                           673,
-	"New filename is empty.":                 865,
-	"New filename is the same as old.":       866,
-	"New folder name":                        674,
-	"New name":                               675,
-	"New organization registration":          766,
-	"New passphrase":                         676,
-	"New passphrase does not match confirmation.":           784,
-	"New passphrase is required.":                           783,
-	"New password":                                          677,
-	"New password must be different from current password.": 743,
-	"New version uploaded for «%s».":                        262,
-	"Newest first":                                          242,
-	"No":                                                    180,
-	"No MCP credentials yet.":                               346,
-	"No Space available yet":                                327,
-	"No Space selected. Please select a Space first.":       452,
-	"No Spaces available yet.":                              272,
-	"No WebDAV credentials yet.":                            381,
-	"No backup codes were returned.":                        572,
-	"No data available.":                                    178,
+	"Max upload size is too large.": 893,
+	"Max upload size mib":           672,
+	"Max upload size must be greater than 0 MiB when unlimited is disabled.": 894,
+	"Max upload size must be greater than or equal to 0 MiB.":                892,
+	"Max upload size must be greater than or equal to 0.":                    790,
+	"Mcp":                1095,
+	"Meals":              988,
+	"Meeting date":       1035,
+	"Meeting notes":      1034,
+	"Meeting status":     1042,
+	"Meeting type":       1041,
+	"Member account":     492,
+	"Message":            673,
+	"Message (optional)": 451,
+	"Metadata":           175,
+	"Metadata already exists or is still in use.": 1126,
+	"Metadata identifiers are unavailable.":       1139,
+	"Metadata upgrade is still in progress.":      1136,
+	"Missing passkey rp id configuration.":        762,
+	"Missing version number.":                     197,
+	"Mode":                                        843,
+	"Modified at":                                 548,
+	"Money":                                       674,
+	"Money value":                                 675,
+	"Money value is out of range.":                1121,
+	"Move":                                        142,
+	"Move file":                                   266,
+	"Move file to «%s»":                           267,
+	"Move tag to group":                           541,
+	"Move to another Inbox":                       431,
+	"Move to group":                               474,
+	"Moved to group «%s».":                        543,
+	"Moved to the Inbox of «%s».":                 446,
+	"Moved to «%s».":                              232,
+	"Moving clears the document type, tags, and custom fields. Versions and notes are kept.": 453,
+	"NDA":                                    1003,
+	"Name":                                   173,
+	"Name must contain 1 to 300 characters.": 1140,
+	"Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.": 819,
+	"Netherlands":                                 676,
+	"New filename":                                677,
+	"New filename is empty.":                      943,
+	"New filename is the same as old.":            944,
+	"New folder name":                             678,
+	"New name":                                    679,
+	"New organization registration":               770,
+	"New passphrase":                              680,
+	"New passphrase does not match confirmation.": 788,
+	"New passphrase is required.":                 787,
+	"New password":                                681,
+	"New password must be different from current password.": 747,
+	"New version uploaded for «%s».":                        263,
+	"Newest first":                                          243,
+	"No":                                                    181,
+	"No MCP credentials yet.":                               347,
+	"No Space available yet":                                328,
+	"No Space selected. Please select a Space first.":       456,
+	"No Spaces available yet.":                              273,
+	"No WebDAV credentials yet.":                            386,
+	"No backup codes were returned.":                        576,
+	"No data available.":                                    179,
 	"No document types available yet.":                      126,
 	"No duplicates found.":                                  133,
-	"No fields assigned yet.":                               169,
-	"No fields available yet.":                              213,
-	"No fields available.":                                  214,
+	"No fields assigned yet.":                               170,
+	"No fields available yet.":                              214,
+	"No fields available.":                                  215,
 	"No file ID provided.":                                  89,
-	"No file provided.":                                     259,
-	"No files available yet.":                               204,
-	"No files or folders available yet.":                    205,
+	"No file provided.":                                     260,
+	"No files available yet.":                               205,
+	"No files or folders available yet.":                    206,
 	"No folder ID provided.":                                88,
-	"No library document types available yet.":              414,
-	"No matches found.":                                     195,
-	"No new files found.":                                   424,
-	"No notes available.":                                   113,
-	"No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.": 443,
-	"No parent folder provided.":               257,
-	"No passkeys registered":                   301,
-	"No passphrase set.":                       782,
-	"No password set":                          322,
-	"No tag groups available yet.":             400,
-	"No tag groups available.":                 130,
-	"No tags assigned.":                        545,
-	"No tags available yet.":                   224,
-	"No unassigned fields available.":          77,
-	"No unassigned users available.":           457,
-	"No users assigned yet.":                   466,
-	"No versions available yet.":               200,
-	"Norway":                                   678,
-	"Not a ZIP archive.":                       246,
-	"Not initialized":                          316,
-	"Note":                                     109,
-	"Note added.":                              93,
-	"Note deleted.":                            96,
-	"Note has already changed. Please reload.": 835,
-	"Note not found.":                          829,
-	"Note replaced.":                           95,
-	"Note text must not be empty.":             831,
-	"Note title must not be empty.":            830,
-	"Note title or body is too long.":          1064,
-	"Note updated.":                            94,
-	"Notes":                                    112,
-	"Notes in Trash are read-only.":            98,
-	"Number":                                   679,
-	"Number value":                             680,
-	"Number value is out of range.":            1036,
-	"OCR succeeded at":                         569,
-	"Office":                                   911,
-	"Old passphrase is required.":              785,
-	"Oldest first":                             243,
-	"On hold":                                  950,
-	"Only HTTP and HTTPS URLs are allowed.":    804,
-	"Only admins and supporters can run assisted passkey recovery.": 25,
-	"Only allowed in folder mode.":                                  229,
-	"Only assigned":                                                 681,
-	"Only files in the Inbox can be transferred.":                   853,
-	"Only organization owners can manage users and settings.":       568,
-	"Only owners can change passkey enforcement.":                   377,
-	"Open":                                   900,
-	"Open file":                              230,
-	"Open folder":                            228,
-	"Open main menu":                         588,
-	"Open sign in page":                      773,
-	"Open tasks":                             299,
-	"Open with":                              558,
-	"OpenCloud callback origin is required.": 1024,
-	"OpenCloud could not provide the file right now. Try again later.":                                          801,
-	"OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.": 797,
-	"OpenCloud import is not configured correctly.":                                                             1022,
-	"OpenCloud import is not configured.":                                                                       1021,
-	"OpenCloud import requires HTTPS.":                                                                          1023,
-	"OpenCloud is receiving too many requests. Wait a moment and try again.":                                    799,
-	"OpenCloud rejected the integration password. Ask your administrator to check the integration settings.":    796,
-	"OpenCloud took too long to respond. Try again.":                                                            794,
-	"Operation":                        682,
-	"Operations":                       944,
-	"Operator":                         683,
-	"Order date":                       928,
-	"Organization":                     359,
-	"Organization database not found.": 887,
-	"Organization is required.":        817,
-	"Organization name":                728,
-	"Organization not found.":          376,
-	"Organization not initialized yet. Please try again later.": 810,
+	"No hosts are configured for automatic certificates.":   846,
+	"No library document types available yet.":              419,
+	"No mail server is configured. Emails, for example for password resets, are not sent.": 838,
+	"No matches found.":   196,
+	"No new files found.": 429,
+	"No notes available.": 113,
+	"No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.": 447,
+	"No parent folder provided.": 258,
+	"No passkeys registered":     302,
+	"No passphrase set.":         786,
+	"No password set":            323,
+	"No problems found":          1075,
+	"No public origin is set. Emails cannot link to the app.": 801,
+	"No sender address is configured. Emails cannot be sent.": 839,
+	"No storage is configured. Files cannot be uploaded.":     812,
+	"No tag groups available yet.":                            405,
+	"No tag groups available.":                                130,
+	"No tags assigned.":                                       549,
+	"No tags available yet.":                                  225,
+	"No unassigned fields available.":                         77,
+	"No unassigned users available.":                          461,
+	"No users assigned yet.":                                  470,
+	"No versions available yet.":                              201,
+	"Norway":                                                  682,
+	"Not a ZIP archive.":                                      247,
+	"Not allowed":                                             864,
+	"Not configured":                                          1081,
+	"Not initialized":                                         317,
+	"Not reachable":                                           856,
+	"Not set":                                                 860,
+	"Note":                                                    109,
+	"Note added.":                                             93,
+	"Note deleted.":                                           96,
+	"Note has already changed. Please reload.":                913,
+	"Note not found.":                                         907,
+	"Note replaced.":                                          95,
+	"Note text must not be empty.":                            909,
+	"Note title must not be empty.":                           908,
+	"Note title or body is too long.":                         1151,
+	"Note updated.":                                           94,
+	"Notes":                                                   112,
+	"Notes in Trash are read-only.":                           98,
+	"Number":                                                  683,
+	"Number value":                                            684,
+	"Number value is out of range.":                           1122,
+	"OCR":                                                     815,
+	"OCR succeeded at":                                        573,
+	"OK":                                                      1082,
+	"Office":                                                  989,
+	"Old passphrase is required.":                             789,
+	"Oldest first":                                            244,
+	"On hold":                                                 1028,
+	"Only HTTP and HTTPS URLs are allowed.":                   882,
+	"Only admins and supporters can run assisted passkey recovery.":              25,
+	"Only allowed in folder mode.":                                               230,
+	"Only assigned":                                                              685,
+	"Only files in the Inbox can be transferred.":                                931,
+	"Only one of certificate file and private key file is set. TLS is disabled.": 848,
+	"Only organization owners can manage users and settings.":                    572,
+	"Only owners can change passkey enforcement.":                                382,
+	"Open":                                   978,
+	"Open file":                              231,
+	"Open folder":                            229,
+	"Open main menu":                         592,
+	"Open sign in page":                      777,
+	"Open tasks":                             300,
+	"Open with":                              562,
+	"OpenCloud callback origin is required.": 1110,
+	"OpenCloud could not provide the file right now. Try again later.":                                          879,
+	"OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.": 875,
+	"OpenCloud import is not configured correctly.":                                                             1108,
+	"OpenCloud import is not configured.":                                                                       1107,
+	"OpenCloud import requires HTTPS.":                                                                          1109,
+	"OpenCloud is receiving too many requests. Wait a moment and try again.":                                    877,
+	"OpenCloud rejected the integration password. Ask your administrator to check the integration settings.":    874,
+	"OpenCloud took too long to respond. Try again.":                                                            872,
+	"Operation":                        686,
+	"Operations":                       1022,
+	"Operator":                         687,
+	"Order date":                       1006,
+	"Organization":                     360,
+	"Organization database not found.": 965,
+	"Organization is required.":        895,
+	"Organization name":                732,
+	"Organization not found.":          381,
+	"Organization not initialized yet. Please try again later.": 888,
 	"Organization upload limit updated to %s.":                  18,
-	"Organization «%s»":                                         300,
-	"Organizations":                                             993,
-	"Organizer":                                                 958,
-	"Original":                                                  157,
-	"Original filename":                                         150,
-	"Original source preview is only available for HTML files.": 420,
-	"Other":         684,
-	"Overdue":       902,
-	"Owned account": 489,
-	"Owner":         685,
-	"PDF preview conversion is not configured.":                                                  236,
-	"PDF preview could not be generated.":                                                        159,
-	"PDF preview generation queued.":                                                             238,
-	"PDF preview is being generated. Please wait a moment; the page will refresh automatically.": 163,
-	"PDF preview is not available.":                                                              164,
-	"PDF preview is not ready to retry.":                                                         237,
-	"PDF preview is unavailable because Gotenberg is not configured.":                            162,
-	"PO number": 927,
-	"Paid":      901,
-	"Parent directory ID and name are required.": 1040,
-	"Parent folder":              267,
-	"Parent is not a folder.":    858,
-	"Participants":               959,
-	"Parties":                    915,
-	"Passkey":                    337,
-	"Passkey account not found.": 762,
+	"Organization «%s»":                                         301,
+	"Organizations":                                             1071,
+	"Organizer":                                                 1036,
+	"Original":                                                  158,
+	"Original filename":                                         151,
+	"Original source preview is only available for HTML files.": 425,
+	"Other":                             688,
+	"Overdue":                           980,
+	"Override stored config on startup": 798,
+	"Owned account":                     493,
+	"Owner":                             689,
+	"PDF preview conversion is not configured.":                                                  237,
+	"PDF preview could not be generated.":                                                        160,
+	"PDF preview generation queued.":                                                             239,
+	"PDF preview is being generated. Please wait a moment; the page will refresh automatically.": 164,
+	"PDF preview is not available.":                                                              165,
+	"PDF preview is not ready to retry.":                                                         238,
+	"PDF preview is unavailable because Gotenberg is not configured.":                            163,
+	"PDF previews": 827,
+	"PO number":    1005,
+	"Paid":         979,
+	"Parent directory ID and name are required.": 1127,
+	"Parent folder":              268,
+	"Parent is not a folder.":    936,
+	"Participants":               1037,
+	"Parties":                    993,
+	"Passkey":                    338,
+	"Passkey account not found.": 766,
 	"Passkey backup codes":       45,
-	"Passkey challenge is invalid or expired.":       760,
+	"Passkey challenge is invalid or expired.":       764,
 	"Passkey deleted.":                               38,
-	"Passkey enforcement disabled for organization.": 379,
-	"Passkey enforcement enabled for organization.":  378,
-	"Passkey name (optional)":                        592,
+	"Passkey enforcement disabled for organization.": 384,
+	"Passkey enforcement enabled for organization.":  383,
+	"Passkey name (optional)":                        596,
 	"Passkey name is required.":                      57,
-	"Passkey not found.":                             755,
-	"Passkey recommendation":                         305,
-	"Passkey registration failed.":                   750,
+	"Passkey not found.":                             759,
+	"Passkey recommendation":                         306,
+	"Passkey registration failed.":                   754,
 	"Passkey renamed.":                               58,
 	"Passkey setup is required by your organization. Register a passkey now.": 69,
-	"Passkey setup required":                           312,
-	"Passkey sign-in failed.":                          748,
-	"Passkey sign-in is not enabled for this account.": 749,
-	"Passkey sign-in is required for this account.":    736,
-	"Passkeys": 302,
+	"Passkey setup required":                           313,
+	"Passkey sign-in failed.":                          752,
+	"Passkey sign-in is not enabled for this account.": 753,
+	"Passkey sign-in is required for this account.":    740,
+	"Passkeys": 303,
 	"Passkeys cannot be removed because an organization requires passkey sign-in.": 32,
-	"Passphrase":                686,
+	"Passphrase":                690,
 	"Passphrase changed.":       3,
-	"Passphrase is required.":   582,
+	"Passphrase is required.":   586,
+	"Passphrase protection":     794,
 	"Passphrase removed.":       10,
 	"Passphrases do not match.": 6,
-	"Password":                  687,
+	"Password":                  691,
 	"Password changed.":         30,
-	"Password must be at least twelve characters long.": 745,
+	"Password must be at least twelve characters long.": 749,
 	"Password set.":                         64,
-	"Passwords do not match.":               746,
-	"Path element is a file, not a folder.": 856,
-	"Payment method":                        907,
-	"Pending":                               688,
-	"Person":                                973,
-	"Plan":                                  953,
-	"Please confirm that the source file metadata will be lost.":             186,
-	"Please create a field first.":                                           393,
-	"Please create a tag group first.":                                       401,
-	"Please create a user in the organization user management first.":        458,
-	"Please create one to get started.":                                      329,
-	"Please register a passkey to continue.":                                 983,
-	"Please reload the page and try again.":                                  456,
-	"Please select at least one document type.":                              825,
-	"Please sign in and change your password as soon as possible.":           772,
-	"Please try again once you created a Space or were invited to join one.": 493,
-	"Please wait":                           317,
-	"Poland":                                689,
-	"Policy":                                934,
-	"Policy department":                     939,
-	"Policy name":                           935,
-	"Policy status":                         938,
-	"Portugal":                              690,
-	"Preview":                               156,
-	"Preview tab":                           691,
-	"Print codes":                           605,
-	"Print dialog opened.":                  601,
-	"Privacy policy":                        734,
-	"Pro":                                   692,
-	"Processing":                            1011,
-	"Processing of downloaded file failed.": 789,
-	"Processing of shared files failed.":    495,
-	"Project document":                      945,
-	"Project name":                          946,
-	"Project status":                        951,
-	"Project type":                          952,
-	"Properties":                            723,
-	"Purchase order":                        926,
-	"Purchase order status":                 933,
-	"Push url":                              693,
-	"Pwaos open":                            1010,
-	"Quota usage":                           320,
-	"Read-only":                             351,
-	"Read-only request context required.":   258,
-	"Read/write":                            352,
-	"Ready":                                 1012,
-	"Receipt":                               904,
-	"Receipt category":                      908,
-	"Receipt date":                          905,
-	"Reduce the secret length only if your device limits the maximum password length.": 284,
-	"Refresh":                 319,
-	"Regenerate backup codes": 307,
-	"Regenerate backup codes? Existing codes will stop working.": 308,
-	"Register a passkey to enable passwordless sign in.":         303,
+	"Passwords do not match.":               750,
+	"Path element is a file, not a folder.": 934,
+	"Payment method":                        985,
+	"Pending":                               692,
+	"Person":                                1051,
+	"Plan":                                  1031,
+	"Please confirm that the source file metadata will be lost.":             187,
+	"Please create a field first.":                                           398,
+	"Please create a tag group first.":                                       406,
+	"Please create a user in the organization user management first.":        462,
+	"Please create one to get started.":                                      330,
+	"Please register a passkey to continue.":                                 1061,
+	"Please reload the page and try again.":                                  460,
+	"Please select at least one document type.":                              903,
+	"Please sign in and change your password as soon as possible.":           776,
+	"Please try again once you created a Space or were invited to join one.": 497,
+	"Please wait":                           318,
+	"Poland":                                693,
+	"Policy":                                1012,
+	"Policy department":                     1017,
+	"Policy name":                           1013,
+	"Policy status":                         1016,
+	"Port":                                  832,
+	"Portugal":                              694,
+	"Preview":                               157,
+	"Preview tab":                           695,
+	"Print codes":                           609,
+	"Print dialog opened.":                  605,
+	"Privacy policy":                        738,
+	"Private key file":                      851,
+	"Pro":                                   696,
+	"Processing":                            1097,
+	"Processing of downloaded file failed.": 867,
+	"Processing of shared files failed.":    499,
+	"Project document":                      1023,
+	"Project name":                          1024,
+	"Project status":                        1029,
+	"Project type":                          1030,
+	"Properties":                            727,
+	"Public origin":                         792,
+	"Purchase order":                        1004,
+	"Purchase order status":                 1011,
+	"Push url":                              697,
+	"Pwaos open":                            1096,
+	"Quota usage":                           321,
+	"Read-only":                             352,
+	"Read-only request context required.":   259,
+	"Read/write":                            353,
+	"Ready":                                 1098,
+	"Receipt":                               982,
+	"Receipt category":                      986,
+	"Receipt date":                          983,
+	"Reduce the secret length only if your device limits the maximum password length.": 285,
+	"Refresh":                 320,
+	"Regenerate backup codes": 308,
+	"Regenerate backup codes? Existing codes will stop working.": 309,
+	"Register a passkey to enable passwordless sign in.":         304,
 	"Register passkey": 50,
-	"Registration successful, please check your emails for your password.": 732,
-	"Rejected":                 970,
-	"Reload metadata":          427,
+	"Registration successful, please check your emails for your password.": 736,
+	"Rejected":                 1048,
+	"Reload metadata":          432,
 	"Remove":                   9,
 	"Remove passphrase":        8,
-	"Remove this field value?": 170,
-	"Remove this user from the organization and delete their account globally?": 487,
-	"Remove this user from the organization?":                                   486,
-	"Removed from group.":            538,
+	"Remove this field value?": 171,
+	"Remove this user from the organization and delete their account globally?": 491,
+	"Remove this user from the organization?":                                   490,
+	"Removed from group.":            542,
 	"Rename":                         56,
-	"Rename document type":           417,
-	"Rename file":                    233,
+	"Rename document type":           422,
+	"Rename file":                    234,
 	"Rename passkey":                 55,
-	"Renamed to «%s».":               234,
-	"Rendering failed.":              165,
+	"Renamed to «%s».":               235,
+	"Rendering failed.":              166,
 	"Replace":                        104,
 	"Replace note":                   103,
 	"Replaced":                       121,
 	"Replaced by: %s":                123,
-	"Report":                         954,
-	"Report period":                  966,
-	"Requested by":                   929,
+	"Report":                         1032,
+	"Report period":                  1044,
+	"Requested by":                   1007,
 	"Reset":                          60,
 	"Reset password":                 59,
-	"Restore":                        550,
-	"Retry PDF generation":           160,
-	"Revoke":                         355,
-	"Revoke this MCP credential?":    356,
-	"Revoke this WebDAV credential?": 389,
-	"Revoked":                        345,
-	"Role":                           694,
-	"Romania":                        695,
-	"S 3":                            696,
-	"SHA-256 hash":                   149,
-	"Sales":                          924,
+	"Restore":                        554,
+	"Retry PDF generation":           161,
+	"Revoke":                         356,
+	"Revoke this MCP credential?":    357,
+	"Revoke this WebDAV credential?": 394,
+	"Revoked":                        346,
+	"Role":                           698,
+	"Romania":                        699,
+	"S 3":                            700,
+	"SHA-256 hash":                   150,
+	"SSL/TLS":                        811,
+	"Sales":                          1002,
 	"Save":                           13,
-	"Search":                         207,
-	"Search Inbox files":             190,
-	"Search in «%s»":                 208,
-	"Search in «Inbox»":              436,
-	"Search query":                   697,
-	"Secret":                         292,
-	"Secret length":                  283,
-	"Secret length must be between %d and %d characters.": 823,
-	"Select Space": 494,
-	"Select between 1 and 64 document type templates.": 1061,
-	"Select destination manually":                      432,
-	"Select document types to add to this Space:":      512,
-	"Select document types to import:":                 415,
-	"Sent":                                             930,
-	"Service":                                          923,
-	"Set global upload limit":                          16,
-	"Set organization upload limit":                    20,
-	"Set passphrase":                                   333,
-	"Set password":                                     63,
-	"Set password now":                                 324,
-	"Set up a second passkey on another device as backup in case one device is lost.": 306,
-	"Settings":                        358,
-	"Show assigned tags":              529,
+	"Search":                         208,
+	"Search Inbox files":             191,
+	"Search in «%s»":                 209,
+	"Search in «Inbox»":              441,
+	"Search query":                   701,
+	"Secret":                         293,
+	"Secret access key":              810,
+	"Secret length":                  284,
+	"Secret length must be between %d and %d characters.": 901,
+	"Select Space": 498,
+	"Select between 1 and 64 document type templates.": 1148,
+	"Select destination manually":                      437,
+	"Select document types to add to this Space:":      516,
+	"Select document types to import:":                 420,
+	"Sender address":                                   833,
+	"Sent":                                             1008,
+	"Service":                                          1001,
+	"Session cookies are also sent over unencrypted connections.": 805,
+	"Set":                           861,
+	"Set global upload limit":       16,
+	"Set organization upload limit": 20,
+	"Set passphrase":                334,
+	"Set password":                  63,
+	"Set password now":              325,
+	"Set up a second passkey on another device as backup in case one device is lost.": 307,
+	"Settings":                        359,
+	"Show assigned tags":              533,
 	"Show deleted and replaced notes": 111,
-	"Show details":                    166,
-	"Show history":                    698,
-	"Show tags":                       699,
+	"Show details":                    167,
+	"Show history":                    702,
+	"Show tags":                       703,
 	"Sign in":                         47,
 	"Sign in [subject]":               72,
 	"Sign in only works over HTTPS or on localhost.": 71,
 	"Sign in with backup code":                       46,
 	"Sign in with passkey":                           73,
-	"Sign out":                                       995,
-	"Sign up":                                        725,
-	"Sign up [subject]":                              726,
+	"Sign out":                                       1073,
+	"Sign up":                                        729,
+	"Sign up [subject]":                              730,
 	"Signed in.":                                     70,
 	"Signed in. %d backup codes left.":               48,
-	"Simple":                                         700,
-	"SimpleDMS backup codes":                         596,
-	"SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.":          795,
-	"SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.": 800,
-	"SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.":        793,
-	"SimpleDMS could not save the imported file. Try again, or ask your administrator for help.":              788,
-	"SimpleDMS password reset": 770,
-	"Size":                     176,
-	"Sizes":                    724,
-	"Slovakia":                 701,
-	"Slovenia":                 702,
-	"Software":                 912,
-	"Something went wrong. Please try again.": 584,
-	"Sort by name":                          244,
-	"Sort files":                            209,
-	"Source":                                146,
-	"Source and target files are required.": 187,
-	"Source and target must be different files.": 832,
-	"Source file has no stored file.":            844,
-	"Source file has no versions.":               842,
-	"Source file is deleted.":                    840,
-	"Source file is not in the Inbox.":           841,
-	"Source file is required.":                   193,
-	"Source | Filter":                            441,
-	"Space":                                      276,
-	"Space context not found.":                   1071,
-	"Space deleted.":                             513,
-	"Space «%s» created.":                        510,
+	"Simple":                                         704,
+	"SimpleDMS backup codes":                         600,
+	"SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.":          873,
+	"SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.": 878,
+	"SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.":        871,
+	"SimpleDMS could not save the imported file. Try again, or ask your administrator for help.":              866,
+	"SimpleDMS password reset": 774,
+	"Size":                     177,
+	"Sizes":                    728,
+	"Slovakia":                 705,
+	"Slovenia":                 706,
+	"Software":                 990,
+	"Something went wrong. Please try again.": 588,
+	"Sort by name":                          245,
+	"Sort files":                            210,
+	"Source":                                147,
+	"Source and target files are required.": 188,
+	"Source and target must be different files.": 910,
+	"Source file has no stored file.":            918,
+	"Source file has no versions.":               916,
+	"Source file is deleted.":                    925,
+	"Source file is not in the Inbox.":           926,
+	"Source file is required.":                   194,
+	"Source | Filter":                            445,
+	"Space":                                      277,
+	"Space context not found.":                   1158,
+	"Space deleted.":                             517,
+	"Space «%s» created.":                        514,
 	"Space: %s":                                  136,
-	"Spaces":                                     518,
-	"Spain":                                      703,
-	"Spec":                                       955,
-	"Staged file integrity mismatch.":            885,
-	"Start date":                                 916,
-	"Starts with":                                216,
-	"Status":                                     899,
-	"Storage filename mismatch.":                 881,
-	"Storage limit reached for this organization. Used: %s of %s.": 893,
-	"Storage path is empty.":        871,
-	"Submission date":               968,
-	"Submitted":                     969,
-	"Subscribe to newsletter":       704,
-	"Subscription":                  315,
-	"Suggestion":                    577,
-	"Suggestions based on filename": 433,
-	"Super":                         705,
-	"Super tag":                     474,
-	"Supplier":                      897,
-	"Supporter":                     706,
-	"Sweden":                        707,
-	"Switzerland":                   708,
-	"System":                        311,
-	"System extraction":             561,
-	"Table":                         212,
-	"Tag":                           709,
-	"Tag group ID is required.":     475,
-	"Tag group not found.":          1050,
-	"Tag group «%s» is already added to this document type.": 827,
-	"Tag groups":                     129,
-	"Tag groups cannot be assigned.": 1037,
-	"Tag is not a group.":            476,
-	"Tag not found.":                 1046,
-	"Tag «%s» created.":              524,
-	"Tags":                           177,
-	"Tags of «%s»":                   531,
-	"Tags | Filter":                  223,
-	"Target account has no passkeys configured.": 754,
-	"Target date":                 947,
-	"Target file is required.":    192,
-	"Target host is not allowed.": 807,
-	"Template keys":               710,
+	"Spaces":                                     522,
+	"Spain":                                      707,
+	"Spec":                                       1033,
+	"Staged file integrity mismatch.":            963,
+	"Start date":                                 994,
+	"Starts with":                                217,
+	"Status":                                     977,
+	"Storage":                                    806,
+	"Storage filename mismatch.":                 959,
+	"Storage limit reached for this organization. Used: %s of %s.": 971,
+	"Storage path is empty.":        949,
+	"Submission date":               1046,
+	"Submitted":                     1047,
+	"Subscribe to newsletter":       708,
+	"Subscription":                  316,
+	"Suggestion":                    581,
+	"Suggestions based on filename": 438,
+	"Super":                         709,
+	"Super tag":                     478,
+	"Supplier":                      975,
+	"Supporter":                     710,
+	"Sweden":                        711,
+	"Switzerland":                   712,
+	"System":                        312,
+	"System extraction":             565,
+	"System settings":               376,
+	"System status":                 378,
+	"TLS":                           842,
+	"Table":                         213,
+	"Tag":                           713,
+	"Tag group ID is required.":     479,
+	"Tag group not found.":          1137,
+	"Tag group «%s» is already added to this document type.": 905,
+	"Tag groups":                      129,
+	"Tag groups cannot be assigned.":  1123,
+	"Tag is not a group.":             480,
+	"Tag is still assigned to files.": 1124,
+	"Tag not found.":                  1133,
+	"Tag «%s» created.":               528,
+	"Tags":                            178,
+	"Tags of «%s»":                    535,
+	"Tags | Filter":                   224,
+	"Target account has no passkeys configured.": 758,
+	"Target date":                 1025,
+	"Target file is required.":    193,
+	"Target host is not allowed.": 885,
+	"Template keys":               714,
 	"Temporary password cleared.": 36,
-	"Temporary password expired.": 739,
-	"Temporary session":           711,
-	"Terminated":                  920,
-	"Terms of service":            735,
-	"Text":                        712,
-	"Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.": 430,
-	"Text recognition (OCR) is not ready yet, suggestions are based on the filename only.":                                431,
-	"Text value": 713,
-	"The OpenCloud file has an unsupported filename. Rename the file and start a new export.":      791,
-	"The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.": 798,
-	"The app is locked.": 332,
-	"The app is unlocked and not protected by a passphrase.":                                                   331,
-	"The app is unlocked and protected by a passphrase.":                                                       334,
+	"Temporary password expired.": 743,
+	"Temporary session":           715,
+	"Terminated":                  998,
+	"Terms of service":            739,
+	"Text":                        716,
+	"Text extraction":             816,
+	"Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.": 435,
+	"Text recognition (OCR) is not ready yet, suggestions are based on the filename only.":                                436,
+	"Text value":                      717,
+	"The Gotenberg URL is not valid.": 830,
+	"The OpenCloud file has an unsupported filename. Rename the file and start a new export.":      869,
+	"The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.": 876,
+	"The Tika URL is not valid.": 825,
+	"The WebAuthn relying party ID does not match the public origin. Passkeys do not work.": 804,
+	"The Xberg URL is not valid.":                                                                              822,
+	"The app is locked.":                                                                                       333,
+	"The app is unlocked and not protected by a passphrase.":                                                   332,
+	"The app is unlocked and protected by a passphrase.":                                                       335,
 	"The backup codes are no longer available. Please generate a new set.":                                     44,
-	"The backup codes were copied to clipboard.":                                                               602,
-	"The backup codes were downloaded.":                                                                        604,
-	"The backup codes were regenerated.":                                                                       573,
-	"The organization is not initialized yet, please wait until the initialization is complete.":               318,
-	"The original parent folder is missing. Restored to Inbox.":                                                548,
-	"The page will be refreshed automatically once the upload is finished.":                                    492,
-	"The provided filename is not allowed.":                                                                    857,
-	"The requested page could not be loaded.":                                                                  520,
-	"The requested page was not found.":                                                                        519,
-	"These codes are shown only once.":                                                                         599,
+	"The backup codes were copied to clipboard.":                                                               606,
+	"The backup codes were downloaded.":                                                                        608,
+	"The backup codes were regenerated.":                                                                       577,
+	"The certificate could not be loaded: %s":                                                                  852,
+	"The certificate expired on %s.":                                                                           854,
+	"The certificate expires on %s.":                                                                           855,
+	"The certificate of the mail server is not verified.":                                                      840,
+	"The connection to the storage is not encrypted.":                                                          814,
+	"The organization is not initialized yet, please wait until the initialization is complete.":               319,
+	"The original parent folder is missing. Restored to Inbox.":                                                552,
+	"The page will be refreshed automatically once the upload is finished.":                                    496,
+	"The provided filename is not allowed.":                                                                    935,
+	"The public origin does not use HTTPS.":                                                                    803,
+	"The public origin is not a valid URL.":                                                                    802,
+	"The requested page could not be loaded.":                                                                  524,
+	"The requested page was not found.":                                                                        523,
+	"These codes are shown only once.":                                                                         603,
 	"This file already exists in the following %d locations:":                                                  135,
-	"This is an automated message, please do not reply.":                                                       767,
-	"This organization is in maintenance mode. Some features may not work. Please contact your administrator.": 580,
-	"Title": 108,
-	"Token": 281,
-	"Too many backup sign-in attempts. Please try again in 10 seconds.": 753,
+	"This is an automated message, please do not reply.":                                                       771,
+	"This organization is in maintenance mode. Some features may not work. Please contact your administrator.": 584,
+	"Tika URL":        824,
+	"Tika connection": 826,
+	"Title":           108,
+	"Token":           282,
+	"Too many backup sign-in attempts. Please try again in 10 seconds.": 757,
 	"Too many passkey requests. Please try again shortly.":              52,
 	"Too many password reset requests. Please try again shortly.":       61,
-	"Too many redirects.": 808,
-	"Too many sign-in attempts. Please try again in 10 seconds.": 737,
+	"Too many redirects.": 886,
+	"Too many sign-in attempts. Please try again in 10 seconds.": 741,
 	"Too many sign-in attempts. Please try again shortly.":       65,
-	"Too many unlock attempts. Please try again later.":          585,
-	"Trash":                                555,
-	"Trash is empty.":                      551,
-	"Travel":                               909,
-	"Trial":                                714,
-	"Type":                                 173,
-	"URL credentials are not allowed.":     805,
-	"URL import":                           559,
-	"URL is required.":                     803,
-	"Unassign":                             463,
-	"Unassign this user from the Space?":   465,
-	"Unassign user from Space":             462,
-	"Unavailable":                          321,
-	"Unavailable destination":              298,
-	"Unit":                                 716,
+	"Too many unlock attempts. Please try again later.":          589,
+	"Trash":                                559,
+	"Trash is empty.":                      555,
+	"Travel":                               987,
+	"Trial":                                718,
+	"Type":                                 174,
+	"URL credentials are not allowed.":     883,
+	"URL import":                           563,
+	"URL is required.":                     881,
+	"Unassign":                             467,
+	"Unassign this user from the Space?":   469,
+	"Unassign user from Space":             466,
+	"Unavailable":                          322,
+	"Unavailable destination":              299,
+	"Unit":                                 720,
 	"Unknown":                              118,
-	"Unknown document type template.":      974,
-	"Unknown legacy":                       1014,
-	"Unknown passkey credential.":          761,
+	"Unknown document type template.":      1052,
+	"Unknown legacy":                       1100,
+	"Unknown passkey credential.":          765,
 	"Unlimited":                            14,
 	"Unlock":                               22,
 	"Unlock app":                           21,
-	"Unsupported URL source.":              1020,
+	"Unsupported URL source.":              1106,
 	"Unsupported field type.":              81,
 	"Unsupported note operation.":          97,
-	"Unzip":                                245,
-	"Unzip archive":                        142,
-	"Upload":                               256,
-	"Upload a new version to get started.": 201,
+	"Unzip":                                246,
+	"Unzip archive":                        143,
+	"Upload":                               257,
+	"Upload a new version to get started.": 202,
 	"Upload file":                          86,
-	"Upload is empty.":                     873,
-	"Upload is no longer active.":          875,
-	"Upload is too large.":                 498,
-	"Upload is too large. Maximum allowed size is %s.": 891,
-	"Upload metadata must be sent before the file.":    261,
-	"Upload new version":                               199,
-	"Upload size mismatch.":                            874,
-	"Upload token":                                     1015,
+	"Upload is empty.":                     951,
+	"Upload is no longer active.":          953,
+	"Upload is too large.":                 502,
+	"Upload is too large. Maximum allowed size is %s.": 969,
+	"Upload metadata must be sent before the file.":    262,
+	"Upload new version":                               200,
+	"Upload size mismatch.":                            952,
+	"Upload token":                                     1101,
 	"Uploaded %s":                                      138,
-	"Uploaded at":                                      151,
-	"Uploaded file is already being processed.":        886,
-	"Uploaded file processing was taken over.":         888,
-	"Uploading":                                        1016,
-	"Uploading files, please wait a moment.":           491,
-	"Url":                                              715,
-	"Url import":                                       1013,
+	"Uploaded at":                                      152,
+	"Uploaded file is already being processed.":        964,
+	"Uploaded file processing was taken over.":         966,
+	"Uploading":                                        1102,
+	"Uploading files, please wait a moment.":           495,
+	"Url":                                              719,
+	"Url import":                                       1099,
 	"Use backup code":                                  75,
 	"Use global default":                               19,
-	"User":                                             717,
-	"User assigned to Space.":                          454,
-	"User created. The password was sent by email. Next, assign the user to a Space.":                   481,
-	"User created. The password was sent by email. Owners can access all Spaces without further setup.": 480,
-	"User is already assigned to this Space.":                                                           460,
-	"User removed from organization and account deleted globally.":                                      484,
-	"User removed from organization.":                                                                   485,
-	"User unassigned from Space.":                                                                       464,
-	"Username":                                                                                          291,
-	"Username: %s · Created: %s":                                                                        386,
-	"Username: %s · Last used: %s":                                                                      387,
-	"Username: %s · Revoked: %s":                                                                        388,
-	"Users":                                                                                             373,
-	"Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.": 286,
-	"Value":                                718,
-	"Value does not match the field type.": 1031,
-	"Value end":                            719,
+	"User":                                             721,
+	"User assigned to Space.":                          458,
+	"User created. The password was sent by email. Next, assign the user to a Space.":                   485,
+	"User created. The password was sent by email. Owners can access all Spaces without further setup.": 484,
+	"User is already assigned to this Space.":                                                           464,
+	"User removed from organization and account deleted globally.":                                      488,
+	"User removed from organization.":                                                                   489,
+	"User unassigned from Space.":                                                                       468,
+	"Username":                                                                                          292,
+	"Username: %s · Created: %s":                                                                        391,
+	"Username: %s · Last used: %s":                                                                      392,
+	"Username: %s · Revoked: %s":                                                                        393,
+	"Users":                                                                                             374,
+	"Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.": 287,
+	"Value":                                722,
+	"Value does not match the field type.": 1117,
+	"Value end":                            723,
 	"Value is required.":                   80,
-	"Value start":                          720,
-	"Vendor":                               906,
-	"Version":                              152,
+	"Value start":                          724,
+	"Vendor":                               984,
+	"Version":                              153,
 	"Version %d":                           140,
-	"Version not found.":                   168,
-	"Version number":                       721,
-	"Version preview":                      198,
-	"Versions":                             182,
-	"View mode":                            722,
+	"Version not found.":                   169,
+	"Version number":                       725,
+	"Version preview":                      199,
+	"Versions":                             183,
+	"View mode":                            726,
 	"View replacement note":                122,
-	"Web dav":                              1017,
-	"Web interface":                        1018,
-	"Web upload":                           557,
-	"WebDAV":                               560,
-	"WebDAV Inbox URL":                     290,
-	"WebDAV URL":                           289,
-	"WebDAV URL copied to clipboard.":      384,
-	"WebDAV credential created":            288,
-	"WebDAV credential revoked.":           370,
-	"WebDAV credentials":                   390,
-	"Welcome to SimpleDMS":                 768,
-	"Without writes, the MCP client can only read documents.": 275,
-	"Yes": 179,
-	"You are not allowed to access the requested resource.":                                                            999,
-	"You are not allowed to access this Space.":                                                                        571,
-	"You are not allowed to access this organization.":                                                                 570,
-	"You are not allowed to assign users to Spaces because you aren't the owner.":                                      453,
-	"You are not allowed to create users because you are not the owner.":                                               479,
-	"You are not allowed to create users. No organization selected.":                                                   478,
-	"You are not allowed to delete users because you are not the owner.":                                               483,
-	"You are not allowed to delete users. No organization selected.":                                                   482,
-	"You are not allowed to revoke this credential.":                                                                   369,
-	"You are not signed in. Please sign in to continue.":                                                               981,
-	"You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.": 446,
-	"You cannot access this document's notes.":                                                                         834,
+	"Warning":                              1080,
+	"Web dav":                              1103,
+	"Web interface":                        1104,
+	"Web upload":                           561,
+	"WebAuthn relying party ID":            793,
+	"WebDAV":                               564,
+	"WebDAV Inbox URL":                     291,
+	"WebDAV URL":                           290,
+	"WebDAV URL copied to clipboard.":      389,
+	"WebDAV credential created":            289,
+	"WebDAV credential revoked.":           371,
+	"WebDAV credentials":                   395,
+	"Welcome to SimpleDMS":                 772,
+	"Without writes, the MCP client can only read documents.": 276,
+	"Xberg URL":                           821,
+	"Xberg connection":                    823,
+	"Xberg, Tika for unsupported formats": 817,
+	"Yes":                                 180,
+	"You are not allowed to access the requested resource.":                                                            1085,
+	"You are not allowed to access this Space.":                                                                        575,
+	"You are not allowed to access this organization.":                                                                 574,
+	"You are not allowed to assign users to Spaces because you aren't the owner.":                                      457,
+	"You are not allowed to create users because you are not the owner.":                                               483,
+	"You are not allowed to create users. No organization selected.":                                                   482,
+	"You are not allowed to delete users because you are not the owner.":                                               487,
+	"You are not allowed to delete users. No organization selected.":                                                   486,
+	"You are not allowed to revoke this credential.":                                                                   370,
+	"You are not signed in. Please sign in to continue.":                                                               1059,
+	"You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.": 450,
+	"You cannot access this document's notes.":                                                                         912,
 	"You cannot change this note.":                                                                                     100,
-	"You cannot create a credential for this Space.":                                                                   294,
-	"You cannot delete your own user in organization management.":                                                      813,
+	"You cannot create a credential for this Space.":                                                                   295,
+	"You cannot delete your own user in organization management.":                                                      891,
 	"You cannot edit another account.":                                                                                 40,
-	"You cannot unassign yourself from a Space.":                                                                       461,
-	"You have no permission to access any Space of this organization.":                                                 328,
-	"You must be an admin to access system settings.":                                                                  374,
-	"You must be an admin to manage upload limits.":                                                                    819,
+	"You cannot unassign yourself from a Space.":                                                                       465,
+	"You have no permission to access any Space of this organization.":                                                 329,
+	"You must be an admin to access system settings.":                                                                  375,
+	"You must be an admin to access the system status.":                                                                377,
+	"You must be an admin to manage upload limits.":                                                                    897,
 	"You must be an admin to unlock the app.":                                                                          2,
 	"You must be signed in to change your password.":                                                                   28,
 	"You must be signed in to manage backup codes.":                                                                    54,
-	"You must be signed in to manage organizations.":                                                                   375,
+	"You must be signed in to manage organizations.":                                                                   380,
 	"You must be signed in to manage passkeys.":                                                                        31,
-	"You must be signed in to manage upload limits.":                                                                   818,
+	"You must be signed in to manage upload limits.":                                                                   896,
 	"You must be signed in to perform this action.":                                                                    24,
 	"You must be signed in to register a passkey.":                                                                     49,
 	"You must be signed in to unlock the app.":                                                                         1,
 	"You must be signed in to view backup codes.":                                                                      43,
-	"You need at least one passkey before creating backup codes.":                                                      751,
-	"You've signed in with a temporary password. Please set a password to secure your account and use the app.":        323,
-	"Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.": 326,
-	"Your account has been created successfully.":                                 771,
-	"Your message will be saved as a note with your name.":                        448,
-	"Your old password will still work until you change it.":                      775,
+	"You need at least one passkey before creating backup codes.":                                                      755,
+	"You've signed in with a temporary password. Please set a password to secure your account and use the app.":        324,
+	"Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.": 327,
+	"Your account has been created successfully.":                                 775,
+	"Your message will be saved as a note with your name.":                        452,
+	"Your old password will still work until you change it.":                      779,
 	"Your organization is no longer active. Please contact support.":              68,
-	"Your organization requires passkey sign-in. Register a passkey to continue.": 313,
-	"Your temporary password is":                                                  764,
-	"active":                                                                      516,
+	"Your organization requires passkey sign-in. Register a passkey to continue.": 314,
+	"Your temporary password is":                                                  768,
+	"active":                                                                      520,
 	"global default":                                                              17,
-	"name-giving":                                                                 396,
-	"optional":                                                                    578,
-	"required":                                                                    579,
+	"name-giving":                                                                 401,
+	"optional":                                                                    582,
+	"required":                                                                    583,
 	"unlimited":                                                                   11,
-	"«%s» assigned.":                                                              521,
-	"«%s» created and assigned.":                                                  523,
-	"«%s» created.":                                                               227,
-	"«%s» deleted.":                                                               525,
-	"«%s» invited you to the tenant «%s».":                                        776,
-	"«%s» invited you.":                                                           777,
-	"«%s» is checked":                                                             221,
-	"«%s» is not checked":                                                         222,
-	"«%s» removed.":                                                               232,
+	"«%s» assigned.":                                                              525,
+	"«%s» created and assigned.":                                                  527,
+	"«%s» created.":                                                               228,
+	"«%s» deleted.":                                                               529,
+	"«%s» invited you to the tenant «%s».":                                        780,
+	"«%s» invited you.":                                                           781,
+	"«%s» is checked":                                                             222,
+	"«%s» is not checked":                                                         223,
+	"«%s» removed.":                                                               233,
 	"«%s» saved.":                                                                 79,
-	"«%s» unassigned.":                                                            542,
-	"«%s» updated.":                                                               533,
-	"«%s» uploaded.":                                                              260,
+	"«%s» unassigned.":                                                            546,
+	"«%s» updated.":                                                               537,
+	"«%s» uploaded.":                                                              261,
 }
 
-var deIndex = []uint32{ // 1074 elements
+var deIndex = []uint32{ // 1161 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000013, 0x00000047, 0x0000007e,
 	0x00000094, 0x000000a7, 0x000000b6, 0x000000da,
@@ -1158,272 +1245,297 @@ var deIndex = []uint32{ // 1074 elements
 	0x00000f38, 0x00000f3f, 0x00000f4b, 0x00000f69,
 	0x00000f75, 0x00000fb3, 0x00000fcd, 0x00000fe0,
 	0x00001024, 0x00001031, 0x0000103f, 0x00001051,
-	0x00001068, 0x00001076, 0x00001082, 0x00001093,
-	0x000010dc, 0x00001137, 0x0000113f, 0x00001146,
-	0x00001153, 0x0000115d, 0x0000116a, 0x0000117f,
-	0x0000118e, 0x00001196, 0x000011b6, 0x000011c3,
-	0x000011d2, 0x000011db, 0x000011e4, 0x000011f6,
+	0x00001068, 0x00001076, 0x0000108c, 0x00001098,
+	0x000010a9, 0x000010f2, 0x0000114d, 0x00001155,
+	0x0000115c, 0x00001169, 0x00001173, 0x00001180,
+	0x00001195, 0x000011a4, 0x000011ac, 0x000011cc,
+	0x000011d9, 0x000011e8, 0x000011f1, 0x000011fa,
 	// Entry A0 - BF
-	0x00001225, 0x00001243, 0x00001251, 0x0000129f,
-	0x00001302, 0x00001329, 0x00001343, 0x00001354,
-	0x00001368, 0x00001380, 0x0000139e, 0x000013b9,
-	0x000013c6, 0x000013cb, 0x000013cf, 0x000013d9,
-	0x000013df, 0x000013e7, 0x000013ec, 0x00001404,
-	0x00001407, 0x0000140c, 0x00001411, 0x0000141b,
-	0x00001425, 0x0000144d, 0x0000145a, 0x0000149e,
-	0x000014c6, 0x000014ef, 0x0000158b, 0x000015a0,
+	0x0000120c, 0x0000123b, 0x00001259, 0x00001267,
+	0x000012b5, 0x00001318, 0x0000133f, 0x00001359,
+	0x0000136a, 0x0000137e, 0x00001396, 0x000013b4,
+	0x000013cf, 0x000013dc, 0x000013e1, 0x000013e5,
+	0x000013ef, 0x000013f5, 0x000013fd, 0x00001402,
+	0x0000141a, 0x0000141d, 0x00001422, 0x00001427,
+	0x00001431, 0x0000143b, 0x00001463, 0x00001470,
+	0x000014b4, 0x000014dc, 0x00001505, 0x000015a1,
 	// Entry C0 - DF
-	0x000015c7, 0x000015e3, 0x00001600, 0x0000161e,
-	0x00001636, 0x0000164f, 0x0000166a, 0x0000167b,
-	0x00001692, 0x000016b3, 0x000016e0, 0x000016f9,
-	0x00001700, 0x0000171f, 0x0000174a, 0x0000176d,
-	0x00001773, 0x00001786, 0x00001798, 0x000017b3,
-	0x000017b9, 0x000017c1, 0x000017df, 0x000017f8,
-	0x00001801, 0x0000180d, 0x00001814, 0x00001821,
-	0x0000182d, 0x00001836, 0x0000184d, 0x0000186a,
+	0x000015b6, 0x000015dd, 0x000015f9, 0x00001616,
+	0x00001634, 0x0000164c, 0x00001665, 0x00001680,
+	0x00001691, 0x000016a8, 0x000016c9, 0x000016f6,
+	0x0000170f, 0x00001716, 0x00001735, 0x00001760,
+	0x00001783, 0x00001789, 0x0000179c, 0x000017ae,
+	0x000017c9, 0x000017cf, 0x000017d7, 0x000017f5,
+	0x0000180e, 0x00001817, 0x00001823, 0x0000182a,
+	0x00001837, 0x00001843, 0x0000184c, 0x00001863,
 	// Entry E0 - FF
-	0x00001878, 0x00001894, 0x000018a3, 0x000018ad,
-	0x000018c1, 0x000018d0, 0x000018ec, 0x000018fa,
-	0x00001915, 0x00001929, 0x0000193a, 0x00001952,
-	0x00001969, 0x000019a0, 0x000019e1, 0x00001a24,
-	0x00001a3c, 0x00001a55, 0x00001a6c, 0x00001a7b,
-	0x00001a8b, 0x00001a9f, 0x00001aa9, 0x00001aba,
-	0x00001ae3, 0x00001b08, 0x00001b2f, 0x00001b5c,
-	0x00001b9c, 0x00001bad, 0x00001bc2, 0x00001bf1,
+	0x00001880, 0x0000188e, 0x000018aa, 0x000018b9,
+	0x000018c3, 0x000018d7, 0x000018e6, 0x00001902,
+	0x00001910, 0x0000192b, 0x0000193f, 0x00001950,
+	0x00001968, 0x0000197f, 0x000019b6, 0x000019f7,
+	0x00001a3a, 0x00001a52, 0x00001a6b, 0x00001a82,
+	0x00001a91, 0x00001aa1, 0x00001ab5, 0x00001abf,
+	0x00001ad0, 0x00001af9, 0x00001b1e, 0x00001b45,
+	0x00001b72, 0x00001bb2, 0x00001bc3, 0x00001bd8,
 	// Entry 100 - 11F
-	0x00001c14, 0x00001c1e, 0x00001c45, 0x00001c6b,
-	0x00001c87, 0x00001ca4, 0x00001ce0, 0x00001d0f,
-	0x00001d47, 0x00001d74, 0x00001d86, 0x00001da7,
-	0x00001dbe, 0x00001dc9, 0x00001dcf, 0x00001df9,
-	0x00001e1d, 0x00001e3b, 0x00001e4e, 0x00001e66,
-	0x00001ea3, 0x00001ea9, 0x00001ebe, 0x00001ed2,
-	0x00001f0c, 0x00001f14, 0x00001f1a, 0x00001f2d,
-	0x00001f3b, 0x00001f8c, 0x00001fa2, 0x00002027,
+	0x00001c07, 0x00001c2a, 0x00001c34, 0x00001c5b,
+	0x00001c81, 0x00001c9d, 0x00001cba, 0x00001cf6,
+	0x00001d25, 0x00001d5d, 0x00001d8a, 0x00001d9c,
+	0x00001dbd, 0x00001dd4, 0x00001ddf, 0x00001de5,
+	0x00001e0f, 0x00001e33, 0x00001e51, 0x00001e64,
+	0x00001e7c, 0x00001eb9, 0x00001ebf, 0x00001ed4,
+	0x00001ee8, 0x00001f22, 0x00001f2a, 0x00001f30,
+	0x00001f43, 0x00001f51, 0x00001fa2, 0x00001fb8,
 	// Entry 120 - 13F
-	0x00002045, 0x00002062, 0x0000206d, 0x0000207e,
-	0x0000208b, 0x00002092, 0x000020a9, 0x000020e3,
-	0x000020f2, 0x0000211d, 0x00002140, 0x00002158,
-	0x00002168, 0x0000217f, 0x0000219a, 0x000021a3,
-	0x000021eb, 0x0000220c, 0x0000221f, 0x00002285,
-	0x000022a1, 0x000022f0, 0x00002300, 0x00002329,
-	0x00002330, 0x00002351, 0x000023b0, 0x000023ca,
-	0x000023d5, 0x000023e9, 0x000023f6, 0x0000245c,
+	0x0000203d, 0x0000205b, 0x00002078, 0x00002083,
+	0x00002094, 0x000020a1, 0x000020a8, 0x000020bf,
+	0x000020f9, 0x00002108, 0x00002133, 0x00002156,
+	0x0000216e, 0x0000217e, 0x00002195, 0x000021b0,
+	0x000021b9, 0x00002201, 0x00002222, 0x00002235,
+	0x0000229b, 0x000022b7, 0x00002306, 0x00002316,
+	0x0000233f, 0x00002346, 0x00002367, 0x000023c6,
+	0x000023e0, 0x000023eb, 0x000023ff, 0x0000240c,
 	// Entry 140 - 15F
-	0x0000246a, 0x0000247f, 0x00002490, 0x000024a6,
-	0x00002528, 0x0000253e, 0x0000255b, 0x000025fd,
-	0x00002618, 0x00002665, 0x0000268b, 0x0000269c,
-	0x000026de, 0x000026f4, 0x00002706, 0x00002742,
-	0x0000274d, 0x00002766, 0x0000276e, 0x00002785,
-	0x0000278f, 0x000027ab, 0x000027c4, 0x000027e3,
-	0x000027fc, 0x00002802, 0x0000280d, 0x0000282a,
-	0x00002873, 0x00002884, 0x000028b1, 0x000028d6,
+	0x00002472, 0x00002480, 0x00002495, 0x000024a6,
+	0x000024bc, 0x0000253e, 0x00002554, 0x00002571,
+	0x00002613, 0x0000262e, 0x0000267b, 0x000026a1,
+	0x000026b2, 0x000026f4, 0x0000270a, 0x0000271c,
+	0x00002758, 0x00002763, 0x0000277c, 0x00002784,
+	0x0000279b, 0x000027a5, 0x000027c1, 0x000027da,
+	0x000027f9, 0x00002812, 0x00002818, 0x00002823,
+	0x00002840, 0x00002889, 0x0000289a, 0x000028c7,
 	// Entry 160 - 17F
-	0x000028e0, 0x000028f4, 0x0000290d, 0x00002928,
-	0x00002933, 0x00002951, 0x00002962, 0x00002970,
-	0x0000297d, 0x00002998, 0x000029ff, 0x00002a1c,
-	0x00002a94, 0x00002aaa, 0x00002aff, 0x00002b14,
-	0x00002b2d, 0x00002b44, 0x00002b73, 0x00002b93,
-	0x00002bb4, 0x00002bc2, 0x00002bcb, 0x00002c08,
-	0x00002c42, 0x00002c5f, 0x00002c94, 0x00002cc5,
-	0x00002cf8, 0x00002d14, 0x00002d34, 0x00002d8c,
+	0x000028ec, 0x000028f6, 0x0000290a, 0x00002923,
+	0x0000293e, 0x00002949, 0x00002967, 0x00002978,
+	0x00002986, 0x00002993, 0x000029ae, 0x00002a15,
+	0x00002a32, 0x00002aaa, 0x00002ac0, 0x00002b15,
+	0x00002b2a, 0x00002b43, 0x00002b5a, 0x00002b89,
+	0x00002ba9, 0x00002bca, 0x00002bd8, 0x00002be1,
+	0x00002c1e, 0x00002c32, 0x00002c67, 0x00002c74,
+	0x00002c83, 0x00002cbd, 0x00002cda, 0x00002d0f,
 	// Entry 180 - 19F
-	0x00002da0, 0x00002dd0, 0x00002df8, 0x00002e1f,
-	0x00002e4f, 0x00002e78, 0x00002e9e, 0x00002eb2,
-	0x00002ecb, 0x00002ee2, 0x00002f02, 0x00002f1c,
-	0x00002f44, 0x00002f51, 0x00002f6e, 0x00002f83,
-	0x00002fa0, 0x00002fc3, 0x00002fea, 0x00003000,
-	0x00003016, 0x0000302a, 0x00003041, 0x00003054,
-	0x0000306c, 0x00003084, 0x000030a5, 0x000030bf,
-	0x000030de, 0x000030ea, 0x00003117, 0x0000314e,
+	0x00002d40, 0x00002d73, 0x00002d8f, 0x00002daf,
+	0x00002e07, 0x00002e1b, 0x00002e4b, 0x00002e73,
+	0x00002e9a, 0x00002eca, 0x00002ef3, 0x00002f19,
+	0x00002f2d, 0x00002f46, 0x00002f5d, 0x00002f7d,
+	0x00002f97, 0x00002fbf, 0x00002fcc, 0x00002fe9,
+	0x00002ffe, 0x0000301b, 0x0000303e, 0x00003065,
+	0x0000307b, 0x00003091, 0x000030a5, 0x000030bc,
+	0x000030cf, 0x000030e7, 0x000030ff, 0x00003120,
 	// Entry 1A0 - 1BF
-	0x00003174, 0x000031a9, 0x000031c0, 0x000031e4,
-	0x0000320f, 0x00003255, 0x00003278, 0x00003287,
-	0x00003290, 0x000032ae, 0x000032c3, 0x000032e4,
-	0x000032f8, 0x0000330f, 0x00003326, 0x000033a2,
-	0x000033fa, 0x00003412, 0x0000343b, 0x00003456,
-	0x0000345c, 0x00003470, 0x00003484, 0x0000349a,
-	0x000034b8, 0x000034df, 0x000034ef, 0x00003516,
-	0x0000359f, 0x000035b0, 0x000035bb, 0x00003644,
+	0x0000313a, 0x00003159, 0x00003165, 0x00003192,
+	0x000031c9, 0x000031ef, 0x00003224, 0x0000323b,
+	0x0000325f, 0x0000328a, 0x000032d0, 0x000032f3,
+	0x00003302, 0x0000330b, 0x00003329, 0x0000333e,
+	0x0000335f, 0x00003373, 0x0000338a, 0x000033a1,
+	0x0000341d, 0x00003475, 0x0000348d, 0x000034b6,
+	0x000034d1, 0x000034d7, 0x000034eb, 0x000034ff,
+	0x0000351d, 0x00003544, 0x00003554, 0x0000357b,
 	// Entry 1C0 - 1DF
-	0x00003659, 0x00003696, 0x00003710, 0x0000377c,
-	0x0000379a, 0x000037d7, 0x00003825, 0x00003844,
-	0x0000386b, 0x0000389c, 0x000038ca, 0x0000391b,
-	0x0000392d, 0x0000395b, 0x00003992, 0x000039af,
-	0x000039b9, 0x000039da, 0x00003a03, 0x00003a23,
-	0x00003a3d, 0x00003a76, 0x00003a84, 0x00003a9a,
-	0x00003aac, 0x00003abf, 0x00003acd, 0x00003ad7,
-	0x00003af8, 0x00003b0e, 0x00003b21, 0x00003b65,
+	0x00003604, 0x00003615, 0x00003620, 0x000036a9,
+	0x000036be, 0x000036fb, 0x00003775, 0x000037e1,
+	0x000037ff, 0x0000383c, 0x0000388a, 0x000038a9,
+	0x000038d0, 0x00003901, 0x0000392f, 0x00003980,
+	0x00003992, 0x000039c0, 0x000039f7, 0x00003a14,
+	0x00003a1e, 0x00003a3f, 0x00003a68, 0x00003a88,
+	0x00003aa2, 0x00003adb, 0x00003ae9, 0x00003aff,
+	0x00003b11, 0x00003b24, 0x00003b32, 0x00003b3c,
 	// Entry 1E0 - 1FF
-	0x00003bad, 0x00003c30, 0x00003c9c, 0x00003cdf,
-	0x00003d23, 0x00003d66, 0x00003d8e, 0x00003dbe,
-	0x00003e0d, 0x00003e1c, 0x00003e2a, 0x00003e39,
-	0x00003e6f, 0x00003ebd, 0x00003f27, 0x00003f38,
-	0x00003f6b, 0x00003f9e, 0x00003fba, 0x00003fcf,
-	0x00004000, 0x00004010, 0x00004020, 0x0000403a,
-	0x00004057, 0x00004066, 0x0000407f, 0x0000408f,
-	0x0000409f, 0x000040b2, 0x000040c8, 0x000040e2,
+	0x00003b5d, 0x00003b73, 0x00003b86, 0x00003bca,
+	0x00003c12, 0x00003c95, 0x00003d01, 0x00003d44,
+	0x00003d88, 0x00003dcb, 0x00003df3, 0x00003e23,
+	0x00003e72, 0x00003e81, 0x00003e8f, 0x00003e9e,
+	0x00003ed4, 0x00003f22, 0x00003f8c, 0x00003f9d,
+	0x00003fd0, 0x00004003, 0x0000401f, 0x00004034,
+	0x00004065, 0x00004075, 0x00004085, 0x0000409f,
+	0x000040bc, 0x000040cb, 0x000040e4, 0x000040f4,
 	// Entry 200 - 21F
-	0x000040f2, 0x00004138, 0x00004149, 0x0000415a,
-	0x00004168, 0x0000416e, 0x00004185, 0x0000418c,
-	0x000041b9, 0x000041ed, 0x00004203, 0x0000421e,
-	0x00004241, 0x00004259, 0x0000426e, 0x00004294,
-	0x000042b9, 0x000042d3, 0x000042ed, 0x000042fe,
-	0x00004311, 0x00004320, 0x00004338, 0x00004358,
-	0x00004374, 0x00004385, 0x0000439f, 0x000043b8,
-	0x000043d8, 0x000043e9, 0x00004445, 0x00004465,
+	0x00004104, 0x00004117, 0x0000412d, 0x00004147,
+	0x00004157, 0x0000419d, 0x000041ae, 0x000041bf,
+	0x000041cd, 0x000041d3, 0x000041ea, 0x000041f1,
+	0x0000421e, 0x00004252, 0x00004268, 0x00004283,
+	0x000042a6, 0x000042be, 0x000042d3, 0x000042f9,
+	0x0000431e, 0x00004338, 0x00004352, 0x00004363,
+	0x00004376, 0x00004385, 0x0000439d, 0x000043bd,
+	0x000043d9, 0x000043ea, 0x00004404, 0x0000441d,
 	// Entry 220 - 23F
-	0x00004471, 0x0000447e, 0x00004495, 0x000044c4,
-	0x000044df, 0x0000452f, 0x00004548, 0x00004559,
-	0x0000456e, 0x0000457f, 0x00004597, 0x000045a8,
-	0x000045b3, 0x000045e3, 0x000045ee, 0x000045fa,
-	0x00004605, 0x0000460c, 0x0000461d, 0x0000463e,
-	0x00004662, 0x00004688, 0x000046ae, 0x000046d6,
-	0x000046ff, 0x0000474e, 0x00004761, 0x000047a1,
-	0x000047db, 0x00004808, 0x0000482f, 0x00004860,
+	0x0000443d, 0x0000444e, 0x000044aa, 0x000044ca,
+	0x000044d6, 0x000044e3, 0x000044fa, 0x00004529,
+	0x00004544, 0x00004594, 0x000045ad, 0x000045be,
+	0x000045d3, 0x000045e4, 0x000045fc, 0x0000460d,
+	0x00004618, 0x00004648, 0x00004653, 0x0000465f,
+	0x0000466a, 0x00004671, 0x00004682, 0x000046a3,
+	0x000046c7, 0x000046ed, 0x00004713, 0x0000473b,
+	0x00004764, 0x000047b3, 0x000047c6, 0x00004806,
 	// Entry 240 - 25F
-	0x00004872, 0x0000487d, 0x00004887, 0x00004890,
-	0x0000489d, 0x00004933, 0x00004948, 0x00004965,
-	0x0000497c, 0x000049b2, 0x000049ef, 0x00004a1c,
-	0x00004a25, 0x00004a38, 0x00004a88, 0x00004af2,
-	0x00004b71, 0x00004b89, 0x00004b92, 0x00004c1d,
-	0x00004c94, 0x00004cab, 0x00004cb4, 0x00004cea,
-	0x00004d13, 0x00004d19, 0x00004d36, 0x00004d6d,
-	0x00004da4, 0x00004dcd, 0x00004ddb, 0x00004dea,
+	0x00004840, 0x0000486d, 0x00004894, 0x000048c5,
+	0x000048d7, 0x000048e2, 0x000048ec, 0x000048f5,
+	0x00004902, 0x00004998, 0x000049ad, 0x000049ca,
+	0x000049e1, 0x00004a17, 0x00004a54, 0x00004a81,
+	0x00004a8a, 0x00004a9d, 0x00004aed, 0x00004b57,
+	0x00004bd6, 0x00004bee, 0x00004bf7, 0x00004c82,
+	0x00004cf9, 0x00004d10, 0x00004d19, 0x00004d4f,
+	0x00004d78, 0x00004d7e, 0x00004d9b, 0x00004dd2,
 	// Entry 260 - 27F
-	0x00004e0f, 0x00004e1b, 0x00004e42, 0x00004e58,
-	0x00004e5e, 0x00004e6a, 0x00004e76, 0x00004e7e,
-	0x00004e83, 0x00004e96, 0x00004ea0, 0x00004ea9,
-	0x00004eb7, 0x00004ed3, 0x00004eea, 0x00004eff,
-	0x00004f13, 0x00004f30, 0x00004f39, 0x00004f5d,
-	0x00004f71, 0x00004f78, 0x00004f83, 0x00004f8e,
-	0x00004fa2, 0x00004fac, 0x00004fb9, 0x00004fbe,
-	0x00004fc5, 0x00004fce, 0x00004fd6, 0x00004fdb,
+	0x00004e09, 0x00004e32, 0x00004e40, 0x00004e4f,
+	0x00004e74, 0x00004e80, 0x00004ea7, 0x00004ebd,
+	0x00004ec3, 0x00004ecf, 0x00004edb, 0x00004ee3,
+	0x00004ee8, 0x00004efb, 0x00004f05, 0x00004f0e,
+	0x00004f1c, 0x00004f38, 0x00004f4f, 0x00004f64,
+	0x00004f78, 0x00004f95, 0x00004f9e, 0x00004fc2,
+	0x00004fd6, 0x00004fdd, 0x00004fe8, 0x00004ff3,
+	0x00005007, 0x00005011, 0x0000501e, 0x00005023,
 	// Entry 280 - 29F
-	0x00004fe1, 0x00004feb, 0x00004ff4, 0x00004ffc,
-	0x00005007, 0x00005012, 0x0000501f, 0x00005027,
-	0x00005033, 0x00005040, 0x00005047, 0x0000504e,
-	0x00005055, 0x0000505c, 0x0000506d, 0x0000507c,
-	0x00005088, 0x00005090, 0x0000509c, 0x000050a4,
-	0x000050ad, 0x000050b6, 0x000050bd, 0x000050db,
-	0x000050e9, 0x000050f1, 0x000050f7, 0x00005101,
-	0x00005107, 0x00005123, 0x0000512d, 0x00005132,
+	0x0000502a, 0x00005033, 0x0000503b, 0x00005040,
+	0x00005046, 0x00005050, 0x00005059, 0x00005061,
+	0x0000506c, 0x00005077, 0x00005084, 0x0000508c,
+	0x00005098, 0x000050a5, 0x000050ac, 0x000050b3,
+	0x000050ba, 0x000050c1, 0x000050d2, 0x000050e1,
+	0x000050ed, 0x000050f5, 0x00005101, 0x00005109,
+	0x00005112, 0x0000511b, 0x00005122, 0x00005140,
+	0x0000514e, 0x00005156, 0x0000515c, 0x00005166,
 	// Entry 2A0 - 2BF
-	0x0000513b, 0x00005147, 0x00005157, 0x00005168,
-	0x00005173, 0x00005183, 0x00005192, 0x0000519b,
-	0x000051a0, 0x000051ab, 0x000051ba, 0x000051c1,
-	0x000051ca, 0x000051d4, 0x000051dd, 0x000051e8,
-	0x000051f1, 0x000051fc, 0x00005202, 0x0000520b,
-	0x00005218, 0x0000521c, 0x00005225, 0x0000522b,
-	0x00005235, 0x00005238, 0x00005244, 0x00005255,
-	0x00005263, 0x0000526b, 0x00005274, 0x0000527e,
+	0x0000516c, 0x00005188, 0x00005192, 0x00005197,
+	0x000051a0, 0x000051ac, 0x000051bc, 0x000051cd,
+	0x000051d8, 0x000051e8, 0x000051f7, 0x00005200,
+	0x00005205, 0x00005210, 0x0000521f, 0x00005226,
+	0x0000522f, 0x00005239, 0x00005242, 0x0000524d,
+	0x00005256, 0x00005261, 0x00005267, 0x00005270,
+	0x0000527d, 0x00005281, 0x0000528a, 0x00005290,
+	0x0000529a, 0x0000529d, 0x000052a9, 0x000052ba,
 	// Entry 2C0 - 2DF
-	0x00005286, 0x0000529c, 0x000052a2, 0x000052ac,
-	0x000052b5, 0x000052bd, 0x000052c1, 0x000052d4,
-	0x000052e7, 0x000052ec, 0x000052f5, 0x000052ff,
-	0x00005303, 0x0000530b, 0x00005314, 0x00005319,
-	0x00005322, 0x0000532d, 0x0000533c, 0x0000534a,
-	0x00005358, 0x00005361, 0x0000536e, 0x0000537c,
-	0x000053ba, 0x000053cc, 0x000053d1, 0x000053f1,
-	0x00005413, 0x00005462, 0x0000546c, 0x00005482,
+	0x000052c8, 0x000052d0, 0x000052d9, 0x000052e3,
+	0x000052eb, 0x00005301, 0x00005307, 0x00005311,
+	0x0000531a, 0x00005322, 0x00005326, 0x00005339,
+	0x0000534c, 0x00005351, 0x0000535a, 0x00005364,
+	0x00005368, 0x00005370, 0x00005379, 0x0000537e,
+	0x00005387, 0x00005392, 0x000053a1, 0x000053af,
+	0x000053bd, 0x000053c6, 0x000053d3, 0x000053e1,
+	0x0000541f, 0x00005431, 0x00005436, 0x00005456,
 	// Entry 2E0 - 2FF
-	0x00005496, 0x000054d0, 0x00005513, 0x00005540,
-	0x00005561, 0x00005595, 0x000055b9, 0x000055db,
-	0x0000561a, 0x0000567a, 0x000056b1, 0x000056d5,
-	0x000056f3, 0x00005715, 0x00005752, 0x00005778,
-	0x000057c8, 0x000057fb, 0x00005845, 0x00005874,
-	0x0000588c, 0x000058a2, 0x000058cf, 0x000058fe,
-	0x00005934, 0x00005969, 0x00005990, 0x000059ae,
-	0x000059c9, 0x000059e7, 0x000059f7, 0x00005a17,
+	0x00005478, 0x000054c7, 0x000054d1, 0x000054e7,
+	0x000054fb, 0x00005535, 0x00005578, 0x000055a5,
+	0x000055c6, 0x000055fa, 0x0000561e, 0x00005640,
+	0x0000567f, 0x000056df, 0x00005716, 0x0000573a,
+	0x00005758, 0x0000577a, 0x000057b7, 0x000057dd,
+	0x0000582d, 0x00005860, 0x000058aa, 0x000058d9,
+	0x000058f1, 0x00005907, 0x00005934, 0x00005963,
+	0x00005999, 0x000059ce, 0x000059f5, 0x00005a13,
 	// Entry 300 - 31F
-	0x00005a5c, 0x00005a75, 0x00005a8d, 0x00005aae,
-	0x00005ad5, 0x00005b19, 0x00005b2e, 0x00005b6e,
-	0x00005bae, 0x00005be2, 0x00005c01, 0x00005c1e,
-	0x00005c3b, 0x00005c56, 0x00005c83, 0x00005c9d,
-	0x00005cbf, 0x00005cfb, 0x00005d1d, 0x00005d5b,
-	0x00005d92, 0x00005e07, 0x00005e48, 0x00005e58,
-	0x00005ec7, 0x00005ef0, 0x00005f58, 0x00005f99,
-	0x00006019, 0x00006091, 0x00006118, 0x0000617f,
+	0x00005a2e, 0x00005a4c, 0x00005a5c, 0x00005a7c,
+	0x00005ac1, 0x00005ada, 0x00005af2, 0x00005b13,
+	0x00005b3a, 0x00005b7e, 0x00005b93, 0x00005bd3,
+	0x00005c13, 0x00005c47, 0x00005c66, 0x00005c83,
+	0x00005ca0, 0x00005cbb, 0x00005ce8, 0x00005d02,
+	0x00005d24, 0x00005d60, 0x00005d82, 0x00005dc0,
+	0x00005dca, 0x00005ddf, 0x00005df9, 0x00005e11,
+	0x00005e27, 0x00005e39, 0x00005e51, 0x00005e86,
 	// Entry 320 - 33F
-	0x000061cf, 0x0000624c, 0x0000629f, 0x00006319,
-	0x0000632f, 0x00006359, 0x0000637e, 0x0000639e,
-	0x000063bb, 0x000063d5, 0x00006411, 0x0000645a,
-	0x000064ac, 0x0000653c, 0x0000658d, 0x000065cf,
-	0x000065f9, 0x00006658, 0x00006677, 0x000066b0,
-	0x000066e4, 0x00006717, 0x00006747, 0x00006772,
-	0x000067b2, 0x000067cc, 0x000067fb, 0x0000682c,
-	0x0000686e, 0x000068aa, 0x000068c0, 0x000068e5,
+	0x00005e98, 0x00005edb, 0x00005f32, 0x00005f62,
+	0x00005f90, 0x00005ff2, 0x0000603d, 0x00006046,
+	0x0000604f, 0x00006056, 0x00006064, 0x00006076,
+	0x0000607e, 0x000060cb, 0x000060d6, 0x0000610c,
+	0x00006110, 0x0000611f, 0x0000614c, 0x00006158,
+	0x000061c5, 0x000061db, 0x000061e5, 0x00006202,
+	0x00006213, 0x0000621c, 0x00006238, 0x00006248,
+	0x00006257, 0x00006265, 0x000062d1, 0x000062f2,
 	// Entry 340 - 35F
-	0x00006909, 0x00006940, 0x00006959, 0x00006995,
-	0x000069d2, 0x000069fb, 0x00006a14, 0x00006a3d,
-	0x00006a6b, 0x00006a85, 0x00006aa8, 0x00006ac8,
-	0x00006af2, 0x00006b1b, 0x00006b47, 0x00006b73,
-	0x00006ba1, 0x00006bcb, 0x00006bea, 0x00006c0f,
-	0x00006c22, 0x00006c57, 0x00006c8c, 0x00006cc2,
-	0x00006ce3, 0x00006d0c, 0x00006d38, 0x00006d61,
-	0x00006d90, 0x00006da6, 0x00006dbd, 0x00006df5,
+	0x000062f7, 0x000062fc, 0x0000630c, 0x0000631f,
+	0x00006333, 0x00006357, 0x00006382, 0x000063f8,
+	0x0000644a, 0x0000647e, 0x000064c0, 0x000064c4,
+	0x000064ca, 0x000064f5, 0x000064fb, 0x00006538,
+	0x00006569, 0x000065bd, 0x000065d0, 0x000065e1,
+	0x000065f9, 0x0000662b, 0x00006642, 0x0000666a,
+	0x0000668d, 0x0000669e, 0x000066c0, 0x000066ca,
+	0x000066dc, 0x000066ea, 0x000066f2, 0x000066fc,
 	// Entry 360 - 37F
-	0x00006e12, 0x00006e57, 0x00006e71, 0x00006e9e,
-	0x00006ebc, 0x00006ee3, 0x00006f0d, 0x00006f32,
-	0x00006f49, 0x00006f62, 0x00006f77, 0x00006fa1,
-	0x00006fc2, 0x00006fd8, 0x00006fff, 0x0000701c,
-	0x00007054, 0x00007085, 0x000070ae, 0x000070e6,
-	0x00007121, 0x0000713f, 0x00007181, 0x000071b2,
-	0x000071d9, 0x00007215, 0x00007243, 0x00007279,
-	0x000072b6, 0x000072e5, 0x00007331, 0x0000733a,
+	0x00006704, 0x00006712, 0x00006749, 0x000067be,
+	0x000067ff, 0x0000680f, 0x0000687e, 0x000068a7,
+	0x0000690f, 0x00006950, 0x000069d0, 0x00006a48,
+	0x00006acf, 0x00006b36, 0x00006b86, 0x00006c03,
+	0x00006c56, 0x00006cd0, 0x00006ce6, 0x00006d10,
+	0x00006d35, 0x00006d55, 0x00006d72, 0x00006d8c,
+	0x00006dc8, 0x00006e11, 0x00006e63, 0x00006ef3,
+	0x00006f44, 0x00006f86, 0x00006fb0, 0x0000700f,
 	// Entry 380 - 39F
-	0x0000734a, 0x00007359, 0x00007363, 0x00007375,
-	0x0000737c, 0x00007382, 0x0000738a, 0x00007397,
-	0x000073a7, 0x000073ad, 0x000073b8, 0x000073c1,
-	0x000073d1, 0x000073e0, 0x000073e6, 0x000073f1,
-	0x000073f7, 0x00007400, 0x00007408, 0x00007415,
-	0x0000741e, 0x00007429, 0x00007432, 0x0000743a,
-	0x00007445, 0x00007450, 0x0000745f, 0x0000746b,
-	0x0000747a, 0x00007482, 0x00007486, 0x00007495,
+	0x0000702e, 0x00007067, 0x0000709b, 0x000070ce,
+	0x000070fe, 0x00007129, 0x00007169, 0x00007183,
+	0x000071b2, 0x000071e3, 0x00007225, 0x00007261,
+	0x00007277, 0x0000729c, 0x000072c0, 0x000072f7,
+	0x00007310, 0x0000734c, 0x00007389, 0x000073b2,
+	0x000073cb, 0x000073eb, 0x00007415, 0x0000743e,
+	0x0000746a, 0x00007496, 0x000074c4, 0x000074ee,
+	0x00007517, 0x00007545, 0x0000755f, 0x00007582,
 	// Entry 3A0 - 3BF
-	0x000074a3, 0x000074b0, 0x000074c0, 0x000074c9,
-	0x000074d3, 0x000074dc, 0x000074f7, 0x00007502,
-	0x00007512, 0x0000751d, 0x00007528, 0x0000753a,
-	0x0000754f, 0x00007559, 0x0000755c, 0x0000755f,
-	0x00007568, 0x00007570, 0x00007580, 0x0000758c,
-	0x00007596, 0x000075a5, 0x000075b3, 0x000075bc,
-	0x000075ca, 0x000075d5, 0x000075da, 0x000075e2,
-	0x000075f0, 0x00007604, 0x00007616, 0x00007622,
+	0x000075a1, 0x000075c6, 0x000075d9, 0x0000760e,
+	0x00007643, 0x00007679, 0x0000769a, 0x000076c3,
+	0x000076ef, 0x00007718, 0x00007747, 0x0000775d,
+	0x00007774, 0x000077ac, 0x000077c9, 0x0000780e,
+	0x00007828, 0x00007855, 0x00007873, 0x0000789a,
+	0x000078c4, 0x000078e9, 0x00007900, 0x00007919,
+	0x0000792e, 0x00007958, 0x00007979, 0x0000798f,
+	0x000079b6, 0x000079d3, 0x00007a0b, 0x00007a3c,
 	// Entry 3C0 - 3DF
-	0x0000762f, 0x00007636, 0x0000763c, 0x00007642,
-	0x00007652, 0x00007665, 0x00007673, 0x00007684,
-	0x00007692, 0x000076a4, 0x000076b0, 0x000076ba,
-	0x000076c7, 0x000076d7, 0x000076de, 0x000076fe,
-	0x00007737, 0x0000775b, 0x000077b5, 0x000077fd,
-	0x00007844, 0x00007865, 0x000078a6, 0x000078c7,
-	0x000078f9, 0x0000791d, 0x00007941, 0x0000795c,
-	0x0000796a, 0x000079b7, 0x000079dd, 0x000079fc,
+	0x00007a65, 0x00007a9d, 0x00007ad8, 0x00007af6,
+	0x00007b38, 0x00007b69, 0x00007b90, 0x00007bcc,
+	0x00007bfa, 0x00007c30, 0x00007c6d, 0x00007c9c,
+	0x00007ce8, 0x00007cf1, 0x00007d01, 0x00007d10,
+	0x00007d1a, 0x00007d2c, 0x00007d33, 0x00007d39,
+	0x00007d41, 0x00007d4e, 0x00007d5e, 0x00007d64,
+	0x00007d6f, 0x00007d78, 0x00007d88, 0x00007d97,
+	0x00007d9d, 0x00007da8, 0x00007dae, 0x00007db7,
 	// Entry 3E0 - 3FF
-	0x00007a12, 0x00007a22, 0x00007a31, 0x00007a35,
-	0x00007a3f, 0x00007a4f, 0x00007a6c, 0x00007a96,
-	0x00007ad0, 0x00007afb, 0x00007b23, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
+	0x00007dbf, 0x00007dcc, 0x00007dd5, 0x00007de0,
+	0x00007de9, 0x00007df1, 0x00007dfc, 0x00007e07,
+	0x00007e16, 0x00007e22, 0x00007e31, 0x00007e39,
+	0x00007e3d, 0x00007e4c, 0x00007e5a, 0x00007e67,
+	0x00007e77, 0x00007e80, 0x00007e8a, 0x00007e93,
+	0x00007eae, 0x00007eb9, 0x00007ec9, 0x00007ed4,
+	0x00007edf, 0x00007ef1, 0x00007f06, 0x00007f10,
+	0x00007f13, 0x00007f16, 0x00007f1f, 0x00007f27,
 	// Entry 400 - 41F
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
+	0x00007f37, 0x00007f43, 0x00007f4d, 0x00007f5c,
+	0x00007f6a, 0x00007f73, 0x00007f81, 0x00007f8c,
+	0x00007f91, 0x00007f99, 0x00007fa7, 0x00007fbb,
+	0x00007fcd, 0x00007fd9, 0x00007fe6, 0x00007fed,
+	0x00007ff3, 0x00007ff9, 0x00008009, 0x0000801c,
+	0x0000802a, 0x0000803b, 0x00008049, 0x0000805b,
+	0x00008067, 0x00008071, 0x0000807e, 0x0000808e,
+	0x00008095, 0x000080b5, 0x000080ee, 0x00008112,
 	// Entry 420 - 43F
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e, 0x00007b3e, 0x00007b3e,
-	0x00007b3e, 0x00007b3e,
-} // Size: 4320 bytes
+	0x0000816c, 0x000081b4, 0x000081fb, 0x0000821c,
+	0x0000825d, 0x0000827e, 0x000082b0, 0x000082d4,
+	0x000082f8, 0x00008313, 0x00008321, 0x0000836e,
+	0x00008394, 0x000083b3, 0x000083c9, 0x000083d9,
+	0x000083e8, 0x000083ec, 0x000083f6, 0x00008406,
+	0x0000841e, 0x00008441, 0x00008469, 0x000084c7,
+	0x000084ce, 0x000084d6, 0x000084e9, 0x000084ec,
+	0x00008509, 0x00008533, 0x0000856d, 0x00008598,
+	// Entry 440 - 45F
+	0x000085c0, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	// Entry 460 - 47F
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	// Entry 480 - 49F
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db, 0x000085db, 0x000085db, 0x000085db,
+	0x000085db,
+} // Size: 4668 bytes
 
-const deData string = "" + // Size: 31550 bytes
+const deData string = "" + // Size: 34267 bytes
 	"\x02Passphrase ändern\x02Du musst angemeldet sein, um die App zu entsper" +
 	"ren.\x02Du musst Administrator sein, um die App zu entsperren.\x02Passph" +
 	"rase geändert.\x02App initialisieren\x02Initialisieren\x02Passphrasen st" +
@@ -1487,114 +1599,116 @@ const deData string = "" + // Size: 31550 bytes
 	"sprüfung wird für diese Datei noch vorbereitet.\x02Keine Duplikate gefun" +
 	"den.\x02Duplikate gefunden\x02Diese Datei existiert bereits an den folge" +
 	"nden %[1]d Speicherorten:\x02Space: %[1]s\x02Ordner: %[1]s\x02Hochgelade" +
-	"n %[1]s\x02Aktuelle Version %[1]d\x02Version %[1]d\x02Verschieben\x02Arc" +
-	"hiv entpacken\x02Diese Datei löschen? Du kannst sie aus dem Papierkorb w" +
-	"iederherstellen.\x02Diesen Ordner löschen? Seine Dateien können aus dem " +
-	"Papierkorb wiederhergestellt werden.\x02Details\x02Quelle\x02Dateigrösse" +
-	"\x02MIME-Type\x02SHA-256-Hash\x02Originaler Dateiname\x02Hochgeladen um" +
-	"\x02Version\x02Aktuelle Version hochgeladen am\x02Gelöscht um\x02Erstell" +
-	"t %[1]s\x02Vorschau\x02Original\x02PDF herunterladen\x02Die PDF-Vorschau" +
-	" konnte nicht erstellt werden.\x02PDF-Vorschau erneut erstellen\x02Herun" +
-	"terladen\x02Die PDF-Vorschau ist nicht verfügbar, weil Gotenberg nicht k" +
-	"onfiguriert ist.\x02Die PDF-Vorschau wird erstellt. Bitte warte einen Mo" +
-	"ment; die Seite wird automatisch aktualisiert.\x02Die PDF-Vorschau ist n" +
-	"icht verfügbar.\x02Rendering fehlgeschlagen.\x02Details anzeigen\x02Vors" +
-	"chau schliessen\x02Version nicht gefunden.\x02Noch keine Felder zugewies" +
-	"en.\x02Diesen Feldwert entfernen?\x02Lade mehr…\x02Name\x02Typ\x02Metada" +
-	"ten\x02Datum\x02Grösse\x02Tags\x02Keine Daten verfügbar.\x02Ja\x02Nein" +
-	"\x02Info\x02Versionen\x02Duplikate\x02Duplikate konnten nicht geladen we" +
-	"rden.\x02Datei-Upload\x02Bitte bestätige, dass die Metadaten der Quellda" +
-	"tei verloren gehen.\x02Quell- und Zieldatei sind erforderlich.\x02Neue V" +
-	"ersion aus der Inbox hinzugefügt.\x02Ich verstehe, dass die Metadaten de" +
-	"r Inbox-Datei (Dokumenttyp, Tags, Felder) beim Zusammenführen verloren g" +
-	"ehen. Notizen und ihr Verlauf bleiben erhalten.\x02Inbox-Dateien suchen" +
-	"\x02Neue Version aus der Inbox hinzufügen\x02Zieldatei ist erforderlich." +
-	"\x02Quelldatei ist erforderlich.\x02Datei muss in der Inbox sein.\x02Kei" +
-	"ne Treffer gefunden.\x02Fehlende Versionsnummer.\x02Ungültige Versionsnu" +
-	"mmer.\x02Versionsvorschau\x02Neue Version hochladen\x02Noch keine Versio" +
-	"nen verfügbar.\x02Lade eine neue Version hoch, um zu beginnen.\x02Neue V" +
-	"ersion hinzufügen\x02Filter\x02Noch keine Dateien verfügbar.\x02Noch kei" +
-	"ne Dateien oder Ordner verfügbar.\x02Zurück zum übergeordneten Ordner" +
-	"\x02Suche\x02Suche in «%[1]s»\x02Dateien sortieren\x02Dateilistenansicht" +
-	" ändern\x02Liste\x02Tabelle\x02Noch keine Felder verfügbar.\x02Keine Fel" +
-	"der verfügbar.\x02Enthält\x02Beginnt mit\x02Gleich\x02Grösser als\x02Kle" +
-	"iner als\x02Zwischen\x02«%[1]s» ist markiert\x02«%[1]s» ist nicht markie" +
-	"rt\x02Tags | Filter\x02Noch keine Tags verfügbar.\x02Tags verwalten\x02E" +
-	"rstellen\x02«%[1]s» erstellt.\x02Ordner öffnen\x02Nur im Ordnermodus erl" +
-	"aubt.\x02Datei öffnen\x02Verschoben nach «%[1]s».\x02«%[1]s» entfernt." +
-	"\x02Datei umbenennen\x02Umbenannt zu «%[1]s».\x02Filter zurückgesetzt." +
-	"\x02Die PDF-Vorschau-Konvertierung ist nicht konfiguriert.\x02Die PDF-Vo" +
-	"rschau ist noch nicht für einen neuen Versuch bereit.\x02Die PDF-Vorscha" +
-	"u-Erstellung wurde in die Warteschlange eingereiht.\x02Dokumenttyp abgew" +
-	"ählt.\x02Dokumenttyp ausgewählt.\x02Beste Übereinstimmung\x02Neueste zu" +
-	"erst\x02Älteste zuerst\x02Sortieren nach Name\x02Entpacken\x02Keine ZIP-" +
-	"Datei.\x02ZIP-Datei konnte nicht geöffnet werden.\x02Archiv konnte nicht" +
-	" entpackt werden.\x02ZIP-Datei konnte nicht gelesen werden.\x02Ordnerstr" +
-	"uktur konnte nicht erstellt werden.\x02Es konnten nicht alle Dateien aus" +
-	" dem Archiv extrahiert werden.\x02Archiv entpackt.\x02Archiv ist zu gros" +
-	"s.\x02Archivgrösse konnte nicht überprüft werden.\x02Enddatum liegt vor " +
-	"dem Startdatum.\x02Hochladen\x02Kein übergeordneter Ordner angegeben." +
-	"\x02Nur-Lese-Anfragekontext erforderlich.\x02Keine Datei bereitgestellt." +
-	"\x02«%[1]s» wurde hochgeladen.\x02Die Upload-Metadaten müssen vor der Da" +
-	"tei gesendet werden.\x02Neue Version für «%[1]s» wurde hochgeladen.\x02F" +
-	"ür Ordner können keine Versionen hochgeladen werden.\x02Ordner können n" +
-	"icht heruntergeladen werden.\x02Datei verschieben\x02Datei nach «%[1]s» " +
-	"verschieben\x02Übergeordneter Ordner\x02Startseite\x02Konto\x02Du benöti" +
-	"gst eine vollständige Session.\x02Formularvalidierung fehlgeschlagen." +
-	"\x02Noch keine Spaces verfügbar.\x02Client-Bezeichnung\x02Schreibzugriff" +
-	" erlauben\x02Ohne Schreibzugriff kann der MCP-Client Dokumente nur lesen" +
-	".\x02Space\x02MCP-Zugang erstellen\x02MCP-Zugang erstellt\x02Kopiere das" +
-	" Secret jetzt. Es wird nicht erneut angezeigt.\x02MCP-URL\x02Token\x02Ge" +
-	"rätebezeichnung\x02Secret-Länge\x02Verkürze das Secret nur, wenn dein Ge" +
-	"rät die maximale Passwortlänge begrenzt.\x02Kompatibilitätsmodus\x02Verw" +
-	"endet nur Buchstaben, Zahlen, Bindestriche und Unterstriche für Geräte m" +
-	"it eingeschränkter Unterstützung für Sonderzeichen.\x02WebDAV-Zugangsdat" +
-	"en erstellen\x02WebDAV-Zugangsdaten erstellt\x02WebDAV-URL\x02WebDAV-Inb" +
-	"ox-URL\x02Benutzername\x02Secret\x02Ziel nicht verfügbar.\x02Du kannst f" +
-	"ür diesen Space keine Zugangsdaten erstellen.\x02%[1]s kopieren\x02%[1]" +
-	"s wurde in die Zwischenablage kopiert.\x02%[1]s konnte nicht kopiert wer" +
-	"den.\x02Nicht verfügbares Ziel\x02Offene Aufgaben\x02Organisation «%[1]s" +
-	"»\x02Keine Passkeys registriert\x02Passkeys\x02Registriere einen Passke" +
-	"y, um die passwortlose Anmeldung zu aktivieren.\x02Füge einen Backup-Pas" +
-	"skey hinzu\x02Passkey-Empfehlung\x02Richte einen zweiten Passkey auf ein" +
-	"em anderen Gerät als Backup ein, falls ein Gerät verloren geht.\x02Backu" +
-	"p-Codes neu generieren\x02Backup-Codes neu generieren? Bestehende Codes " +
-	"funktionieren danach nicht mehr.\x02Konto «%[1]s»\x02Konto «%[1]s», im B" +
-	"esitz von «%[2]s»\x02System\x02Passkey-Einrichtung erforderlich\x02Deine" +
-	" Organisation verlangt die Passkey-Anmeldung. Registriere einen Passkey," +
-	" um fortzufahren.\x02%[1]d Backup-Codes übrig\x02Abonnement\x02Nicht ini" +
-	"tialisiert\x02Bitte warten\x02Die Organisation ist noch nicht initialisi" +
-	"ert, bitte warte bis die Initialisierung abgeschlossen ist.\x02Aktualisi" +
-	"eren\x02Kontingentauslastung\x02Nicht verfügbar\x02Kein Passwort gesetzt" +
-	"\x02Du hast dich mit einem temporären Passwort angemeldet. Bitte setze e" +
-	"in Passwort, um dein Konto zu sichern und die App zu nutzen.\x02Passwort" +
-	" jetzt setzen\x02Aktives temporäres Passwort\x02Dein Konto hat ein aktiv" +
-	"es temporäres Passwort. Bitte ändere dein Passwort oder lösche das tempo" +
-	"räre Passwort so bald wie möglich, um dein Konto zu sichern.\x02Noch kei" +
-	"n Space verfügbar\x02Du hast keine Berechtigung, auf einen Space dieser " +
-	"Organisation zuzugreifen.\x02Bitte erstelle einen, um zu beginnen.\x02Sp" +
-	"aces verwalten\x02Die App ist entsperrt und nicht durch eine Passphrase " +
-	"geschützt.\x02Die App ist gesperrt.\x02Passphrase setzen\x02Die App ist " +
-	"entsperrt und durch eine Passphrase geschützt.\x02App-Status\x02Zuletzt " +
-	"verwendet: %[1]s\x02Passkey\x02Upload-Limit verwalten\x02Dashboard\x02MC" +
-	"P-Zugangsdaten bearbeiten\x02Änderungen gespeichert.\x02WebDAV-Zugangsda" +
-	"ten bearbeiten\x02MCP-Zugangsdaten filtern\x02Aktiv\x02Widerrufen\x02Noc" +
-	"h keine MCP-Zugangsdaten.\x02Erstelle Zugangsdaten, um einen MCP-Client " +
-	"mit einem Space zu verbinden.\x02MCP-URL kopieren\x02MCP-URL wurde in di" +
-	"e Zwischenablage kopiert.\x02MCP-URL konnte nicht kopiert werden.\x02Nur" +
-	" lesen\x02Lesen und schreiben\x02%[1]s · Erstellt: %[2]s\x02%[1]s · Wide" +
-	"rrufen: %[2]s\x02Widerrufen\x02Diesen MCP-Zugang widerrufen?\x02MCP-Zuga" +
-	"ngsdaten\x02Einstellungen\x02Organisation\x02Passkey-Pflicht aktivieren" +
-	"\x02Passkey-Pflicht für diese Organisation aktivieren? Mitglieder benöti" +
-	"gen dann Passkeys zur Anmeldung.\x02Passkey-Pflicht deaktivieren\x02Pass" +
-	"key-Pflicht für diese Organisation deaktivieren? Mitglieder können dann " +
-	"wieder Passwörter nutzen, falls erlaubt.\x02Organisation löschen\x02Dies" +
-	"e Organisation löschen? Alle Konten, die ihr gehören, werden global gelö" +
-	"scht.\x02Backup herunterladen\x02Diesen Passkey löschen?\x02MCP-Zugang w" +
-	"iderrufen.\x02Du darfst diese Zugangsdaten nicht widerrufen.\x02WebDAV-Z" +
-	"ugangsdaten widerrufen.\x02In «Spaces»-Ansicht bearbeiten\x02Dokumenttyp" +
-	"en\x02Benutzer\x02Du musst Admin sein, um auf Systemeinstellungen zuzugr" +
-	"eifen.\x02Du musst angemeldet sein, um Organisationen zu verwalten.\x02O" +
+	"n %[1]s\x02Aktuelle Version %[1]d\x02Version %[1]d\x02Datei nicht gefund" +
+	"en.\x02Verschieben\x02Archiv entpacken\x02Diese Datei löschen? Du kannst" +
+	" sie aus dem Papierkorb wiederherstellen.\x02Diesen Ordner löschen? Sein" +
+	"e Dateien können aus dem Papierkorb wiederhergestellt werden.\x02Details" +
+	"\x02Quelle\x02Dateigrösse\x02MIME-Type\x02SHA-256-Hash\x02Originaler Dat" +
+	"einame\x02Hochgeladen um\x02Version\x02Aktuelle Version hochgeladen am" +
+	"\x02Gelöscht um\x02Erstellt %[1]s\x02Vorschau\x02Original\x02PDF herunte" +
+	"rladen\x02Die PDF-Vorschau konnte nicht erstellt werden.\x02PDF-Vorschau" +
+	" erneut erstellen\x02Herunterladen\x02Die PDF-Vorschau ist nicht verfügb" +
+	"ar, weil Gotenberg nicht konfiguriert ist.\x02Die PDF-Vorschau wird erst" +
+	"ellt. Bitte warte einen Moment; die Seite wird automatisch aktualisiert." +
+	"\x02Die PDF-Vorschau ist nicht verfügbar.\x02Rendering fehlgeschlagen." +
+	"\x02Details anzeigen\x02Vorschau schliessen\x02Version nicht gefunden." +
+	"\x02Noch keine Felder zugewiesen.\x02Diesen Feldwert entfernen?\x02Lade " +
+	"mehr…\x02Name\x02Typ\x02Metadaten\x02Datum\x02Grösse\x02Tags\x02Keine Da" +
+	"ten verfügbar.\x02Ja\x02Nein\x02Info\x02Versionen\x02Duplikate\x02Duplik" +
+	"ate konnten nicht geladen werden.\x02Datei-Upload\x02Bitte bestätige, da" +
+	"ss die Metadaten der Quelldatei verloren gehen.\x02Quell- und Zieldatei " +
+	"sind erforderlich.\x02Neue Version aus der Inbox hinzugefügt.\x02Ich ver" +
+	"stehe, dass die Metadaten der Inbox-Datei (Dokumenttyp, Tags, Felder) be" +
+	"im Zusammenführen verloren gehen. Notizen und ihr Verlauf bleiben erhalt" +
+	"en.\x02Inbox-Dateien suchen\x02Neue Version aus der Inbox hinzufügen\x02" +
+	"Zieldatei ist erforderlich.\x02Quelldatei ist erforderlich.\x02Datei mus" +
+	"s in der Inbox sein.\x02Keine Treffer gefunden.\x02Fehlende Versionsnumm" +
+	"er.\x02Ungültige Versionsnummer.\x02Versionsvorschau\x02Neue Version hoc" +
+	"hladen\x02Noch keine Versionen verfügbar.\x02Lade eine neue Version hoch" +
+	", um zu beginnen.\x02Neue Version hinzufügen\x02Filter\x02Noch keine Dat" +
+	"eien verfügbar.\x02Noch keine Dateien oder Ordner verfügbar.\x02Zurück z" +
+	"um übergeordneten Ordner\x02Suche\x02Suche in «%[1]s»\x02Dateien sortier" +
+	"en\x02Dateilistenansicht ändern\x02Liste\x02Tabelle\x02Noch keine Felder" +
+	" verfügbar.\x02Keine Felder verfügbar.\x02Enthält\x02Beginnt mit\x02Glei" +
+	"ch\x02Grösser als\x02Kleiner als\x02Zwischen\x02«%[1]s» ist markiert\x02" +
+	"«%[1]s» ist nicht markiert\x02Tags | Filter\x02Noch keine Tags verfügba" +
+	"r.\x02Tags verwalten\x02Erstellen\x02«%[1]s» erstellt.\x02Ordner öffnen" +
+	"\x02Nur im Ordnermodus erlaubt.\x02Datei öffnen\x02Verschoben nach «%[1]" +
+	"s».\x02«%[1]s» entfernt.\x02Datei umbenennen\x02Umbenannt zu «%[1]s»." +
+	"\x02Filter zurückgesetzt.\x02Die PDF-Vorschau-Konvertierung ist nicht ko" +
+	"nfiguriert.\x02Die PDF-Vorschau ist noch nicht für einen neuen Versuch b" +
+	"ereit.\x02Die PDF-Vorschau-Erstellung wurde in die Warteschlange eingere" +
+	"iht.\x02Dokumenttyp abgewählt.\x02Dokumenttyp ausgewählt.\x02Beste Übere" +
+	"instimmung\x02Neueste zuerst\x02Älteste zuerst\x02Sortieren nach Name" +
+	"\x02Entpacken\x02Keine ZIP-Datei.\x02ZIP-Datei konnte nicht geöffnet wer" +
+	"den.\x02Archiv konnte nicht entpackt werden.\x02ZIP-Datei konnte nicht g" +
+	"elesen werden.\x02Ordnerstruktur konnte nicht erstellt werden.\x02Es kon" +
+	"nten nicht alle Dateien aus dem Archiv extrahiert werden.\x02Archiv entp" +
+	"ackt.\x02Archiv ist zu gross.\x02Archivgrösse konnte nicht überprüft wer" +
+	"den.\x02Enddatum liegt vor dem Startdatum.\x02Hochladen\x02Kein übergeor" +
+	"dneter Ordner angegeben.\x02Nur-Lese-Anfragekontext erforderlich.\x02Kei" +
+	"ne Datei bereitgestellt.\x02«%[1]s» wurde hochgeladen.\x02Die Upload-Met" +
+	"adaten müssen vor der Datei gesendet werden.\x02Neue Version für «%[1]s»" +
+	" wurde hochgeladen.\x02Für Ordner können keine Versionen hochgeladen wer" +
+	"den.\x02Ordner können nicht heruntergeladen werden.\x02Datei verschieben" +
+	"\x02Datei nach «%[1]s» verschieben\x02Übergeordneter Ordner\x02Startseit" +
+	"e\x02Konto\x02Du benötigst eine vollständige Session.\x02Formularvalidie" +
+	"rung fehlgeschlagen.\x02Noch keine Spaces verfügbar.\x02Client-Bezeichnu" +
+	"ng\x02Schreibzugriff erlauben\x02Ohne Schreibzugriff kann der MCP-Client" +
+	" Dokumente nur lesen.\x02Space\x02MCP-Zugang erstellen\x02MCP-Zugang ers" +
+	"tellt\x02Kopiere das Secret jetzt. Es wird nicht erneut angezeigt.\x02MC" +
+	"P-URL\x02Token\x02Gerätebezeichnung\x02Secret-Länge\x02Verkürze das Secr" +
+	"et nur, wenn dein Gerät die maximale Passwortlänge begrenzt.\x02Kompatib" +
+	"ilitätsmodus\x02Verwendet nur Buchstaben, Zahlen, Bindestriche und Unter" +
+	"striche für Geräte mit eingeschränkter Unterstützung für Sonderzeichen." +
+	"\x02WebDAV-Zugangsdaten erstellen\x02WebDAV-Zugangsdaten erstellt\x02Web" +
+	"DAV-URL\x02WebDAV-Inbox-URL\x02Benutzername\x02Secret\x02Ziel nicht verf" +
+	"ügbar.\x02Du kannst für diesen Space keine Zugangsdaten erstellen.\x02%" +
+	"[1]s kopieren\x02%[1]s wurde in die Zwischenablage kopiert.\x02%[1]s kon" +
+	"nte nicht kopiert werden.\x02Nicht verfügbares Ziel\x02Offene Aufgaben" +
+	"\x02Organisation «%[1]s»\x02Keine Passkeys registriert\x02Passkeys\x02Re" +
+	"gistriere einen Passkey, um die passwortlose Anmeldung zu aktivieren." +
+	"\x02Füge einen Backup-Passkey hinzu\x02Passkey-Empfehlung\x02Richte eine" +
+	"n zweiten Passkey auf einem anderen Gerät als Backup ein, falls ein Gerä" +
+	"t verloren geht.\x02Backup-Codes neu generieren\x02Backup-Codes neu gene" +
+	"rieren? Bestehende Codes funktionieren danach nicht mehr.\x02Konto «%[1]" +
+	"s»\x02Konto «%[1]s», im Besitz von «%[2]s»\x02System\x02Passkey-Einricht" +
+	"ung erforderlich\x02Deine Organisation verlangt die Passkey-Anmeldung. R" +
+	"egistriere einen Passkey, um fortzufahren.\x02%[1]d Backup-Codes übrig" +
+	"\x02Abonnement\x02Nicht initialisiert\x02Bitte warten\x02Die Organisatio" +
+	"n ist noch nicht initialisiert, bitte warte bis die Initialisierung abge" +
+	"schlossen ist.\x02Aktualisieren\x02Kontingentauslastung\x02Nicht verfügb" +
+	"ar\x02Kein Passwort gesetzt\x02Du hast dich mit einem temporären Passwor" +
+	"t angemeldet. Bitte setze ein Passwort, um dein Konto zu sichern und die" +
+	" App zu nutzen.\x02Passwort jetzt setzen\x02Aktives temporäres Passwort" +
+	"\x02Dein Konto hat ein aktives temporäres Passwort. Bitte ändere dein Pa" +
+	"sswort oder lösche das temporäre Passwort so bald wie möglich, um dein K" +
+	"onto zu sichern.\x02Noch kein Space verfügbar\x02Du hast keine Berechtig" +
+	"ung, auf einen Space dieser Organisation zuzugreifen.\x02Bitte erstelle " +
+	"einen, um zu beginnen.\x02Spaces verwalten\x02Die App ist entsperrt und " +
+	"nicht durch eine Passphrase geschützt.\x02Die App ist gesperrt.\x02Passp" +
+	"hrase setzen\x02Die App ist entsperrt und durch eine Passphrase geschütz" +
+	"t.\x02App-Status\x02Zuletzt verwendet: %[1]s\x02Passkey\x02Upload-Limit " +
+	"verwalten\x02Dashboard\x02MCP-Zugangsdaten bearbeiten\x02Änderungen gesp" +
+	"eichert.\x02WebDAV-Zugangsdaten bearbeiten\x02MCP-Zugangsdaten filtern" +
+	"\x02Aktiv\x02Widerrufen\x02Noch keine MCP-Zugangsdaten.\x02Erstelle Zuga" +
+	"ngsdaten, um einen MCP-Client mit einem Space zu verbinden.\x02MCP-URL k" +
+	"opieren\x02MCP-URL wurde in die Zwischenablage kopiert.\x02MCP-URL konnt" +
+	"e nicht kopiert werden.\x02Nur lesen\x02Lesen und schreiben\x02%[1]s · E" +
+	"rstellt: %[2]s\x02%[1]s · Widerrufen: %[2]s\x02Widerrufen\x02Diesen MCP-" +
+	"Zugang widerrufen?\x02MCP-Zugangsdaten\x02Einstellungen\x02Organisation" +
+	"\x02Passkey-Pflicht aktivieren\x02Passkey-Pflicht für diese Organisation" +
+	" aktivieren? Mitglieder benötigen dann Passkeys zur Anmeldung.\x02Passke" +
+	"y-Pflicht deaktivieren\x02Passkey-Pflicht für diese Organisation deaktiv" +
+	"ieren? Mitglieder können dann wieder Passwörter nutzen, falls erlaubt." +
+	"\x02Organisation löschen\x02Diese Organisation löschen? Alle Konten, die" +
+	" ihr gehören, werden global gelöscht.\x02Backup herunterladen\x02Diesen " +
+	"Passkey löschen?\x02MCP-Zugang widerrufen.\x02Du darfst diese Zugangsdat" +
+	"en nicht widerrufen.\x02WebDAV-Zugangsdaten widerrufen.\x02In «Spaces»-A" +
+	"nsicht bearbeiten\x02Dokumenttypen\x02Benutzer\x02Du musst Admin sein, u" +
+	"m auf Systemeinstellungen zuzugreifen.\x02Systemeinstellungen\x02Du muss" +
+	"t Admin sein, um den Systemstatus aufzurufen.\x02Systemstatus\x02Erneut " +
+	"prüfen\x02Du musst angemeldet sein, um Organisationen zu verwalten.\x02O" +
 	"rganisation nicht gefunden.\x02Nur Eigentümer können die Passkey-Pflicht" +
 	" ändern.\x02Passkey-Pflicht für die Organisation aktiviert.\x02Passkey-P" +
 	"flicht für die Organisation deaktiviert.\x02WebDAV-Zugangsdaten filtern" +
@@ -1626,281 +1740,320 @@ const deData string = "" + // Size: 31550 bytes
 	"einamen.\x02Texterkennung (OCR) ist noch nicht bereit, Vorschläge basier" +
 	"en nur auf dem Dateinamen.\x02Ziel manuell auswählen\x02Vorschläge basie" +
 	"rend auf dem Dateinamen\x02Ungültiger Quellenfilter.\x02Inbox\x02In «Inb" +
-	"ox» suchen\x02Nach Quelle filtern\x02Datei nicht gefunden.\x02Datei ist " +
-	"nicht in der Inbox.\x02Datei «%[1]s» als erledigt markiert.\x02Quelle | " +
-	"Filter\x02In die Inbox von «%[1]s» verschoben.\x02Keine andere Inbox ist" +
-	" verfügbar. Du brauchst Schreibzugriff auf einen anderen Space, oder sei" +
-	"ne Inbox muss Übertragungen akzeptieren.\x02Inbox auswählen\x02Ziel-Inbo" +
-	"x\x02Du kannst andere Spaces in dieser Organisation auswählen, auf die d" +
-	"u Schreibzugriff hast oder deren Inboxes Übertragungen akzeptieren.\x02N" +
-	"achricht (optional)\x02Deine Nachricht wird als Notiz mit deinem Namen g" +
-	"espeichert.\x02Beim Verschieben werden Dokumenttyp, Tags und benutzerdef" +
-	"inierte Felder entfernt. Versionen und Notizen bleiben erhalten.\x02Wenn" +
-	" du den Ziel-Space nicht öffnen kannst, verlierst du nach dem Verschiebe" +
-	"n den Zugriff auf diese Datei.\x02Benutzer einem Space zuweisen\x02Kein " +
-	"Space ausgewählt. Bitte wähle zuerst einen Space aus.\x02Du darfst Benut" +
-	"zer nicht Spaces zuweisen, weil du nicht der Eigentümer bist.\x02Benutze" +
-	"r dem Space zugewiesen.\x02Benutzer konnten nicht geladen werden.\x02Bit" +
-	"te lade die Seite neu und versuche es erneut.\x02Keine nicht zugewiesene" +
-	"n Benutzer verfügbar.\x02Bitte erstelle zuerst einen Benutzer in der Ben" +
-	"utzerverwaltung der Organisation.\x02Benutzer zuweisen\x02Benutzer ist d" +
-	"iesem Space bereits zugewiesen.\x02Du kannst dich nicht selbst aus einem" +
-	" Space entfernen.\x02Benutzer aus Space entfernen\x02Entfernen\x02Benutz" +
-	"er aus dem Space entfernt.\x02Diesen Benutzer aus dem Space entfernen?" +
-	"\x02Noch keine Benutzer zugewiesen.\x02Tag oder Gruppe erstellen\x02Dies" +
-	"en Tag löschen? Er wird von allen Dateien entfernt.\x02Tags zuweisen\x02" +
-	"In Gruppe verschieben\x02Gruppe, %[1]d Tag\x02Gruppe, %[1]d Tags\x02Tag " +
-	"erstellen\x02Super-Tag\x02Tag-Gruppen-ID ist erforderlich.\x02Tag ist ke" +
-	"ine Gruppe.\x02Benutzer erstellen\x02Du darfst keine Benutzer erstellen." +
-	" Keine Organisation ausgewählt.\x02Du darfst keine Benutzer erstellen, w" +
-	"eil du nicht der Eigentümer bist.\x02Benutzer erstellt. Das Passwort wur" +
-	"de per E-Mail gesendet. Eigentümer können ohne weitere Einrichtung auf a" +
-	"lle Spaces zugreifen.\x02Benutzer erstellt. Das Passwort wurde per E-Mai" +
-	"l gesendet. Weise den Benutzer als Nächstes einem Space zu.\x02Du darfst" +
-	" keine Benutzer löschen. Keine Organisation ausgewählt.\x02Du darfst kei" +
-	"ne Benutzer löschen, weil du nicht der Besitzer bist.\x02Benutzer aus de" +
-	"r Organisation entfernt und Konto global gelöscht.\x02Benutzer aus der O" +
-	"rganisation entfernt.\x02Diesen Benutzer aus der Organisation entfernen?" +
-	"\x02Diesen Benutzer aus der Organisation entfernen und sein Konto global" +
-	" löschen?\x02Mitgliedskonto\x02Besitzerkonto\x02%[1]s · %[2]s\x02Dateien" +
-	" werden hochgeladen, bitte warte einen Moment.\x02Die Seite wird automat" +
-	"isch aktualisiert, sobald der Upload abgeschlossen ist.\x02Bitte versuch" +
-	"e es erneut, sobald du einen Space erstellt hast oder eingeladen wurdest" +
-	", einem beizutreten.\x02Space auswählen\x02Verarbeitung der geteilten Da" +
-	"teien fehlgeschlagen.\x02Dateien hochgeladen, bitte wähle einen Space au" +
-	"s.\x02Fehlerhafter Upload-Inhalt.\x02Upload ist zu gross.\x02Datei hochg" +
-	"eladen, bitte wähle einen Space aus.\x02URL importieren\x02URL importier" +
-	"en\x02Datei von URL importieren\x02Herunterladen und fortfahren\x02Feld " +
-	"erstellen\x02Feld «%[1]s» erstellt.\x02Feld gelöscht.\x02Feld bearbeiten" +
-	"\x02Feld aktualisiert.\x02Dieses Feld löschen?\x02Space «%[1]s» erstellt" +
-	".\x02Space erstellen\x02Wähle Dokumenttypen, die zu diesem Space hinzuge" +
-	"fügt werden sollen:\x02Space gelöscht.\x02Space bearbeiten\x02%[1]s (%[2" +
-	"]s)\x02aktiv\x02Diesen Space löschen?\x02Spaces\x02Die angeforderte Seit" +
-	"e wurde nicht gefunden.\x02Die angeforderte Seite konnte nicht geladen w" +
-	"erden.\x02«%[1]s» zugewiesen.\x02Tag erstellen und zuweisen\x02«%[1]s» e" +
-	"rstellt und zugewiesen.\x02Tag «%[1]s» erstellt.\x02«%[1]s» gelöscht." +
-	"\x02Gruppe, %[1]d Tags, %[2]d ausgewählt\x02Gruppe, %[1]d Tag, %[2]d aus" +
-	"gewählt\x02Zusammengesetzt aus %[1]s\x02Zugewiesene Tags anzeigen\x02Gru" +
-	"ppe erstellen\x02Tags von «%[1]s»\x02Tag bearbeiten\x02«%[1]s» aktualisi" +
-	"ert.\x02Layout wird nicht unterstützt.\x02Zugewiesene Tags bearbeiten" +
-	"\x02Gruppe «%[1]s»\x02Tag in Gruppe verschieben\x02Aus der Gruppe entfer" +
-	"nt.\x02In Gruppe «%[1]s» verschoben.\x02Gruppe abwählen\x02Diesen Tag vo" +
-	"llständig löschen? Er wird von allen Dateien entfernt, nicht nur von die" +
-	"ser.\x02«%[1]s» Zuweisung aufgehoben.\x02Erstellt am\x02Geändert am\x02K" +
-	"eine Tags zugewiesen.\x02Ordner können nicht wiederhergestellt werden." +
-	"\x02Datei ist nicht gelöscht.\x02Der ursprüngliche übergeordnete Ordner " +
-	"fehlt. In die Inbox wiederhergestellt.\x02Datei wiederhergestellt.\x02Wi" +
-	"ederherstellen\x02Papierkorb ist leer.\x02Ordner gelöscht\x02Ordner gelö" +
-	"scht: %[1]s\x02Gelöscht: %[1]s\x02Papierkorb\x02Dateivorschau ist für Or" +
-	"dner nicht verfügbar.\x02Web-Upload\x02Öffnen mit\x02URL-Import\x02WebDA" +
-	"V\x02Systemextraktion\x02Datei kann nicht geparst werden.\x02Formular ka" +
-	"nn nicht geparst werden.\x02Formular kann nicht dekodiert werden.\x02For" +
-	"mular kann nicht validiert werden.\x02Aktuelle URL kann nicht geparst we" +
-	"rden.\x02URL-Abfrage kann nicht dekodiert werden.\x02Nur Eigentümer der " +
-	"Organisation können Benutzer und Einstellungen verwalten.\x02OCR erfolgr" +
-	"eich um\x02Du hast keine Berechtigung, auf diese Organisation zuzugreife" +
-	"n.\x02Du hast keine Berechtigung, auf diesen Space zuzugreifen.\x02Es wu" +
-	"rden keine Backup-Codes zurückgegeben.\x02Die Backup-Codes wurden neu ge" +
-	"neriert.\x02Backup-Codes konnten nicht neu generiert werden.\x02Dialog s" +
-	"chliessen\x02Schliessen\x02Vorschlag\x02optional\x02erforderlich\x02Dies" +
-	"e Organisation befindet sich im Wartungsmodus. Einige Funktionen sind mö" +
-	"glicherweise nicht verfügbar. Bitte wende dich an deinen Administrator." +
-	"\x02Anwendungspassphrase\x02Passphrase ist erforderlich.\x02Ungültige Pa" +
-	"ssphrase.\x02Ein Fehler ist aufgetreten. Bitte versuche es erneut.\x02Zu" +
-	" viele Entsperrversuche. Bitte versuche es später erneut.\x02Anwendung e" +
-	"ntsperrt. Start wird fortgesetzt.\x02Aktionen\x02Hauptmenü öffnen\x02Gib" +
-	" diesem Passkey einen optionalen Namen, damit du ihn später wiedererkenn" +
-	"st.\x02Nach der Registrierung werden druckbare Backup-Codes einmal angez" +
-	"eigt. Speichere sie, bevor du schliesst.\x02Nach der Einrichtung ist die" +
-	" Passwort-Anmeldung für dieses Konto deaktiviert. Verwende stattdessen P" +
-	"asskeys und Backup-Codes.\x02Passkey-Name (optional)\x02Lädt…\x02Wichtig" +
-	": Diese Backup-Codes werden nur einmal angezeigt. Speichere, drucke oder" +
-	" lade sie jetzt herunter, bevor du diesen Dialog schliesst.\x02Wenn du d" +
-	"iese Codes und deinen Passkey verlierst, ist eine Kontowiederherstellung" +
-	" möglicherweise nicht mehr möglich.\x02SimpleDMS Backup-Codes\x02Erstell" +
-	"t\x02Bewahre diese Backup-Codes an einem sicheren Ort auf.\x02Diese Code" +
-	"s werden nur einmal angezeigt.\x02Codes\x02Druckdialog wurde geöffnet." +
-	"\x02Die Backup-Codes wurden in die Zwischenablage kopiert.\x02Backup-Cod" +
-	"es konnten nicht automatisch kopiert werden.\x02Die Backup-Codes wurden " +
-	"heruntergeladen.\x02Codes drucken\x02Codes kopieren\x02Übertragungen in " +
-	"die Inbox zulassen\x02Aktiver Tab\x02Mich als Space-Eigentümer hinzufüge" +
-	"n\x02Zur Inbox hinzufügen\x02Admin\x02Österreich\x02Backup-Code\x02Belgi" +
-	"en\x02Text\x02Integrierte Spalte\x02Bulgarien\x02Checkbox\x02Checkbox-We" +
-	"rt\x02Neue Passphrase bestätigen\x02Passphrase bestätigen\x02Passwort be" +
-	"stätigen\x02Warnung bestätigen\x02Statuswerte der Zugangsdaten\x02Kroati" +
-	"en\x02Aktuelles oder temporäres Passwort\x02Aktuelle Passphrase\x02Zyper" +
-	"n\x02Tschechien\x02Datumswert\x02Bei Erfolg löschen\x02Dänemark\x02Besch" +
-	"reibung\x02Ziel\x02E-Mail\x02Englisch\x02Estland\x02Feld\x02Datei\x02Dat" +
-	"einame\x02Finnland\x02Vorname\x02Ordnername\x02Frankreich\x02Französisch" +
-	"\x02Deutsch\x02Deutschland\x02Griechenland\x02Gruppe\x02Ungarn\x02Island" +
-	"\x02Irland\x02Ist namensgebend\x02Ist unbegrenzt\x02Italienisch\x02Itali" +
-	"en\x02Bezeichnung\x02Sprache\x02Nachname\x02Lettland\x02Layout\x02Biblio" +
-	"thek-Vorlagenschlüssel\x02Liechtenstein\x02Litauen\x02Lokal\x02Luxemburg" +
-	"\x02Malta\x02Maximale Upload-Grösse MiB\x02Nachricht\x02Geld\x02Geldwert" +
-	"\x02Niederlande\x02Neuer Dateiname\x02Neuer Ordnername\x02Neuer Name\x02" +
-	"Neue Passphrase\x02Neues Passwort\x02Norwegen\x02Zahl\x02Zahlenwert\x02N" +
-	"ur zugewiesen\x02Aktion\x02Operator\x02Sonstiges\x02Besitzer\x02Passphra" +
-	"se\x02Passwort\x02Ausstehend\x02Polen\x02Portugal\x02Vorschau-Tab\x02Pro" +
-	"\x02Push-URL\x02Rolle\x02Rumänien\x02S3\x02Suchanfrage\x02Verlauf anzeig" +
-	"en\x02Tags anzeigen\x02Einfach\x02Slowakei\x02Slowenien\x02Spanien\x02Ne" +
-	"wsletter abonnieren\x02Super\x02Supporter\x02Schweden\x02Schweiz\x02Tag" +
-	"\x02Vorlagenschlüssel\x02Temporäre Sitzung\x02Text\x02Textwert\x02Testph" +
-	"ase\x02URL\x02Einheit\x02Benutzer\x02Wert\x02Wertende\x02Wertbeginn\x02V" +
-	"ersionsnummer\x02Ansichtsmodus\x02Eigenschaften\x02Grössen\x02Registrier" +
-	"en\x02Registrierung\x02Kostenlose 30-Tage-Testphase, keine Kreditkarte e" +
-	"rforderlich.\x02Organisationsname\x02Land\x02Nutzungsbedingungen akzepti" +
-	"eren\x02Datenschutzrichtlinie akzeptieren\x02Registrierung erfolgreich, " +
-	"bitte überprüfe deine E-Mails für dein Passwort.\x02Impressum\x02Datensc" +
-	"hutzerklärung\x02Nutzungsbedingungen\x02Für dieses Konto ist die Passkey" +
-	"-Anmeldung erforderlich.\x02Zu viele Anmeldeversuche. Bitte versuche es " +
-	"in 10 Sekunden erneut.\x02Backup-Codes konnten nicht generiert werden." +
-	"\x02Temporäres Passwort abgelaufen.\x02Temporäres Passwort konnte nicht " +
-	"generiert werden.\x02Salt konnte nicht generiert werden.\x02Aktuelles Pa" +
-	"sswort ist ungültig.\x02Neues Passwort muss sich vom aktuellen Passwort " +
-	"unterscheiden.\x02Ein Passwort ist bereits gesetzt. Bitte verwende statt" +
-	"dessen das Formular «Passwort ändern».\x02Das Passwort muss mindestens z" +
-	"wölf Zeichen lang sein.\x02Passwörter stimmen nicht überein.\x02Ungültig" +
-	"e Passkey-Anmeldung.\x02Passkey-Anmeldung fehlgeschlagen.\x02Die Passkey" +
-	"-Anmeldung ist für dieses Konto nicht aktiviert.\x02Passkey-Registrierun" +
-	"g fehlgeschlagen.\x02Du benötigst mindestens einen Passkey, bevor du Bac" +
-	"kup-Codes erstellen kannst.\x02Ungültige Anmeldedaten für die Backup-Anm" +
-	"eldung.\x02Zu viele Backup-Anmeldeversuche. Bitte versuche es in 10 Seku" +
-	"nden erneut.\x02Das Zielkonto hat keine Passkeys konfiguriert.\x02Passke" +
-	"y nicht gefunden.\x02Konto nicht gefunden.\x02Ungültige Konfiguration de" +
-	"r Passkey-Origin.\x02Fehlende Konfiguration für die Passkey-RP-ID.\x02De" +
-	"r Passkey-Dienst konnte nicht initialisiert werden.\x02Die Passkey-Chall" +
-	"enge ist ungültig oder abgelaufen.\x02Unbekannte Passkey-Anmeldeinformat" +
-	"ion.\x02Passkey-Konto nicht gefunden.\x02App bereits initialisiert.\x02D" +
-	"ein temporäres Passwort ist\x02Es läuft ab am\x02Neue Organisationsregis" +
-	"trierung\x02Dies ist eine automatisierte Nachricht, bitte antworte nicht" +
-	" darauf.\x02Willkommen bei SimpleDMS\x0202.01.2006 um 15:04 Uhr\x02Simpl" +
-	"eDMS Passwort zurücksetzen\x02Dein Konto wurde erfolgreich erstellt.\x02" +
-	"Bitte melde dich an und ändere dein Passwort so bald wie möglich.\x02Anm" +
-	"eldeseite öffnen\x02Für dein Konto wurde eine Passwort-Zurücksetzung ang" +
-	"efordert.\x02Dein altes Passwort funktioniert weiterhin, bis du es änder" +
-	"st.\x02«%[1]s» hat dich zum Tenant «%[2]s» eingeladen.\x02«%[1]s» hat di" +
-	"ch eingeladen.\x02Zugangsdaten nicht gefunden.\x02Ungültige MCP-Zugangsd" +
-	"aten.\x02App ist bereits entsperrt.\x02App ist nicht mit Passphrase vers" +
-	"chlüsselt.\x02Keine Passphrase gesetzt.\x02Neue Passphrase ist erforderl" +
-	"ich.\x02Neue Passphrase stimmt nicht mit der Bestätigung überein.\x02Alt" +
-	"e Passphrase ist erforderlich.\x02Die maximale Upload-Grösse muss grösse" +
-	"r oder gleich 0 sein.\x02Datei konnte nicht von der URL heruntergeladen " +
-	"werden.\x02SimpleDMS konnte die importierte Datei nicht speichern. Versu" +
-	"che es erneut oder bitte deine Administration um Hilfe.\x02Die Verarbeit" +
-	"ung der heruntergeladenen Datei ist fehlgeschlagen.\x02Ungültige URL." +
-	"\x02Der Dateiname der OpenCloud-Datei wird nicht unterstützt. Benenne di" +
-	"e Datei um und starte einen neuen Export.\x02Dateiname konnte nicht ermi" +
-	"ttelt werden.\x02SimpleDMS konnte keine sichere Verbindung zu OpenCloud " +
-	"herstellen. Bitte deine Administration um Hilfe.\x02OpenCloud hat nicht " +
-	"rechtzeitig geantwortet. Versuche es erneut.\x02SimpleDMS konnte keine V" +
-	"erbindung zu OpenCloud herstellen. Versuche es später erneut oder bitte " +
-	"deine Administration um Hilfe.\x02OpenCloud hat das Integrationspasswort" +
-	" abgelehnt. Bitte deine Administration, die Integrationseinstellungen zu" +
-	" prüfen.\x02OpenCloud erlaubt das Herunterladen dieser Datei nicht. Bitt" +
-	"e die Person, der die Datei gehört, oder deine Administration um Zugriff" +
-	".\x02Der OpenCloud-Link ist abgelaufen oder nicht mehr verfügbar. Starte" +
-	" einen neuen Export aus OpenCloud.\x02OpenCloud erhält zu viele Anfragen" +
-	". Warte einen Moment und versuche es erneut.\x02SimpleDMS konnte die Dat" +
-	"ei nicht sicher herunterladen. Bitte deine Administration, die Integrati" +
-	"onseinstellungen zu prüfen.\x02OpenCloud konnte die Datei gerade nicht b" +
-	"ereitstellen. Versuche es später erneut.\x02Die Datei konnte nicht aus O" +
-	"penCloud heruntergeladen werden. Versuche es erneut oder bitte deine Adm" +
-	"inistration um Hilfe.\x02URL ist erforderlich.\x02Es sind nur HTTP- und " +
-	"HTTPS-URLs erlaubt.\x02URL-Zugangsdaten sind nicht erlaubt.\x02Lokale UR" +
-	"Ls sind nicht erlaubt.\x02Ziel-Host ist nicht erlaubt.\x02Zu viele Weite" +
-	"rleitungen.\x02App noch nicht entsperrt. Bitte versuche es später erneut" +
-	".\x02Organisation noch nicht initialisiert. Bitte versuche es später ern" +
-	"eut.\x02Fehler beim Öffnen der Organisationsdatenbank. Bitte versuche es" +
-	" später erneut.\x02Ein Benutzer mit dieser E-Mail-Adresse existiert bere" +
-	"its. Bitte kontaktiere den Support, wenn du diesen Benutzer dennoch hinz" +
-	"ufügen möchtest.\x02Du kannst deinen eigenen Benutzer in der Organisatio" +
-	"nsverwaltung nicht löschen.\x02Die maximale Upload-Grösse muss grösser o" +
-	"der gleich 0 MiB sein.\x02Die maximale Upload-Grösse ist zu gross.\x02Di" +
-	"e maximale Upload-Grösse muss grösser als 0 MiB sein, wenn «Unbegrenzt» " +
-	"deaktiviert ist.\x02Organisation ist erforderlich.\x02Du musst angemelde" +
-	"t sein, um Upload-Limits zu verwalten.\x02Du musst Admin sein, um Upload" +
-	"-Limits zu verwalten.\x02Die Bezeichnung der Zugangsdaten ist erforderli" +
-	"ch.\x02Die Zugangsdaten konnten nicht erstellt werden.\x02Eine ähnliche " +
-	"Entität existiert bereits.\x02Die Secret-Länge muss zwischen %[1]d und %" +
-	"[2]d Zeichen liegen.\x02Die Datei ist ein Ordner.\x02Bitte wähle mindest" +
-	"ens einen Dokumenttyp aus.\x02Das Attribut muss auf eine Tag-Gruppe verw" +
-	"eisen.\x02Tag-Gruppe «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt." +
-	"\x02Feld «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt.\x02Notiz ni" +
-	"cht gefunden.\x02Der Notiztitel darf nicht leer sein.\x02Der Notiztext d" +
-	"arf nicht leer sein.\x02Quelle und Ziel müssen unterschiedliche Dateien " +
-	"sein.\x02Dokument nicht gefunden.\x02Du kannst nicht auf die Notizen die" +
-	"ses Dokuments zugreifen.\x02Die Notiz wurde bereits geändert. Bitte lade" +
-	" die Seite neu.\x02Datei hat keinen übergeordneten Ordner.\x02Ungültiger" +
-	" Textbereich.\x02Datei gehört nicht zum aktuellen Space.\x02Ordner könne" +
-	"n nicht zusammengeführt werden.\x02Quelldatei ist gelöscht.\x02Quelldate" +
-	"i ist nicht in der Inbox.\x02Quelldatei hat keine Versionen.\x02Quellver" +
-	"sion konnte nicht gelesen werden.\x02Quelldatei hat keine gespeicherte D" +
-	"atei.\x02Zielversionen konnten nicht gelesen werden.\x02Zieldatei konnte" +
-	" nicht aktualisiert werden.\x02Quellversionen konnten nicht entfernt wer" +
-	"den.\x02Quelldatei konnte nicht gelöscht werden.\x02Ungültige Sortierrei" +
-	"henfolge.\x02Die Ziel-Inbox ist nicht verfügbar.\x02Inbox-Übertragung" +
-	"\x02Die Datei wurde geändert. Bitte lade die Seite neu.\x02Nur Dateien i" +
-	"n der Inbox können übertragen werden.\x02Der Stammordner des Space kann " +
-	"nicht abgelegt werden.\x02Ordnermodus ist nicht aktiviert.\x02Pfadelemen" +
-	"t ist eine Datei, kein Ordner.\x02Der angegebene Dateiname ist nicht erl" +
-	"aubt.\x02Übergeordnetes Element ist kein Ordner.\x02Ein Ordner mit diese" +
-	"m Namen existiert bereits.\x02Ziel ist kein Ordner.\x02Ungültiger Datein" +
-	"ame.\x02Ein Ordner kann nicht in sich selbst verschoben werden.\x02Ziel " +
-	"ist aktueller Standort.\x02Ein Ordner kann nicht in einen seiner Unteror" +
-	"dner verschoben werden.\x02Neuer Dateiname ist leer.\x02Neuer Dateiname " +
-	"ist identisch mit dem alten.\x02Zyklus im Ordnerbaum erkannt.\x02Dateipf" +
-	"ad konnte nicht geladen werden.\x02Objektname konnte nicht ermittelt wer" +
-	"den.\x02Datei konnte nicht geöffnet werden.\x02Speicherpfad ist leer." +
-	"\x02Datei existiert bereits.\x02Der Upload ist leer.\x02Die Upload-Gröss" +
-	"e stimmt nicht überein.\x02Der Upload ist nicht mehr aktiv.\x02Bucket-Na" +
-	"me ist leer.\x02Datei konnte nicht gespeichert werden.\x02Dateiname exis" +
-	"tiert bereits.\x02Die gespeicherte Datei konnte nicht überprüft werden." +
-	"\x02X25519-Identität konnte nicht abgerufen werden.\x02Speicherdateiname" +
-	" stimmt nicht überein.\x02Die hochgeladene Datei konnte nicht übernommen" +
-	" werden.\x02Die bereitgestellte Datei konnte nicht überprüft werden.\x02" +
-	"App ist noch nicht entsperrt.\x02Die Integrität der bereitgestellten Dat" +
-	"ei stimmt nicht überein.\x02Die hochgeladene Datei wird bereits verarbei" +
-	"tet.\x02Organisationsdatenbank nicht gefunden.\x02Die Verarbeitung der h" +
-	"ochgeladenen Datei wurde übernommen.\x02Temporäre Datei konnte nicht kop" +
-	"iert werden.\x02Upload-Grössenlimit konnte nicht überprüft werden.\x02Up" +
-	"load ist zu gross. Die maximal erlaubte Grösse ist %[1]s.\x02Speicherlim" +
-	"it konnte nicht überprüft werden.\x02Speicherlimit für diese Organisatio" +
-	"n erreicht. Verwendet: %[1]s von %[2]s.\x02Rechnung\x02Rechnungsnummer" +
-	"\x02Rechnungsdatum\x02Lieferant\x02Fälligkeitsdatum\x02Status\x02Offen" +
-	"\x02Bezahlt\x02Überfällig\x02Rechnungsstatus\x02Beleg\x02Belegdatum\x02H" +
-	"ändler\x02Zahlungsmethode\x02Belegkategorie\x02Reise\x02Mahlzeiten\x02B" +
-	"üro\x02Software\x02Vertrag\x02Vertragsname\x02Parteien\x02Startdatum" +
-	"\x02Enddatum\x02Entwurf\x02Abgelaufen\x02Gekündigt\x02Vertragsstatus\x02" +
-	"Vertragstyp\x02Dienstleistung\x02Verkauf\x02NDA\x02Bestellauftrag\x02Bes" +
-	"tellnummer\x02Bestelldatum\x02Angefordert von\x02Gesendet\x02Genehmigt" +
-	"\x02Erfüllt\x02Status des Bestellauftrags\x02Richtlinie\x02Richtlinienna" +
-	"me\x02Gültig ab\x02Archiviert\x02Richtlinienstatus\x02Richtlinienabteilu" +
-	"ng\x02Abteilung\x02HR\x02IT\x02Finanzen\x02Betrieb\x02Projektdokument" +
-	"\x02Projektname\x02Zieldatum\x02In Bearbeitung\x02Abgeschlossen\x02Pausi" +
-	"ert\x02Projektstatus\x02Projekttyp\x02Plan\x02Bericht\x02Spezifikation" +
-	"\x02Besprechungsnotizen\x02Besprechungsdatum\x02Organisator\x02Teilnehme" +
-	"nde\x02Intern\x02Kunde\x02Final\x02Besprechungstyp\x02Besprechungsstatus" +
-	"\x02Spesenbericht\x02Berichtszeitraum\x02Mitarbeitende\x02Einreichungsda" +
-	"tum\x02Eingereicht\x02Abgelehnt\x02Spesenstatus\x02Spesenabteilung\x02Pe" +
-	"rson\x02Unbekannte Dokumenttyp-Vorlage.\x02Eine Tag-Gruppe kann nicht al" +
-	"s Kind hinzugefügt werden.\x02Das Ziel muss eine Tag-Gruppe sein.\x02Ein" +
-	"e Zusammensetzung benötigt einen zusammengesetzten Tag und einen einfach" +
-	"en Unter-Tag.\x02Eine Entität, die noch in Verwendung ist, kann nicht ge" +
-	"löscht werden.\x02Es ist ein Datenbankfehler aufgetreten. Bitte kontakti" +
-	"ere den Support.\x02Datenvalidierung fehlgeschlagen.\x02Du bist nicht ei" +
-	"ngeloggt. Bitte logge dich ein, um fortzufahren.\x02URL konnte nicht gep" +
-	"arst werden.\x02Bitte registriere einen Passkey, um fortzufahren.\x02Coo" +
-	"kie konnte nicht gelesen werden.\x02Cookie gesetzt, aber nicht gültig." +
-	"\x02Cookie gesetzt, aber leer.\x02Wartungsmodus\x02Der Wartungsmodus ist" +
-	" aktiviert. Bitte warte, bis die App wieder bereit ist.\x02Ungültiger Se" +
-	"iten- oder Suchbereich.\x02Die Datei-ID ist erforderlich.\x02Ungültige O" +
-	"rdner-ID.\x02Space verwalten\x02Organisationen\x02MCP\x02Ausloggen\x02Üb" +
-	"er SimpleDMS\x02Auth-Cookie bereits gesetzt.\x02Session-ID konnte nicht " +
-	"generiert werden.\x02Du darfst nicht auf die angeforderte Ressource zugr" +
-	"eifen.\x02Transaktion konnte nicht gestartet werden.\x02Die Daten konnte" +
-	"n nicht gelesen werden.\x02Ungültige Upload-Grösse."
+	"ox» suchen\x02Nach Quelle filtern\x02Datei ist nicht in der Inbox.\x02Da" +
+	"tei «%[1]s» als erledigt markiert.\x02Quelle | Filter\x02In die Inbox vo" +
+	"n «%[1]s» verschoben.\x02Keine andere Inbox ist verfügbar. Du brauchst S" +
+	"chreibzugriff auf einen anderen Space, oder seine Inbox muss Übertragung" +
+	"en akzeptieren.\x02Inbox auswählen\x02Ziel-Inbox\x02Du kannst andere Spa" +
+	"ces in dieser Organisation auswählen, auf die du Schreibzugriff hast ode" +
+	"r deren Inboxes Übertragungen akzeptieren.\x02Nachricht (optional)\x02De" +
+	"ine Nachricht wird als Notiz mit deinem Namen gespeichert.\x02Beim Versc" +
+	"hieben werden Dokumenttyp, Tags und benutzerdefinierte Felder entfernt. " +
+	"Versionen und Notizen bleiben erhalten.\x02Wenn du den Ziel-Space nicht " +
+	"öffnen kannst, verlierst du nach dem Verschieben den Zugriff auf diese " +
+	"Datei.\x02Benutzer einem Space zuweisen\x02Kein Space ausgewählt. Bitte " +
+	"wähle zuerst einen Space aus.\x02Du darfst Benutzer nicht Spaces zuweise" +
+	"n, weil du nicht der Eigentümer bist.\x02Benutzer dem Space zugewiesen." +
+	"\x02Benutzer konnten nicht geladen werden.\x02Bitte lade die Seite neu u" +
+	"nd versuche es erneut.\x02Keine nicht zugewiesenen Benutzer verfügbar." +
+	"\x02Bitte erstelle zuerst einen Benutzer in der Benutzerverwaltung der O" +
+	"rganisation.\x02Benutzer zuweisen\x02Benutzer ist diesem Space bereits z" +
+	"ugewiesen.\x02Du kannst dich nicht selbst aus einem Space entfernen.\x02" +
+	"Benutzer aus Space entfernen\x02Entfernen\x02Benutzer aus dem Space entf" +
+	"ernt.\x02Diesen Benutzer aus dem Space entfernen?\x02Noch keine Benutzer" +
+	" zugewiesen.\x02Tag oder Gruppe erstellen\x02Diesen Tag löschen? Er wird" +
+	" von allen Dateien entfernt.\x02Tags zuweisen\x02In Gruppe verschieben" +
+	"\x02Gruppe, %[1]d Tag\x02Gruppe, %[1]d Tags\x02Tag erstellen\x02Super-Ta" +
+	"g\x02Tag-Gruppen-ID ist erforderlich.\x02Tag ist keine Gruppe.\x02Benutz" +
+	"er erstellen\x02Du darfst keine Benutzer erstellen. Keine Organisation a" +
+	"usgewählt.\x02Du darfst keine Benutzer erstellen, weil du nicht der Eige" +
+	"ntümer bist.\x02Benutzer erstellt. Das Passwort wurde per E-Mail gesende" +
+	"t. Eigentümer können ohne weitere Einrichtung auf alle Spaces zugreifen." +
+	"\x02Benutzer erstellt. Das Passwort wurde per E-Mail gesendet. Weise den" +
+	" Benutzer als Nächstes einem Space zu.\x02Du darfst keine Benutzer lösch" +
+	"en. Keine Organisation ausgewählt.\x02Du darfst keine Benutzer löschen, " +
+	"weil du nicht der Besitzer bist.\x02Benutzer aus der Organisation entfer" +
+	"nt und Konto global gelöscht.\x02Benutzer aus der Organisation entfernt." +
+	"\x02Diesen Benutzer aus der Organisation entfernen?\x02Diesen Benutzer a" +
+	"us der Organisation entfernen und sein Konto global löschen?\x02Mitglied" +
+	"skonto\x02Besitzerkonto\x02%[1]s · %[2]s\x02Dateien werden hochgeladen, " +
+	"bitte warte einen Moment.\x02Die Seite wird automatisch aktualisiert, so" +
+	"bald der Upload abgeschlossen ist.\x02Bitte versuche es erneut, sobald d" +
+	"u einen Space erstellt hast oder eingeladen wurdest, einem beizutreten." +
+	"\x02Space auswählen\x02Verarbeitung der geteilten Dateien fehlgeschlagen" +
+	".\x02Dateien hochgeladen, bitte wähle einen Space aus.\x02Fehlerhafter U" +
+	"pload-Inhalt.\x02Upload ist zu gross.\x02Datei hochgeladen, bitte wähle " +
+	"einen Space aus.\x02URL importieren\x02URL importieren\x02Datei von URL " +
+	"importieren\x02Herunterladen und fortfahren\x02Feld erstellen\x02Feld «%" +
+	"[1]s» erstellt.\x02Feld gelöscht.\x02Feld bearbeiten\x02Feld aktualisier" +
+	"t.\x02Dieses Feld löschen?\x02Space «%[1]s» erstellt.\x02Space erstellen" +
+	"\x02Wähle Dokumenttypen, die zu diesem Space hinzugefügt werden sollen:" +
+	"\x02Space gelöscht.\x02Space bearbeiten\x02%[1]s (%[2]s)\x02aktiv\x02Die" +
+	"sen Space löschen?\x02Spaces\x02Die angeforderte Seite wurde nicht gefun" +
+	"den.\x02Die angeforderte Seite konnte nicht geladen werden.\x02«%[1]s» z" +
+	"ugewiesen.\x02Tag erstellen und zuweisen\x02«%[1]s» erstellt und zugewie" +
+	"sen.\x02Tag «%[1]s» erstellt.\x02«%[1]s» gelöscht.\x02Gruppe, %[1]d Tags" +
+	", %[2]d ausgewählt\x02Gruppe, %[1]d Tag, %[2]d ausgewählt\x02Zusammenges" +
+	"etzt aus %[1]s\x02Zugewiesene Tags anzeigen\x02Gruppe erstellen\x02Tags " +
+	"von «%[1]s»\x02Tag bearbeiten\x02«%[1]s» aktualisiert.\x02Layout wird ni" +
+	"cht unterstützt.\x02Zugewiesene Tags bearbeiten\x02Gruppe «%[1]s»\x02Tag" +
+	" in Gruppe verschieben\x02Aus der Gruppe entfernt.\x02In Gruppe «%[1]s» " +
+	"verschoben.\x02Gruppe abwählen\x02Diesen Tag vollständig löschen? Er wir" +
+	"d von allen Dateien entfernt, nicht nur von dieser.\x02«%[1]s» Zuweisung" +
+	" aufgehoben.\x02Erstellt am\x02Geändert am\x02Keine Tags zugewiesen.\x02" +
+	"Ordner können nicht wiederhergestellt werden.\x02Datei ist nicht gelösch" +
+	"t.\x02Der ursprüngliche übergeordnete Ordner fehlt. In die Inbox wiederh" +
+	"ergestellt.\x02Datei wiederhergestellt.\x02Wiederherstellen\x02Papierkor" +
+	"b ist leer.\x02Ordner gelöscht\x02Ordner gelöscht: %[1]s\x02Gelöscht: %[" +
+	"1]s\x02Papierkorb\x02Dateivorschau ist für Ordner nicht verfügbar.\x02We" +
+	"b-Upload\x02Öffnen mit\x02URL-Import\x02WebDAV\x02Systemextraktion\x02Da" +
+	"tei kann nicht geparst werden.\x02Formular kann nicht geparst werden." +
+	"\x02Formular kann nicht dekodiert werden.\x02Formular kann nicht validie" +
+	"rt werden.\x02Aktuelle URL kann nicht geparst werden.\x02URL-Abfrage kan" +
+	"n nicht dekodiert werden.\x02Nur Eigentümer der Organisation können Benu" +
+	"tzer und Einstellungen verwalten.\x02OCR erfolgreich um\x02Du hast keine" +
+	" Berechtigung, auf diese Organisation zuzugreifen.\x02Du hast keine Bere" +
+	"chtigung, auf diesen Space zuzugreifen.\x02Es wurden keine Backup-Codes " +
+	"zurückgegeben.\x02Die Backup-Codes wurden neu generiert.\x02Backup-Codes" +
+	" konnten nicht neu generiert werden.\x02Dialog schliessen\x02Schliessen" +
+	"\x02Vorschlag\x02optional\x02erforderlich\x02Diese Organisation befindet" +
+	" sich im Wartungsmodus. Einige Funktionen sind möglicherweise nicht verf" +
+	"ügbar. Bitte wende dich an deinen Administrator.\x02Anwendungspassphras" +
+	"e\x02Passphrase ist erforderlich.\x02Ungültige Passphrase.\x02Ein Fehler" +
+	" ist aufgetreten. Bitte versuche es erneut.\x02Zu viele Entsperrversuche" +
+	". Bitte versuche es später erneut.\x02Anwendung entsperrt. Start wird fo" +
+	"rtgesetzt.\x02Aktionen\x02Hauptmenü öffnen\x02Gib diesem Passkey einen o" +
+	"ptionalen Namen, damit du ihn später wiedererkennst.\x02Nach der Registr" +
+	"ierung werden druckbare Backup-Codes einmal angezeigt. Speichere sie, be" +
+	"vor du schliesst.\x02Nach der Einrichtung ist die Passwort-Anmeldung für" +
+	" dieses Konto deaktiviert. Verwende stattdessen Passkeys und Backup-Code" +
+	"s.\x02Passkey-Name (optional)\x02Lädt…\x02Wichtig: Diese Backup-Codes we" +
+	"rden nur einmal angezeigt. Speichere, drucke oder lade sie jetzt herunte" +
+	"r, bevor du diesen Dialog schliesst.\x02Wenn du diese Codes und deinen P" +
+	"asskey verlierst, ist eine Kontowiederherstellung möglicherweise nicht m" +
+	"ehr möglich.\x02SimpleDMS Backup-Codes\x02Erstellt\x02Bewahre diese Back" +
+	"up-Codes an einem sicheren Ort auf.\x02Diese Codes werden nur einmal ang" +
+	"ezeigt.\x02Codes\x02Druckdialog wurde geöffnet.\x02Die Backup-Codes wurd" +
+	"en in die Zwischenablage kopiert.\x02Backup-Codes konnten nicht automati" +
+	"sch kopiert werden.\x02Die Backup-Codes wurden heruntergeladen.\x02Codes" +
+	" drucken\x02Codes kopieren\x02Übertragungen in die Inbox zulassen\x02Akt" +
+	"iver Tab\x02Mich als Space-Eigentümer hinzufügen\x02Zur Inbox hinzufügen" +
+	"\x02Admin\x02Österreich\x02Backup-Code\x02Belgien\x02Text\x02Integrierte" +
+	" Spalte\x02Bulgarien\x02Checkbox\x02Checkbox-Wert\x02Neue Passphrase bes" +
+	"tätigen\x02Passphrase bestätigen\x02Passwort bestätigen\x02Warnung bestä" +
+	"tigen\x02Statuswerte der Zugangsdaten\x02Kroatien\x02Aktuelles oder temp" +
+	"oräres Passwort\x02Aktuelle Passphrase\x02Zypern\x02Tschechien\x02Datums" +
+	"wert\x02Bei Erfolg löschen\x02Dänemark\x02Beschreibung\x02Ziel\x02E-Mail" +
+	"\x02Englisch\x02Estland\x02Feld\x02Datei\x02Dateiname\x02Finnland\x02Vor" +
+	"name\x02Ordnername\x02Frankreich\x02Französisch\x02Deutsch\x02Deutschlan" +
+	"d\x02Griechenland\x02Gruppe\x02Ungarn\x02Island\x02Irland\x02Ist namensg" +
+	"ebend\x02Ist unbegrenzt\x02Italienisch\x02Italien\x02Bezeichnung\x02Spra" +
+	"che\x02Nachname\x02Lettland\x02Layout\x02Bibliothek-Vorlagenschlüssel" +
+	"\x02Liechtenstein\x02Litauen\x02Lokal\x02Luxemburg\x02Malta\x02Maximale " +
+	"Upload-Grösse MiB\x02Nachricht\x02Geld\x02Geldwert\x02Niederlande\x02Neu" +
+	"er Dateiname\x02Neuer Ordnername\x02Neuer Name\x02Neue Passphrase\x02Neu" +
+	"es Passwort\x02Norwegen\x02Zahl\x02Zahlenwert\x02Nur zugewiesen\x02Aktio" +
+	"n\x02Operator\x02Sonstiges\x02Besitzer\x02Passphrase\x02Passwort\x02Auss" +
+	"tehend\x02Polen\x02Portugal\x02Vorschau-Tab\x02Pro\x02Push-URL\x02Rolle" +
+	"\x02Rumänien\x02S3\x02Suchanfrage\x02Verlauf anzeigen\x02Tags anzeigen" +
+	"\x02Einfach\x02Slowakei\x02Slowenien\x02Spanien\x02Newsletter abonnieren" +
+	"\x02Super\x02Supporter\x02Schweden\x02Schweiz\x02Tag\x02Vorlagenschlüsse" +
+	"l\x02Temporäre Sitzung\x02Text\x02Textwert\x02Testphase\x02URL\x02Einhei" +
+	"t\x02Benutzer\x02Wert\x02Wertende\x02Wertbeginn\x02Versionsnummer\x02Ans" +
+	"ichtsmodus\x02Eigenschaften\x02Grössen\x02Registrieren\x02Registrierung" +
+	"\x02Kostenlose 30-Tage-Testphase, keine Kreditkarte erforderlich.\x02Org" +
+	"anisationsname\x02Land\x02Nutzungsbedingungen akzeptieren\x02Datenschutz" +
+	"richtlinie akzeptieren\x02Registrierung erfolgreich, bitte überprüfe dei" +
+	"ne E-Mails für dein Passwort.\x02Impressum\x02Datenschutzerklärung\x02Nu" +
+	"tzungsbedingungen\x02Für dieses Konto ist die Passkey-Anmeldung erforder" +
+	"lich.\x02Zu viele Anmeldeversuche. Bitte versuche es in 10 Sekunden erne" +
+	"ut.\x02Backup-Codes konnten nicht generiert werden.\x02Temporäres Passwo" +
+	"rt abgelaufen.\x02Temporäres Passwort konnte nicht generiert werden.\x02" +
+	"Salt konnte nicht generiert werden.\x02Aktuelles Passwort ist ungültig." +
+	"\x02Neues Passwort muss sich vom aktuellen Passwort unterscheiden.\x02Ei" +
+	"n Passwort ist bereits gesetzt. Bitte verwende stattdessen das Formular " +
+	"«Passwort ändern».\x02Das Passwort muss mindestens zwölf Zeichen lang s" +
+	"ein.\x02Passwörter stimmen nicht überein.\x02Ungültige Passkey-Anmeldung" +
+	".\x02Passkey-Anmeldung fehlgeschlagen.\x02Die Passkey-Anmeldung ist für " +
+	"dieses Konto nicht aktiviert.\x02Passkey-Registrierung fehlgeschlagen." +
+	"\x02Du benötigst mindestens einen Passkey, bevor du Backup-Codes erstell" +
+	"en kannst.\x02Ungültige Anmeldedaten für die Backup-Anmeldung.\x02Zu vie" +
+	"le Backup-Anmeldeversuche. Bitte versuche es in 10 Sekunden erneut.\x02D" +
+	"as Zielkonto hat keine Passkeys konfiguriert.\x02Passkey nicht gefunden." +
+	"\x02Konto nicht gefunden.\x02Ungültige Konfiguration der Passkey-Origin." +
+	"\x02Fehlende Konfiguration für die Passkey-RP-ID.\x02Der Passkey-Dienst " +
+	"konnte nicht initialisiert werden.\x02Die Passkey-Challenge ist ungültig" +
+	" oder abgelaufen.\x02Unbekannte Passkey-Anmeldeinformation.\x02Passkey-K" +
+	"onto nicht gefunden.\x02App bereits initialisiert.\x02Dein temporäres Pa" +
+	"sswort ist\x02Es läuft ab am\x02Neue Organisationsregistrierung\x02Dies " +
+	"ist eine automatisierte Nachricht, bitte antworte nicht darauf.\x02Willk" +
+	"ommen bei SimpleDMS\x0202.01.2006 um 15:04 Uhr\x02SimpleDMS Passwort zur" +
+	"ücksetzen\x02Dein Konto wurde erfolgreich erstellt.\x02Bitte melde dich" +
+	" an und ändere dein Passwort so bald wie möglich.\x02Anmeldeseite öffnen" +
+	"\x02Für dein Konto wurde eine Passwort-Zurücksetzung angefordert.\x02Dei" +
+	"n altes Passwort funktioniert weiterhin, bis du es änderst.\x02«%[1]s» h" +
+	"at dich zum Tenant «%[2]s» eingeladen.\x02«%[1]s» hat dich eingeladen." +
+	"\x02Zugangsdaten nicht gefunden.\x02Ungültige MCP-Zugangsdaten.\x02App i" +
+	"st bereits entsperrt.\x02App ist nicht mit Passphrase verschlüsselt.\x02" +
+	"Keine Passphrase gesetzt.\x02Neue Passphrase ist erforderlich.\x02Neue P" +
+	"assphrase stimmt nicht mit der Bestätigung überein.\x02Alte Passphrase i" +
+	"st erforderlich.\x02Die maximale Upload-Grösse muss grösser oder gleich " +
+	"0 sein.\x02Allgemein\x02Öffentlicher Origin\x02WebAuthn Relying Party ID" +
+	"\x02Schutz durch Passphrase\x02Dateiverschlüsselung\x02Unsichere Cookies" +
+	"\x02Maximale Upload-Grösse\x02Gespeicherte Konfiguration beim Start über" +
+	"schreiben\x02Entwicklungsmodus\x02Der Entwicklungsmodus ist aktiviert. V" +
+	"erwende ihn nicht produktiv.\x02Es ist kein öffentlicher Origin gesetzt." +
+	" E-Mails können nicht auf die App verlinken.\x02Der öffentliche Origin i" +
+	"st keine gültige URL.\x02Der öffentliche Origin verwendet kein HTTPS." +
+	"\x02Die WebAuthn Relying Party ID passt nicht zum öffentlichen Origin. P" +
+	"asskeys funktionieren nicht.\x02Session-Cookies werden auch über unversc" +
+	"hlüsselte Verbindungen gesendet.\x02Speicher\x02Endpunkt\x02Bucket\x02Ac" +
+	"cess Key ID\x02Secret Access Key\x02SSL/TLS\x02Es ist kein Speicher konf" +
+	"iguriert. Dateien können nicht hochgeladen werden.\x02Verbindung\x02Die " +
+	"Verbindung zum Speicher ist nicht verschlüsselt.\x02OCR\x02Textextraktio" +
+	"n\x02Xberg, Tika für nicht unterstützte Formate\x02Deaktiviert\x02Weder " +
+	"Xberg noch Tika ist konfiguriert. Text in Dokumenten wird nicht extrahie" +
+	"rt und ist nicht durchsuchbar.\x02Maximale Dateigrösse\x02Xberg-URL\x02D" +
+	"ie Xberg-URL ist ungültig.\x02Xberg-Verbindung\x02Tika-URL\x02Die Tika-U" +
+	"RL ist ungültig.\x02Tika-Verbindung\x02PDF-Vorschauen\x02Gotenberg-URL" +
+	"\x02Gotenberg ist nicht konfiguriert. PDF-Vorschauen für Office-, HTML- " +
+	"und Markdown-Dateien sind deaktiviert.\x02Die Gotenberg-URL ist ungültig" +
+	".\x02Host\x02Port\x02Absenderadresse\x02Implizites SSL/TLS\x02Zertifikat" +
+	"sprüfung\x02E-Mails, die auf den Versand warten\x02E-Mails, die nicht ge" +
+	"sendet werden konnten\x02Es ist kein Mailserver konfiguriert. E-Mails, z" +
+	"um Beispiel zum Zurücksetzen von Passwörtern, werden nicht gesendet.\x02" +
+	"Es ist keine Absenderadresse konfiguriert. E-Mails können nicht gesendet" +
+	" werden.\x02Das Zertifikat des Mailservers wird nicht geprüft.\x02%[1]d " +
+	"E-Mails konnten nach %[2]d Versuchen nicht gesendet werden.\x02TLS\x02Mo" +
+	"dus\x02Automatische Zertifikate von Let's Encrypt\x02Hosts\x02Für automa" +
+	"tische Zertifikate sind keine Hosts konfiguriert.\x02HTTP, HTTPS muss ei" +
+	"n Reverse Proxy bereitstellen\x02Nur Zertifikatsdatei oder private Schlü" +
+	"sseldatei ist gesetzt. TLS ist deaktiviert.\x02Zertifikatsdateien\x02Zer" +
+	"tifikatsdatei\x02Private Schlüsseldatei\x02Das Zertifikat konnte nicht g" +
+	"eladen werden: %[1]s\x02Zertifikat gültig bis\x02Das Zertifikat ist am %" +
+	"[1]s abgelaufen.\x02Das Zertifikat läuft am %[1]s ab.\x02Nicht erreichba" +
+	"r\x02%[1]s ist nicht erreichbar: %[2]s\x02Verbunden\x02Verbunden (%[1]s)" +
+	"\x02Nicht gesetzt\x02Gesetzt\x02Aktiviert\x02Erlaubt\x02Nicht erlaubt" +
+	"\x02Datei konnte nicht von der URL heruntergeladen werden.\x02SimpleDMS " +
+	"konnte die importierte Datei nicht speichern. Versuche es erneut oder bi" +
+	"tte deine Administration um Hilfe.\x02Die Verarbeitung der heruntergelad" +
+	"enen Datei ist fehlgeschlagen.\x02Ungültige URL.\x02Der Dateiname der Op" +
+	"enCloud-Datei wird nicht unterstützt. Benenne die Datei um und starte ei" +
+	"nen neuen Export.\x02Dateiname konnte nicht ermittelt werden.\x02SimpleD" +
+	"MS konnte keine sichere Verbindung zu OpenCloud herstellen. Bitte deine " +
+	"Administration um Hilfe.\x02OpenCloud hat nicht rechtzeitig geantwortet." +
+	" Versuche es erneut.\x02SimpleDMS konnte keine Verbindung zu OpenCloud h" +
+	"erstellen. Versuche es später erneut oder bitte deine Administration um " +
+	"Hilfe.\x02OpenCloud hat das Integrationspasswort abgelehnt. Bitte deine " +
+	"Administration, die Integrationseinstellungen zu prüfen.\x02OpenCloud er" +
+	"laubt das Herunterladen dieser Datei nicht. Bitte die Person, der die Da" +
+	"tei gehört, oder deine Administration um Zugriff.\x02Der OpenCloud-Link " +
+	"ist abgelaufen oder nicht mehr verfügbar. Starte einen neuen Export aus " +
+	"OpenCloud.\x02OpenCloud erhält zu viele Anfragen. Warte einen Moment und" +
+	" versuche es erneut.\x02SimpleDMS konnte die Datei nicht sicher herunter" +
+	"laden. Bitte deine Administration, die Integrationseinstellungen zu prüf" +
+	"en.\x02OpenCloud konnte die Datei gerade nicht bereitstellen. Versuche e" +
+	"s später erneut.\x02Die Datei konnte nicht aus OpenCloud heruntergeladen" +
+	" werden. Versuche es erneut oder bitte deine Administration um Hilfe." +
+	"\x02URL ist erforderlich.\x02Es sind nur HTTP- und HTTPS-URLs erlaubt." +
+	"\x02URL-Zugangsdaten sind nicht erlaubt.\x02Lokale URLs sind nicht erlau" +
+	"bt.\x02Ziel-Host ist nicht erlaubt.\x02Zu viele Weiterleitungen.\x02App " +
+	"noch nicht entsperrt. Bitte versuche es später erneut.\x02Organisation n" +
+	"och nicht initialisiert. Bitte versuche es später erneut.\x02Fehler beim" +
+	" Öffnen der Organisationsdatenbank. Bitte versuche es später erneut.\x02" +
+	"Ein Benutzer mit dieser E-Mail-Adresse existiert bereits. Bitte kontakti" +
+	"ere den Support, wenn du diesen Benutzer dennoch hinzufügen möchtest." +
+	"\x02Du kannst deinen eigenen Benutzer in der Organisationsverwaltung nic" +
+	"ht löschen.\x02Die maximale Upload-Grösse muss grösser oder gleich 0 MiB" +
+	" sein.\x02Die maximale Upload-Grösse ist zu gross.\x02Die maximale Uploa" +
+	"d-Grösse muss grösser als 0 MiB sein, wenn «Unbegrenzt» deaktiviert ist." +
+	"\x02Organisation ist erforderlich.\x02Du musst angemeldet sein, um Uploa" +
+	"d-Limits zu verwalten.\x02Du musst Admin sein, um Upload-Limits zu verwa" +
+	"lten.\x02Die Bezeichnung der Zugangsdaten ist erforderlich.\x02Die Zugan" +
+	"gsdaten konnten nicht erstellt werden.\x02Eine ähnliche Entität existier" +
+	"t bereits.\x02Die Secret-Länge muss zwischen %[1]d und %[2]d Zeichen lie" +
+	"gen.\x02Die Datei ist ein Ordner.\x02Bitte wähle mindestens einen Dokume" +
+	"nttyp aus.\x02Das Attribut muss auf eine Tag-Gruppe verweisen.\x02Tag-Gr" +
+	"uppe «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt.\x02Feld «%[1]s»" +
+	" ist diesem Dokumenttyp bereits hinzugefügt.\x02Notiz nicht gefunden." +
+	"\x02Der Notiztitel darf nicht leer sein.\x02Der Notiztext darf nicht lee" +
+	"r sein.\x02Quelle und Ziel müssen unterschiedliche Dateien sein.\x02Doku" +
+	"ment nicht gefunden.\x02Du kannst nicht auf die Notizen dieses Dokuments" +
+	" zugreifen.\x02Die Notiz wurde bereits geändert. Bitte lade die Seite ne" +
+	"u.\x02Datei hat keinen übergeordneten Ordner.\x02Ungültiger Textbereich." +
+	"\x02Quelldatei hat keine Versionen.\x02Quellversion konnte nicht gelesen" +
+	" werden.\x02Quelldatei hat keine gespeicherte Datei.\x02Zielversionen ko" +
+	"nnten nicht gelesen werden.\x02Zieldatei konnte nicht aktualisiert werde" +
+	"n.\x02Quellversionen konnten nicht entfernt werden.\x02Quelldatei konnte" +
+	" nicht gelöscht werden.\x02Datei gehört nicht zum aktuellen Space.\x02Or" +
+	"dner können nicht zusammengeführt werden.\x02Quelldatei ist gelöscht." +
+	"\x02Quelldatei ist nicht in der Inbox.\x02Ungültige Sortierreihenfolge." +
+	"\x02Die Ziel-Inbox ist nicht verfügbar.\x02Inbox-Übertragung\x02Die Date" +
+	"i wurde geändert. Bitte lade die Seite neu.\x02Nur Dateien in der Inbox " +
+	"können übertragen werden.\x02Der Stammordner des Space kann nicht abgele" +
+	"gt werden.\x02Ordnermodus ist nicht aktiviert.\x02Pfadelement ist eine D" +
+	"atei, kein Ordner.\x02Der angegebene Dateiname ist nicht erlaubt.\x02Übe" +
+	"rgeordnetes Element ist kein Ordner.\x02Ein Ordner mit diesem Namen exis" +
+	"tiert bereits.\x02Ziel ist kein Ordner.\x02Ungültiger Dateiname.\x02Ein " +
+	"Ordner kann nicht in sich selbst verschoben werden.\x02Ziel ist aktuelle" +
+	"r Standort.\x02Ein Ordner kann nicht in einen seiner Unterordner verscho" +
+	"ben werden.\x02Neuer Dateiname ist leer.\x02Neuer Dateiname ist identisc" +
+	"h mit dem alten.\x02Zyklus im Ordnerbaum erkannt.\x02Dateipfad konnte ni" +
+	"cht geladen werden.\x02Objektname konnte nicht ermittelt werden.\x02Date" +
+	"i konnte nicht geöffnet werden.\x02Speicherpfad ist leer.\x02Datei exist" +
+	"iert bereits.\x02Der Upload ist leer.\x02Die Upload-Grösse stimmt nicht " +
+	"überein.\x02Der Upload ist nicht mehr aktiv.\x02Bucket-Name ist leer." +
+	"\x02Datei konnte nicht gespeichert werden.\x02Dateiname existiert bereit" +
+	"s.\x02Die gespeicherte Datei konnte nicht überprüft werden.\x02X25519-Id" +
+	"entität konnte nicht abgerufen werden.\x02Speicherdateiname stimmt nicht" +
+	" überein.\x02Die hochgeladene Datei konnte nicht übernommen werden.\x02D" +
+	"ie bereitgestellte Datei konnte nicht überprüft werden.\x02App ist noch " +
+	"nicht entsperrt.\x02Die Integrität der bereitgestellten Datei stimmt nic" +
+	"ht überein.\x02Die hochgeladene Datei wird bereits verarbeitet.\x02Organ" +
+	"isationsdatenbank nicht gefunden.\x02Die Verarbeitung der hochgeladenen " +
+	"Datei wurde übernommen.\x02Temporäre Datei konnte nicht kopiert werden." +
+	"\x02Upload-Grössenlimit konnte nicht überprüft werden.\x02Upload ist zu " +
+	"gross. Die maximal erlaubte Grösse ist %[1]s.\x02Speicherlimit konnte ni" +
+	"cht überprüft werden.\x02Speicherlimit für diese Organisation erreicht. " +
+	"Verwendet: %[1]s von %[2]s.\x02Rechnung\x02Rechnungsnummer\x02Rechnungsd" +
+	"atum\x02Lieferant\x02Fälligkeitsdatum\x02Status\x02Offen\x02Bezahlt\x02Ü" +
+	"berfällig\x02Rechnungsstatus\x02Beleg\x02Belegdatum\x02Händler\x02Zahlun" +
+	"gsmethode\x02Belegkategorie\x02Reise\x02Mahlzeiten\x02Büro\x02Software" +
+	"\x02Vertrag\x02Vertragsname\x02Parteien\x02Startdatum\x02Enddatum\x02Ent" +
+	"wurf\x02Abgelaufen\x02Gekündigt\x02Vertragsstatus\x02Vertragstyp\x02Dien" +
+	"stleistung\x02Verkauf\x02NDA\x02Bestellauftrag\x02Bestellnummer\x02Beste" +
+	"lldatum\x02Angefordert von\x02Gesendet\x02Genehmigt\x02Erfüllt\x02Status" +
+	" des Bestellauftrags\x02Richtlinie\x02Richtlinienname\x02Gültig ab\x02Ar" +
+	"chiviert\x02Richtlinienstatus\x02Richtlinienabteilung\x02Abteilung\x02HR" +
+	"\x02IT\x02Finanzen\x02Betrieb\x02Projektdokument\x02Projektname\x02Zield" +
+	"atum\x02In Bearbeitung\x02Abgeschlossen\x02Pausiert\x02Projektstatus\x02" +
+	"Projekttyp\x02Plan\x02Bericht\x02Spezifikation\x02Besprechungsnotizen" +
+	"\x02Besprechungsdatum\x02Organisator\x02Teilnehmende\x02Intern\x02Kunde" +
+	"\x02Final\x02Besprechungstyp\x02Besprechungsstatus\x02Spesenbericht\x02B" +
+	"erichtszeitraum\x02Mitarbeitende\x02Einreichungsdatum\x02Eingereicht\x02" +
+	"Abgelehnt\x02Spesenstatus\x02Spesenabteilung\x02Person\x02Unbekannte Dok" +
+	"umenttyp-Vorlage.\x02Eine Tag-Gruppe kann nicht als Kind hinzugefügt wer" +
+	"den.\x02Das Ziel muss eine Tag-Gruppe sein.\x02Eine Zusammensetzung benö" +
+	"tigt einen zusammengesetzten Tag und einen einfachen Unter-Tag.\x02Eine " +
+	"Entität, die noch in Verwendung ist, kann nicht gelöscht werden.\x02Es i" +
+	"st ein Datenbankfehler aufgetreten. Bitte kontaktiere den Support.\x02Da" +
+	"tenvalidierung fehlgeschlagen.\x02Du bist nicht eingeloggt. Bitte logge " +
+	"dich ein, um fortzufahren.\x02URL konnte nicht geparst werden.\x02Bitte " +
+	"registriere einen Passkey, um fortzufahren.\x02Cookie konnte nicht geles" +
+	"en werden.\x02Cookie gesetzt, aber nicht gültig.\x02Cookie gesetzt, aber" +
+	" leer.\x02Wartungsmodus\x02Der Wartungsmodus ist aktiviert. Bitte warte," +
+	" bis die App wieder bereit ist.\x02Ungültiger Seiten- oder Suchbereich." +
+	"\x02Die Datei-ID ist erforderlich.\x02Ungültige Ordner-ID.\x02Space verw" +
+	"alten\x02Organisationen\x02MCP\x02Ausloggen\x02Über SimpleDMS\x02Keine P" +
+	"robleme gefunden\x021 Problem erfordert Aufmerksamkeit\x02%[1]d Probleme" +
+	" erfordern Aufmerksamkeit\x02Zuletzt geprüft: %[1]s. Änderungen an der K" +
+	"onfiguration werden nach einem Neustart wirksam.\x02Fehler\x02Warnung" +
+	"\x02Nicht konfiguriert\x02OK\x02Auth-Cookie bereits gesetzt.\x02Session-" +
+	"ID konnte nicht generiert werden.\x02Du darfst nicht auf die angefordert" +
+	"e Ressource zugreifen.\x02Transaktion konnte nicht gestartet werden.\x02" +
+	"Die Daten konnten nicht gelesen werden.\x02Ungültige Upload-Grösse."
 
-var enIndex = []uint32{ // 1074 elements
+var enIndex = []uint32{ // 1161 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000012, 0x0000003a,
 	0x0000004e, 0x0000004e, 0x0000004e, 0x00000068,
@@ -1945,10 +2098,10 @@ var enIndex = []uint32{ // 1074 elements
 	0x000001ac, 0x000001ac, 0x000001ac, 0x000001ac,
 	0x000001ac, 0x000001ac, 0x000001ac, 0x000001ac,
 	0x000001ac, 0x000001ac, 0x000001ac, 0x000001ac,
-	0x000001ac, 0x000001ac, 0x000001b5, 0x000001c2,
+	0x000001ac, 0x000001ac, 0x000001ac, 0x000001b5,
 	// Entry A0 - BF
-	0x000001e6, 0x000001fb, 0x000001fb, 0x0000023b,
-	0x00000296, 0x000002b4, 0x000002b4, 0x000002b4,
+	0x000001c2, 0x000001e6, 0x000001fb, 0x000001fb,
+	0x0000023b, 0x00000296, 0x000002b4, 0x000002b4,
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
@@ -1968,7 +2121,7 @@ var enIndex = []uint32{ // 1074 elements
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
 	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
-	0x000002b4, 0x000002b4, 0x000002b4, 0x000002d3,
+	0x000002b4, 0x000002b4, 0x000002b4, 0x000002b4,
 	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
 	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
 	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
@@ -2066,8 +2219,8 @@ var enIndex = []uint32{ // 1074 elements
 	// Entry 240 - 25F
 	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
 	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
+	0x000002d3, 0x000002d3, 0x000002d3, 0x000002d3,
 	0x000002d3, 0x000002fb, 0x000002fb, 0x000002fb,
-	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
@@ -2105,17 +2258,17 @@ var enIndex = []uint32{ // 1074 elements
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
+	0x000002fb, 0x000002fb, 0x000002fb, 0x000002fb,
 	0x000002fb, 0x000002fb, 0x00000303, 0x0000030b,
 	0x0000030b, 0x0000030b, 0x0000030b, 0x0000030b,
-	0x0000030b, 0x00000350, 0x00000350, 0x00000350,
 	// Entry 2E0 - 2FF
+	0x0000030b, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000350, 0x00000350, 0x00000350,
 	0x00000350, 0x00000363, 0x00000363, 0x00000363,
-	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	// Entry 300 - 31F
 	0x00000363, 0x00000363, 0x00000363, 0x00000363,
@@ -2177,34 +2330,59 @@ var enIndex = []uint32{ // 1074 elements
 	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	0x00000363, 0x00000363, 0x00000363, 0x00000363,
-	0x00000363, 0x00000363, 0x00000396, 0x000003ab,
-	0x000003ab, 0x000003c2, 0x000003dc, 0x000003f2,
-	0x00000403, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	// Entry 3E0 - 3FF
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	// Entry 400 - 41F
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
 	// Entry 420 - 43F
+	0x00000363, 0x00000363, 0x00000363, 0x00000363,
+	0x00000396, 0x000003ab, 0x000003ab, 0x000003c2,
+	0x000003dc, 0x000003f2, 0x00000403, 0x0000044a,
 	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
 	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
 	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
 	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
-	0x0000044a, 0x0000044a,
-} // Size: 4320 bytes
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	// Entry 440 - 45F
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	// Entry 460 - 47F
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	// Entry 480 - 49F
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a, 0x0000044a, 0x0000044a, 0x0000044a,
+	0x0000044a,
+} // Size: 4668 bytes
 
 const enData string = "" + // Size: 1098 bytes
 	"\x02Change passphrase\x02You must be an admin to unlock the app.\x02Pass" +
@@ -2226,7 +2404,7 @@ const enData string = "" + // Size: 1098 bytes
 	"e mode\x02Maintenance mode is enabled. Please wait until the app is read" +
 	"y again."
 
-var en_USIndex = []uint32{ // 1074 elements
+var en_USIndex = []uint32{ // 1161 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000086, 0x00000091, 0x000000ab,
@@ -2267,272 +2445,297 @@ var en_USIndex = []uint32{ // 1074 elements
 	0x00000c0f, 0x00000c16, 0x00000c21, 0x00000c3a,
 	0x00000c48, 0x00000c7f, 0x00000c94, 0x00000ca5,
 	0x00000ce0, 0x00000ced, 0x00000cfb, 0x00000d0a,
-	0x00000d20, 0x00000d2e, 0x00000d33, 0x00000d41,
-	0x00000d76, 0x00000db4, 0x00000dbc, 0x00000dc3,
-	0x00000dcd, 0x00000dd7, 0x00000de4, 0x00000df6,
-	0x00000e02, 0x00000e0a, 0x00000e26, 0x00000e31,
-	0x00000e3f, 0x00000e47, 0x00000e50, 0x00000e5d,
+	0x00000d20, 0x00000d2e, 0x00000d3e, 0x00000d43,
+	0x00000d51, 0x00000d86, 0x00000dc4, 0x00000dcc,
+	0x00000dd3, 0x00000ddd, 0x00000de7, 0x00000df4,
+	0x00000e06, 0x00000e12, 0x00000e1a, 0x00000e36,
+	0x00000e41, 0x00000e4f, 0x00000e57, 0x00000e60,
 	// Entry A0 - BF
-	0x00000e81, 0x00000e96, 0x00000e9f, 0x00000edf,
-	0x00000f3a, 0x00000f58, 0x00000f6a, 0x00000f77,
-	0x00000f85, 0x00000f98, 0x00000fb0, 0x00000fc9,
-	0x00000fd9, 0x00000fde, 0x00000fe3, 0x00000fec,
-	0x00000ff1, 0x00000ff6, 0x00000ffb, 0x0000100e,
-	0x00001012, 0x00001015, 0x0000101a, 0x00001023,
-	0x0000102e, 0x00001049, 0x00001055, 0x00001090,
-	0x000010b6, 0x000010d4, 0x00001163, 0x00001176,
+	0x00000e6d, 0x00000e91, 0x00000ea6, 0x00000eaf,
+	0x00000eef, 0x00000f4a, 0x00000f68, 0x00000f7a,
+	0x00000f87, 0x00000f95, 0x00000fa8, 0x00000fc0,
+	0x00000fd9, 0x00000fe9, 0x00000fee, 0x00000ff3,
+	0x00000ffc, 0x00001001, 0x00001006, 0x0000100b,
+	0x0000101e, 0x00001022, 0x00001025, 0x0000102a,
+	0x00001033, 0x0000103e, 0x00001059, 0x00001065,
+	0x000010a0, 0x000010c6, 0x000010e4, 0x00001173,
 	// Entry C0 - DF
-	0x00001191, 0x000011aa, 0x000011c3, 0x000011de,
-	0x000011f0, 0x00001208, 0x00001220, 0x00001230,
-	0x00001243, 0x0000125e, 0x00001283, 0x00001293,
-	0x0000129b, 0x000012b3, 0x000012d6, 0x000012ec,
-	0x000012f3, 0x00001307, 0x00001312, 0x00001328,
-	0x0000132d, 0x00001333, 0x0000134c, 0x00001361,
-	0x0000136a, 0x00001376, 0x0000137d, 0x0000138a,
-	0x00001394, 0x0000139c, 0x000013b1, 0x000013ca,
+	0x00001186, 0x000011a1, 0x000011ba, 0x000011d3,
+	0x000011ee, 0x00001200, 0x00001218, 0x00001230,
+	0x00001240, 0x00001253, 0x0000126e, 0x00001293,
+	0x000012a3, 0x000012ab, 0x000012c3, 0x000012e6,
+	0x000012fc, 0x00001303, 0x00001317, 0x00001322,
+	0x00001338, 0x0000133d, 0x00001343, 0x0000135c,
+	0x00001371, 0x0000137a, 0x00001386, 0x0000138d,
+	0x0000139a, 0x000013a4, 0x000013ac, 0x000013c1,
 	// Entry E0 - FF
-	0x000013d8, 0x000013ef, 0x000013fb, 0x00001402,
-	0x00001415, 0x00001421, 0x0000143e, 0x00001448,
-	0x0000145c, 0x0000146f, 0x0000147b, 0x00001491,
-	0x000014a0, 0x000014ca, 0x000014ed, 0x0000150c,
-	0x00001526, 0x0000153e, 0x00001549, 0x00001556,
-	0x00001563, 0x00001570, 0x00001576, 0x00001589,
-	0x000015a5, 0x000015c2, 0x000015de, 0x00001601,
-	0x0000162b, 0x0000163d, 0x00001653, 0x00001672,
+	0x000013da, 0x000013e8, 0x000013ff, 0x0000140b,
+	0x00001412, 0x00001425, 0x00001431, 0x0000144e,
+	0x00001458, 0x0000146c, 0x0000147f, 0x0000148b,
+	0x000014a1, 0x000014b0, 0x000014da, 0x000014fd,
+	0x0000151c, 0x00001536, 0x0000154e, 0x00001559,
+	0x00001566, 0x00001573, 0x00001580, 0x00001586,
+	0x00001599, 0x000015b5, 0x000015d2, 0x000015ee,
+	0x00001611, 0x0000163b, 0x0000164d, 0x00001663,
 	// Entry 100 - 11F
-	0x00001695, 0x0000169c, 0x000016b7, 0x000016db,
-	0x000016ed, 0x00001701, 0x0000172f, 0x00001753,
-	0x00001777, 0x00001795, 0x0000179f, 0x000017b6,
-	0x000017c4, 0x000017c9, 0x000017d1, 0x000017ed,
-	0x00001805, 0x0000181e, 0x0000182b, 0x00001838,
-	0x00001870, 0x00001876, 0x0000188c, 0x000018a3,
-	0x000018d4, 0x000018dc, 0x000018e2, 0x000018ef,
-	0x000018fd, 0x0000194e, 0x00001961, 0x000019cf,
+	0x00001682, 0x000016a5, 0x000016ac, 0x000016c7,
+	0x000016eb, 0x000016fd, 0x00001711, 0x0000173f,
+	0x00001763, 0x00001787, 0x000017a5, 0x000017af,
+	0x000017c6, 0x000017d4, 0x000017d9, 0x000017e1,
+	0x000017fd, 0x00001815, 0x0000182e, 0x0000183b,
+	0x00001848, 0x00001880, 0x00001886, 0x0000189c,
+	0x000018b3, 0x000018e4, 0x000018ec, 0x000018f2,
+	0x000018ff, 0x0000190d, 0x0000195e, 0x00001971,
 	// Entry 120 - 13F
-	0x000019e8, 0x00001a02, 0x00001a0d, 0x00001a1e,
-	0x00001a27, 0x00001a2e, 0x00001a47, 0x00001a76,
-	0x00001a81, 0x00001a9c, 0x00001ab2, 0x00001aca,
-	0x00001ad5, 0x00001aec, 0x00001b03, 0x00001b0c,
-	0x00001b3f, 0x00001b54, 0x00001b6b, 0x00001bbb,
-	0x00001bd3, 0x00001c0e, 0x00001c20, 0x00001c46,
-	0x00001c4d, 0x00001c64, 0x00001cb0, 0x00001cc8,
-	0x00001cd5, 0x00001ce5, 0x00001cf1, 0x00001d4c,
+	0x000019df, 0x000019f8, 0x00001a12, 0x00001a1d,
+	0x00001a2e, 0x00001a37, 0x00001a3e, 0x00001a57,
+	0x00001a86, 0x00001a91, 0x00001aac, 0x00001ac2,
+	0x00001ada, 0x00001ae5, 0x00001afc, 0x00001b13,
+	0x00001b1c, 0x00001b4f, 0x00001b64, 0x00001b7b,
+	0x00001bcb, 0x00001be3, 0x00001c1e, 0x00001c30,
+	0x00001c56, 0x00001c5d, 0x00001c74, 0x00001cc0,
+	0x00001cd8, 0x00001ce5, 0x00001cf5, 0x00001d01,
 	// Entry 140 - 15F
-	0x00001d54, 0x00001d60, 0x00001d6c, 0x00001d7c,
-	0x00001de6, 0x00001df7, 0x00001e11, 0x00001ea8,
-	0x00001ebf, 0x00001f00, 0x00001f22, 0x00001f30,
-	0x00001f67, 0x00001f7a, 0x00001f89, 0x00001fbc,
-	0x00001fc7, 0x00001fd8, 0x00001fe0, 0x00001ff4,
-	0x00001ffe, 0x00002012, 0x00002021, 0x00002038,
-	0x0000204f, 0x00002056, 0x0000205e, 0x00002076,
-	0x000020af, 0x000020bc, 0x000020d9, 0x000020f1,
+	0x00001d5c, 0x00001d64, 0x00001d70, 0x00001d7c,
+	0x00001d8c, 0x00001df6, 0x00001e07, 0x00001e21,
+	0x00001eb8, 0x00001ecf, 0x00001f10, 0x00001f32,
+	0x00001f40, 0x00001f77, 0x00001f8a, 0x00001f99,
+	0x00001fcc, 0x00001fd7, 0x00001fe8, 0x00001ff0,
+	0x00002004, 0x0000200e, 0x00002022, 0x00002031,
+	0x00002048, 0x0000205f, 0x00002066, 0x0000206e,
+	0x00002086, 0x000020bf, 0x000020cc, 0x000020e9,
 	// Entry 160 - 17F
-	0x000020fb, 0x00002106, 0x0000211e, 0x00002136,
-	0x0000213d, 0x00002159, 0x00002169, 0x00002172,
-	0x0000217f, 0x0000219a, 0x000021f3, 0x0000220f,
-	0x0000226e, 0x00002282, 0x000022cf, 0x000022df,
-	0x000022f4, 0x0000230c, 0x0000233b, 0x00002356,
-	0x0000236e, 0x0000237d, 0x00002383, 0x000023b3,
-	0x000023e2, 0x000023fa, 0x00002426, 0x00002454,
-	0x00002483, 0x0000249d, 0x000024b8, 0x000024fc,
+	0x00002101, 0x0000210b, 0x00002116, 0x0000212e,
+	0x00002146, 0x0000214d, 0x00002169, 0x00002179,
+	0x00002182, 0x0000218f, 0x000021aa, 0x00002203,
+	0x0000221f, 0x0000227e, 0x00002292, 0x000022df,
+	0x000022ef, 0x00002304, 0x0000231c, 0x0000234b,
+	0x00002366, 0x0000237e, 0x0000238d, 0x00002393,
+	0x000023c3, 0x000023d3, 0x00002405, 0x00002413,
+	0x0000241f, 0x0000244e, 0x00002466, 0x00002492,
 	// Entry 180 - 19F
-	0x0000250c, 0x0000252c, 0x00002547, 0x00002569,
-	0x0000258d, 0x000025af, 0x000025ce, 0x000025e1,
-	0x000025f5, 0x00002608, 0x00002625, 0x0000263c,
-	0x0000265b, 0x00002667, 0x00002682, 0x00002690,
-	0x000026ad, 0x000026ca, 0x000026eb, 0x00002700,
-	0x00002717, 0x0000272a, 0x00002741, 0x0000274f,
-	0x00002764, 0x00002777, 0x00002794, 0x000027ad,
-	0x000027c1, 0x000027c8, 0x000027f3, 0x0000281c,
+	0x000024c0, 0x000024ef, 0x00002509, 0x00002524,
+	0x00002568, 0x00002578, 0x00002598, 0x000025b3,
+	0x000025d5, 0x000025f9, 0x0000261b, 0x0000263a,
+	0x0000264d, 0x00002661, 0x00002674, 0x00002691,
+	0x000026a8, 0x000026c7, 0x000026d3, 0x000026ee,
+	0x000026fc, 0x00002719, 0x00002736, 0x00002757,
+	0x0000276c, 0x00002783, 0x00002796, 0x000027ad,
+	0x000027bb, 0x000027d0, 0x000027e3, 0x00002800,
 	// Entry 1A0 - 1BF
-	0x0000283d, 0x0000285e, 0x00002873, 0x00002897,
-	0x000028b4, 0x000028ee, 0x00002903, 0x0000290f,
-	0x00002916, 0x0000292a, 0x0000293a, 0x00002950,
-	0x00002960, 0x00002972, 0x0000297f, 0x000029f3,
-	0x00002a48, 0x00002a64, 0x00002a82, 0x00002a99,
-	0x00002a9f, 0x00002ab3, 0x00002ac4, 0x00002ad4,
-	0x00002aee, 0x00002b0d, 0x00002b1d, 0x00002b3e,
-	0x00002ba7, 0x00002bb7, 0x00002bc9, 0x00002c3a,
+	0x00002819, 0x0000282d, 0x00002834, 0x0000285f,
+	0x00002888, 0x000028a9, 0x000028ca, 0x000028df,
+	0x00002903, 0x00002920, 0x0000295a, 0x0000296f,
+	0x0000297b, 0x00002982, 0x00002996, 0x000029a6,
+	0x000029bc, 0x000029cc, 0x000029de, 0x000029eb,
+	0x00002a5f, 0x00002ab4, 0x00002ad0, 0x00002aee,
+	0x00002b05, 0x00002b0b, 0x00002b1f, 0x00002b30,
+	0x00002b4a, 0x00002b69, 0x00002b79, 0x00002b9a,
 	// Entry 1C0 - 1DF
-	0x00002c4d, 0x00002c82, 0x00002cd9, 0x00002d36,
-	0x00002d4b, 0x00002d7b, 0x00002dc7, 0x00002ddf,
-	0x00002df5, 0x00002e1b, 0x00002e3a, 0x00002e7a,
-	0x00002e86, 0x00002eae, 0x00002ed9, 0x00002ef2,
-	0x00002efb, 0x00002f17, 0x00002f3a, 0x00002f51,
-	0x00002f65, 0x00002f9c, 0x00002fa8, 0x00002fb6,
-	0x00002fc7, 0x00002fd9, 0x00002fe4, 0x00002fee,
-	0x00003008, 0x0000301c, 0x00003028, 0x00003067,
+	0x00002c03, 0x00002c13, 0x00002c25, 0x00002c96,
+	0x00002ca9, 0x00002cde, 0x00002d35, 0x00002d92,
+	0x00002da7, 0x00002dd7, 0x00002e23, 0x00002e3b,
+	0x00002e51, 0x00002e77, 0x00002e96, 0x00002ed6,
+	0x00002ee2, 0x00002f0a, 0x00002f35, 0x00002f4e,
+	0x00002f57, 0x00002f73, 0x00002f96, 0x00002fad,
+	0x00002fc1, 0x00002ff8, 0x00003004, 0x00003012,
+	0x00003023, 0x00003035, 0x00003040, 0x0000304a,
 	// Entry 1E0 - 1FF
-	0x000030aa, 0x0000310c, 0x0000315c, 0x0000319b,
-	0x000031de, 0x0000321b, 0x0000323b, 0x00003263,
-	0x000032ad, 0x000032bc, 0x000032ca, 0x000032d9,
-	0x00003300, 0x00003346, 0x0000338d, 0x0000339a,
-	0x000033bd, 0x000033e4, 0x000033fb, 0x00003410,
-	0x00003436, 0x00003441, 0x0000344c, 0x00003461,
-	0x00003477, 0x00003484, 0x0000349d, 0x000034ac,
-	0x000034b7, 0x000034c6, 0x000034d9, 0x000034f2,
+	0x00003064, 0x00003078, 0x00003084, 0x000030c3,
+	0x00003106, 0x00003168, 0x000031b8, 0x000031f7,
+	0x0000323a, 0x00003277, 0x00003297, 0x000032bf,
+	0x00003309, 0x00003318, 0x00003326, 0x00003335,
+	0x0000335c, 0x000033a2, 0x000033e9, 0x000033f6,
+	0x00003419, 0x00003440, 0x00003457, 0x0000346c,
+	0x00003492, 0x0000349d, 0x000034a8, 0x000034bd,
+	0x000034d3, 0x000034e0, 0x000034f9, 0x00003508,
 	// Entry 200 - 21F
-	0x000034ff, 0x0000352b, 0x0000353a, 0x00003545,
-	0x00003553, 0x0000355a, 0x0000356d, 0x00003574,
-	0x00003596, 0x000035be, 0x000035d2, 0x000035e8,
-	0x00003608, 0x0000361f, 0x00003632, 0x00003654,
-	0x00003675, 0x00003687, 0x0000369a, 0x000036a7,
-	0x000036b9, 0x000036c2, 0x000036d5, 0x000036eb,
-	0x000036fe, 0x0000370e, 0x00003720, 0x00003734,
-	0x0000374e, 0x0000375d, 0x000037b5, 0x000037cb,
+	0x00003513, 0x00003522, 0x00003535, 0x0000354e,
+	0x0000355b, 0x00003587, 0x00003596, 0x000035a1,
+	0x000035af, 0x000035b6, 0x000035c9, 0x000035d0,
+	0x000035f2, 0x0000361a, 0x0000362e, 0x00003644,
+	0x00003664, 0x0000367b, 0x0000368e, 0x000036b0,
+	0x000036d1, 0x000036e3, 0x000036f6, 0x00003703,
+	0x00003715, 0x0000371e, 0x00003731, 0x00003747,
+	0x0000375a, 0x0000376a, 0x0000377c, 0x00003790,
 	// Entry 220 - 23F
-	0x000037d6, 0x000037e2, 0x000037f4, 0x00003810,
-	0x00003825, 0x0000385f, 0x0000386e, 0x00003876,
-	0x00003886, 0x00003895, 0x000038ab, 0x000038ba,
-	0x000038c0, 0x000038eb, 0x000038f6, 0x00003900,
-	0x0000390b, 0x00003912, 0x00003924, 0x00003937,
-	0x0000394a, 0x0000395e, 0x00003974, 0x0000398e,
-	0x000039a7, 0x000039df, 0x000039f0, 0x00003a21,
-	0x00003a4b, 0x00003a6a, 0x00003a8d, 0x00003ab0,
+	0x000037aa, 0x000037b9, 0x00003811, 0x00003827,
+	0x00003832, 0x0000383e, 0x00003850, 0x0000386c,
+	0x00003881, 0x000038bb, 0x000038ca, 0x000038d2,
+	0x000038e2, 0x000038f1, 0x00003907, 0x00003916,
+	0x0000391c, 0x00003947, 0x00003952, 0x0000395c,
+	0x00003967, 0x0000396e, 0x00003980, 0x00003993,
+	0x000039a6, 0x000039ba, 0x000039d0, 0x000039ea,
+	0x00003a03, 0x00003a3b, 0x00003a4c, 0x00003a7d,
 	// Entry 240 - 25F
-	0x00003abd, 0x00003ac3, 0x00003ace, 0x00003ad7,
-	0x00003ae0, 0x00003b49, 0x00003b60, 0x00003b78,
-	0x00003b8c, 0x00003bb4, 0x00003be6, 0x00003c09,
-	0x00003c11, 0x00003c20, 0x00003c62, 0x00003cbb,
-	0x00003d1e, 0x00003d36, 0x00003d41, 0x00003db2,
-	0x00003e08, 0x00003e1f, 0x00003e29, 0x00003e54,
-	0x00003e75, 0x00003e7b, 0x00003e90, 0x00003ebb,
-	0x00003ee6, 0x00003f08, 0x00003f14, 0x00003f1f,
+	0x00003aa7, 0x00003ac6, 0x00003ae9, 0x00003b0c,
+	0x00003b19, 0x00003b1f, 0x00003b2a, 0x00003b33,
+	0x00003b3c, 0x00003ba5, 0x00003bbc, 0x00003bd4,
+	0x00003be8, 0x00003c10, 0x00003c42, 0x00003c65,
+	0x00003c6d, 0x00003c7c, 0x00003cbe, 0x00003d17,
+	0x00003d7a, 0x00003d92, 0x00003d9d, 0x00003e0e,
+	0x00003e64, 0x00003e7b, 0x00003e85, 0x00003eb0,
+	0x00003ed1, 0x00003ed7, 0x00003eec, 0x00003f17,
 	// Entry 260 - 27F
-	0x00003f37, 0x00003f42, 0x00003f58, 0x00003f65,
-	0x00003f6b, 0x00003f73, 0x00003f7f, 0x00003f87,
-	0x00003f8c, 0x00003f9c, 0x00003fa5, 0x00003fae,
-	0x00003fbd, 0x00003fd4, 0x00003fe7, 0x00003ff8,
-	0x00004008, 0x00004021, 0x00004029, 0x00004047,
-	0x0000405a, 0x00004061, 0x00004070, 0x0000407b,
-	0x0000408d, 0x00004095, 0x000040a1, 0x000040ad,
-	0x000040b3, 0x000040bb, 0x000040c3, 0x000040c9,
+	0x00003f42, 0x00003f64, 0x00003f70, 0x00003f7b,
+	0x00003f93, 0x00003f9e, 0x00003fb4, 0x00003fc1,
+	0x00003fc7, 0x00003fcf, 0x00003fdb, 0x00003fe3,
+	0x00003fe8, 0x00003ff8, 0x00004001, 0x0000400a,
+	0x00004019, 0x00004030, 0x00004043, 0x00004054,
+	0x00004064, 0x0000407d, 0x00004085, 0x000040a3,
+	0x000040b6, 0x000040bd, 0x000040cc, 0x000040d7,
+	0x000040e9, 0x000040f1, 0x000040fd, 0x00004109,
 	// Entry 280 - 29F
-	0x000040ce, 0x000040d7, 0x000040df, 0x000040ea,
-	0x000040f6, 0x000040fd, 0x00004104, 0x0000410b,
-	0x00004113, 0x0000411a, 0x00004120, 0x00004128,
-	0x00004130, 0x00004138, 0x00004147, 0x00004154,
-	0x0000415c, 0x00004162, 0x00004168, 0x00004171,
-	0x0000417b, 0x00004182, 0x00004189, 0x0000419f,
-	0x000041ad, 0x000041b7, 0x000041bd, 0x000041c8,
-	0x000041ce, 0x000041e2, 0x000041ea, 0x000041f0,
+	0x0000410f, 0x00004117, 0x0000411f, 0x00004125,
+	0x0000412a, 0x00004133, 0x0000413b, 0x00004146,
+	0x00004152, 0x00004159, 0x00004160, 0x00004167,
+	0x0000416f, 0x00004176, 0x0000417c, 0x00004184,
+	0x0000418c, 0x00004194, 0x000041a3, 0x000041b0,
+	0x000041b8, 0x000041be, 0x000041c4, 0x000041cd,
+	0x000041d7, 0x000041de, 0x000041e5, 0x000041fb,
+	0x00004209, 0x00004213, 0x00004219, 0x00004224,
 	// Entry 2A0 - 2BF
-	0x000041fc, 0x00004208, 0x00004215, 0x00004225,
-	0x0000422e, 0x0000423d, 0x0000424a, 0x00004251,
-	0x00004258, 0x00004265, 0x00004273, 0x0000427d,
-	0x00004286, 0x0000428c, 0x00004292, 0x0000429d,
-	0x000042a6, 0x000042ae, 0x000042b5, 0x000042be,
-	0x000042ca, 0x000042ce, 0x000042d7, 0x000042dc,
-	0x000042e4, 0x000042e8, 0x000042f5, 0x00004302,
-	0x0000430c, 0x00004313, 0x0000431c, 0x00004325,
+	0x0000422a, 0x0000423e, 0x00004246, 0x0000424c,
+	0x00004258, 0x00004264, 0x00004271, 0x00004281,
+	0x0000428a, 0x00004299, 0x000042a6, 0x000042ad,
+	0x000042b4, 0x000042c1, 0x000042cf, 0x000042d9,
+	0x000042e2, 0x000042e8, 0x000042ee, 0x000042f9,
+	0x00004302, 0x0000430a, 0x00004311, 0x0000431a,
+	0x00004326, 0x0000432a, 0x00004333, 0x00004338,
+	0x00004340, 0x00004344, 0x00004351, 0x0000435e,
 	// Entry 2C0 - 2DF
-	0x0000432b, 0x00004343, 0x00004349, 0x00004353,
-	0x0000435a, 0x00004366, 0x0000436a, 0x00004378,
-	0x0000438a, 0x0000438f, 0x0000439a, 0x000043a0,
-	0x000043a4, 0x000043a9, 0x000043ae, 0x000043b4,
-	0x000043be, 0x000043ca, 0x000043d9, 0x000043e3,
-	0x000043ee, 0x000043f4, 0x000043fc, 0x0000440e,
-	0x0000443a, 0x0000444c, 0x00004454, 0x0000446c,
-	0x00004482, 0x000044c7, 0x000044cf, 0x000044de,
+	0x00004368, 0x0000436f, 0x00004378, 0x00004381,
+	0x00004387, 0x0000439f, 0x000043a5, 0x000043af,
+	0x000043b6, 0x000043c2, 0x000043c6, 0x000043d4,
+	0x000043e6, 0x000043eb, 0x000043f6, 0x000043fc,
+	0x00004400, 0x00004405, 0x0000440a, 0x00004410,
+	0x0000441a, 0x00004426, 0x00004435, 0x0000443f,
+	0x0000444a, 0x00004450, 0x00004458, 0x0000446a,
+	0x00004496, 0x000044a8, 0x000044b0, 0x000044c8,
 	// Entry 2E0 - 2FF
-	0x000044ef, 0x0000451d, 0x00004558, 0x00004579,
-	0x00004595, 0x000045bc, 0x000045d5, 0x000045f2,
-	0x00004628, 0x00004670, 0x000046a2, 0x000046ba,
-	0x000046d3, 0x000046eb, 0x0000471c, 0x00004739,
-	0x00004775, 0x00004799, 0x000047db, 0x00004806,
-	0x00004819, 0x0000482c, 0x00004852, 0x00004877,
-	0x0000489d, 0x000048c6, 0x000048e2, 0x000048fd,
-	0x00004916, 0x00004931, 0x0000493f, 0x0000495d,
+	0x000044de, 0x00004523, 0x0000452b, 0x0000453a,
+	0x0000454b, 0x00004579, 0x000045b4, 0x000045d5,
+	0x000045f1, 0x00004618, 0x00004631, 0x0000464e,
+	0x00004684, 0x000046cc, 0x000046fe, 0x00004716,
+	0x0000472f, 0x00004747, 0x00004778, 0x00004795,
+	0x000047d1, 0x000047f5, 0x00004837, 0x00004862,
+	0x00004875, 0x00004888, 0x000048ae, 0x000048d3,
+	0x000048f9, 0x00004922, 0x0000493e, 0x00004959,
 	// Entry 300 - 31F
-	0x00004990, 0x000049a5, 0x000049c1, 0x000049da,
-	0x00004a06, 0x00004a43, 0x00004a55, 0x00004a8b,
-	0x00004ac2, 0x00004af1, 0x00004b08, 0x00004b1e,
-	0x00004b36, 0x00004b4f, 0x00004b75, 0x00004b88,
-	0x00004ba4, 0x00004bd0, 0x00004bec, 0x00004c20,
-	0x00004c42, 0x00004c9d, 0x00004cc3, 0x00004cd0,
-	0x00004d28, 0x00004d46, 0x00004da7, 0x00004dd6,
-	0x00004e35, 0x00004e9c, 0x00004f06, 0x00004f63,
+	0x00004972, 0x0000498d, 0x0000499b, 0x000049b9,
+	0x000049ec, 0x00004a01, 0x00004a1d, 0x00004a36,
+	0x00004a62, 0x00004a9f, 0x00004ab1, 0x00004ae7,
+	0x00004b1e, 0x00004b4d, 0x00004b64, 0x00004b7a,
+	0x00004b92, 0x00004bab, 0x00004bd1, 0x00004be4,
+	0x00004c00, 0x00004c2c, 0x00004c48, 0x00004c7c,
+	0x00004c84, 0x00004c92, 0x00004cac, 0x00004cc2,
+	0x00004cd2, 0x00004ce3, 0x00004cf3, 0x00004d15,
 	// Entry 320 - 33F
-	0x00004faa, 0x00005012, 0x00005053, 0x000050ae,
-	0x000050bf, 0x000050e5, 0x00005106, 0x00005122,
-	0x0000513e, 0x00005152, 0x00005180, 0x000051ba,
-	0x000051f7, 0x00005262, 0x0000529e, 0x000052d6,
-	0x000052f4, 0x0000533b, 0x00005355, 0x00005384,
-	0x000053b2, 0x000053d0, 0x000053ed, 0x0000540e,
-	0x00005448, 0x0000545a, 0x00005484, 0x000054aa,
-	0x000054e6, 0x0000551e, 0x0000552e, 0x0000554c,
+	0x00004d26, 0x00004d60, 0x00004d98, 0x00004dbe,
+	0x00004de4, 0x00004e3a, 0x00004e76, 0x00004e7e,
+	0x00004e87, 0x00004e8e, 0x00004e9c, 0x00004eae,
+	0x00004eb6, 0x00004eea, 0x00004ef5, 0x00004f25,
+	0x00004f29, 0x00004f39, 0x00004f5d, 0x00004f66,
+	0x00004fc7, 0x00004fd5, 0x00004fdf, 0x00004ffb,
+	0x0000500c, 0x00005015, 0x00005030, 0x00005040,
+	0x0000504d, 0x0000505b, 0x000050b6, 0x000050d6,
 	// Entry 340 - 35F
-	0x00005569, 0x00005594, 0x000055a8, 0x000055d1,
-	0x000055fa, 0x0000560e, 0x00005622, 0x0000564d,
-	0x00005663, 0x0000567b, 0x0000569c, 0x000056b9,
-	0x000056d8, 0x000056f8, 0x00005718, 0x00005736,
-	0x00005758, 0x00005776, 0x0000578a, 0x000057ac,
-	0x000057bb, 0x000057dc, 0x00005808, 0x0000582f,
-	0x0000584b, 0x00005871, 0x00005897, 0x000058af,
-	0x000058d7, 0x000058f4, 0x00005906, 0x00005928,
+	0x000050db, 0x000050e0, 0x000050ef, 0x00005100,
+	0x00005119, 0x00005133, 0x00005151, 0x000051a6,
+	0x000051de, 0x00005212, 0x00005247, 0x0000524b,
+	0x00005250, 0x0000527a, 0x00005280, 0x000052b4,
+	0x000052e4, 0x0000532f, 0x00005341, 0x00005352,
+	0x00005363, 0x0000538e, 0x000053a6, 0x000053c8,
+	0x000053ea, 0x000053f8, 0x00005416, 0x00005420,
+	0x00005432, 0x0000543a, 0x0000543e, 0x00005446,
 	// Entry 360 - 37F
-	0x00005949, 0x0000597a, 0x00005991, 0x000059b2,
-	0x000059d1, 0x000059ee, 0x00005a09, 0x00005a1e,
-	0x00005a35, 0x00005a4a, 0x00005a5b, 0x00005a71,
-	0x00005a8d, 0x00005aa3, 0x00005ab8, 0x00005ad1,
-	0x00005aef, 0x00005b0e, 0x00005b29, 0x00005b48,
-	0x00005b66, 0x00005b7c, 0x00005b9c, 0x00005bc6,
-	0x00005be7, 0x00005c10, 0x00005c2f, 0x00005c53,
-	0x00005c87, 0x00005ca7, 0x00005cea, 0x00005cf2,
+	0x0000544e, 0x0000545a, 0x0000547c, 0x000054d7,
+	0x000054fd, 0x0000550a, 0x00005562, 0x00005580,
+	0x000055e1, 0x00005610, 0x0000566f, 0x000056d6,
+	0x00005740, 0x0000579d, 0x000057e4, 0x0000584c,
+	0x0000588d, 0x000058e8, 0x000058f9, 0x0000591f,
+	0x00005940, 0x0000595c, 0x00005978, 0x0000598c,
+	0x000059ba, 0x000059f4, 0x00005a31, 0x00005a9c,
+	0x00005ad8, 0x00005b10, 0x00005b2e, 0x00005b75,
 	// Entry 380 - 39F
-	0x00005d01, 0x00005d0e, 0x00005d17, 0x00005d20,
-	0x00005d27, 0x00005d2c, 0x00005d31, 0x00005d39,
-	0x00005d48, 0x00005d50, 0x00005d5d, 0x00005d64,
-	0x00005d73, 0x00005d84, 0x00005d8b, 0x00005d91,
-	0x00005d98, 0x00005da1, 0x00005daa, 0x00005db8,
-	0x00005dc0, 0x00005dcb, 0x00005dd4, 0x00005dda,
-	0x00005de2, 0x00005ded, 0x00005dfd, 0x00005e0b,
-	0x00005e13, 0x00005e19, 0x00005e1d, 0x00005e2c,
+	0x00005b8f, 0x00005bbe, 0x00005bec, 0x00005c0a,
+	0x00005c27, 0x00005c48, 0x00005c82, 0x00005c94,
+	0x00005cbe, 0x00005ce4, 0x00005d20, 0x00005d58,
+	0x00005d68, 0x00005d86, 0x00005da3, 0x00005dce,
+	0x00005de2, 0x00005e0b, 0x00005e34, 0x00005e48,
+	0x00005e5c, 0x00005e79, 0x00005e98, 0x00005eb8,
+	0x00005ed8, 0x00005ef6, 0x00005f18, 0x00005f36,
+	0x00005f61, 0x00005f77, 0x00005f8f, 0x00005fb0,
 	// Entry 3A0 - 3BF
-	0x00005e36, 0x00005e41, 0x00005e4e, 0x00005e53,
-	0x00005e5c, 0x00005e66, 0x00005e7c, 0x00005e83,
-	0x00005e8f, 0x00005e9e, 0x00005ea7, 0x00005eb5,
-	0x00005ec7, 0x00005ed2, 0x00005ed5, 0x00005ed8,
-	0x00005ee0, 0x00005eeb, 0x00005efc, 0x00005f09,
-	0x00005f15, 0x00005f21, 0x00005f2a, 0x00005f32,
-	0x00005f41, 0x00005f4e, 0x00005f53, 0x00005f5a,
-	0x00005f5f, 0x00005f6d, 0x00005f7a, 0x00005f84,
+	0x00005fc4, 0x00005fe6, 0x00005ff5, 0x00006016,
+	0x00006042, 0x00006069, 0x00006085, 0x000060ab,
+	0x000060d1, 0x000060e9, 0x00006111, 0x0000612e,
+	0x00006140, 0x00006162, 0x00006183, 0x000061b4,
+	0x000061cb, 0x000061ec, 0x0000620b, 0x00006228,
+	0x00006243, 0x00006258, 0x0000626f, 0x00006284,
+	0x00006295, 0x000062ab, 0x000062c7, 0x000062dd,
+	0x000062f2, 0x0000630b, 0x00006329, 0x00006348,
 	// Entry 3C0 - 3DF
-	0x00005f91, 0x00005f9a, 0x00005fa1, 0x00005fa7,
-	0x00005fb4, 0x00005fc3, 0x00005fd2, 0x00005fe0,
-	0x00005fe9, 0x00005ff9, 0x00006003, 0x0000600c,
-	0x0000601b, 0x0000602e, 0x00006035, 0x00006055,
-	0x00006076, 0x00006097, 0x000060d1, 0x000060f7,
-	0x0000613d, 0x00006155, 0x00006188, 0x0000619d,
-	0x000061c4, 0x000061db, 0x000061f5, 0x0000620b,
-	0x0000621c, 0x00006263, 0x00006281, 0x00006296,
+	0x00006363, 0x00006382, 0x000063a0, 0x000063b6,
+	0x000063d6, 0x00006400, 0x00006421, 0x0000644a,
+	0x00006469, 0x0000648d, 0x000064c1, 0x000064e1,
+	0x00006524, 0x0000652c, 0x0000653b, 0x00006548,
+	0x00006551, 0x0000655a, 0x00006561, 0x00006566,
+	0x0000656b, 0x00006573, 0x00006582, 0x0000658a,
+	0x00006597, 0x0000659e, 0x000065ad, 0x000065be,
+	0x000065c5, 0x000065cb, 0x000065d2, 0x000065db,
 	// Entry 3E0 - 3FF
-	0x000062a9, 0x000062b6, 0x000062c4, 0x000062c8,
-	0x000062d1, 0x000062e1, 0x000062fa, 0x00006319,
-	0x0000634f, 0x0000636c, 0x00006381, 0x00006396,
-	0x000063b7, 0x000063d6, 0x00006407, 0x00006417,
-	0x0000642b, 0x00006432, 0x00006436, 0x00006441,
-	0x0000644c, 0x00006452, 0x0000645d, 0x0000646c,
-	0x00006479, 0x00006483, 0x0000648b, 0x00006499,
-	0x000064b6, 0x000064ce, 0x000064f2, 0x00006520,
+	0x000065e4, 0x000065f2, 0x000065fa, 0x00006605,
+	0x0000660e, 0x00006614, 0x0000661c, 0x00006627,
+	0x00006637, 0x00006645, 0x0000664d, 0x00006653,
+	0x00006657, 0x00006666, 0x00006670, 0x0000667b,
+	0x00006688, 0x0000668d, 0x00006696, 0x000066a0,
+	0x000066b6, 0x000066bd, 0x000066c9, 0x000066d8,
+	0x000066e1, 0x000066ef, 0x00006701, 0x0000670c,
+	0x0000670f, 0x00006712, 0x0000671a, 0x00006725,
 	// Entry 400 - 41F
-	0x00006541, 0x00006568, 0x0000658b, 0x000065a3,
-	0x000065db, 0x000065f3, 0x0000661b, 0x00006654,
-	0x00006679, 0x0000668f, 0x000066ab, 0x000066c3,
-	0x000066e0, 0x000066fe, 0x0000671d, 0x00006734,
-	0x00006760, 0x0000678b, 0x000067a1, 0x000067b7,
-	0x000067d6, 0x000067ea, 0x000067fe, 0x0000680d,
-	0x00006826, 0x0000683e, 0x00006865, 0x0000687a,
-	0x00006898, 0x000068be, 0x000068e5, 0x00006907,
+	0x00006736, 0x00006743, 0x0000674f, 0x0000675b,
+	0x00006764, 0x0000676c, 0x0000677b, 0x00006788,
+	0x0000678d, 0x00006794, 0x00006799, 0x000067a7,
+	0x000067b4, 0x000067be, 0x000067cb, 0x000067d4,
+	0x000067db, 0x000067e1, 0x000067ee, 0x000067fd,
+	0x0000680c, 0x0000681a, 0x00006823, 0x00006833,
+	0x0000683d, 0x00006846, 0x00006855, 0x00006868,
+	0x0000686f, 0x0000688f, 0x000068b0, 0x000068d1,
 	// Entry 420 - 43F
-	0x00006918, 0x0000692a, 0x00006942, 0x00006956,
-	0x00006982, 0x000069a5, 0x000069d6, 0x000069ef,
-	0x00006a13, 0x00006a33, 0x00006a59, 0x00006a7a,
-	0x00006a9d, 0x00006ac2, 0x00006adc, 0x00006b07,
-	0x00006b20, 0x00006b39,
-} // Size: 4320 bytes
+	0x0000690b, 0x00006931, 0x00006977, 0x0000698f,
+	0x000069c2, 0x000069d7, 0x000069fe, 0x00006a15,
+	0x00006a2f, 0x00006a45, 0x00006a56, 0x00006a9d,
+	0x00006abb, 0x00006ad0, 0x00006ae3, 0x00006af0,
+	0x00006afe, 0x00006b02, 0x00006b0b, 0x00006b1b,
+	0x00006b2d, 0x00006b47, 0x00006b65, 0x00006bad,
+	0x00006bb3, 0x00006bbb, 0x00006bca, 0x00006bcd,
+	0x00006be6, 0x00006c05, 0x00006c3b, 0x00006c58,
+	// Entry 440 - 45F
+	0x00006c6d, 0x00006c82, 0x00006ca3, 0x00006cc2,
+	0x00006cf3, 0x00006d03, 0x00006d17, 0x00006d1e,
+	0x00006d22, 0x00006d2d, 0x00006d38, 0x00006d3e,
+	0x00006d49, 0x00006d58, 0x00006d65, 0x00006d6f,
+	0x00006d77, 0x00006d85, 0x00006da2, 0x00006dba,
+	0x00006dde, 0x00006e0c, 0x00006e2d, 0x00006e54,
+	0x00006e77, 0x00006e8f, 0x00006ec7, 0x00006edf,
+	0x00006f07, 0x00006f40, 0x00006f65, 0x00006f7b,
+	// Entry 460 - 47F
+	0x00006f97, 0x00006faf, 0x00006fcc, 0x00006fea,
+	0x00007009, 0x00007029, 0x00007040, 0x0000706c,
+	0x00007097, 0x000070ad, 0x000070c3, 0x000070e2,
+	0x000070f6, 0x0000710a, 0x00007119, 0x00007132,
+	0x0000714a, 0x00007171, 0x00007186, 0x000071a4,
+	0x000071ca, 0x000071f1, 0x00007213, 0x00007224,
+	0x00007236, 0x0000724e, 0x00007262, 0x0000728e,
+	0x000072b1, 0x000072e2, 0x000072fb, 0x0000731f,
+	// Entry 480 - 49F
+	0x0000733f, 0x00007365, 0x00007386, 0x000073a9,
+	0x000073ce, 0x000073e8, 0x00007413, 0x0000742c,
+	0x00007445,
+} // Size: 4668 bytes
 
-const en_USData string = "" + // Size: 27449 bytes
+const en_USData string = "" + // Size: 29765 bytes
 	"\x02Change passphrase\x02You must be signed in to unlock the app.\x02You" +
 	" must be an admin to unlock the app.\x02Passphrase changed.\x02Initializ" +
 	"e app\x02Initialize\x02Passphrases do not match.\x02App initialized.\x02" +
@@ -2585,383 +2788,419 @@ const en_USData string = "" + // Size: 27449 bytes
 	"able.\x02Document type\x02Duplicate check is still being prepared for th" +
 	"is file.\x02No duplicates found.\x02Duplicates found\x02This file alread" +
 	"y exists in the following %[1]d locations:\x02Space: %[1]s\x02Folder: %[" +
-	"1]s\x02Uploaded %[1]s\x02Current version %[1]d\x02Version %[1]d\x02Move" +
-	"\x02Unzip archive\x02Delete this file? You can restore it from the Trash" +
-	".\x02Delete this folder? Its files can be restored from the Trash.\x02De" +
-	"tails\x02Source\x02File size\x02MIME type\x02SHA-256 hash\x02Original fi" +
-	"lename\x02Uploaded at\x02Version\x02Current version uploaded at\x02Delet" +
-	"ed at\x02Created %[1]s\x02Preview\x02Original\x02Download PDF\x02PDF pre" +
-	"view could not be generated.\x02Retry PDF generation\x02Download\x02PDF " +
-	"preview is unavailable because Gotenberg is not configured.\x02PDF previ" +
-	"ew is being generated. Please wait a moment; the page will refresh autom" +
-	"atically.\x02PDF preview is not available.\x02Rendering failed.\x02Show " +
-	"details\x02Close preview\x02Version not found.\x02No fields assigned yet" +
-	".\x02Remove this field value?\x02Loading more…\x02Name\x02Type\x02Metada" +
-	"ta\x02Date\x02Size\x02Tags\x02No data available.\x02Yes\x02No\x02Info" +
-	"\x02Versions\x02Duplicates\x02Could not load duplicates.\x02File upload" +
-	"\x02Please confirm that the source file metadata will be lost.\x02Source" +
-	" and target files are required.\x02Added new version from Inbox.\x02I un" +
-	"derstand that the Inbox file's metadata (document type, tags, fields) wi" +
-	"ll be lost when merged. Notes and their history will be preserved.\x02Se" +
-	"arch Inbox files\x02Add new version from Inbox\x02Target file is require" +
-	"d.\x02Source file is required.\x02File must be in the Inbox.\x02No match" +
-	"es found.\x02Missing version number.\x02Invalid version number.\x02Versi" +
-	"on preview\x02Upload new version\x02No versions available yet.\x02Upload" +
-	" a new version to get started.\x02Add new version\x02Filters\x02No files" +
-	" available yet.\x02No files or folders available yet.\x02Back to parent " +
-	"folder\x02Search\x02Search in «%[1]s»\x02Sort files\x02Change file list " +
-	"view\x02List\x02Table\x02No fields available yet.\x02No fields available" +
-	".\x02Contains\x02Starts with\x02Equals\x02Greater than\x02Less than\x02B" +
-	"etween\x02«%[1]s» is checked\x02«%[1]s» is not checked\x02Tags | Filter" +
-	"\x02No tags available yet.\x02Manage tags\x02Create\x02«%[1]s» created." +
-	"\x02Open folder\x02Only allowed in folder mode.\x02Open file\x02Moved to" +
-	" «%[1]s».\x02«%[1]s» removed.\x02Rename file\x02Renamed to «%[1]s».\x02F" +
-	"ilters reset.\x02PDF preview conversion is not configured.\x02PDF previe" +
-	"w is not ready to retry.\x02PDF preview generation queued.\x02Document t" +
-	"ype deselected.\x02Document type selected.\x02Best match\x02Newest first" +
-	"\x02Oldest first\x02Sort by name\x02Unzip\x02Not a ZIP archive.\x02Could" +
-	" not open ZIP archive.\x02Could not unzip the archive.\x02Could not read" +
-	" ZIP archive.\x02Could not create folder structure.\x02Could not extract" +
-	" all files from archive.\x02Archive unzipped.\x02Archive is too large." +
-	"\x02Could not verify archive size.\x02End date is before the start date." +
-	"\x02Upload\x02No parent folder provided.\x02Read-only request context re" +
-	"quired.\x02No file provided.\x02«%[1]s» uploaded.\x02Upload metadata mus" +
-	"t be sent before the file.\x02New version uploaded for «%[1]s».\x02Canno" +
-	"t upload versions for folders.\x02Folders cannot be downloaded.\x02Move " +
-	"file\x02Move file to «%[1]s»\x02Parent folder\x02Home\x02Account\x02A fu" +
-	"ll Session is required.\x02Form validation failed.\x02No Spaces availabl" +
-	"e yet.\x02Client label\x02Allow writes\x02Without writes, the MCP client" +
-	" can only read documents.\x02Space\x02Create MCP credential\x02MCP crede" +
-	"ntial created\x02Copy the secret now. It will not be shown again.\x02MCP" +
-	" URL\x02Token\x02Device label\x02Secret length\x02Reduce the secret leng" +
-	"th only if your device limits the maximum password length.\x02Compatibil" +
-	"ity mode\x02Uses only letters, numbers, hyphens, and underscores for dev" +
-	"ices with limited support for special characters.\x02Create WebDAV crede" +
-	"ntial\x02WebDAV credential created\x02WebDAV URL\x02WebDAV Inbox URL\x02" +
-	"Username\x02Secret\x02Destination unavailable.\x02You cannot create a cr" +
-	"edential for this Space.\x02Copy %[1]s\x02%[1]s copied to clipboard.\x02" +
-	"Could not copy %[1]s.\x02Unavailable destination\x02Open tasks\x02Organi" +
-	"zation «%[1]s»\x02No passkeys registered\x02Passkeys\x02Register a passk" +
-	"ey to enable passwordless sign in.\x02Add a backup passkey\x02Passkey re" +
-	"commendation\x02Set up a second passkey on another device as backup in c" +
-	"ase one device is lost.\x02Regenerate backup codes\x02Regenerate backup " +
-	"codes? Existing codes will stop working.\x02Account «%[1]s»\x02Account «" +
-	"%[1]s», owned by «%[2]s»\x02System\x02Passkey setup required\x02Your org" +
-	"anization requires passkey sign-in. Register a passkey to continue.\x02%" +
-	"[1]d backup codes left\x02Subscription\x02Not initialized\x02Please wait" +
-	"\x02The organization is not initialized yet, please wait until the initi" +
-	"alization is complete.\x02Refresh\x02Quota usage\x02Unavailable\x02No pa" +
-	"ssword set\x02You've signed in with a temporary password. Please set a p" +
-	"assword to secure your account and use the app.\x02Set password now\x02A" +
-	"ctive temporary password\x02Your account has an active temporary passwor" +
-	"d. Please change your password or clear the temporary password as soon a" +
-	"s possible to secure your account.\x02No Space available yet\x02You have" +
-	" no permission to access any Space of this organization.\x02Please creat" +
-	"e one to get started.\x02Manage Spaces\x02The app is unlocked and not pr" +
-	"otected by a passphrase.\x02The app is locked.\x02Set passphrase\x02The " +
-	"app is unlocked and protected by a passphrase.\x02App status\x02Last use" +
-	"d: %[1]s\x02Passkey\x02Manage upload limit\x02Dashboard\x02Edit MCP cred" +
-	"ential\x02Changes saved.\x02Edit WebDAV credential\x02Filter MCP credent" +
-	"ials\x02Active\x02Revoked\x02No MCP credentials yet.\x02Create a credent" +
-	"ial to connect an MCP client to a Space.\x02Copy MCP URL\x02MCP URL copi" +
-	"ed to clipboard.\x02Could not copy MCP URL.\x02Read-only\x02Read/write" +
-	"\x02%[1]s · Created: %[2]s\x02%[1]s · Revoked: %[2]s\x02Revoke\x02Revoke" +
-	" this MCP credential?\x02MCP credentials\x02Settings\x02Organization\x02" +
-	"Enable passkey enforcement\x02Enable passkey enforcement for this organi" +
-	"zation? Members will need passkeys to sign in.\x02Disable passkey enforc" +
-	"ement\x02Disable passkey enforcement for this organization? Members can " +
-	"use passwords again if allowed.\x02Delete organization\x02Delete this or" +
-	"ganization? All accounts owned by it will be deleted globally.\x02Downlo" +
-	"ad backup\x02Delete this passkey?\x02MCP credential revoked.\x02You are " +
-	"not allowed to revoke this credential.\x02WebDAV credential revoked.\x02" +
-	"Edit in «Spaces» view\x02Document types\x02Users\x02You must be an admin" +
-	" to access system settings.\x02You must be signed in to manage organizat" +
-	"ions.\x02Organization not found.\x02Only owners can change passkey enfor" +
-	"cement.\x02Passkey enforcement enabled for organization.\x02Passkey enfo" +
-	"rcement disabled for organization.\x02Filter WebDAV credentials\x02No We" +
-	"bDAV credentials yet.\x02Create a device credential to upload files to a" +
-	"n Inbox over WebDAV.\x02Copy WebDAV URL\x02WebDAV URL copied to clipboar" +
-	"d.\x02Could not copy WebDAV URL.\x02Username: %[1]s · Created: %[2]s\x02" +
-	"Username: %[1]s · Last used: %[2]s\x02Username: %[1]s · Revoked: %[2]s" +
-	"\x02Revoke this WebDAV credential?\x02WebDAV credentials\x02Add field at" +
-	"tribute\x02Attribute updated.\x02Please create a field first.\x02Delete " +
-	"this attribute?\x02Add list attribute (tag group)\x02name-giving\x02Dele" +
-	"te this document type?\x02Add attribute\x02Attribute «%[1]s» created." +
-	"\x02No tag groups available yet.\x02Please create a tag group first.\x02" +
-	"Create document type\x02Document type created.\x02Attribute deleted.\x02" +
-	"Document type deleted.\x02Close details\x02Edit field attribute\x02Edit " +
-	"tag attribute\x02Attribute «%[1]s» updated.\x02Document types imported." +
-	"\x02Import from library\x02Import\x02Import is only available for empty " +
-	"Spaces.\x02No library document types available yet.\x02Select document t" +
-	"ypes to import:\x02Could not convert id to integer.\x02Rename document t" +
-	"ype\x02Document type renamed to «%[1]s».\x02Folders cannot be previewed." +
-	"\x02Original source preview is only available for HTML files.\x02Could n" +
-	"ot read file.\x02Assign file\x02Assign\x02No new files found.\x02Files u" +
-	"ploaded.\x02Move to another Inbox\x02Reload metadata\x02Delete from Inbo" +
-	"x\x02Mark as done\x02Text recognition (OCR) cannot be applied because th" +
-	"e file is too large, suggestions are based on the filename only.\x02Text" +
-	" recognition (OCR) is not ready yet, suggestions are based on the filena" +
-	"me only.\x02Select destination manually\x02Suggestions based on filename" +
-	"\x02Invalid source filter.\x02Inbox\x02Search in «Inbox»\x02Filter by so" +
-	"urce\x02File not found.\x02File is not in the Inbox.\x02Marked file «%[1" +
-	"]s» as done.\x02Source | Filter\x02Moved to the Inbox of «%[1]s».\x02No " +
-	"other Inbox is available. You need write access to another Space, or its" +
-	" Inbox must accept transfers.\x02Choose an Inbox\x02Destination Inbox" +
-	"\x02You can choose other Spaces in this organization where you have writ" +
-	"e access, or whose Inboxes accept transfers.\x02Message (optional)\x02Yo" +
-	"ur message will be saved as a note with your name.\x02Moving clears the " +
-	"document type, tags, and custom fields. Versions and notes are kept.\x02" +
-	"If you cannot open the destination Space, you will lose access to this f" +
-	"ile after moving it.\x02Assign user to Space\x02No Space selected. Pleas" +
-	"e select a Space first.\x02You are not allowed to assign users to Spaces" +
-	" because you aren't the owner.\x02User assigned to Space.\x02Could not l" +
-	"oad users.\x02Please reload the page and try again.\x02No unassigned use" +
-	"rs available.\x02Please create a user in the organization user managemen" +
-	"t first.\x02Assign user\x02User is already assigned to this Space.\x02Yo" +
-	"u cannot unassign yourself from a Space.\x02Unassign user from Space\x02" +
-	"Unassign\x02User unassigned from Space.\x02Unassign this user from the S" +
-	"pace?\x02No users assigned yet.\x02Create tag or group\x02Delete this ta" +
-	"g? It will be unassigned from all files.\x02Assign tags\x02Move to group" +
-	"\x02Group, %[1]d tag\x02Group, %[1]d tags\x02Create tag\x02Super tag\x02" +
-	"Tag group ID is required.\x02Tag is not a group.\x02Create user\x02You a" +
-	"re not allowed to create users. No organization selected.\x02You are not" +
-	" allowed to create users because you are not the owner.\x02User created." +
-	" The password was sent by email. Owners can access all Spaces without fu" +
-	"rther setup.\x02User created. The password was sent by email. Next, assi" +
-	"gn the user to a Space.\x02You are not allowed to delete users. No organ" +
-	"ization selected.\x02You are not allowed to delete users because you are" +
-	" not the owner.\x02User removed from organization and account deleted gl" +
-	"obally.\x02User removed from organization.\x02Remove this user from the " +
-	"organization?\x02Remove this user from the organization and delete their" +
-	" account globally?\x02Member account\x02Owned account\x02%[1]s · %[2]s" +
-	"\x02Uploading files, please wait a moment.\x02The page will be refreshed" +
-	" automatically once the upload is finished.\x02Please try again once you" +
-	" created a Space or were invited to join one.\x02Select Space\x02Process" +
-	"ing of shared files failed.\x02Files uploaded, please select a Space." +
-	"\x02Malformed upload body.\x02Upload is too large.\x02File uploaded, ple" +
-	"ase select a Space.\x02Import URL\x02Import URL\x02Import file from URL" +
-	"\x02Download and continue\x02Create field\x02Field «%[1]s» created.\x02F" +
-	"ield deleted.\x02Edit field\x02Field updated.\x02Delete this field?\x02S" +
-	"pace «%[1]s» created.\x02Create Space\x02Select document types to add to" +
-	" this Space:\x02Space deleted.\x02Edit Space\x02%[1]s (%[2]s)\x02active" +
-	"\x02Delete this Space?\x02Spaces\x02The requested page was not found." +
-	"\x02The requested page could not be loaded.\x02«%[1]s» assigned.\x02Crea" +
-	"te and assign tag\x02«%[1]s» created and assigned.\x02Tag «%[1]s» create" +
-	"d.\x02«%[1]s» deleted.\x02Group, %[1]d tags, %[2]d selected\x02Group, %[" +
-	"1]d tag, %[2]d selected\x02Composed of %[1]s\x02Show assigned tags\x02Cr" +
-	"eate group\x02Tags of «%[1]s»\x02Edit tag\x02«%[1]s» updated.\x02Layout " +
-	"not supported.\x02Edit assigned tags\x02Group «%[1]s»\x02Move tag to gro" +
-	"up\x02Removed from group.\x02Moved to group «%[1]s».\x02Deselect group" +
-	"\x02Delete this tag entirely? It will be unassigned from all files, not " +
-	"only from this one.\x02«%[1]s» unassigned.\x02Created at\x02Modified at" +
-	"\x02No tags assigned.\x02Folders cannot be restored.\x02File is not dele" +
-	"ted.\x02The original parent folder is missing. Restored to Inbox.\x02Fil" +
-	"e restored.\x02Restore\x02Trash is empty.\x02Folder deleted\x02Folder de" +
-	"leted: %[1]s\x02Deleted: %[1]s\x02Trash\x02File preview is not available" +
-	" for folders.\x02Web upload\x02Open with\x02URL import\x02WebDAV\x02Syst" +
-	"em extraction\x02Cannot parse file.\x02Cannot parse form.\x02Cannot deco" +
-	"de form.\x02Cannot validate form.\x02Cannot parse current URL.\x02Cannot" +
-	" decode url query.\x02Only organization owners can manage users and sett" +
-	"ings.\x02OCR succeeded at\x02You are not allowed to access this organiza" +
-	"tion.\x02You are not allowed to access this Space.\x02No backup codes we" +
-	"re returned.\x02The backup codes were regenerated.\x02Could not regenera" +
-	"te backup codes.\x02Close dialog\x02Close\x02Suggestion\x02optional\x02r" +
-	"equired\x02This organization is in maintenance mode. Some features may n" +
-	"ot work. Please contact your administrator.\x02Application passphrase" +
-	"\x02Passphrase is required.\x02Invalid passphrase.\x02Something went wro" +
-	"ng. Please try again.\x02Too many unlock attempts. Please try again late" +
-	"r.\x02Application unlocked. Starting up.\x02Actions\x02Open main menu" +
-	"\x02Give this passkey an optional name so you can recognize it later." +
-	"\x02After registration, printable backup codes will be shown once. Save " +
-	"them before closing.\x02After setup, password sign-in is disabled for th" +
-	"is account. Use passkeys and backup codes instead.\x02Passkey name (opti" +
-	"onal)\x02Loading…\x02Important: these backup codes are shown only once. " +
-	"Save, print, or download them now before closing this dialog.\x02If you " +
-	"lose these codes and your passkey, account recovery may no longer be pos" +
-	"sible.\x02SimpleDMS backup codes\x02Generated\x02Keep these backup codes" +
-	" in a secure place.\x02These codes are shown only once.\x02Codes\x02Prin" +
-	"t dialog opened.\x02The backup codes were copied to clipboard.\x02Could " +
-	"not copy backup codes automatically.\x02The backup codes were downloaded" +
-	".\x02Print codes\x02Copy codes\x02Accepts inbox transfers\x02Active tab" +
-	"\x02Add me as space owner\x02Add to inbox\x02Admin\x02Austria\x02Backup " +
-	"code\x02Belgium\x02Body\x02Built in column\x02Bulgaria\x02Checkbox\x02Ch" +
-	"eckbox value\x02Confirm new passphrase\x02Confirm passphrase\x02Confirm " +
-	"password\x02Confirm warning\x02Credential status values\x02Croatia\x02Cu" +
-	"rrent or temporary password\x02Current passphrase\x02Cyprus\x02Czech rep" +
-	"ublic\x02Date value\x02Delete on success\x02Denmark\x02Description\x02De" +
-	"stination\x02Email\x02English\x02Estonia\x02Field\x02File\x02Filename" +
-	"\x02Finland\x02First name\x02Folder name\x02France\x02French\x02German" +
-	"\x02Germany\x02Greece\x02Group\x02Hungary\x02Iceland\x02Ireland\x02Is na" +
-	"me giving\x02Is unlimited\x02Italian\x02Italy\x02Label\x02Language\x02La" +
-	"st name\x02Latvia\x02Layout\x02Library template keys\x02Liechtenstein" +
-	"\x02Lithuania\x02Local\x02Luxembourg\x02Malta\x02Max upload size mib\x02" +
-	"Message\x02Money\x02Money value\x02Netherlands\x02New filename\x02New fo" +
-	"lder name\x02New name\x02New passphrase\x02New password\x02Norway\x02Num" +
-	"ber\x02Number value\x02Only assigned\x02Operation\x02Operator\x02Other" +
-	"\x02Owner\x02Passphrase\x02Password\x02Pending\x02Poland\x02Portugal\x02" +
-	"Preview tab\x02Pro\x02Push url\x02Role\x02Romania\x02S 3\x02Search query" +
-	"\x02Show history\x02Show tags\x02Simple\x02Slovakia\x02Slovenia\x02Spain" +
-	"\x02Subscribe to newsletter\x02Super\x02Supporter\x02Sweden\x02Switzerla" +
-	"nd\x02Tag\x02Template keys\x02Temporary session\x02Text\x02Text value" +
-	"\x02Trial\x02Url\x02Unit\x02User\x02Value\x02Value end\x02Value start" +
-	"\x02Version number\x02View mode\x02Properties\x02Sizes\x02Sign up\x02Sig" +
-	"n up [subject]\x02Free 30-day trial, no credit card required.\x02Organiz" +
-	"ation name\x02Country\x02Accept terms of service\x02Accept privacy polic" +
-	"y\x02Registration successful, please check your emails for your password" +
-	".\x02Imprint\x02Privacy policy\x02Terms of service\x02Passkey sign-in is" +
-	" required for this account.\x02Too many sign-in attempts. Please try aga" +
-	"in in 10 seconds.\x02Could not generate backup codes.\x02Temporary passw" +
-	"ord expired.\x02Could not generate temporary password.\x02Could not gene" +
-	"rate salt.\x02Current password is invalid.\x02New password must be diffe" +
-	"rent from current password.\x02A password is already set. Please use the" +
-	" change password form instead.\x02Password must be at least twelve chara" +
-	"cters long.\x02Passwords do not match.\x02Invalid passkey sign-in.\x02Pa" +
-	"sskey sign-in failed.\x02Passkey sign-in is not enabled for this account" +
-	".\x02Passkey registration failed.\x02You need at least one passkey befor" +
-	"e creating backup codes.\x02Invalid backup sign-in credentials.\x02Too m" +
-	"any backup sign-in attempts. Please try again in 10 seconds.\x02Target a" +
-	"ccount has no passkeys configured.\x02Passkey not found.\x02Account not " +
-	"found.\x02Invalid passkey origin configuration.\x02Missing passkey rp id" +
-	" configuration.\x02Could not initialize passkey service.\x02Passkey chal" +
-	"lenge is invalid or expired.\x02Unknown passkey credential.\x02Passkey a" +
-	"ccount not found.\x02App already initialized.\x02Your temporary password" +
-	" is\x02It expires at\x02New organization registration\x02This is an auto" +
-	"mated message, please do not reply.\x02Welcome to SimpleDMS\x0202-01-200" +
-	"6 at 15:04 o'clock\x02SimpleDMS password reset\x02Your account has been " +
-	"created successfully.\x02Please sign in and change your password as soon" +
-	" as possible.\x02Open sign in page\x02A password reset has been requeste" +
-	"d for your account.\x02Your old password will still work until you chang" +
-	"e it.\x02«%[1]s» invited you to the tenant «%[2]s».\x02«%[1]s» invited y" +
-	"ou.\x02Credential not found.\x02Invalid MCP credential.\x02App is alread" +
-	"y unlocked.\x02App is not encrypted with passphrase.\x02No passphrase se" +
-	"t.\x02New passphrase is required.\x02New passphrase does not match confi" +
-	"rmation.\x02Old passphrase is required.\x02Max upload size must be great" +
-	"er than or equal to 0.\x02Could not download file from URL.\x02SimpleDMS" +
-	" could not save the imported file. Try again, or ask your administrator " +
-	"for help.\x02Processing of downloaded file failed.\x02Invalid URL.\x02Th" +
-	"e OpenCloud file has an unsupported filename. Rename the file and start " +
-	"a new export.\x02Could not determine filename.\x02SimpleDMS could not es" +
-	"tablish a secure connection to OpenCloud. Ask your administrator for hel" +
-	"p.\x02OpenCloud took too long to respond. Try again.\x02SimpleDMS could " +
-	"not connect to OpenCloud. Try again later, or ask your administrator for" +
-	" help.\x02OpenCloud rejected the integration password. Ask your administ" +
-	"rator to check the integration settings.\x02OpenCloud does not allow thi" +
-	"s file to be downloaded. Ask the file owner or your administrator for ac" +
-	"cess.\x02The OpenCloud link has expired or is no longer available. Start" +
-	" a new export from OpenCloud.\x02OpenCloud is receiving too many request" +
-	"s. Wait a moment and try again.\x02SimpleDMS could not download the file" +
-	" safely. Ask your administrator to check the integration settings.\x02Op" +
-	"enCloud could not provide the file right now. Try again later.\x02Could " +
-	"not download the file from OpenCloud. Try again, or ask your administrat" +
-	"or for help.\x02URL is required.\x02Only HTTP and HTTPS URLs are allowed" +
-	".\x02URL credentials are not allowed.\x02Local URLs are not allowed.\x02" +
-	"Target host is not allowed.\x02Too many redirects.\x02App not unlocked y" +
-	"et. Please try again later.\x02Organization not initialized yet. Please " +
-	"try again later.\x02Error opening organization database. Please try agai" +
-	"n later.\x02A user with this email address already exists, please contac" +
-	"t support if you want to add this user anyway.\x02You cannot delete your" +
-	" own user in organization management.\x02Max upload size must be greater" +
-	" than or equal to 0 MiB.\x02Max upload size is too large.\x02Max upload " +
-	"size must be greater than 0 MiB when unlimited is disabled.\x02Organizat" +
-	"ion is required.\x02You must be signed in to manage upload limits.\x02Yo" +
-	"u must be an admin to manage upload limits.\x02Credential label is requi" +
-	"red.\x02Could not create credential.\x02A similar entity already exists." +
-	"\x02Secret length must be between %[1]d and %[2]d characters.\x02File is" +
-	" a folder.\x02Please select at least one document type.\x02Attribute mus" +
-	"t reference a Tag group.\x02Tag group «%[1]s» is already added to this d" +
-	"ocument type.\x02Field «%[1]s» is already added to this document type." +
-	"\x02Note not found.\x02Note title must not be empty.\x02Note text must n" +
-	"ot be empty.\x02Source and target must be different files.\x02Document n" +
-	"ot found.\x02You cannot access this document's notes.\x02Note has alread" +
-	"y changed. Please reload.\x02File has no parent.\x02Invalid text range." +
-	"\x02File does not belong to the current Space.\x02Cannot merge folders." +
-	"\x02Source file is deleted.\x02Source file is not in the Inbox.\x02Sourc" +
-	"e file has no versions.\x02Could not read source version.\x02Source file" +
-	" has no stored file.\x02Could not read target versions.\x02Could not upd" +
-	"ate target file.\x02Could not remove source versions.\x02Could not delet" +
-	"e source file.\x02Invalid sort order.\x02Destination Inbox is unavailabl" +
-	"e.\x02Inbox transfer\x02File has changed. Please reload.\x02Only files i" +
-	"n the Inbox can be transferred.\x02Cannot organize the Space root folder" +
-	".\x02Folder mode is not enabled.\x02Path element is a file, not a folder" +
-	".\x02The provided filename is not allowed.\x02Parent is not a folder." +
-	"\x02A folder with this name already exists.\x02Destination is not a fold" +
-	"er.\x02Invalid filename.\x02Cannot move a folder into itself.\x02Destina" +
-	"tion is current location.\x02Cannot move a folder into one of its subfol" +
-	"ders.\x02New filename is empty.\x02New filename is the same as old.\x02D" +
-	"etected cycle in folder tree.\x02Could not load path of file.\x02Could n" +
-	"ot get object name.\x02Could not open file.\x02Storage path is empty." +
-	"\x02File already exists.\x02Upload is empty.\x02Upload size mismatch." +
-	"\x02Upload is no longer active.\x02Bucket name is empty.\x02Could not sa" +
-	"ve file.\x02Filename already exists.\x02Could not verify stored file." +
-	"\x02Could not get x25519 identity.\x02Storage filename mismatch.\x02Coul" +
-	"d not claim uploaded file.\x02Could not verify staged file.\x02App not u" +
-	"nlocked yet.\x02Staged file integrity mismatch.\x02Uploaded file is alre" +
-	"ady being processed.\x02Organization database not found.\x02Uploaded fil" +
-	"e processing was taken over.\x02Could not copy temporary file.\x02Could " +
-	"not verify upload size limit.\x02Upload is too large. Maximum allowed si" +
-	"ze is %[1]s.\x02Could not verify storage limit.\x02Storage limit reached" +
-	" for this organization. Used: %[1]s of %[2]s.\x02Invoice\x02Invoice numb" +
-	"er\x02Invoice date\x02Supplier\x02Due date\x02Status\x02Open\x02Paid\x02" +
-	"Overdue\x02Invoice status\x02Receipt\x02Receipt date\x02Vendor\x02Paymen" +
-	"t method\x02Receipt category\x02Travel\x02Meals\x02Office\x02Software" +
-	"\x02Contract\x02Contract name\x02Parties\x02Start date\x02End date\x02Dr" +
-	"aft\x02Expired\x02Terminated\x02Contract status\x02Contract type\x02Serv" +
-	"ice\x02Sales\x02NDA\x02Purchase order\x02PO number\x02Order date\x02Requ" +
-	"ested by\x02Sent\x02Approved\x02Fulfilled\x02Purchase order status\x02Po" +
-	"licy\x02Policy name\x02Effective date\x02Archived\x02Policy status\x02Po" +
-	"licy department\x02Department\x02HR\x02IT\x02Finance\x02Operations\x02Pr" +
-	"oject document\x02Project name\x02Target date\x02In progress\x02Complete" +
-	"\x02On hold\x02Project status\x02Project type\x02Plan\x02Report\x02Spec" +
-	"\x02Meeting notes\x02Meeting date\x02Organizer\x02Participants\x02Intern" +
-	"al\x02Client\x02Final\x02Meeting type\x02Meeting status\x02Expense repor" +
-	"t\x02Report period\x02Employee\x02Submission date\x02Submitted\x02Reject" +
-	"ed\x02Expense status\x02Expense department\x02Person\x02Unknown document" +
-	" type template.\x02Cannot add a tag group as child.\x02Destination must " +
-	"be a Tag group.\x02Composition requires a composed Tag and a simple sub-" +
-	"Tag.\x02Cannot delete an entity still in use.\x02A database constraint v" +
-	"iolation happened. Please contact the support.\x02Data validation failed" +
-	".\x02You are not signed in. Please sign in to continue.\x02Could not par" +
-	"se url.\x02Please register a passkey to continue.\x02Could not read cook" +
-	"ie.\x02Cookie set but not valid.\x02Cookie set but empty.\x02Maintenance" +
-	" mode\x02Maintenance mode is enabled. Please wait until the app is ready" +
-	" again.\x02Invalid page or search range.\x02File ID is required.\x02Inva" +
-	"lid folder ID.\x02Manage Space\x02Organizations\x02MCP\x02Sign out\x02Ab" +
-	"out SimpleDMS\x02Auth cookie already set.\x02Could not generate session " +
-	"id.\x02You are not allowed to access the requested resource.\x02Could no" +
-	"t start transaction.\x02Could not read data.\x02Invalid upload size.\x02" +
-	"Invalid OpenCloud permission ID.\x02Invalid OpenCloud public link.\x02A " +
-	"file shared from OpenCloud is ready to import.\x02Cleanup pending\x02Cre" +
-	"ated destination\x02Failed\x02Mcp\x02Pwaos open\x02Processing\x02Ready" +
-	"\x02Url import\x02Unknown legacy\x02Upload token\x02Uploading\x02Web dav" +
-	"\x02Web interface\x02MCP credential cannot write.\x02Unsupported URL sou" +
-	"rce.\x02OpenCloud import is not configured.\x02OpenCloud import is not c" +
-	"onfigured correctly.\x02OpenCloud import requires HTTPS.\x02OpenCloud ca" +
-	"llback origin is required.\x02Invalid OpenCloud callback origin.\x02Inva" +
-	"lid download range.\x02A version number is required for download continu" +
-	"ation.\x02File version not found.\x02File must be filed before organizat" +
-	"ion.\x02A file with this name already exists in the destination.\x02Valu" +
-	"e does not match the field type.\x02Invalid field filter.\x02Invalid fie" +
-	"ld filter range.\x02Date value is required.\x02Money value is out of ran" +
-	"ge.\x02Number value is out of range.\x02Tag groups cannot be assigned." +
-	"\x02File or Tag not found.\x02Metadata already exists or is still in use" +
-	".\x02Parent directory ID and name are required.\x02Invalid filing input." +
-	"\x02Invalid search input.\x02Field filter text is too long.\x02Invalid p" +
-	"age range.\x02Invalid Tag filter.\x02Tag not found.\x02Document type not" +
-	" found.\x02Invalid base64 content.\x02Metadata upgrade is still in progr" +
-	"ess.\x02Tag group not found.\x02Document type ID is required.\x02Metadat" +
-	"a identifiers are unavailable.\x02Name must contain 1 to 300 characters." +
-	"\x02A public metadata ID is required.\x02Field not found.\x02Invalid Tag" +
-	" type.\x02Field unit is too long.\x02Invalid field type.\x02Exactly one " +
-	"Tag ID or field ID is required.\x02Document type attribute not found." +
-	"\x02Select between 1 and 64 document type templates.\x02Invalid note tex" +
-	"t range.\x02Document and note IDs are required.\x02Note title or body is" +
-	" too long.\x02A file with this name already exists.\x02File ID and Tag I" +
-	"D are required.\x02File ID and field ID are required.\x02Exactly one typ" +
-	"ed value is required.\x02Date must use YYYY-MM-DD.\x02File ID and docume" +
-	"nt type ID are required.\x02Space context not found.\x02Could not verify" +
-	" access."
+	"1]s\x02Uploaded %[1]s\x02Current version %[1]d\x02Version %[1]d\x02File " +
+	"not found.\x02Move\x02Unzip archive\x02Delete this file? You can restore" +
+	" it from the Trash.\x02Delete this folder? Its files can be restored fro" +
+	"m the Trash.\x02Details\x02Source\x02File size\x02MIME type\x02SHA-256 h" +
+	"ash\x02Original filename\x02Uploaded at\x02Version\x02Current version up" +
+	"loaded at\x02Deleted at\x02Created %[1]s\x02Preview\x02Original\x02Downl" +
+	"oad PDF\x02PDF preview could not be generated.\x02Retry PDF generation" +
+	"\x02Download\x02PDF preview is unavailable because Gotenberg is not conf" +
+	"igured.\x02PDF preview is being generated. Please wait a moment; the pag" +
+	"e will refresh automatically.\x02PDF preview is not available.\x02Render" +
+	"ing failed.\x02Show details\x02Close preview\x02Version not found.\x02No" +
+	" fields assigned yet.\x02Remove this field value?\x02Loading more…\x02Na" +
+	"me\x02Type\x02Metadata\x02Date\x02Size\x02Tags\x02No data available.\x02" +
+	"Yes\x02No\x02Info\x02Versions\x02Duplicates\x02Could not load duplicates" +
+	".\x02File upload\x02Please confirm that the source file metadata will be" +
+	" lost.\x02Source and target files are required.\x02Added new version fro" +
+	"m Inbox.\x02I understand that the Inbox file's metadata (document type, " +
+	"tags, fields) will be lost when merged. Notes and their history will be " +
+	"preserved.\x02Search Inbox files\x02Add new version from Inbox\x02Target" +
+	" file is required.\x02Source file is required.\x02File must be in the In" +
+	"box.\x02No matches found.\x02Missing version number.\x02Invalid version " +
+	"number.\x02Version preview\x02Upload new version\x02No versions availabl" +
+	"e yet.\x02Upload a new version to get started.\x02Add new version\x02Fil" +
+	"ters\x02No files available yet.\x02No files or folders available yet." +
+	"\x02Back to parent folder\x02Search\x02Search in «%[1]s»\x02Sort files" +
+	"\x02Change file list view\x02List\x02Table\x02No fields available yet." +
+	"\x02No fields available.\x02Contains\x02Starts with\x02Equals\x02Greater" +
+	" than\x02Less than\x02Between\x02«%[1]s» is checked\x02«%[1]s» is not ch" +
+	"ecked\x02Tags | Filter\x02No tags available yet.\x02Manage tags\x02Creat" +
+	"e\x02«%[1]s» created.\x02Open folder\x02Only allowed in folder mode.\x02" +
+	"Open file\x02Moved to «%[1]s».\x02«%[1]s» removed.\x02Rename file\x02Ren" +
+	"amed to «%[1]s».\x02Filters reset.\x02PDF preview conversion is not conf" +
+	"igured.\x02PDF preview is not ready to retry.\x02PDF preview generation " +
+	"queued.\x02Document type deselected.\x02Document type selected.\x02Best " +
+	"match\x02Newest first\x02Oldest first\x02Sort by name\x02Unzip\x02Not a " +
+	"ZIP archive.\x02Could not open ZIP archive.\x02Could not unzip the archi" +
+	"ve.\x02Could not read ZIP archive.\x02Could not create folder structure." +
+	"\x02Could not extract all files from archive.\x02Archive unzipped.\x02Ar" +
+	"chive is too large.\x02Could not verify archive size.\x02End date is bef" +
+	"ore the start date.\x02Upload\x02No parent folder provided.\x02Read-only" +
+	" request context required.\x02No file provided.\x02«%[1]s» uploaded.\x02" +
+	"Upload metadata must be sent before the file.\x02New version uploaded fo" +
+	"r «%[1]s».\x02Cannot upload versions for folders.\x02Folders cannot be d" +
+	"ownloaded.\x02Move file\x02Move file to «%[1]s»\x02Parent folder\x02Home" +
+	"\x02Account\x02A full Session is required.\x02Form validation failed." +
+	"\x02No Spaces available yet.\x02Client label\x02Allow writes\x02Without " +
+	"writes, the MCP client can only read documents.\x02Space\x02Create MCP c" +
+	"redential\x02MCP credential created\x02Copy the secret now. It will not " +
+	"be shown again.\x02MCP URL\x02Token\x02Device label\x02Secret length\x02" +
+	"Reduce the secret length only if your device limits the maximum password" +
+	" length.\x02Compatibility mode\x02Uses only letters, numbers, hyphens, a" +
+	"nd underscores for devices with limited support for special characters." +
+	"\x02Create WebDAV credential\x02WebDAV credential created\x02WebDAV URL" +
+	"\x02WebDAV Inbox URL\x02Username\x02Secret\x02Destination unavailable." +
+	"\x02You cannot create a credential for this Space.\x02Copy %[1]s\x02%[1]" +
+	"s copied to clipboard.\x02Could not copy %[1]s.\x02Unavailable destinati" +
+	"on\x02Open tasks\x02Organization «%[1]s»\x02No passkeys registered\x02Pa" +
+	"sskeys\x02Register a passkey to enable passwordless sign in.\x02Add a ba" +
+	"ckup passkey\x02Passkey recommendation\x02Set up a second passkey on ano" +
+	"ther device as backup in case one device is lost.\x02Regenerate backup c" +
+	"odes\x02Regenerate backup codes? Existing codes will stop working.\x02Ac" +
+	"count «%[1]s»\x02Account «%[1]s», owned by «%[2]s»\x02System\x02Passkey " +
+	"setup required\x02Your organization requires passkey sign-in. Register a" +
+	" passkey to continue.\x02%[1]d backup codes left\x02Subscription\x02Not " +
+	"initialized\x02Please wait\x02The organization is not initialized yet, p" +
+	"lease wait until the initialization is complete.\x02Refresh\x02Quota usa" +
+	"ge\x02Unavailable\x02No password set\x02You've signed in with a temporar" +
+	"y password. Please set a password to secure your account and use the app" +
+	".\x02Set password now\x02Active temporary password\x02Your account has a" +
+	"n active temporary password. Please change your password or clear the te" +
+	"mporary password as soon as possible to secure your account.\x02No Space" +
+	" available yet\x02You have no permission to access any Space of this org" +
+	"anization.\x02Please create one to get started.\x02Manage Spaces\x02The " +
+	"app is unlocked and not protected by a passphrase.\x02The app is locked." +
+	"\x02Set passphrase\x02The app is unlocked and protected by a passphrase." +
+	"\x02App status\x02Last used: %[1]s\x02Passkey\x02Manage upload limit\x02" +
+	"Dashboard\x02Edit MCP credential\x02Changes saved.\x02Edit WebDAV creden" +
+	"tial\x02Filter MCP credentials\x02Active\x02Revoked\x02No MCP credential" +
+	"s yet.\x02Create a credential to connect an MCP client to a Space.\x02Co" +
+	"py MCP URL\x02MCP URL copied to clipboard.\x02Could not copy MCP URL." +
+	"\x02Read-only\x02Read/write\x02%[1]s · Created: %[2]s\x02%[1]s · Revoked" +
+	": %[2]s\x02Revoke\x02Revoke this MCP credential?\x02MCP credentials\x02S" +
+	"ettings\x02Organization\x02Enable passkey enforcement\x02Enable passkey " +
+	"enforcement for this organization? Members will need passkeys to sign in" +
+	".\x02Disable passkey enforcement\x02Disable passkey enforcement for this" +
+	" organization? Members can use passwords again if allowed.\x02Delete org" +
+	"anization\x02Delete this organization? All accounts owned by it will be " +
+	"deleted globally.\x02Download backup\x02Delete this passkey?\x02MCP cred" +
+	"ential revoked.\x02You are not allowed to revoke this credential.\x02Web" +
+	"DAV credential revoked.\x02Edit in «Spaces» view\x02Document types\x02Us" +
+	"ers\x02You must be an admin to access system settings.\x02System setting" +
+	"s\x02You must be an admin to access the system status.\x02System status" +
+	"\x02Check again\x02You must be signed in to manage organizations.\x02Org" +
+	"anization not found.\x02Only owners can change passkey enforcement.\x02P" +
+	"asskey enforcement enabled for organization.\x02Passkey enforcement disa" +
+	"bled for organization.\x02Filter WebDAV credentials\x02No WebDAV credent" +
+	"ials yet.\x02Create a device credential to upload files to an Inbox over" +
+	" WebDAV.\x02Copy WebDAV URL\x02WebDAV URL copied to clipboard.\x02Could " +
+	"not copy WebDAV URL.\x02Username: %[1]s · Created: %[2]s\x02Username: %[" +
+	"1]s · Last used: %[2]s\x02Username: %[1]s · Revoked: %[2]s\x02Revoke thi" +
+	"s WebDAV credential?\x02WebDAV credentials\x02Add field attribute\x02Att" +
+	"ribute updated.\x02Please create a field first.\x02Delete this attribute" +
+	"?\x02Add list attribute (tag group)\x02name-giving\x02Delete this docume" +
+	"nt type?\x02Add attribute\x02Attribute «%[1]s» created.\x02No tag groups" +
+	" available yet.\x02Please create a tag group first.\x02Create document t" +
+	"ype\x02Document type created.\x02Attribute deleted.\x02Document type del" +
+	"eted.\x02Close details\x02Edit field attribute\x02Edit tag attribute\x02" +
+	"Attribute «%[1]s» updated.\x02Document types imported.\x02Import from li" +
+	"brary\x02Import\x02Import is only available for empty Spaces.\x02No libr" +
+	"ary document types available yet.\x02Select document types to import:" +
+	"\x02Could not convert id to integer.\x02Rename document type\x02Document" +
+	" type renamed to «%[1]s».\x02Folders cannot be previewed.\x02Original so" +
+	"urce preview is only available for HTML files.\x02Could not read file." +
+	"\x02Assign file\x02Assign\x02No new files found.\x02Files uploaded.\x02M" +
+	"ove to another Inbox\x02Reload metadata\x02Delete from Inbox\x02Mark as " +
+	"done\x02Text recognition (OCR) cannot be applied because the file is too" +
+	" large, suggestions are based on the filename only.\x02Text recognition " +
+	"(OCR) is not ready yet, suggestions are based on the filename only.\x02S" +
+	"elect destination manually\x02Suggestions based on filename\x02Invalid s" +
+	"ource filter.\x02Inbox\x02Search in «Inbox»\x02Filter by source\x02File " +
+	"is not in the Inbox.\x02Marked file «%[1]s» as done.\x02Source | Filter" +
+	"\x02Moved to the Inbox of «%[1]s».\x02No other Inbox is available. You n" +
+	"eed write access to another Space, or its Inbox must accept transfers." +
+	"\x02Choose an Inbox\x02Destination Inbox\x02You can choose other Spaces " +
+	"in this organization where you have write access, or whose Inboxes accep" +
+	"t transfers.\x02Message (optional)\x02Your message will be saved as a no" +
+	"te with your name.\x02Moving clears the document type, tags, and custom " +
+	"fields. Versions and notes are kept.\x02If you cannot open the destinati" +
+	"on Space, you will lose access to this file after moving it.\x02Assign u" +
+	"ser to Space\x02No Space selected. Please select a Space first.\x02You a" +
+	"re not allowed to assign users to Spaces because you aren't the owner." +
+	"\x02User assigned to Space.\x02Could not load users.\x02Please reload th" +
+	"e page and try again.\x02No unassigned users available.\x02Please create" +
+	" a user in the organization user management first.\x02Assign user\x02Use" +
+	"r is already assigned to this Space.\x02You cannot unassign yourself fro" +
+	"m a Space.\x02Unassign user from Space\x02Unassign\x02User unassigned fr" +
+	"om Space.\x02Unassign this user from the Space?\x02No users assigned yet" +
+	".\x02Create tag or group\x02Delete this tag? It will be unassigned from " +
+	"all files.\x02Assign tags\x02Move to group\x02Group, %[1]d tag\x02Group," +
+	" %[1]d tags\x02Create tag\x02Super tag\x02Tag group ID is required.\x02T" +
+	"ag is not a group.\x02Create user\x02You are not allowed to create users" +
+	". No organization selected.\x02You are not allowed to create users becau" +
+	"se you are not the owner.\x02User created. The password was sent by emai" +
+	"l. Owners can access all Spaces without further setup.\x02User created. " +
+	"The password was sent by email. Next, assign the user to a Space.\x02You" +
+	" are not allowed to delete users. No organization selected.\x02You are n" +
+	"ot allowed to delete users because you are not the owner.\x02User remove" +
+	"d from organization and account deleted globally.\x02User removed from o" +
+	"rganization.\x02Remove this user from the organization?\x02Remove this u" +
+	"ser from the organization and delete their account globally?\x02Member a" +
+	"ccount\x02Owned account\x02%[1]s · %[2]s\x02Uploading files, please wait" +
+	" a moment.\x02The page will be refreshed automatically once the upload i" +
+	"s finished.\x02Please try again once you created a Space or were invited" +
+	" to join one.\x02Select Space\x02Processing of shared files failed.\x02F" +
+	"iles uploaded, please select a Space.\x02Malformed upload body.\x02Uploa" +
+	"d is too large.\x02File uploaded, please select a Space.\x02Import URL" +
+	"\x02Import URL\x02Import file from URL\x02Download and continue\x02Creat" +
+	"e field\x02Field «%[1]s» created.\x02Field deleted.\x02Edit field\x02Fie" +
+	"ld updated.\x02Delete this field?\x02Space «%[1]s» created.\x02Create Sp" +
+	"ace\x02Select document types to add to this Space:\x02Space deleted.\x02" +
+	"Edit Space\x02%[1]s (%[2]s)\x02active\x02Delete this Space?\x02Spaces" +
+	"\x02The requested page was not found.\x02The requested page could not be" +
+	" loaded.\x02«%[1]s» assigned.\x02Create and assign tag\x02«%[1]s» create" +
+	"d and assigned.\x02Tag «%[1]s» created.\x02«%[1]s» deleted.\x02Group, %[" +
+	"1]d tags, %[2]d selected\x02Group, %[1]d tag, %[2]d selected\x02Composed" +
+	" of %[1]s\x02Show assigned tags\x02Create group\x02Tags of «%[1]s»\x02Ed" +
+	"it tag\x02«%[1]s» updated.\x02Layout not supported.\x02Edit assigned tag" +
+	"s\x02Group «%[1]s»\x02Move tag to group\x02Removed from group.\x02Moved " +
+	"to group «%[1]s».\x02Deselect group\x02Delete this tag entirely? It will" +
+	" be unassigned from all files, not only from this one.\x02«%[1]s» unassi" +
+	"gned.\x02Created at\x02Modified at\x02No tags assigned.\x02Folders canno" +
+	"t be restored.\x02File is not deleted.\x02The original parent folder is " +
+	"missing. Restored to Inbox.\x02File restored.\x02Restore\x02Trash is emp" +
+	"ty.\x02Folder deleted\x02Folder deleted: %[1]s\x02Deleted: %[1]s\x02Tras" +
+	"h\x02File preview is not available for folders.\x02Web upload\x02Open wi" +
+	"th\x02URL import\x02WebDAV\x02System extraction\x02Cannot parse file." +
+	"\x02Cannot parse form.\x02Cannot decode form.\x02Cannot validate form." +
+	"\x02Cannot parse current URL.\x02Cannot decode url query.\x02Only organi" +
+	"zation owners can manage users and settings.\x02OCR succeeded at\x02You " +
+	"are not allowed to access this organization.\x02You are not allowed to a" +
+	"ccess this Space.\x02No backup codes were returned.\x02The backup codes " +
+	"were regenerated.\x02Could not regenerate backup codes.\x02Close dialog" +
+	"\x02Close\x02Suggestion\x02optional\x02required\x02This organization is " +
+	"in maintenance mode. Some features may not work. Please contact your adm" +
+	"inistrator.\x02Application passphrase\x02Passphrase is required.\x02Inva" +
+	"lid passphrase.\x02Something went wrong. Please try again.\x02Too many u" +
+	"nlock attempts. Please try again later.\x02Application unlocked. Startin" +
+	"g up.\x02Actions\x02Open main menu\x02Give this passkey an optional name" +
+	" so you can recognize it later.\x02After registration, printable backup " +
+	"codes will be shown once. Save them before closing.\x02After setup, pass" +
+	"word sign-in is disabled for this account. Use passkeys and backup codes" +
+	" instead.\x02Passkey name (optional)\x02Loading…\x02Important: these bac" +
+	"kup codes are shown only once. Save, print, or download them now before " +
+	"closing this dialog.\x02If you lose these codes and your passkey, accoun" +
+	"t recovery may no longer be possible.\x02SimpleDMS backup codes\x02Gener" +
+	"ated\x02Keep these backup codes in a secure place.\x02These codes are sh" +
+	"own only once.\x02Codes\x02Print dialog opened.\x02The backup codes were" +
+	" copied to clipboard.\x02Could not copy backup codes automatically.\x02T" +
+	"he backup codes were downloaded.\x02Print codes\x02Copy codes\x02Accepts" +
+	" inbox transfers\x02Active tab\x02Add me as space owner\x02Add to inbox" +
+	"\x02Admin\x02Austria\x02Backup code\x02Belgium\x02Body\x02Built in colum" +
+	"n\x02Bulgaria\x02Checkbox\x02Checkbox value\x02Confirm new passphrase" +
+	"\x02Confirm passphrase\x02Confirm password\x02Confirm warning\x02Credent" +
+	"ial status values\x02Croatia\x02Current or temporary password\x02Current" +
+	" passphrase\x02Cyprus\x02Czech republic\x02Date value\x02Delete on succe" +
+	"ss\x02Denmark\x02Description\x02Destination\x02Email\x02English\x02Eston" +
+	"ia\x02Field\x02File\x02Filename\x02Finland\x02First name\x02Folder name" +
+	"\x02France\x02French\x02German\x02Germany\x02Greece\x02Group\x02Hungary" +
+	"\x02Iceland\x02Ireland\x02Is name giving\x02Is unlimited\x02Italian\x02I" +
+	"taly\x02Label\x02Language\x02Last name\x02Latvia\x02Layout\x02Library te" +
+	"mplate keys\x02Liechtenstein\x02Lithuania\x02Local\x02Luxembourg\x02Malt" +
+	"a\x02Max upload size mib\x02Message\x02Money\x02Money value\x02Netherlan" +
+	"ds\x02New filename\x02New folder name\x02New name\x02New passphrase\x02N" +
+	"ew password\x02Norway\x02Number\x02Number value\x02Only assigned\x02Oper" +
+	"ation\x02Operator\x02Other\x02Owner\x02Passphrase\x02Password\x02Pending" +
+	"\x02Poland\x02Portugal\x02Preview tab\x02Pro\x02Push url\x02Role\x02Roma" +
+	"nia\x02S 3\x02Search query\x02Show history\x02Show tags\x02Simple\x02Slo" +
+	"vakia\x02Slovenia\x02Spain\x02Subscribe to newsletter\x02Super\x02Suppor" +
+	"ter\x02Sweden\x02Switzerland\x02Tag\x02Template keys\x02Temporary sessio" +
+	"n\x02Text\x02Text value\x02Trial\x02Url\x02Unit\x02User\x02Value\x02Valu" +
+	"e end\x02Value start\x02Version number\x02View mode\x02Properties\x02Siz" +
+	"es\x02Sign up\x02Sign up [subject]\x02Free 30-day trial, no credit card " +
+	"required.\x02Organization name\x02Country\x02Accept terms of service\x02" +
+	"Accept privacy policy\x02Registration successful, please check your emai" +
+	"ls for your password.\x02Imprint\x02Privacy policy\x02Terms of service" +
+	"\x02Passkey sign-in is required for this account.\x02Too many sign-in at" +
+	"tempts. Please try again in 10 seconds.\x02Could not generate backup cod" +
+	"es.\x02Temporary password expired.\x02Could not generate temporary passw" +
+	"ord.\x02Could not generate salt.\x02Current password is invalid.\x02New " +
+	"password must be different from current password.\x02A password is alrea" +
+	"dy set. Please use the change password form instead.\x02Password must be" +
+	" at least twelve characters long.\x02Passwords do not match.\x02Invalid " +
+	"passkey sign-in.\x02Passkey sign-in failed.\x02Passkey sign-in is not en" +
+	"abled for this account.\x02Passkey registration failed.\x02You need at l" +
+	"east one passkey before creating backup codes.\x02Invalid backup sign-in" +
+	" credentials.\x02Too many backup sign-in attempts. Please try again in 1" +
+	"0 seconds.\x02Target account has no passkeys configured.\x02Passkey not " +
+	"found.\x02Account not found.\x02Invalid passkey origin configuration." +
+	"\x02Missing passkey rp id configuration.\x02Could not initialize passkey" +
+	" service.\x02Passkey challenge is invalid or expired.\x02Unknown passkey" +
+	" credential.\x02Passkey account not found.\x02App already initialized." +
+	"\x02Your temporary password is\x02It expires at\x02New organization regi" +
+	"stration\x02This is an automated message, please do not reply.\x02Welcom" +
+	"e to SimpleDMS\x0202-01-2006 at 15:04 o'clock\x02SimpleDMS password rese" +
+	"t\x02Your account has been created successfully.\x02Please sign in and c" +
+	"hange your password as soon as possible.\x02Open sign in page\x02A passw" +
+	"ord reset has been requested for your account.\x02Your old password will" +
+	" still work until you change it.\x02«%[1]s» invited you to the tenant «%" +
+	"[2]s».\x02«%[1]s» invited you.\x02Credential not found.\x02Invalid MCP c" +
+	"redential.\x02App is already unlocked.\x02App is not encrypted with pass" +
+	"phrase.\x02No passphrase set.\x02New passphrase is required.\x02New pass" +
+	"phrase does not match confirmation.\x02Old passphrase is required.\x02Ma" +
+	"x upload size must be greater than or equal to 0.\x02General\x02Public o" +
+	"rigin\x02WebAuthn relying party ID\x02Passphrase protection\x02File encr" +
+	"yption\x02Insecure cookies\x02Max upload size\x02Override stored config " +
+	"on startup\x02Development mode\x02Development mode is enabled. Do not us" +
+	"e it in production.\x02No public origin is set. Emails cannot link to th" +
+	"e app.\x02The public origin is not a valid URL.\x02The public origin doe" +
+	"s not use HTTPS.\x02The WebAuthn relying party ID does not match the pub" +
+	"lic origin. Passkeys do not work.\x02Session cookies are also sent over " +
+	"unencrypted connections.\x02Storage\x02Endpoint\x02Bucket\x02Access key " +
+	"ID\x02Secret access key\x02SSL/TLS\x02No storage is configured. Files ca" +
+	"nnot be uploaded.\x02Connection\x02The connection to the storage is not " +
+	"encrypted.\x02OCR\x02Text extraction\x02Xberg, Tika for unsupported form" +
+	"ats\x02Disabled\x02Neither Xberg nor Tika is configured. Text in documen" +
+	"ts is not extracted and cannot be searched.\x02Max file size\x02Xberg UR" +
+	"L\x02The Xberg URL is not valid.\x02Xberg connection\x02Tika URL\x02The " +
+	"Tika URL is not valid.\x02Tika connection\x02PDF previews\x02Gotenberg U" +
+	"RL\x02Gotenberg is not configured. PDF previews of office, HTML and Mark" +
+	"down files are disabled.\x02The Gotenberg URL is not valid.\x02Host\x02P" +
+	"ort\x02Sender address\x02Implicit SSL/TLS\x02Certificate verification" +
+	"\x02Emails waiting to be sent\x02Emails that could not be sent\x02No mai" +
+	"l server is configured. Emails, for example for password resets, are not" +
+	" sent.\x02No sender address is configured. Emails cannot be sent.\x02The" +
+	" certificate of the mail server is not verified.\x02%[1]d emails could n" +
+	"ot be sent after %[2]d attempts.\x02TLS\x02Mode\x02Automatic certificate" +
+	"s from Let's Encrypt\x02Hosts\x02No hosts are configured for automatic c" +
+	"ertificates.\x02HTTP, HTTPS must be provided by a reverse proxy\x02Only " +
+	"one of certificate file and private key file is set. TLS is disabled." +
+	"\x02Certificate files\x02Certificate file\x02Private key file\x02The cer" +
+	"tificate could not be loaded: %[1]s\x02Certificate valid until\x02The ce" +
+	"rtificate expired on %[1]s.\x02The certificate expires on %[1]s.\x02Not " +
+	"reachable\x02%[1]s is not reachable: %[2]s\x02Connected\x02Connected (%[" +
+	"1]s)\x02Not set\x02Set\x02Enabled\x02Allowed\x02Not allowed\x02Could not" +
+	" download file from URL.\x02SimpleDMS could not save the imported file. " +
+	"Try again, or ask your administrator for help.\x02Processing of download" +
+	"ed file failed.\x02Invalid URL.\x02The OpenCloud file has an unsupported" +
+	" filename. Rename the file and start a new export.\x02Could not determin" +
+	"e filename.\x02SimpleDMS could not establish a secure connection to Open" +
+	"Cloud. Ask your administrator for help.\x02OpenCloud took too long to re" +
+	"spond. Try again.\x02SimpleDMS could not connect to OpenCloud. Try again" +
+	" later, or ask your administrator for help.\x02OpenCloud rejected the in" +
+	"tegration password. Ask your administrator to check the integration sett" +
+	"ings.\x02OpenCloud does not allow this file to be downloaded. Ask the fi" +
+	"le owner or your administrator for access.\x02The OpenCloud link has exp" +
+	"ired or is no longer available. Start a new export from OpenCloud.\x02Op" +
+	"enCloud is receiving too many requests. Wait a moment and try again.\x02" +
+	"SimpleDMS could not download the file safely. Ask your administrator to " +
+	"check the integration settings.\x02OpenCloud could not provide the file " +
+	"right now. Try again later.\x02Could not download the file from OpenClou" +
+	"d. Try again, or ask your administrator for help.\x02URL is required." +
+	"\x02Only HTTP and HTTPS URLs are allowed.\x02URL credentials are not all" +
+	"owed.\x02Local URLs are not allowed.\x02Target host is not allowed.\x02T" +
+	"oo many redirects.\x02App not unlocked yet. Please try again later.\x02O" +
+	"rganization not initialized yet. Please try again later.\x02Error openin" +
+	"g organization database. Please try again later.\x02A user with this ema" +
+	"il address already exists, please contact support if you want to add thi" +
+	"s user anyway.\x02You cannot delete your own user in organization manage" +
+	"ment.\x02Max upload size must be greater than or equal to 0 MiB.\x02Max " +
+	"upload size is too large.\x02Max upload size must be greater than 0 MiB " +
+	"when unlimited is disabled.\x02Organization is required.\x02You must be " +
+	"signed in to manage upload limits.\x02You must be an admin to manage upl" +
+	"oad limits.\x02Credential label is required.\x02Could not create credent" +
+	"ial.\x02A similar entity already exists.\x02Secret length must be betwee" +
+	"n %[1]d and %[2]d characters.\x02File is a folder.\x02Please select at l" +
+	"east one document type.\x02Attribute must reference a Tag group.\x02Tag " +
+	"group «%[1]s» is already added to this document type.\x02Field «%[1]s» i" +
+	"s already added to this document type.\x02Note not found.\x02Note title " +
+	"must not be empty.\x02Note text must not be empty.\x02Source and target " +
+	"must be different files.\x02Document not found.\x02You cannot access thi" +
+	"s document's notes.\x02Note has already changed. Please reload.\x02File " +
+	"has no parent.\x02Invalid text range.\x02Source file has no versions." +
+	"\x02Could not read source version.\x02Source file has no stored file." +
+	"\x02Could not read target versions.\x02Could not update target file.\x02" +
+	"Could not remove source versions.\x02Could not delete source file.\x02Fi" +
+	"le does not belong to the current Space.\x02Cannot merge folders.\x02Sou" +
+	"rce file is deleted.\x02Source file is not in the Inbox.\x02Invalid sort" +
+	" order.\x02Destination Inbox is unavailable.\x02Inbox transfer\x02File h" +
+	"as changed. Please reload.\x02Only files in the Inbox can be transferred" +
+	".\x02Cannot organize the Space root folder.\x02Folder mode is not enable" +
+	"d.\x02Path element is a file, not a folder.\x02The provided filename is " +
+	"not allowed.\x02Parent is not a folder.\x02A folder with this name alrea" +
+	"dy exists.\x02Destination is not a folder.\x02Invalid filename.\x02Canno" +
+	"t move a folder into itself.\x02Destination is current location.\x02Cann" +
+	"ot move a folder into one of its subfolders.\x02New filename is empty." +
+	"\x02New filename is the same as old.\x02Detected cycle in folder tree." +
+	"\x02Could not load path of file.\x02Could not get object name.\x02Could " +
+	"not open file.\x02Storage path is empty.\x02File already exists.\x02Uplo" +
+	"ad is empty.\x02Upload size mismatch.\x02Upload is no longer active.\x02" +
+	"Bucket name is empty.\x02Could not save file.\x02Filename already exists" +
+	".\x02Could not verify stored file.\x02Could not get x25519 identity.\x02" +
+	"Storage filename mismatch.\x02Could not claim uploaded file.\x02Could no" +
+	"t verify staged file.\x02App not unlocked yet.\x02Staged file integrity " +
+	"mismatch.\x02Uploaded file is already being processed.\x02Organization d" +
+	"atabase not found.\x02Uploaded file processing was taken over.\x02Could " +
+	"not copy temporary file.\x02Could not verify upload size limit.\x02Uploa" +
+	"d is too large. Maximum allowed size is %[1]s.\x02Could not verify stora" +
+	"ge limit.\x02Storage limit reached for this organization. Used: %[1]s of" +
+	" %[2]s.\x02Invoice\x02Invoice number\x02Invoice date\x02Supplier\x02Due " +
+	"date\x02Status\x02Open\x02Paid\x02Overdue\x02Invoice status\x02Receipt" +
+	"\x02Receipt date\x02Vendor\x02Payment method\x02Receipt category\x02Trav" +
+	"el\x02Meals\x02Office\x02Software\x02Contract\x02Contract name\x02Partie" +
+	"s\x02Start date\x02End date\x02Draft\x02Expired\x02Terminated\x02Contrac" +
+	"t status\x02Contract type\x02Service\x02Sales\x02NDA\x02Purchase order" +
+	"\x02PO number\x02Order date\x02Requested by\x02Sent\x02Approved\x02Fulfi" +
+	"lled\x02Purchase order status\x02Policy\x02Policy name\x02Effective date" +
+	"\x02Archived\x02Policy status\x02Policy department\x02Department\x02HR" +
+	"\x02IT\x02Finance\x02Operations\x02Project document\x02Project name\x02T" +
+	"arget date\x02In progress\x02Complete\x02On hold\x02Project status\x02Pr" +
+	"oject type\x02Plan\x02Report\x02Spec\x02Meeting notes\x02Meeting date" +
+	"\x02Organizer\x02Participants\x02Internal\x02Client\x02Final\x02Meeting " +
+	"type\x02Meeting status\x02Expense report\x02Report period\x02Employee" +
+	"\x02Submission date\x02Submitted\x02Rejected\x02Expense status\x02Expens" +
+	"e department\x02Person\x02Unknown document type template.\x02Cannot add " +
+	"a tag group as child.\x02Destination must be a Tag group.\x02Composition" +
+	" requires a composed Tag and a simple sub-Tag.\x02Cannot delete an entit" +
+	"y still in use.\x02A database constraint violation happened. Please cont" +
+	"act the support.\x02Data validation failed.\x02You are not signed in. Pl" +
+	"ease sign in to continue.\x02Could not parse url.\x02Please register a p" +
+	"asskey to continue.\x02Could not read cookie.\x02Cookie set but not vali" +
+	"d.\x02Cookie set but empty.\x02Maintenance mode\x02Maintenance mode is e" +
+	"nabled. Please wait until the app is ready again.\x02Invalid page or sea" +
+	"rch range.\x02File ID is required.\x02Invalid folder ID.\x02Manage Space" +
+	"\x02Organizations\x02MCP\x02Sign out\x02About SimpleDMS\x02No problems f" +
+	"ound\x021 problem needs attention\x02%[1]d problems need attention\x02La" +
+	"st checked: %[1]s. Configuration changes take effect after a restart." +
+	"\x02Error\x02Warning\x02Not configured\x02OK\x02Auth cookie already set." +
+	"\x02Could not generate session id.\x02You are not allowed to access the " +
+	"requested resource.\x02Could not start transaction.\x02Could not read da" +
+	"ta.\x02Invalid upload size.\x02Invalid OpenCloud permission ID.\x02Inval" +
+	"id OpenCloud public link.\x02A file shared from OpenCloud is ready to im" +
+	"port.\x02Cleanup pending\x02Created destination\x02Failed\x02Mcp\x02Pwao" +
+	"s open\x02Processing\x02Ready\x02Url import\x02Unknown legacy\x02Upload " +
+	"token\x02Uploading\x02Web dav\x02Web interface\x02MCP credential cannot " +
+	"write.\x02Unsupported URL source.\x02OpenCloud import is not configured." +
+	"\x02OpenCloud import is not configured correctly.\x02OpenCloud import re" +
+	"quires HTTPS.\x02OpenCloud callback origin is required.\x02Invalid OpenC" +
+	"loud callback origin.\x02Invalid download range.\x02A version number is " +
+	"required for download continuation.\x02File version not found.\x02File m" +
+	"ust be filed before organization.\x02A file with this name already exist" +
+	"s in the destination.\x02Value does not match the field type.\x02Invalid" +
+	" field filter.\x02Invalid field filter range.\x02Date value is required." +
+	"\x02Money value is out of range.\x02Number value is out of range.\x02Tag" +
+	" groups cannot be assigned.\x02Tag is still assigned to files.\x02File o" +
+	"r Tag not found.\x02Metadata already exists or is still in use.\x02Paren" +
+	"t directory ID and name are required.\x02Invalid filing input.\x02Invali" +
+	"d search input.\x02Field filter text is too long.\x02Invalid page range." +
+	"\x02Invalid Tag filter.\x02Tag not found.\x02Document type not found." +
+	"\x02Invalid base64 content.\x02Metadata upgrade is still in progress." +
+	"\x02Tag group not found.\x02Document type ID is required.\x02Metadata id" +
+	"entifiers are unavailable.\x02Name must contain 1 to 300 characters.\x02" +
+	"A public metadata ID is required.\x02Field not found.\x02Invalid Tag typ" +
+	"e.\x02Field unit is too long.\x02Invalid field type.\x02Exactly one Tag " +
+	"ID or field ID is required.\x02Document type attribute not found.\x02Sel" +
+	"ect between 1 and 64 document type templates.\x02Invalid note text range" +
+	".\x02Document and note IDs are required.\x02Note title or body is too lo" +
+	"ng.\x02A file with this name already exists.\x02File ID and Tag ID are r" +
+	"equired.\x02File ID and field ID are required.\x02Exactly one typed valu" +
+	"e is required.\x02Date must use YYYY-MM-DD.\x02File ID and document type" +
+	" ID are required.\x02Space context not found.\x02Could not verify access" +
+	"."
 
-var frIndex = []uint32{ // 1074 elements
+var frIndex = []uint32{ // 1161 elements
 	// Entry 0 - 1F
 	0x00000000, 0x0000001b, 0x00000051, 0x00000094,
 	0x000000af, 0x000000c1, 0x000000cd, 0x000000f9,
@@ -3002,272 +3241,297 @@ var frIndex = []uint32{ // 1074 elements
 	0x00001049, 0x00001056, 0x00001065, 0x00001085,
 	0x00001096, 0x000010e0, 0x000010f7, 0x00001109,
 	0x00001144, 0x00001151, 0x00001161, 0x00001177,
-	0x0000118e, 0x0000119c, 0x000011a6, 0x000011be,
-	0x00001203, 0x00001255, 0x0000125e, 0x00001265,
-	0x00001277, 0x00001281, 0x00001291, 0x000012aa,
-	0x000012ba, 0x000012c2, 0x000012e4, 0x000012f1,
-	0x00001301, 0x00001309, 0x00001312, 0x00001327,
+	0x0000118e, 0x0000119c, 0x000011b1, 0x000011bb,
+	0x000011d3, 0x00001218, 0x0000126a, 0x00001273,
+	0x0000127a, 0x0000128c, 0x00001296, 0x000012a6,
+	0x000012bf, 0x000012cf, 0x000012d7, 0x000012f9,
+	0x00001306, 0x00001316, 0x0000131e, 0x00001327,
 	// Entry A0 - BF
-	0x00001355, 0x00001374, 0x00001382, 0x000013d0,
-	0x00001447, 0x0000146f, 0x00001480, 0x00001496,
-	0x000014a7, 0x000014bc, 0x000014e2, 0x00001504,
-	0x00001527, 0x0000152b, 0x00001530, 0x0000153e,
-	0x00001543, 0x0000154a, 0x0000154f, 0x0000156a,
-	0x0000156e, 0x00001572, 0x00001577, 0x00001580,
-	0x00001589, 0x000015ad, 0x000015c9, 0x00001614,
-	0x0000163e, 0x00001668, 0x00001714, 0x0000173c,
+	0x0000133c, 0x0000136a, 0x00001389, 0x00001397,
+	0x000013e5, 0x0000145c, 0x00001484, 0x00001495,
+	0x000014ab, 0x000014bc, 0x000014d1, 0x000014f7,
+	0x00001519, 0x0000153c, 0x00001540, 0x00001545,
+	0x00001553, 0x00001558, 0x0000155f, 0x00001564,
+	0x0000157f, 0x00001583, 0x00001587, 0x0000158c,
+	0x00001595, 0x0000159e, 0x000015c2, 0x000015de,
+	0x00001629, 0x00001653, 0x0000167d, 0x00001729,
 	// Entry C0 - DF
-	0x00001768, 0x00001785, 0x000017a3, 0x000017c7,
-	0x000017e0, 0x000017fd, 0x0000181a, 0x0000182d,
-	0x0000184f, 0x00001879, 0x000018ab, 0x000018c8,
-	0x000018d0, 0x000018f9, 0x0000192d, 0x00001946,
-	0x00001951, 0x0000196b, 0x0000197e, 0x000019ab,
-	0x000019b1, 0x000019b9, 0x000019e7, 0x00001a06,
-	0x00001a0f, 0x00001a1c, 0x00001a25, 0x00001a33,
-	0x00001a41, 0x00001a47, 0x00001a5c, 0x00001a77,
+	0x00001751, 0x0000177d, 0x0000179a, 0x000017b8,
+	0x000017dc, 0x000017f5, 0x00001812, 0x0000182f,
+	0x00001842, 0x00001864, 0x0000188e, 0x000018c0,
+	0x000018dd, 0x000018e5, 0x0000190e, 0x00001942,
+	0x0000195b, 0x00001966, 0x00001980, 0x00001993,
+	0x000019c0, 0x000019c6, 0x000019ce, 0x000019fc,
+	0x00001a1b, 0x00001a24, 0x00001a31, 0x00001a3a,
+	0x00001a48, 0x00001a56, 0x00001a5c, 0x00001a71,
 	// Entry E0 - FF
-	0x00001a85, 0x00001aab, 0x00001abb, 0x00001ac2,
-	0x00001ad4, 0x00001ae6, 0x00001b0c, 0x00001b1e,
-	0x00001b38, 0x00001b4d, 0x00001b61, 0x00001b78,
-	0x00001b91, 0x00001bc7, 0x00001c02, 0x00001c47,
-	0x00001c6a, 0x00001c8a, 0x00001ca3, 0x00001cbb,
-	0x00001cd2, 0x00001ce0, 0x00001cee, 0x00001d0c,
-	0x00001d2f, 0x00001d56, 0x00001d78, 0x00001da9,
-	0x00001ddf, 0x00001df7, 0x00001e17, 0x00001e47,
+	0x00001a8c, 0x00001a9a, 0x00001ac0, 0x00001ad0,
+	0x00001ad7, 0x00001ae9, 0x00001afb, 0x00001b21,
+	0x00001b33, 0x00001b4d, 0x00001b62, 0x00001b76,
+	0x00001b8d, 0x00001ba6, 0x00001bdc, 0x00001c17,
+	0x00001c5c, 0x00001c7f, 0x00001c9f, 0x00001cb8,
+	0x00001cd0, 0x00001ce7, 0x00001cf5, 0x00001d03,
+	0x00001d21, 0x00001d44, 0x00001d6b, 0x00001d8d,
+	0x00001dbe, 0x00001df4, 0x00001e0c, 0x00001e2c,
 	// Entry 100 - 11F
-	0x00001e7c, 0x00001e89, 0x00001ea6, 0x00001ed4,
-	0x00001eea, 0x00001f0a, 0x00001f59, 0x00001f88,
-	0x00001fc3, 0x00001ff5, 0x0000200a, 0x0000202e,
-	0x0000203d, 0x00002045, 0x0000204c, 0x00002073,
-	0x0000209b, 0x000020c2, 0x000020d5, 0x000020f1,
-	0x00002137, 0x0000213d, 0x00002157, 0x0000216e,
-	0x000021a4, 0x000021ac, 0x000021b2, 0x000021cb,
-	0x000021de, 0x00002244, 0x0000225b, 0x0000230c,
+	0x00001e5c, 0x00001e91, 0x00001e9e, 0x00001ebb,
+	0x00001ee9, 0x00001eff, 0x00001f1f, 0x00001f6e,
+	0x00001f9d, 0x00001fd8, 0x0000200a, 0x0000201f,
+	0x00002043, 0x00002052, 0x0000205a, 0x00002061,
+	0x00002088, 0x000020b0, 0x000020d7, 0x000020ea,
+	0x00002106, 0x0000214c, 0x00002152, 0x0000216c,
+	0x00002183, 0x000021b9, 0x000021c1, 0x000021c7,
+	0x000021e0, 0x000021f3, 0x00002259, 0x00002270,
 	// Entry 120 - 13F
-	0x0000232b, 0x00002347, 0x00002352, 0x00002363,
-	0x00002377, 0x0000237e, 0x00002398, 0x000023d2,
-	0x000023df, 0x0000240f, 0x0000242b, 0x00002444,
-	0x00002457, 0x0000246e, 0x00002489, 0x00002492,
-	0x000024d6, 0x000024fc, 0x0000251e, 0x0000258b,
-	0x000025a9, 0x000025f7, 0x00002608, 0x00002633,
-	0x0000263c, 0x0000265a, 0x000026b5, 0x000026d1,
-	0x000026dc, 0x000026ec, 0x000026ff, 0x00002764,
+	0x00002321, 0x00002340, 0x0000235c, 0x00002367,
+	0x00002378, 0x0000238c, 0x00002393, 0x000023ad,
+	0x000023e7, 0x000023f4, 0x00002424, 0x00002440,
+	0x00002459, 0x0000246c, 0x00002483, 0x0000249e,
+	0x000024a7, 0x000024eb, 0x00002511, 0x00002533,
+	0x000025a0, 0x000025be, 0x0000260c, 0x0000261d,
+	0x00002648, 0x00002651, 0x0000266f, 0x000026ca,
+	0x000026e6, 0x000026f1, 0x00002701, 0x00002714,
 	// Entry 140 - 15F
-	0x0000276f, 0x00002784, 0x00002791, 0x000027ac,
-	0x00002839, 0x0000285d, 0x0000287b, 0x00002928,
-	0x0000294e, 0x0000299b, 0x000029c1, 0x000029d3,
-	0x00002a26, 0x00002a46, 0x00002a62, 0x00002aab,
-	0x00002ac3, 0x00002ae1, 0x00002ae9, 0x00002b02,
-	0x00002b12, 0x00002b2d, 0x00002b4a, 0x00002b68,
-	0x00002b85, 0x00002b8b, 0x00002b96, 0x00002bbc,
-	0x00002bfd, 0x00002c10, 0x00002c44, 0x00002c66,
+	0x00002779, 0x00002784, 0x00002799, 0x000027a6,
+	0x000027c1, 0x0000284e, 0x00002872, 0x00002890,
+	0x0000293d, 0x00002963, 0x000029b0, 0x000029d6,
+	0x000029e8, 0x00002a3b, 0x00002a5b, 0x00002a77,
+	0x00002ac0, 0x00002ad8, 0x00002af6, 0x00002afe,
+	0x00002b17, 0x00002b27, 0x00002b42, 0x00002b5f,
+	0x00002b7d, 0x00002b9a, 0x00002ba0, 0x00002bab,
+	0x00002bd1, 0x00002c12, 0x00002c25, 0x00002c59,
 	// Entry 160 - 17F
-	0x00002c74, 0x00002c89, 0x00002ca1, 0x00002cbc,
-	0x00002cc6, 0x00002ce6, 0x00002cf7, 0x00002d03,
-	0x00002d10, 0x00002d33, 0x00002daf, 0x00002dd5,
-	0x00002e61, 0x00002e7a, 0x00002edf, 0x00002efb,
-	0x00002f12, 0x00002f2d, 0x00002f69, 0x00002f89,
-	0x00002fa9, 0x00002fbb, 0x00002fc8, 0x00003010,
-	0x0000304a, 0x00003064, 0x000030a9, 0x000030df,
-	0x00003118, 0x00003138, 0x00003161, 0x000031bf,
+	0x00002c7b, 0x00002c89, 0x00002c9e, 0x00002cb6,
+	0x00002cd1, 0x00002cdb, 0x00002cfb, 0x00002d0c,
+	0x00002d18, 0x00002d25, 0x00002d48, 0x00002dc4,
+	0x00002dea, 0x00002e76, 0x00002e8f, 0x00002ef4,
+	0x00002f10, 0x00002f27, 0x00002f42, 0x00002f7e,
+	0x00002f9e, 0x00002fbe, 0x00002fd0, 0x00002fdd,
+	0x00003025, 0x0000303a, 0x00003082, 0x00003094,
+	0x000030a9, 0x000030e3, 0x000030fd, 0x00003142,
 	// Entry 180 - 19F
-	0x000031d5, 0x0000320c, 0x00003231, 0x0000325f,
-	0x0000329c, 0x000032cd, 0x000032f1, 0x00003305,
-	0x00003322, 0x00003338, 0x0000335a, 0x00003373,
-	0x000033a0, 0x000033aa, 0x000033ca, 0x000033de,
-	0x000033f9, 0x00003428, 0x00003452, 0x0000346d,
-	0x00003486, 0x0000349a, 0x000034b6, 0x000034ca,
-	0x000034e7, 0x00003504, 0x00003524, 0x00003542,
-	0x00003563, 0x0000356c, 0x000035ab, 0x000035ee,
+	0x00003178, 0x000031b1, 0x000031d1, 0x000031fa,
+	0x00003258, 0x0000326e, 0x000032a5, 0x000032ca,
+	0x000032f8, 0x00003335, 0x00003366, 0x0000338a,
+	0x0000339e, 0x000033bb, 0x000033d1, 0x000033f3,
+	0x0000340c, 0x00003439, 0x00003443, 0x00003463,
+	0x00003477, 0x00003492, 0x000034c1, 0x000034eb,
+	0x00003506, 0x0000351f, 0x00003533, 0x0000354f,
+	0x00003563, 0x00003580, 0x0000359d, 0x000035bd,
 	// Entry 1A0 - 1BF
-	0x00003621, 0x00003652, 0x0000366f, 0x00003697,
-	0x000036ca, 0x00003718, 0x00003737, 0x0000374c,
-	0x00003756, 0x00003775, 0x0000378d, 0x000037ac,
-	0x000037c8, 0x000037dd, 0x000037f4, 0x00003895,
-	0x0000390b, 0x00003935, 0x0000395f, 0x0000397a,
-	0x0000398f, 0x000039b8, 0x000039cb, 0x000039e0,
-	0x00003a03, 0x00003a2d, 0x00003a3d, 0x00003a64,
-	0x00003aee, 0x00003b00, 0x00003b15, 0x00003ba2,
+	0x000035db, 0x000035fc, 0x00003605, 0x00003644,
+	0x00003687, 0x000036ba, 0x000036eb, 0x00003708,
+	0x00003730, 0x00003763, 0x000037b1, 0x000037d0,
+	0x000037e5, 0x000037ef, 0x0000380e, 0x00003826,
+	0x00003845, 0x00003861, 0x00003876, 0x0000388d,
+	0x0000392e, 0x000039a4, 0x000039ce, 0x000039f8,
+	0x00003a13, 0x00003a28, 0x00003a51, 0x00003a64,
+	0x00003a87, 0x00003ab1, 0x00003ac1, 0x00003ae8,
 	// Entry 1C0 - 1DF
-	0x00003bb7, 0x00003bed, 0x00003c6c, 0x00003cda,
-	0x00003cfc, 0x00003d40, 0x00003dae, 0x00003dce,
-	0x00003df6, 0x00003e20, 0x00003e4c, 0x00003ea7,
-	0x00003ec0, 0x00003ef0, 0x00003f22, 0x00003f47,
-	0x00003f55, 0x00003f79, 0x00003fa2, 0x00003fce,
-	0x00003fe9, 0x00004022, 0x00004035, 0x0000404e,
-	0x00004060, 0x00004073, 0x00004082, 0x0000408c,
-	0x000040b7, 0x000040d2, 0x000040e8, 0x00004143,
+	0x00003b72, 0x00003b84, 0x00003b99, 0x00003c26,
+	0x00003c3b, 0x00003c71, 0x00003cf0, 0x00003d5e,
+	0x00003d80, 0x00003dc4, 0x00003e32, 0x00003e52,
+	0x00003e7a, 0x00003ea4, 0x00003ed0, 0x00003f2b,
+	0x00003f44, 0x00003f74, 0x00003fa6, 0x00003fcb,
+	0x00003fd9, 0x00003ffd, 0x00004026, 0x00004052,
+	0x0000406d, 0x000040a6, 0x000040b9, 0x000040d2,
+	0x000040e4, 0x000040f7, 0x00004106, 0x00004110,
 	// Entry 1E0 - 1FF
-	0x000041a0, 0x0000423b, 0x000042a8, 0x00004306,
-	0x00004369, 0x000043b0, 0x000043d7, 0x00004403,
-	0x00004453, 0x00004461, 0x00004476, 0x00004485,
-	0x000044c1, 0x00004510, 0x00004580, 0x00004597,
-	0x000045c8, 0x00004601, 0x00004626, 0x0000464e,
-	0x00004685, 0x00004696, 0x000046a7, 0x000046ca,
-	0x000046e5, 0x000046f5, 0x0000470d, 0x0000471e,
-	0x00004730, 0x00004743, 0x00004758, 0x00004770,
+	0x0000413b, 0x00004156, 0x0000416c, 0x000041c7,
+	0x00004224, 0x000042bf, 0x0000432c, 0x0000438a,
+	0x000043ed, 0x00004434, 0x0000445b, 0x00004487,
+	0x000044d7, 0x000044e5, 0x000044fa, 0x00004509,
+	0x00004545, 0x00004594, 0x00004604, 0x0000461b,
+	0x0000464c, 0x00004685, 0x000046aa, 0x000046d2,
+	0x00004709, 0x0000471a, 0x0000472b, 0x0000474e,
+	0x00004769, 0x00004779, 0x00004791, 0x000047a2,
 	// Entry 200 - 21F
-	0x00004780, 0x000047be, 0x000047cf, 0x000047e1,
-	0x000047ef, 0x000047f5, 0x0000480a, 0x00004811,
-	0x00004834, 0x00004861, 0x00004876, 0x00004892,
-	0x000048b1, 0x000048c8, 0x000048dd, 0x00004908,
-	0x00004932, 0x00004944, 0x00004962, 0x00004973,
-	0x00004985, 0x00004994, 0x000049ab, 0x000049cd,
-	0x000049eb, 0x000049fc, 0x00004a1b, 0x00004a2e,
-	0x00004a52, 0x00004a6d, 0x00004ace, 0x00004ae7,
+	0x000047b4, 0x000047c7, 0x000047dc, 0x000047f4,
+	0x00004804, 0x00004842, 0x00004853, 0x00004865,
+	0x00004873, 0x00004879, 0x0000488e, 0x00004895,
+	0x000048b8, 0x000048e5, 0x000048fa, 0x00004916,
+	0x00004935, 0x0000494c, 0x00004961, 0x0000498c,
+	0x000049b6, 0x000049c8, 0x000049e6, 0x000049f7,
+	0x00004a09, 0x00004a18, 0x00004a2f, 0x00004a51,
+	0x00004a6f, 0x00004a80, 0x00004a9f, 0x00004ab2,
 	// Entry 220 - 23F
-	0x00004af1, 0x00004afd, 0x00004b14, 0x00004b42,
-	0x00004b62, 0x00004ba4, 0x00004bb7, 0x00004bc1,
-	0x00004bd8, 0x00004bea, 0x00004c04, 0x00004c16,
-	0x00004c20, 0x00004c5d, 0x00004c71, 0x00004c7d,
-	0x00004c88, 0x00004c8f, 0x00004ca3, 0x00004cc5,
-	0x00004cea, 0x00004d10, 0x00004d35, 0x00004d5b,
-	0x00004d83, 0x00004de2, 0x00004df1, 0x00004e2f,
-	0x00004e63, 0x00004e8b, 0x00004eb5, 0x00004ee2,
+	0x00004ad6, 0x00004af1, 0x00004b52, 0x00004b6b,
+	0x00004b75, 0x00004b81, 0x00004b98, 0x00004bc6,
+	0x00004be6, 0x00004c28, 0x00004c3b, 0x00004c45,
+	0x00004c5c, 0x00004c6e, 0x00004c88, 0x00004c9a,
+	0x00004ca4, 0x00004ce1, 0x00004cf5, 0x00004d01,
+	0x00004d0c, 0x00004d13, 0x00004d27, 0x00004d49,
+	0x00004d6e, 0x00004d94, 0x00004db9, 0x00004ddf,
+	0x00004e07, 0x00004e66, 0x00004e75, 0x00004eb3,
 	// Entry 240 - 25F
-	0x00004eff, 0x00004f06, 0x00004f11, 0x00004f1b,
-	0x00004f22, 0x00004fae, 0x00004fd1, 0x00004ff1,
-	0x0000500b, 0x0000503b, 0x00005081, 0x000050b3,
-	0x000050bb, 0x000050d4, 0x00005119, 0x0000518f,
-	0x00005225, 0x00005244, 0x00005252, 0x000052f5,
-	0x0000535f, 0x0000537a, 0x00005384, 0x000053b5,
-	0x000053e6, 0x000053ec, 0x0000541e, 0x00005459,
-	0x00005498, 0x000054c3, 0x000054d6, 0x000054e7,
+	0x00004ee7, 0x00004f0f, 0x00004f39, 0x00004f66,
+	0x00004f83, 0x00004f8a, 0x00004f95, 0x00004f9f,
+	0x00004fa6, 0x00005032, 0x00005055, 0x00005075,
+	0x0000508f, 0x000050bf, 0x00005105, 0x00005137,
+	0x0000513f, 0x00005158, 0x0000519d, 0x00005213,
+	0x000052a9, 0x000052c8, 0x000052d6, 0x00005379,
+	0x000053e3, 0x000053fe, 0x00005408, 0x00005439,
+	0x0000546a, 0x00005470, 0x000054a2, 0x000054dd,
 	// Entry 260 - 27F
-	0x0000550e, 0x0000551b, 0x00005544, 0x00005557,
-	0x00005566, 0x0000556f, 0x0000557b, 0x00005584,
-	0x0000558a, 0x0000559d, 0x000055a6, 0x000055af,
-	0x000055c2, 0x000055e8, 0x00005605, 0x0000561f,
-	0x00005639, 0x0000565c, 0x00005664, 0x00005686,
-	0x0000569f, 0x000056a6, 0x000056bb, 0x000056ca,
-	0x000056e6, 0x000056ef, 0x000056fb, 0x00005707,
-	0x0000570e, 0x00005716, 0x0000571e, 0x00005724,
+	0x0000551c, 0x00005547, 0x0000555a, 0x0000556b,
+	0x00005592, 0x0000559f, 0x000055c8, 0x000055db,
+	0x000055ea, 0x000055f3, 0x000055ff, 0x00005608,
+	0x0000560e, 0x00005621, 0x0000562a, 0x00005633,
+	0x00005646, 0x0000566c, 0x00005689, 0x000056a3,
+	0x000056bd, 0x000056e0, 0x000056e8, 0x0000570a,
+	0x00005723, 0x0000572a, 0x0000573f, 0x0000574e,
+	0x0000576a, 0x00005773, 0x0000577f, 0x0000578b,
 	// Entry 280 - 29F
-	0x0000572c, 0x0000573b, 0x00005744, 0x0000574c,
-	0x0000575b, 0x00005762, 0x0000576c, 0x00005775,
-	0x0000577f, 0x00005786, 0x0000578d, 0x00005795,
-	0x0000579d, 0x000057a5, 0x000057b3, 0x000057c1,
-	0x000057c9, 0x000057d0, 0x000057d9, 0x000057e0,
-	0x000057e4, 0x000057ed, 0x000057f9, 0x0000581c,
-	0x0000582a, 0x00005833, 0x00005839, 0x00005844,
-	0x0000584a, 0x0000586c, 0x00005874, 0x0000587b,
+	0x00005792, 0x0000579a, 0x000057a2, 0x000057a8,
+	0x000057b0, 0x000057bf, 0x000057c8, 0x000057d0,
+	0x000057df, 0x000057e6, 0x000057f0, 0x000057f9,
+	0x00005803, 0x0000580a, 0x00005811, 0x00005819,
+	0x00005821, 0x00005829, 0x00005837, 0x00005845,
+	0x0000584d, 0x00005854, 0x0000585d, 0x00005864,
+	0x00005868, 0x00005871, 0x0000587d, 0x000058a0,
+	0x000058ae, 0x000058b7, 0x000058bd, 0x000058c8,
 	// Entry 2A0 - 2BF
-	0x0000588d, 0x00005896, 0x000058ad, 0x000058c4,
-	0x000058d0, 0x000058e9, 0x000058fe, 0x00005907,
-	0x0000590e, 0x00005920, 0x00005935, 0x00005940,
-	0x0000594b, 0x00005951, 0x0000595f, 0x0000596f,
-	0x0000597c, 0x00005987, 0x0000598f, 0x00005998,
-	0x000059ab, 0x000059af, 0x000059b8, 0x000059be,
-	0x000059c7, 0x000059cb, 0x000059e1, 0x000059f9,
-	0x00005a0b, 0x00005a12, 0x00005a1c, 0x00005a26,
+	0x000058ce, 0x000058f0, 0x000058f8, 0x000058ff,
+	0x00005911, 0x0000591a, 0x00005931, 0x00005948,
+	0x00005954, 0x0000596d, 0x00005982, 0x0000598b,
+	0x00005992, 0x000059a4, 0x000059b9, 0x000059c4,
+	0x000059cf, 0x000059d5, 0x000059e3, 0x000059f3,
+	0x00005a00, 0x00005a0b, 0x00005a13, 0x00005a1c,
+	0x00005a2f, 0x00005a33, 0x00005a3c, 0x00005a42,
+	0x00005a4b, 0x00005a4f, 0x00005a65, 0x00005a7d,
 	// Entry 2C0 - 2DF
-	0x00005a2e, 0x00005a49, 0x00005a4f, 0x00005a59,
-	0x00005a60, 0x00005a67, 0x00005a6b, 0x00005a7c,
-	0x00005a8f, 0x00005a95, 0x00005aa5, 0x00005aab,
-	0x00005aaf, 0x00005ab6, 0x00005ac2, 0x00005ac9,
-	0x00005ad7, 0x00005ae8, 0x00005afb, 0x00005b0c,
-	0x00005b19, 0x00005b21, 0x00005b2c, 0x00005b38,
-	0x00005b72, 0x00005b88, 0x00005b8d, 0x00005bb3,
-	0x00005bdd, 0x00005c2b, 0x00005c3d, 0x00005c5b,
+	0x00005a8f, 0x00005a96, 0x00005aa0, 0x00005aaa,
+	0x00005ab2, 0x00005acd, 0x00005ad3, 0x00005add,
+	0x00005ae4, 0x00005aeb, 0x00005aef, 0x00005b00,
+	0x00005b13, 0x00005b19, 0x00005b29, 0x00005b2f,
+	0x00005b33, 0x00005b3a, 0x00005b46, 0x00005b4d,
+	0x00005b5b, 0x00005b6c, 0x00005b7f, 0x00005b90,
+	0x00005b9d, 0x00005ba5, 0x00005bb0, 0x00005bbc,
+	0x00005bf6, 0x00005c0c, 0x00005c11, 0x00005c37,
 	// Entry 2E0 - 2FF
-	0x00005c74, 0x00005caa, 0x00005cf1, 0x00005d1b,
-	0x00005d41, 0x00005d75, 0x00005d95, 0x00005dba,
-	0x00005e00, 0x00005e61, 0x00005e9b, 0x00005ec3,
-	0x00005edf, 0x00005f03, 0x00005f40, 0x00005f69,
-	0x00005fb0, 0x00005fdc, 0x00006020, 0x0000604f,
-	0x00006064, 0x00006078, 0x000060a2, 0x000060ce,
-	0x000060fb, 0x00006128, 0x00006145, 0x00006161,
-	0x00006188, 0x000061aa, 0x000061b4, 0x000061d8,
+	0x00005c61, 0x00005caf, 0x00005cc1, 0x00005cdf,
+	0x00005cf8, 0x00005d2e, 0x00005d75, 0x00005d9f,
+	0x00005dc5, 0x00005df9, 0x00005e19, 0x00005e3e,
+	0x00005e84, 0x00005ee5, 0x00005f1f, 0x00005f47,
+	0x00005f63, 0x00005f87, 0x00005fc4, 0x00005fed,
+	0x00006034, 0x00006060, 0x000060a4, 0x000060d3,
+	0x000060e8, 0x000060fc, 0x00006126, 0x00006152,
+	0x0000617f, 0x000061ac, 0x000061c9, 0x000061e5,
 	// Entry 300 - 31F
-	0x00006214, 0x0000622c, 0x00006240, 0x0000626c,
-	0x00006296, 0x000062df, 0x000062fb, 0x00006346,
-	0x00006396, 0x000063c7, 0x000063e1, 0x000063fc,
-	0x00006416, 0x00006440, 0x0000647c, 0x0000649d,
-	0x000064c6, 0x00006508, 0x00006530, 0x00006578,
-	0x000065af, 0x00006629, 0x0000665c, 0x0000666a,
-	0x000066d0, 0x000066fd, 0x0000677a, 0x000067b2,
-	0x00006830, 0x000068c2, 0x0000695e, 0x000069be,
+	0x0000620c, 0x0000622e, 0x00006238, 0x0000625c,
+	0x00006298, 0x000062b0, 0x000062c4, 0x000062f0,
+	0x0000631a, 0x00006363, 0x0000637f, 0x000063ca,
+	0x0000641a, 0x0000644b, 0x00006465, 0x00006480,
+	0x0000649a, 0x000064c4, 0x00006500, 0x00006521,
+	0x0000654a, 0x0000658c, 0x000065b4, 0x000065fc,
+	0x00006606, 0x00006617, 0x0000663d, 0x0000665c,
+	0x00006675, 0x0000668d, 0x000066b0, 0x000066e6,
 	// Entry 320 - 33F
-	0x00006a07, 0x00006aa5, 0x00006af3, 0x00006b70,
-	0x00006b89, 0x00006bb8, 0x00006bee, 0x00006c17,
-	0x00006c3e, 0x00006c54, 0x00006ca3, 0x00006cf0,
-	0x00006d54, 0x00006de5, 0x00006e3e, 0x00006e8a,
-	0x00006ebc, 0x00006f26, 0x00006f46, 0x00006f8d,
-	0x00006fd9, 0x00007007, 0x0000702e, 0x00007053,
-	0x0000709f, 0x000070ba, 0x000070ef, 0x00007129,
-	0x0000716f, 0x000071ad, 0x000071bf, 0x000071eb,
+	0x000066fa, 0x00006741, 0x000067ad, 0x000067de,
+	0x0000680a, 0x00006881, 0x000068cf, 0x000068d8,
+	0x000068ed, 0x000068f4, 0x0000690a, 0x00006923,
+	0x0000692b, 0x0000697f, 0x00006989, 0x000069b9,
+	0x000069bd, 0x000069d1, 0x00006a01, 0x00006a0d,
+	0x00006a7e, 0x00006a99, 0x00006aa3, 0x00006ac5,
+	0x00006ad5, 0x00006ade, 0x00006aff, 0x00006b0e,
+	0x00006b1b, 0x00006b29, 0x00006b95, 0x00006bbb,
 	// Entry 340 - 35F
-	0x00007217, 0x0000724f, 0x00007265, 0x00007297,
-	0x000072cb, 0x000072f1, 0x0000730a, 0x00007337,
-	0x0000735d, 0x0000737e, 0x000073a8, 0x000073cf,
-	0x000073f5, 0x00007423, 0x0000744b, 0x0000747a,
-	0x000074a7, 0x000074d2, 0x000074e9, 0x0000751a,
-	0x00007533, 0x00007562, 0x000075a0, 0x000075d2,
-	0x000075f5, 0x0000762b, 0x00007659, 0x00007682,
-	0x000076ab, 0x000076d0, 0x000076e9, 0x0000771c,
+	0x00006bc1, 0x00006bc6, 0x00006be1, 0x00006bf3,
+	0x00006c0f, 0x00006c2c, 0x00006c56, 0x00006cda,
+	0x00006d39, 0x00006d77, 0x00006dbc, 0x00006dc0,
+	0x00006dc5, 0x00006def, 0x00006df6, 0x00006e38,
+	0x00006e6b, 0x00006ec9, 0x00006ee0, 0x00006ef6,
+	0x00006f0e, 0x00006f3f, 0x00006f5c, 0x00006f7e,
+	0x00006f9d, 0x00006faa, 0x00006fc9, 0x00006fd3,
+	0x00006fe5, 0x00006ff1, 0x00006ff9, 0x00007001,
 	// Entry 360 - 37F
-	0x00007745, 0x00007788, 0x000077ac, 0x000077e1,
-	0x00007813, 0x0000783f, 0x00007867, 0x00007887,
-	0x000078a7, 0x000078c1, 0x000078de, 0x0000790e,
-	0x00007935, 0x00007950, 0x00007975, 0x00007996,
-	0x000079c2, 0x000079eb, 0x00007a1c, 0x00007a55,
-	0x00007a84, 0x00007ab4, 0x00007aed, 0x00007b28,
-	0x00007b58, 0x00007b8e, 0x00007bba, 0x00007bfa,
-	0x00007c4b, 0x00007c7a, 0x00007ccb, 0x00007cd3,
+	0x0000700b, 0x00007019, 0x00007050, 0x000070ca,
+	0x000070fd, 0x0000710b, 0x00007171, 0x0000719e,
+	0x0000721b, 0x00007253, 0x000072d1, 0x00007363,
+	0x000073ff, 0x0000745f, 0x000074a8, 0x00007546,
+	0x00007594, 0x00007611, 0x0000762a, 0x00007659,
+	0x0000768f, 0x000076b8, 0x000076df, 0x000076f5,
+	0x00007744, 0x00007791, 0x000077f5, 0x00007886,
+	0x000078df, 0x0000792b, 0x0000795d, 0x000079c7,
 	// Entry 380 - 39F
-	0x00007ce6, 0x00007cf6, 0x00007d02, 0x00007d14,
-	0x00007d1b, 0x00007d22, 0x00007d28, 0x00007d32,
-	0x00007d44, 0x00007d4a, 0x00007d58, 0x00007d60,
-	0x00007d71, 0x00007d85, 0x00007d8c, 0x00007d92,
-	0x00007d99, 0x00007da2, 0x00007daa, 0x00007db9,
-	0x00007dc1, 0x00007dd0, 0x00007ddc, 0x00007de6,
-	0x00007dee, 0x00007df8, 0x00007e0a, 0x00007e1a,
-	0x00007e22, 0x00007e28, 0x00007e2c, 0x00007e3c,
+	0x000079e7, 0x00007a2e, 0x00007a7a, 0x00007aa8,
+	0x00007acf, 0x00007af4, 0x00007b40, 0x00007b5b,
+	0x00007b90, 0x00007bca, 0x00007c10, 0x00007c4e,
+	0x00007c60, 0x00007c8c, 0x00007cb8, 0x00007cf0,
+	0x00007d06, 0x00007d38, 0x00007d6c, 0x00007d92,
+	0x00007dab, 0x00007dd2, 0x00007df8, 0x00007e26,
+	0x00007e4e, 0x00007e7d, 0x00007eaa, 0x00007ed5,
+	0x00007f02, 0x00007f28, 0x00007f49, 0x00007f73,
 	// Entry 3A0 - 3BF
-	0x00007e50, 0x00007e61, 0x00007e6e, 0x00007e76,
-	0x00007e80, 0x00007e8a, 0x00007ea4, 0x00007eae,
-	0x00007ec2, 0x00007edc, 0x00007ee5, 0x00007efc,
-	0x00007f19, 0x00007f26, 0x00007f29, 0x00007f2c,
-	0x00007f34, 0x00007f40, 0x00007f53, 0x00007f61,
-	0x00007f6c, 0x00007f75, 0x00007f7e, 0x00007f87,
-	0x00007f98, 0x00007fa7, 0x00007fac, 0x00007fb4,
-	0x00007fc3, 0x00007fd5, 0x00007fe6, 0x00007ff3,
+	0x00007f8a, 0x00007fbb, 0x00007fd4, 0x00008003,
+	0x00008041, 0x00008073, 0x00008096, 0x000080cc,
+	0x000080fa, 0x00008123, 0x0000814c, 0x00008171,
+	0x0000818a, 0x000081bd, 0x000081e6, 0x00008229,
+	0x0000824d, 0x00008282, 0x000082b4, 0x000082e0,
+	0x00008308, 0x00008328, 0x00008348, 0x00008362,
+	0x0000837f, 0x000083af, 0x000083d6, 0x000083f1,
+	0x00008416, 0x00008437, 0x00008463, 0x0000848c,
 	// Entry 3C0 - 3DF
-	0x00008000, 0x00008008, 0x0000800f, 0x00008015,
-	0x00008026, 0x0000803c, 0x0000804a, 0x0000805e,
-	0x00008067, 0x0000807a, 0x00008081, 0x00008089,
-	0x0000809a, 0x000080b1, 0x000080ba, 0x000080df,
-	0x00008113, 0x00008140, 0x00008182, 0x000081b8,
-	0x00008217, 0x0000823e, 0x00008282, 0x0000829f,
-	0x000082cf, 0x000082ed, 0x0000830d, 0x00008327,
-	0x00008338, 0x000083a2, 0x000083d0, 0x000083fc,
+	0x000084bd, 0x000084f6, 0x00008525, 0x00008555,
+	0x0000858e, 0x000085c9, 0x000085f9, 0x0000862f,
+	0x0000865b, 0x0000869b, 0x000086ec, 0x0000871b,
+	0x0000876c, 0x00008774, 0x00008787, 0x00008797,
+	0x000087a3, 0x000087b5, 0x000087bc, 0x000087c3,
+	0x000087c9, 0x000087d3, 0x000087e5, 0x000087eb,
+	0x000087f9, 0x00008801, 0x00008812, 0x00008826,
+	0x0000882d, 0x00008833, 0x0000883a, 0x00008843,
 	// Entry 3E0 - 3FF
-	0x0000841d, 0x0000842d, 0x0000843b, 0x0000843f,
-	0x0000844c, 0x00008463, 0x0000848d, 0x000084bb,
-	0x000084fd, 0x00008525, 0x00008546, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
+	0x0000884b, 0x0000885a, 0x00008862, 0x00008871,
+	0x0000887d, 0x00008887, 0x0000888f, 0x00008899,
+	0x000088ab, 0x000088bb, 0x000088c3, 0x000088c9,
+	0x000088cd, 0x000088dd, 0x000088f1, 0x00008902,
+	0x0000890f, 0x00008917, 0x00008921, 0x0000892b,
+	0x00008945, 0x0000894f, 0x00008963, 0x0000897d,
+	0x00008986, 0x0000899d, 0x000089ba, 0x000089c7,
+	0x000089ca, 0x000089cd, 0x000089d5, 0x000089e1,
 	// Entry 400 - 41F
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
+	0x000089f4, 0x00008a02, 0x00008a0d, 0x00008a16,
+	0x00008a1f, 0x00008a28, 0x00008a39, 0x00008a48,
+	0x00008a4d, 0x00008a55, 0x00008a64, 0x00008a76,
+	0x00008a87, 0x00008a94, 0x00008aa1, 0x00008aa9,
+	0x00008ab0, 0x00008ab6, 0x00008ac7, 0x00008add,
+	0x00008aeb, 0x00008aff, 0x00008b08, 0x00008b1b,
+	0x00008b22, 0x00008b2a, 0x00008b3b, 0x00008b52,
+	0x00008b5b, 0x00008b80, 0x00008bb4, 0x00008be1,
 	// Entry 420 - 43F
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a, 0x0000856a, 0x0000856a,
-	0x0000856a, 0x0000856a,
-} // Size: 4320 bytes
+	0x00008c23, 0x00008c59, 0x00008cb8, 0x00008cdf,
+	0x00008d23, 0x00008d40, 0x00008d70, 0x00008d8e,
+	0x00008dae, 0x00008dc8, 0x00008dd9, 0x00008e43,
+	0x00008e71, 0x00008e9d, 0x00008ebe, 0x00008ece,
+	0x00008edc, 0x00008ee0, 0x00008eed, 0x00008f04,
+	0x00008f1c, 0x00008f43, 0x00008f71, 0x00008fdf,
+	0x00008fe6, 0x00008ff4, 0x00009003, 0x00009006,
+	0x00009030, 0x0000905e, 0x000090a0, 0x000090c8,
+	// Entry 440 - 45F
+	0x000090e9, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	// Entry 460 - 47F
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	// Entry 480 - 49F
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d, 0x0000910d, 0x0000910d, 0x0000910d,
+	0x0000910d,
+} // Size: 4668 bytes
 
-const frData string = "" + // Size: 34154 bytes
+const frData string = "" + // Size: 37133 bytes
 	"\x02Changer la phrase secrète\x02Vous devez être connecté pour déverroui" +
 	"ller l'app.\x02Vous devez être administrateur pour déverrouiller l'appli" +
 	"cation.\x02Phrase secrète modifiée.\x02Initialiser l'app\x02Initialiser" +
@@ -3335,426 +3599,465 @@ const frData string = "" + // Size: 34154 bytes
 	"paration pour ce fichier.\x02Aucun doublon trouvé.\x02Doublons trouvés" +
 	"\x02Ce fichier existe déjà aux %[1]d emplacements suivants :\x02Space: %" +
 	"[1]s\x02Dossier : %[1]s\x02Téléversé le %[1]s\x02Version actuelle %[1]d" +
-	"\x02Version %[1]d\x02Déplacer\x02Décompresser l'archive\x02Supprimer ce " +
-	"fichier ? Vous pouvez le restaurer depuis la corbeille.\x02Supprimer ce " +
-	"dossier ? Ses fichiers peuvent être restaurés depuis la corbeille.\x02Dé" +
-	"tails\x02Source\x02Taille du fichier\x02Type MIME\x02Hachage SHA-256\x02" +
-	"Nom de fichier d'origine\x02Téléversé le\x02Version\x02Version actuelle " +
-	"téléversée le\x02Supprimé le\x02Créé le %[1]s\x02Aperçu\x02Original\x02T" +
-	"élécharger le PDF\x02L’aperçu PDF n’a pas pu être généré.\x02Réessayer " +
-	"de générer le PDF\x02Télécharger\x02L’aperçu PDF n’est pas disponible, c" +
-	"ar Gotenberg n’est pas configuré.\x02L’aperçu PDF est en cours de généra" +
-	"tion. Veuillez patienter un instant ; la page s’actualisera automatiquem" +
-	"ent.\x02L’aperçu PDF n’est pas disponible.\x02Échec du rendu.\x02Affiche" +
-	"r les détails\x02Fermer l'aperçu\x02Version introuvable.\x02Aucun champ " +
-	"attribué pour le moment.\x02Supprimer cette valeur de champ ?\x02Chargem" +
-	"ent de plus d'éléments…\x02Nom\x02Type\x02Métadonnées\x02Date\x02Taille" +
-	"\x02Tags\x02Aucune donnée disponible.\x02Oui\x02Non\x02Info\x02Versions" +
-	"\x02Doublons\x02Impossible de charger les doublons.\x02Téléchargement de" +
-	" fichier\x02Veuillez confirmer que les métadonnées du fichier source ser" +
-	"ont perdues.\x02Les fichiers source et cible sont requis.\x02Nouvelle ve" +
-	"rsion ajoutée depuis l'Inbox.\x02Je comprends que les métadonnées du fic" +
-	"hier de l'Inbox (type de document, Tags, champs) seront perdues lors de " +
-	"la fusion. Les notes et leur historique seront conservés.\x02Rechercher " +
-	"dans les fichiers de l'Inbox\x02Ajouter une nouvelle version depuis l'In" +
-	"box\x02Le fichier cible est requis.\x02Le fichier source est requis.\x02" +
-	"Le fichier doit être dans l'Inbox.\x02Aucun résultat trouvé.\x02Numéro d" +
-	"e version manquant.\x02Numéro de version invalide.\x02Aperçu de version" +
-	"\x02Téléverser une nouvelle version\x02Aucune version disponible pour le" +
-	" moment.\x02Téléversez une nouvelle version pour commencer.\x02Ajouter u" +
-	"ne nouvelle version\x02Filtres\x02Aucun fichier disponible pour le momen" +
-	"t.\x02Aucun fichier ou dossier disponible pour le moment.\x02Retour au d" +
-	"ossier parent\x02Rechercher\x02Rechercher dans «%[1]s»\x02Trier les fich" +
-	"iers\x02Changer l'affichage de la liste des fichiers\x02Liste\x02Tableau" +
-	"\x02Aucune propriété disponible pour le moment.\x02Aucune propriété disp" +
-	"onible.\x02Contient\x02Commence par\x02Égal à\x02Supérieur à\x02Inférieu" +
-	"r à\x02Entre\x02«%[1]s» est coché\x02«%[1]s» n'est pas coché\x02Tags | F" +
-	"iltre\x02Aucune Tag disponible pour le moment.\x02Gérer les Tags\x02Crée" +
-	"r\x02«%[1]s» créé.\x02Ouvrir le dossier\x02Autorisé uniquement en mode d" +
-	"ossier.\x02Ouvrir le fichier\x02Déplacé vers «%[1]s».\x02«%[1]s» supprim" +
-	"é.\x02Renommer le fichier\x02Renommé en «%[1]s».\x02Filtres réinitialis" +
-	"és.\x02La conversion de l'aperçu PDF n'est pas configurée.\x02L'aperçu " +
-	"PDF n'est pas prêt pour une nouvelle tentative.\x02La génération de l’ap" +
-	"erçu PDF a été mise en file d’attente.\x02Type de document désélectionné" +
-	".\x02Type de document sélectionné.\x02Meilleure correspondance\x02Le plu" +
-	"s récent d'abord\x02Le plus ancien d'abord\x02Trier par nom\x02Décompres" +
-	"ser\x02Ce n'est pas une archive ZIP.\x02Impossible d'ouvrir l'archive ZI" +
-	"P.\x02Impossible de décompresser l'archive.\x02Impossible de lire l'arch" +
-	"ive ZIP.\x02Impossible de créer l'arborescence de dossiers.\x02Impossibl" +
-	"e d'extraire tous les fichiers de l'archive.\x02Archive décompressée." +
-	"\x02L'archive est trop volumineuse.\x02Impossible de vérifier la taille " +
-	"de l'archive.\x02La date de fin est antérieure à la date de début.\x02Té" +
-	"léverser\x02Aucun dossier parent fourni.\x02Contexte de requête en lectu" +
-	"re seule requis.\x02Aucun fichier fourni.\x02«%[1]s» a été téléversé." +
-	"\x02Les métadonnées du téléversement doivent être envoyées avant le fich" +
-	"ier.\x02Nouvelle version téléversée pour «%[1]s».\x02Impossible de télév" +
-	"erser des versions pour les dossiers.\x02Les dossiers ne peuvent pas êtr" +
-	"e téléchargés.\x02Déplacer le fichier\x02Déplacer le fichier vers «%[1]s" +
-	"»\x02Dossier parent\x02Accueil\x02Compte\x02Une Session complète est né" +
-	"cessaire.\x02La validation du formulaire a échoué.\x02Aucun Space dispon" +
-	"ible pour le moment.\x02Libellé du client\x02Autoriser les modifications" +
-	"\x02Sans modifications, le client MCP peut uniquement lire les documents" +
-	".\x02Space\x02Créer un identifiant MCP\x02Identifiant MCP créé\x02Copie " +
-	"le secret maintenant. Il ne sera plus affiché.\x02URL MCP\x02Jeton\x02Li" +
-	"bellé de l’appareil\x02Longueur du secret\x02Réduis la longueur du secre" +
-	"t uniquement si ton appareil limite la longueur maximale du mot de passe" +
-	".\x02Mode de compatibilité\x02Utilise uniquement des lettres, des chiffr" +
-	"es, des traits d’union et des traits de soulignement pour les appareils " +
-	"avec une prise en charge limitée des caractères spéciaux.\x02Créer des i" +
-	"dentifiants WebDAV\x02Identifiants WebDAV créés\x02URL WebDAV\x02URL Web" +
-	"DAV Inbox\x02Nom d’utilisateur\x02Secret\x02Destination indisponible." +
-	"\x02Vous ne pouvez pas créer d’identifiants pour ce Space.\x02Copier %[1" +
-	"]s\x02Copie de %[1]s dans le presse-papiers réussie.\x02Impossible de co" +
-	"pier %[1]s.\x02Destination indisponible\x02Ouvrir les tâches\x02Organisa" +
-	"tion «%[1]s»\x02Aucune Passkey enregistree\x02Passkeys\x02Enregistrez un" +
-	" Passkey pour activer la connexion sans mot de passe.\x02Ajoute une clé " +
-	"d’accès de secours\x02Recommandation de clé d’accès\x02Configure une deu" +
-	"xième clé d’accès sur un autre appareil comme secours en cas de perte d’" +
-	"un appareil.\x02Régénérer les codes Backup\x02Régénérer les codes Backup" +
-	" ? Les codes existants cesseront de fonctionner.\x02Compte «%[1]s»\x02Co" +
-	"mpte «%[1]s», appartenant à «%[2]s»\x02Système\x02Configuration Passkey " +
-	"requise\x02Votre organisation exige la connexion avec Passkey. Enregistr" +
-	"ez un Passkey pour continuer.\x02Il reste %[1]d codes Backup\x02Abonneme" +
-	"nt\x02Non initialisé\x02Veuillez patienter\x02L'organisation n'est pas e" +
-	"ncore initialisée, veuillez attendre que l'initialisation soit terminée." +
-	"\x02Actualiser\x02Utilisation du quota\x02Indisponible\x02Aucun mot de p" +
-	"asse défini\x02Vous vous êtes connecté avec un mot de passe temporaire. " +
-	"Veuillez définir un mot de passe pour sécuriser votre compte et utiliser" +
-	" l'app.\x02Définir le mot de passe maintenant\x02Mot de passe temporaire" +
-	" actif\x02Votre compte a un mot de passe temporaire actif. Veuillez chan" +
-	"ger votre mot de passe ou supprimer le mot de passe temporaire dès que p" +
-	"ossible pour sécuriser votre compte.\x02Aucun Space disponible pour le m" +
-	"oment\x02Vous n'avez pas l'autorisation d'accéder à un Space de cette or" +
-	"ganisation.\x02Veuillez en créer un pour commencer.\x02Gérer les Spaces" +
-	"\x02L'application est déverrouillée et n'est pas protégée par une phrase" +
-	" secrète.\x02L'application est verrouillée.\x02Définir la phrase secrète" +
-	"\x02L'application est déverrouillée et protégée par une phrase secrète." +
-	"\x02Statut de l'application\x02Dernière utilisation : %[1]s\x02Passkey" +
-	"\x02Gérer la limite d'envoi\x02Tableau de bord\x02Modifier l'identifiant" +
-	" MCP\x02Modifications enregistrées.\x02Modifier l'identifiant WebDAV\x02" +
-	"Filtrer les identifiants MCP\x02Actif\x02Révoqués\x02Aucun identifiant M" +
-	"CP pour le moment.\x02Crée des identifiants pour connecter un client MCP" +
-	" à un Space.\x02Copier l’URL MCP\x02L’URL MCP a été copiée dans le press" +
-	"e-papiers.\x02Impossible de copier l’URL MCP.\x02Lecture seule\x02Lectur" +
-	"e et écriture\x02%[1]s · Créé : %[2]s\x02%[1]s · Révoqué : %[2]s\x02Révo" +
-	"quer\x02Révoquer cet identifiant MCP ?\x02Identifiants MCP\x02Paramètres" +
-	"\x02Organisation\x02Activer l application des Passkeys\x02Activer l’appl" +
-	"ication des Passkeys pour cette organisation ? Les membres devront utili" +
-	"ser des Passkeys pour se connecter.\x02Desactiver l application des Pass" +
-	"keys\x02Désactiver l’application des Passkeys pour cette organisation ? " +
-	"Les membres pourront à nouveau utiliser des mots de passe si autorisé." +
-	"\x02Supprimer l'organisation\x02Supprimer cette organisation ? Tous les " +
-	"comptes qui lui appartiennent seront supprimés globalement.\x02Télécharg" +
-	"er la sauvegarde\x02Supprimer ce Passkey ?\x02Identifiant MCP révoqué." +
-	"\x02Vous n’êtes pas autorisé à révoquer ces identifiants.\x02Identifiant" +
-	"s WebDAV révoqués.\x02Modifier dans la vue «Spaces»\x02Types de document" +
-	"\x02Utilisateurs\x02Vous devez être administrateur pour accéder aux para" +
-	"mètres système.\x02Vous devez être connecté pour gérer les organisations" +
-	".\x02Organisation introuvable.\x02Seuls les proprietaires peuvent modifi" +
-	"er l application des Passkeys.\x02Application des Passkeys activee pour " +
-	"l organisation.\x02Application des Passkeys desactivee pour l organisati" +
-	"on.\x02Filtrer les identifiants WebDAV\x02Aucun identifiant WebDAV pour " +
-	"le moment.\x02Crée des identifiants d’appareil pour téléverser des fichi" +
-	"ers vers une Inbox via WebDAV.\x02Copier l’URL WebDAV\x02L’URL WebDAV a " +
-	"été copiée dans le presse-papiers.\x02Impossible de copier l’URL WebDAV" +
-	".\x02Nom d’utilisateur : %[1]s · Créé : %[2]s\x02Nom d’utilisateur : %[1" +
-	"]s · Dernière utilisation : %[2]s\x02Nom d’utilisateur : %[1]s · Révoqué" +
-	" : %[2]s\x02Révoquer ces identifiants WebDAV ?\x02Identifiants WebDAV" +
-	"\x02Ajouter un attribut de champ\x02Attribut mis à jour.\x02Veuillez d'a" +
-	"bord créer un champ.\x02Supprimer cet attribut ?\x02Ajouter un attribut " +
-	"de liste (groupe d'Tags)\x02nominatif\x02Supprimer ce type de document ?" +
-	"\x02Ajouter un attribut\x02Attribut «%[1]s» créé.\x02Aucun groupe d'Tags" +
-	" disponible pour le moment.\x02Veuillez d'abord créer un groupe d'Tags." +
-	"\x02Créer un type de document\x02Type de document créé.\x02Attribut supp" +
-	"rimé.\x02Type de document supprimé.\x02Fermer les détails\x02Modifier l'" +
-	"attribut du champ\x02Modifier l'attribut de l'Tag\x02Attribut «%[1]s» mi" +
-	"s à jour.\x02Types de documents importés.\x02Importer depuis la biblioth" +
-	"èque\x02Importer\x02L'importation est disponible uniquement pour les Sp" +
-	"aces vides.\x02Aucun type de document de bibliothèque disponible pour le" +
-	" moment.\x02Sélectionnez les types de documents à importer :\x02Impossib" +
-	"le de convertir l'identifiant en entier.\x02Renommer le type de document" +
-	"\x02Type de document renommé en «%[1]s».\x02Les dossiers ne peuvent pas " +
-	"être prévisualisés.\x02L'aperçu de la source originale n'est disponible" +
-	" que pour les fichiers HTML.\x02Impossible de lire le fichier.\x02Attrib" +
-	"uer un fichier\x02Attribuer\x02Aucun nouveau fichier trouvé.\x02Fichiers" +
-	" téléversés.\x02Déplacer vers une autre Inbox\x02Recharger les métadonné" +
-	"es\x02Supprimer de l'Inbox\x02Marquer comme terminé\x02La reconnaissance" +
-	" de texte (OCR) ne peut pas être appliquée car le fichier est trop volum" +
-	"ineux, les suggestions sont basées uniquement sur le nom du fichier.\x02" +
-	"La reconnaissance de texte (OCR) n'est pas encore prête, les suggestions" +
-	" se basent uniquement sur le nom de fichier.\x02Sélectionner la destinat" +
-	"ion manuellement\x02Suggestions basées sur le nom de fichier\x02Filtre d" +
-	"e source invalide.\x02Boîte de réception\x02Rechercher dans «Boîte de ré" +
-	"ception»\x02Filtrer par source\x02Fichier introuvable.\x02Le fichier n'e" +
-	"st pas dans l'Inbox.\x02Fichier «%[1]s» marqué comme terminé.\x02Source " +
-	"| Filtre\x02Déplacé vers l’Inbox de «%[1]s».\x02Aucune autre Inbox n’est" +
-	" disponible. Tu dois avoir un accès en écriture à un autre Space, ou son" +
-	" Inbox doit accepter les transferts.\x02Choisir une Inbox\x02Inbox de de" +
-	"stination\x02Vous pouvez choisir d'autres Spaces de cette organisation a" +
-	"uxquels vous avez accès en écriture ou dont les Inbox acceptent les tran" +
-	"sferts.\x02Message (facultatif)\x02Ton message sera enregistré comme not" +
-	"e avec ton nom.\x02Le déplacement efface le type de document, les tags e" +
-	"t les champs personnalisés. Les versions et les notes sont conservées." +
-	"\x02Si tu ne peux pas ouvrir le Space de destination, tu perdras l’accès" +
-	" à ce fichier après le déplacement.\x02Attribuer un utilisateur au Space" +
-	"\x02Aucun Space sélectionné. Veuillez d'abord sélectionner un Space.\x02" +
-	"Vous n'êtes pas autorisé à attribuer des utilisateurs à des Spaces car v" +
-	"ous n'êtes pas le propriétaire.\x02Utilisateur attribué au Space.\x02Imp" +
-	"ossible de charger les utilisateurs.\x02Veuillez recharger la page et ré" +
-	"essayer.\x02Aucun utilisateur non attribué disponible.\x02Veuillez d'abo" +
-	"rd créer un utilisateur dans la gestion des utilisateurs de l'organisati" +
-	"on.\x02Attribuer un utilisateur\x02L'utilisateur est déjà attribué à ce " +
-	"Space.\x02Vous ne pouvez pas vous désattribuer d'un Space.\x02Désattribu" +
-	"er l'utilisateur du Space\x02Désattribuer\x02Utilisateur désattribué du " +
-	"Space.\x02Désattribuer cet utilisateur du Space ?\x02Aucun utilisateur a" +
-	"ttribué pour le moment.\x02Créer un Tag ou un groupe\x02Supprimer ce Tag" +
-	" ? Il sera retiré de tous les fichiers.\x02Attribuer des Tags\x02Déplace" +
-	"r vers le groupe\x02Groupe, %[1]d Tag\x02Groupe, %[1]d Tags\x02Créer une" +
-	" Tag\x02Super Tag\x02L'identifiant du groupe d'Tags est requis.\x02L'Tag" +
-	" n'est pas un groupe.\x02Créer un utilisateur\x02Vous n'êtes pas autoris" +
-	"é à créer des utilisateurs. Aucune organisation sélectionnée.\x02Vous n" +
-	"'êtes pas autorisé à créer des utilisateurs car vous n'êtes pas le propr" +
-	"iétaire.\x02Utilisateur créé. Le mot de passe a été envoyé par e-mail. L" +
-	"es propriétaires peuvent accéder à tous les Spaces sans configuration su" +
-	"pplémentaire.\x02Utilisateur créé. Le mot de passe a été envoyé par e-ma" +
-	"il. Attribuez ensuite l'utilisateur à un Space.\x02Vous n'êtes pas autor" +
-	"isé à supprimer des utilisateurs. Aucune organisation sélectionnée.\x02V" +
-	"ous n'êtes pas autorisé à supprimer des utilisateurs parce que vous n'êt" +
-	"es pas propriétaire.\x02Utilisateur retiré de l'organisation et compte s" +
-	"upprimé globalement.\x02Utilisateur retiré de l'organisation.\x02Retirer" +
-	" cet utilisateur de l'organisation ?\x02Retirer cet utilisateur de l'org" +
-	"anisation et supprimer son compte globalement ?\x02Compte membre\x02Comp" +
-	"te propriétaire\x02%[1]s · %[2]s\x02Téléversement des fichiers, veuillez" +
-	" patienter un moment.\x02La page sera actualisée automatiquement une foi" +
-	"s le téléversement terminé.\x02Veuillez réessayer une fois que vous aure" +
-	"z créé un Space ou que vous aurez été invité à en rejoindre un.\x02Sélec" +
-	"tionner un Space\x02Le traitement des fichiers partagés a échoué.\x02Fic" +
-	"hiers téléversés, veuillez sélectionner un Space.\x02Corps du téléversem" +
-	"ent mal formé.\x02Le téléversement est trop volumineux.\x02Fichier télév" +
-	"ersé, veuillez sélectionner un Space.\x02Importer une URL\x02Importer un" +
-	"e URL\x02Importer un fichier depuis une URL\x02Télécharger et continuer" +
-	"\x02Créer un champ\x02Champ «%[1]s» créé.\x02Champ supprimé.\x02Modifier" +
-	" le champ\x02Champ mis à jour.\x02Supprimer ce champ ?\x02Space «%[1]s» " +
-	"créé.\x02Créer un Space\x02Sélectionnez les types de documents à ajouter" +
-	" à ce Space :\x02Space supprimé.\x02Modifier le Space\x02%[1]s (%[2]s)" +
-	"\x02actif\x02Supprimer ce Space ?\x02Spaces\x02La page demandée est intr" +
-	"ouvable.\x02La page demandée n'a pas pu être chargée.\x02«%[1]s» attribu" +
-	"é.\x02Créer et attribuer une Tag\x02«%[1]s» créé et attribué.\x02Tag «%" +
-	"[1]s» créée.\x02«%[1]s» supprimé.\x02Groupe, %[1]d Tags, %[2]d sélection" +
-	"né(s)\x02Groupe, %[1]d Tag, %[2]d sélectionné(s)\x02Composé de %[1]s\x02" +
-	"Afficher les Tags attribuées\x02Créer un groupe\x02Tags de «%[1]s»\x02Mo" +
-	"difier l'Tag\x02«%[1]s» mis à jour.\x02Mise en page non prise en charge." +
-	"\x02Modifier les Tags attribuées\x02Groupe «%[1]s»\x02Déplacer l'Tag ver" +
-	"s le groupe\x02Retiré du groupe.\x02Déplacé vers le groupe «%[1]s».\x02D" +
-	"ésélectionner le groupe\x02Supprimer entièrement ce Tag ? Il sera retir" +
-	"é de tous les fichiers, pas seulement de celui-ci.\x02«%[1]s» désattrib" +
-	"ué.\x02Créé le\x02Modifié le\x02Aucune Tag attribuée.\x02Les dossiers ne" +
-	" peuvent pas être restaurés.\x02Le fichier n'est pas supprimé.\x02Le dos" +
-	"sier parent d'origine est manquant. Restauré dans l'Inbox.\x02Fichier re" +
-	"stauré.\x02Restaurer\x02La corbeille est vide.\x02Dossier supprimé\x02Do" +
-	"ssier supprimé : %[1]s\x02Supprimé : %[1]s\x02Corbeille\x02L'aperçu de f" +
-	"ichier n'est pas disponible pour les dossiers.\x02Téléversement web\x02O" +
-	"uvrir avec\x02Import URL\x02WebDAV\x02Extraction système\x02Impossible d" +
-	"'analyser le fichier.\x02Impossible d'analyser le formulaire.\x02Impossi" +
-	"ble de décoder le formulaire.\x02Impossible de valider le formulaire." +
-	"\x02Impossible d'analyser l'URL actuelle.\x02Impossible de décoder la re" +
-	"quête URL.\x02Seuls les propriétaires de l'organisation peuvent gérer le" +
-	"s utilisateurs et les paramètres.\x02OCR réussi le\x02Vous n'êtes pas au" +
-	"torisé à accéder à cette organisation.\x02Vous n'êtes pas autorisé à acc" +
-	"éder à ce Space.\x02Aucun code Backup n’a été renvoyé.\x02Les codes Bac" +
-	"kup ont été régénérés.\x02Impossible de régénérer les codes Backup.\x02F" +
-	"ermer la boîte de dialogue\x02Fermer\x02Suggestion\x02optionnel\x02requi" +
-	"s\x02Cette organisation est en mode maintenance. Certaines fonctionnalit" +
-	"és peuvent ne pas fonctionner. Veuillez contacter votre administrateur." +
-	"\x02Phrase secrète de l’application\x02La phrase secrète est requise." +
-	"\x02Phrase secrète invalide.\x02Une erreur s'est produite. Veuillez rées" +
-	"sayer.\x02Trop de tentatives de déverrouillage. Veuillez réessayer plus " +
-	"tard.\x02Application déverrouillée. Démarrage en cours.\x02Actions\x02Ou" +
-	"vrir le menu principal\x02Donnez a ce Passkey un nom facultatif pour le " +
-	"reconnaitre plus tard.\x02Après l’inscription, des codes Backup imprimab" +
-	"les seront affichés une seule fois. Enregistre-les avant de fermer.\x02A" +
-	"près la configuration, la connexion par mot de passe est désactivée pour" +
-	" ce compte. Utilise plutôt les clés d’accès et les codes de secours.\x02" +
-	"Nom de la Passkey (facultatif)\x02Chargement…\x02Important : ces codes d" +
-	"e secours ne sont affichés qu’une seule fois. Enregistre-les, imprime-le" +
-	"s ou télécharge-les maintenant avant de fermer cette fenêtre.\x02Si tu p" +
-	"erds ces codes et ta clé d’accès, la récupération du compte pourrait ne " +
-	"plus être possible.\x02Codes de secours SimpleDMS\x02Généré\x02Garde ces" +
-	" codes de secours dans un endroit sûr.\x02Ces codes ne sont affichés qu’" +
-	"une seule fois.\x02Codes\x02La boîte de dialogue d’impression est ouvert" +
-	"e.\x02Les codes Backup ont été copiés dans le presse-papiers.\x02Les cod" +
-	"es Backup n’ont pas pu être copiés automatiquement.\x02Les codes Backup " +
-	"ont été téléchargés.\x02Imprimer les codes\x02Copier les codes\x02Accept" +
-	"er les transferts vers l’Inbox\x02Onglet actif\x02M'ajouter comme propri" +
-	"étaire de l'Space\x02Ajouter à l'Inbox\x02Administrateur\x02Autriche" +
-	"\x02Code Backup\x02Belgique\x02Texte\x02Colonne intégrée\x02Bulgarie\x02" +
-	"Checkbox\x02Valeur de Checkbox\x02Confirmer la nouvelle phrase secrète" +
-	"\x02Confirmer la phrase secrète\x02Confirmer le mot de passe\x02Confirme" +
-	"r l'avertissement\x02Valeurs d’état des identifiants\x02Croatie\x02Mot d" +
-	"e passe actuel ou temporaire\x02Phrase secrète actuelle\x02Chypre\x02Rép" +
-	"ublique tchèque\x02Valeur de date\x02Supprimer en cas de succès\x02Danem" +
-	"ark\x02Description\x02Destination\x02E-mail\x02Anglais\x02Estonie\x02Cha" +
-	"mp\x02Fichier\x02Nom de fichier\x02Finlande\x02Prénom\x02Nom du dossier" +
-	"\x02France\x02Français\x02Allemand\x02Allemagne\x02Grèce\x02Groupe\x02Ho" +
-	"ngrie\x02Islande\x02Irlande\x02Est nominatif\x02Est illimité\x02Italien" +
-	"\x02Italie\x02Libellé\x02Langue\x02Nom\x02Lettonie\x02Disposition\x02Clé" +
-	"s de modèles de bibliothèque\x02Liechtenstein\x02Lituanie\x02Local\x02Lu" +
-	"xembourg\x02Malte\x02Taille max du téléversement MiB\x02Message\x02Argen" +
-	"t\x02Valeur monétaire\x02Pays-Bas\x02Nouveau nom de fichier\x02Nouveau n" +
-	"om de dossier\x02Nouveau nom\x02Nouvelle phrase secrète\x02Nouveau mot d" +
-	"e passe\x02Norvège\x02Nombre\x02Valeur numérique\x02Uniquement attribué" +
-	"\x02Opération\x02Opérateur\x02Autre\x02Propriétaire\x02Phrase secrète" +
-	"\x02Mot de passe\x02En attente\x02Pologne\x02Portugal\x02Onglet d’aperçu" +
-	"\x02Pro\x02URL push\x02Rôle\x02Roumanie\x02S 3\x02Requête de recherche" +
-	"\x02Afficher l’historique\x02Afficher les Tags\x02Simple\x02Slovaquie" +
-	"\x02Slovénie\x02Espagne\x02S'abonner à la newsletter\x02Super\x02Support" +
-	"er\x02Suède\x02Suisse\x02Tag\x02Clés de modèle\x02Session temporaire\x02" +
-	"Texte\x02Valeur de texte\x02Essai\x02URL\x02Unité\x02Utilisateur\x02Vale" +
-	"ur\x02Valeur de fin\x02Valeur de début\x02Numéro de version\x02Mode d'af" +
-	"fichage\x02Propriétés\x02Tailles\x02S'inscrire\x02Inscription\x02Essai g" +
-	"ratuit de 30 jours, sans carte de crédit requise.\x02Nom de l'organisati" +
-	"on\x02Pays\x02Accepter les conditions d'utilisation\x02Accepter la polit" +
-	"ique de confidentialité\x02Inscription réussie, veuillez vérifier vos e-" +
-	"mails pour votre mot de passe.\x02Mentions légales\x02Politique de confi" +
-	"dentialité\x02Conditions d'utilisation\x02La connexion avec Passkey est " +
-	"requise pour ce compte.\x02Trop de tentatives de connexion. Veuillez rée" +
-	"ssayer dans 10 secondes.\x02Impossible de générer les codes Backup.\x02L" +
-	"e mot de passe temporaire a expiré.\x02Impossible de générer le mot de p" +
-	"asse temporaire.\x02Impossible de générer le sel.\x02Le mot de passe act" +
-	"uel est invalide.\x02Le nouveau mot de passe doit être différent du mot " +
-	"de passe actuel.\x02Un mot de passe est déjà défini. Utilise plutôt le f" +
-	"ormulaire « Changer le mot de passe ».\x02Le mot de passe doit contenir " +
-	"au moins douze caractères.\x02Les mots de passe ne correspondent pas." +
-	"\x02Connexion Passkey invalide.\x02Echec de la connexion avec Passkey." +
-	"\x02La connexion avec Passkey n'est pas activée pour ce compte.\x02Echec" +
-	" de l enregistrement de la Passkey.\x02Tu as besoin d’au moins un passke" +
-	"y avant de créer des codes Backup.\x02Identifiants de connexion Backup i" +
-	"nvalides.\x02Trop de tentatives de connexion Backup. Réessaie dans 10 se" +
-	"condes.\x02Le compte cible n a aucune Passkey configuree.\x02Passkey int" +
-	"rouvable.\x02Compte non trouvé.\x02Configuration d origine Passkey inval" +
-	"ide.\x02Configuration de l ID RP Passkey manquante.\x02Impossible d init" +
-	"ialiser le service Passkey.\x02Le challenge Passkey est invalide ou expi" +
-	"re.\x02Identifiant Passkey inconnu.\x02Compte Passkey introuvable.\x02L'" +
-	"application est déjà initialisée.\x02Votre mot de passe temporaire est" +
-	"\x02Expire le\x02Nouvelle inscription d'organisation\x02Ceci est un mess" +
-	"age automatisé, veuillez ne pas répondre.\x02Bienvenue sur SimpleDMS\x02" +
-	"02-01-2006 à 15:04\x02Réinitialisation du mot de passe SimpleDMS\x02Votr" +
-	"e compte a été créé avec succès.\x02Veuillez vous connecter et changer v" +
-	"otre mot de passe dès que possible.\x02Ouvrir la page de connexion\x02Un" +
-	"e réinitialisation du mot de passe a été demandée pour votre compte.\x02" +
-	"Votre ancien mot de passe fonctionnera encore jusqu'à ce que vous le cha" +
-	"ngiez.\x02«%[1]s» vous a invité au locataire «%[2]s».\x02«%[1]s» vous a " +
-	"invité.\x02Identifiants introuvables.\x02Identifiant MCP invalide.\x02L'" +
-	"application est déjà déverrouillée.\x02L'application n'est pas chiffrée " +
-	"avec une phrase secrète.\x02Aucune phrase secrète définie.\x02La nouvell" +
-	"e phrase secrète est requise.\x02La nouvelle phrase secrète ne correspon" +
-	"d pas à la confirmation.\x02L'ancienne phrase secrète est requise.\x02La" +
-	" taille max du téléversement doit être supérieure ou égale à 0.\x02Impos" +
-	"sible de télécharger le fichier depuis l’URL.\x02SimpleDMS n'a pas pu en" +
-	"registrer le fichier importé. Réessayez ou demandez de l'aide à votre éq" +
-	"uipe d'administration.\x02Le traitement du fichier téléchargé a échoué." +
-	"\x02URL invalide.\x02Le nom du fichier OpenCloud n'est pas pris en charg" +
-	"e. Renommez le fichier et lancez un nouvel export.\x02Impossible de déte" +
-	"rminer le nom du fichier.\x02SimpleDMS n'a pas pu établir de connexion s" +
-	"écurisée avec OpenCloud. Demandez de l'aide à votre équipe d'administra" +
-	"tion.\x02OpenCloud a mis trop de temps à répondre. Réessayez.\x02SimpleD" +
-	"MS n'a pas pu se connecter à OpenCloud. Réessayez plus tard ou demandez " +
-	"de l'aide à votre équipe d'administration.\x02OpenCloud a refusé le mot " +
-	"de passe de l'intégration. Demandez à votre équipe d'administration de v" +
-	"érifier les paramètres de l'intégration.\x02OpenCloud n'autorise pas le" +
-	" téléchargement de ce fichier. Demandez l'accès à la personne propriétai" +
-	"re du fichier ou à votre équipe d'administration.\x02Le lien OpenCloud a" +
-	" expiré ou n'est plus disponible. Lancez un nouvel export depuis OpenClo" +
-	"ud.\x02OpenCloud reçoit trop de requêtes. Patientez un instant et réessa" +
-	"yez.\x02SimpleDMS n'a pas pu télécharger le fichier en toute sécurité. D" +
-	"emandez à votre équipe d'administration de vérifier les paramètres de l'" +
-	"intégration.\x02OpenCloud n'a pas pu fournir le fichier pour le moment. " +
-	"Réessayez plus tard.\x02Impossible de télécharger le fichier depuis Open" +
-	"Cloud. Réessayez ou demandez de l'aide à votre équipe d'administration." +
-	"\x02L’URL est obligatoire.\x02Seules les URL HTTP et HTTPS sont autorisé" +
-	"es.\x02Les identifiants dans l’URL ne sont pas autorisés.\x02Les URL loc" +
-	"ales ne sont pas autorisées.\x02L’hôte cible n’est pas autorisé.\x02Trop" +
-	" de redirections.\x02L'application n'est pas encore déverrouillée. Veuil" +
-	"lez réessayer plus tard.\x02L'organisation n'est pas encore initialisée." +
-	" Veuillez réessayer plus tard.\x02Erreur lors de l'ouverture de la base " +
-	"de données de l'organisation. Veuillez réessayer plus tard.\x02Un utilis" +
-	"ateur avec cette adresse e-mail existe déjà, veuillez contacter l'assist" +
-	"ance si vous souhaitez tout de même ajouter cet utilisateur.\x02Vous ne " +
-	"pouvez pas supprimer votre propre utilisateur dans la gestion de l'organ" +
-	"isation.\x02La taille max du téléversement doit être supérieure ou égale" +
-	" à 0 MiB.\x02La taille max du téléversement est trop grande.\x02La taill" +
-	"e max du téléversement doit être supérieure à 0 MiB lorsque « Illimité »" +
-	" est désactivé.\x02L'organisation est obligatoire.\x02Vous devez être co" +
-	"nnecté pour gérer les limites de téléversement.\x02Vous devez être admin" +
-	"istrateur pour gérer les limites de téléversement.\x02Le libellé des ide" +
-	"ntifiants est obligatoire.\x02Impossible de créer les identifiants.\x02U" +
-	"ne entité similaire existe déjà.\x02La longueur du secret doit être comp" +
-	"rise entre %[1]d et %[2]d caractères.\x02Le fichier est un dossier.\x02V" +
-	"euillez sélectionner au moins un type de document.\x02L’attribut doit fa" +
-	"ire référence à un groupe de Tags.\x02Le groupe d'Tags «%[1]s» est déjà " +
-	"ajouté à ce type de document.\x02Le champ «%[1]s» est déjà ajouté à ce t" +
-	"ype de document.\x02Note introuvable.\x02Le titre de la note ne doit pas" +
-	" être vide.\x02Le texte de la note ne doit pas être vide.\x02Les fichier" +
-	"s source et cible doivent être différents.\x02Document introuvable.\x02T" +
-	"u ne peux pas accéder aux notes de ce document.\x02La note a déjà été mo" +
-	"difiée. Recharge la page.\x02Le fichier n'a pas de dossier parent.\x02Pl" +
-	"age de texte invalide.\x02Le fichier n'appartient pas au Space actuel." +
-	"\x02Impossible de fusionner les dossiers.\x02Le fichier source est suppr" +
-	"imé.\x02Le fichier source n'est pas dans l'Inbox.\x02Le fichier source n" +
-	"'a pas de versions.\x02Impossible de lire la version source.\x02Le fichi" +
-	"er source n'a pas de fichier stocké.\x02Impossible de lire les versions " +
-	"cibles.\x02Impossible de mettre à jour le fichier cible.\x02Impossible d" +
-	"e supprimer les versions source.\x02Impossible de supprimer le fichier s" +
-	"ource.\x02Ordre de tri invalide.\x02L’Inbox de destination n’est pas dis" +
-	"ponible.\x02Transfert vers l’Inbox\x02Le fichier a été modifié. Recharge" +
-	" la page.\x02Seuls les fichiers dans l’Inbox peuvent être transférés." +
-	"\x02Impossible de classer le dossier racine du Space.\x02Le mode dossier" +
-	" n'est pas activé.\x02L'élément du chemin est un fichier, pas un dossier" +
-	".\x02Le nom de fichier fourni n'est pas autorisé.\x02L'élément parent n'" +
-	"est pas un dossier.\x02Un dossier portant ce nom existe déjà.\x02La dest" +
-	"ination n'est pas un dossier.\x02Nom de fichier invalide.\x02Impossible " +
-	"de déplacer un dossier dans lui-même.\x02La destination est l'emplacemen" +
-	"t actuel.\x02Impossible de déplacer un dossier dans l'un de ses sous-dos" +
-	"siers.\x02Le nouveau nom de fichier est vide.\x02Le nouveau nom de fichi" +
-	"er est identique à l'ancien.\x02Cycle détecté dans l'arborescence des do" +
-	"ssiers.\x02Impossible de charger le chemin du fichier.\x02Impossible d'o" +
-	"btenir le nom de l'objet.\x02Impossible d'ouvrir le fichier.\x02Le chemi" +
-	"n de stockage est vide.\x02Le fichier existe déjà.\x02Le téléversement e" +
-	"st vide.\x02La taille du téléversement ne correspond pas.\x02Le télévers" +
-	"ement n’est plus actif.\x02Le nom du bucket est vide.\x02Impossible d'en" +
-	"registrer le fichier.\x02Le nom de fichier existe déjà.\x02Impossible de" +
-	" vérifier le fichier stocké.\x02Impossible d'obtenir l'identité x25519." +
-	"\x02Le nom de fichier de stockage ne correspond pas.\x02Impossible de pr" +
-	"endre en charge le fichier téléversé.\x02Impossible de vérifier le fichi" +
-	"er temporaire.\x02L'application n'est pas encore déverrouillée.\x02L’int" +
-	"égrité du fichier temporaire ne correspond pas.\x02Le fichier téléversé" +
-	" est déjà en cours de traitement.\x02Base de données de l'organisation i" +
-	"ntrouvable.\x02Le traitement du fichier téléversé a été repris.\x02Impos" +
-	"sible de copier le fichier temporaire.\x02Impossible de vérifier la limi" +
-	"te de taille de téléversement.\x02Le téléversement est trop volumineux. " +
-	"La taille maximale autorisée est %[1]s.\x02Impossible de vérifier la lim" +
-	"ite de stockage.\x02Limite de stockage atteinte pour cette organisation." +
-	" Utilisé : %[1]s sur %[2]s.\x02Facture\x02Numéro de facture\x02Date de f" +
-	"acture\x02Fournisseur\x02Date d'échéance\x02Statut\x02Ouvert\x02Payé\x02" +
-	"En retard\x02Statut de facture\x02Reçu\x02Date du reçu\x02Vendeur\x02Mod" +
-	"e de paiement\x02Catégorie du reçu\x02Voyage\x02Repas\x02Bureau\x02Logic" +
-	"iel\x02Contrat\x02Nom du contrat\x02Parties\x02Date de début\x02Date de " +
-	"fin\x02Brouillon\x02Expiré\x02Résilié\x02Statut du contrat\x02Type de co" +
-	"ntrat\x02Service\x02Vente\x02NDA\x02Bon de commande\x02Numéro de command" +
-	"e\x02Date de commande\x02Demandé par\x02Envoyé\x02Approuvé\x02Exécuté" +
-	"\x02Statut du bon de commande\x02Politique\x02Nom de la politique\x02Dat" +
-	"e d'entrée en vigueur\x02Archivé\x02Statut de la politique\x02Départemen" +
-	"t de la politique\x02Département\x02RH\x02IT\x02Finance\x02Opérations" +
-	"\x02Document de projet\x02Nom du projet\x02Date cible\x02En cours\x02Ter" +
-	"miné\x02En pause\x02Statut du projet\x02Type de projet\x02Plan\x02Rappor" +
-	"t\x02Spécification\x02Notes de réunion\x02Date de réunion\x02Organisateu" +
-	"r\x02Participants\x02Interne\x02Client\x02Final\x02Type de réunion\x02St" +
-	"atut de la réunion\x02Note de frais\x02Période du rapport\x02Employé\x02" +
-	"Date de soumission\x02Soumis\x02Rejeté\x02Statut des frais\x02Départemen" +
-	"t des frais\x02Personne\x02Modèle de type de document inconnu.\x02Imposs" +
-	"ible d'ajouter un groupe d'Tags comme enfant.\x02La destination doit êtr" +
-	"e un groupe de Tags.\x02Une composition nécessite un Tag composé et un s" +
-	"ous-Tag simple.\x02Impossible de supprimer une entité encore utilisée." +
+	"\x02Version %[1]d\x02Fichier introuvable.\x02Déplacer\x02Décompresser l'" +
+	"archive\x02Supprimer ce fichier ? Vous pouvez le restaurer depuis la cor" +
+	"beille.\x02Supprimer ce dossier ? Ses fichiers peuvent être restaurés de" +
+	"puis la corbeille.\x02Détails\x02Source\x02Taille du fichier\x02Type MIM" +
+	"E\x02Hachage SHA-256\x02Nom de fichier d'origine\x02Téléversé le\x02Vers" +
+	"ion\x02Version actuelle téléversée le\x02Supprimé le\x02Créé le %[1]s" +
+	"\x02Aperçu\x02Original\x02Télécharger le PDF\x02L’aperçu PDF n’a pas pu " +
+	"être généré.\x02Réessayer de générer le PDF\x02Télécharger\x02L’aperçu " +
+	"PDF n’est pas disponible, car Gotenberg n’est pas configuré.\x02L’aperçu" +
+	" PDF est en cours de génération. Veuillez patienter un instant ; la page" +
+	" s’actualisera automatiquement.\x02L’aperçu PDF n’est pas disponible." +
+	"\x02Échec du rendu.\x02Afficher les détails\x02Fermer l'aperçu\x02Versio" +
+	"n introuvable.\x02Aucun champ attribué pour le moment.\x02Supprimer cett" +
+	"e valeur de champ ?\x02Chargement de plus d'éléments…\x02Nom\x02Type\x02" +
+	"Métadonnées\x02Date\x02Taille\x02Tags\x02Aucune donnée disponible.\x02Ou" +
+	"i\x02Non\x02Info\x02Versions\x02Doublons\x02Impossible de charger les do" +
+	"ublons.\x02Téléchargement de fichier\x02Veuillez confirmer que les métad" +
+	"onnées du fichier source seront perdues.\x02Les fichiers source et cible" +
+	" sont requis.\x02Nouvelle version ajoutée depuis l'Inbox.\x02Je comprend" +
+	"s que les métadonnées du fichier de l'Inbox (type de document, Tags, cha" +
+	"mps) seront perdues lors de la fusion. Les notes et leur historique sero" +
+	"nt conservés.\x02Rechercher dans les fichiers de l'Inbox\x02Ajouter une " +
+	"nouvelle version depuis l'Inbox\x02Le fichier cible est requis.\x02Le fi" +
+	"chier source est requis.\x02Le fichier doit être dans l'Inbox.\x02Aucun " +
+	"résultat trouvé.\x02Numéro de version manquant.\x02Numéro de version inv" +
+	"alide.\x02Aperçu de version\x02Téléverser une nouvelle version\x02Aucune" +
+	" version disponible pour le moment.\x02Téléversez une nouvelle version p" +
+	"our commencer.\x02Ajouter une nouvelle version\x02Filtres\x02Aucun fichi" +
+	"er disponible pour le moment.\x02Aucun fichier ou dossier disponible pou" +
+	"r le moment.\x02Retour au dossier parent\x02Rechercher\x02Rechercher dan" +
+	"s «%[1]s»\x02Trier les fichiers\x02Changer l'affichage de la liste des f" +
+	"ichiers\x02Liste\x02Tableau\x02Aucune propriété disponible pour le momen" +
+	"t.\x02Aucune propriété disponible.\x02Contient\x02Commence par\x02Égal à" +
+	"\x02Supérieur à\x02Inférieur à\x02Entre\x02«%[1]s» est coché\x02«%[1]s» " +
+	"n'est pas coché\x02Tags | Filtre\x02Aucune Tag disponible pour le moment" +
+	".\x02Gérer les Tags\x02Créer\x02«%[1]s» créé.\x02Ouvrir le dossier\x02Au" +
+	"torisé uniquement en mode dossier.\x02Ouvrir le fichier\x02Déplacé vers " +
+	"«%[1]s».\x02«%[1]s» supprimé.\x02Renommer le fichier\x02Renommé en «%[1" +
+	"]s».\x02Filtres réinitialisés.\x02La conversion de l'aperçu PDF n'est pa" +
+	"s configurée.\x02L'aperçu PDF n'est pas prêt pour une nouvelle tentative" +
+	".\x02La génération de l’aperçu PDF a été mise en file d’attente.\x02Type" +
+	" de document désélectionné.\x02Type de document sélectionné.\x02Meilleur" +
+	"e correspondance\x02Le plus récent d'abord\x02Le plus ancien d'abord\x02" +
+	"Trier par nom\x02Décompresser\x02Ce n'est pas une archive ZIP.\x02Imposs" +
+	"ible d'ouvrir l'archive ZIP.\x02Impossible de décompresser l'archive." +
+	"\x02Impossible de lire l'archive ZIP.\x02Impossible de créer l'arboresce" +
+	"nce de dossiers.\x02Impossible d'extraire tous les fichiers de l'archive" +
+	".\x02Archive décompressée.\x02L'archive est trop volumineuse.\x02Impossi" +
+	"ble de vérifier la taille de l'archive.\x02La date de fin est antérieure" +
+	" à la date de début.\x02Téléverser\x02Aucun dossier parent fourni.\x02Co" +
+	"ntexte de requête en lecture seule requis.\x02Aucun fichier fourni.\x02«" +
+	"%[1]s» a été téléversé.\x02Les métadonnées du téléversement doivent être" +
+	" envoyées avant le fichier.\x02Nouvelle version téléversée pour «%[1]s»." +
+	"\x02Impossible de téléverser des versions pour les dossiers.\x02Les doss" +
+	"iers ne peuvent pas être téléchargés.\x02Déplacer le fichier\x02Déplacer" +
+	" le fichier vers «%[1]s»\x02Dossier parent\x02Accueil\x02Compte\x02Une S" +
+	"ession complète est nécessaire.\x02La validation du formulaire a échoué." +
+	"\x02Aucun Space disponible pour le moment.\x02Libellé du client\x02Autor" +
+	"iser les modifications\x02Sans modifications, le client MCP peut uniquem" +
+	"ent lire les documents.\x02Space\x02Créer un identifiant MCP\x02Identifi" +
+	"ant MCP créé\x02Copie le secret maintenant. Il ne sera plus affiché.\x02" +
+	"URL MCP\x02Jeton\x02Libellé de l’appareil\x02Longueur du secret\x02Rédui" +
+	"s la longueur du secret uniquement si ton appareil limite la longueur ma" +
+	"ximale du mot de passe.\x02Mode de compatibilité\x02Utilise uniquement d" +
+	"es lettres, des chiffres, des traits d’union et des traits de souligneme" +
+	"nt pour les appareils avec une prise en charge limitée des caractères sp" +
+	"éciaux.\x02Créer des identifiants WebDAV\x02Identifiants WebDAV créés" +
+	"\x02URL WebDAV\x02URL WebDAV Inbox\x02Nom d’utilisateur\x02Secret\x02Des" +
+	"tination indisponible.\x02Vous ne pouvez pas créer d’identifiants pour c" +
+	"e Space.\x02Copier %[1]s\x02Copie de %[1]s dans le presse-papiers réussi" +
+	"e.\x02Impossible de copier %[1]s.\x02Destination indisponible\x02Ouvrir " +
+	"les tâches\x02Organisation «%[1]s»\x02Aucune Passkey enregistree\x02Pass" +
+	"keys\x02Enregistrez un Passkey pour activer la connexion sans mot de pas" +
+	"se.\x02Ajoute une clé d’accès de secours\x02Recommandation de clé d’accè" +
+	"s\x02Configure une deuxième clé d’accès sur un autre appareil comme seco" +
+	"urs en cas de perte d’un appareil.\x02Régénérer les codes Backup\x02Régé" +
+	"nérer les codes Backup ? Les codes existants cesseront de fonctionner." +
+	"\x02Compte «%[1]s»\x02Compte «%[1]s», appartenant à «%[2]s»\x02Système" +
+	"\x02Configuration Passkey requise\x02Votre organisation exige la connexi" +
+	"on avec Passkey. Enregistrez un Passkey pour continuer.\x02Il reste %[1]" +
+	"d codes Backup\x02Abonnement\x02Non initialisé\x02Veuillez patienter\x02" +
+	"L'organisation n'est pas encore initialisée, veuillez attendre que l'ini" +
+	"tialisation soit terminée.\x02Actualiser\x02Utilisation du quota\x02Indi" +
+	"sponible\x02Aucun mot de passe défini\x02Vous vous êtes connecté avec un" +
+	" mot de passe temporaire. Veuillez définir un mot de passe pour sécurise" +
+	"r votre compte et utiliser l'app.\x02Définir le mot de passe maintenant" +
+	"\x02Mot de passe temporaire actif\x02Votre compte a un mot de passe temp" +
+	"oraire actif. Veuillez changer votre mot de passe ou supprimer le mot de" +
+	" passe temporaire dès que possible pour sécuriser votre compte.\x02Aucun" +
+	" Space disponible pour le moment\x02Vous n'avez pas l'autorisation d'acc" +
+	"éder à un Space de cette organisation.\x02Veuillez en créer un pour com" +
+	"mencer.\x02Gérer les Spaces\x02L'application est déverrouillée et n'est " +
+	"pas protégée par une phrase secrète.\x02L'application est verrouillée." +
+	"\x02Définir la phrase secrète\x02L'application est déverrouillée et prot" +
+	"égée par une phrase secrète.\x02Statut de l'application\x02Dernière uti" +
+	"lisation : %[1]s\x02Passkey\x02Gérer la limite d'envoi\x02Tableau de bor" +
+	"d\x02Modifier l'identifiant MCP\x02Modifications enregistrées.\x02Modifi" +
+	"er l'identifiant WebDAV\x02Filtrer les identifiants MCP\x02Actif\x02Révo" +
+	"qués\x02Aucun identifiant MCP pour le moment.\x02Crée des identifiants p" +
+	"our connecter un client MCP à un Space.\x02Copier l’URL MCP\x02L’URL MCP" +
+	" a été copiée dans le presse-papiers.\x02Impossible de copier l’URL MCP." +
+	"\x02Lecture seule\x02Lecture et écriture\x02%[1]s · Créé : %[2]s\x02%[1]" +
+	"s · Révoqué : %[2]s\x02Révoquer\x02Révoquer cet identifiant MCP ?\x02Ide" +
+	"ntifiants MCP\x02Paramètres\x02Organisation\x02Activer l application des" +
+	" Passkeys\x02Activer l’application des Passkeys pour cette organisation " +
+	"? Les membres devront utiliser des Passkeys pour se connecter.\x02Desact" +
+	"iver l application des Passkeys\x02Désactiver l’application des Passkeys" +
+	" pour cette organisation ? Les membres pourront à nouveau utiliser des m" +
+	"ots de passe si autorisé.\x02Supprimer l'organisation\x02Supprimer cette" +
+	" organisation ? Tous les comptes qui lui appartiennent seront supprimés " +
+	"globalement.\x02Télécharger la sauvegarde\x02Supprimer ce Passkey ?\x02I" +
+	"dentifiant MCP révoqué.\x02Vous n’êtes pas autorisé à révoquer ces ident" +
+	"ifiants.\x02Identifiants WebDAV révoqués.\x02Modifier dans la vue «Space" +
+	"s»\x02Types de document\x02Utilisateurs\x02Vous devez être administrateu" +
+	"r pour accéder aux paramètres système.\x02Paramètres système\x02Vous dev" +
+	"ez être administrateur pour accéder à l’état du système.\x02État du syst" +
+	"ème\x02Vérifier à nouveau\x02Vous devez être connecté pour gérer les or" +
+	"ganisations.\x02Organisation introuvable.\x02Seuls les proprietaires peu" +
+	"vent modifier l application des Passkeys.\x02Application des Passkeys ac" +
+	"tivee pour l organisation.\x02Application des Passkeys desactivee pour l" +
+	" organisation.\x02Filtrer les identifiants WebDAV\x02Aucun identifiant W" +
+	"ebDAV pour le moment.\x02Crée des identifiants d’appareil pour téléverse" +
+	"r des fichiers vers une Inbox via WebDAV.\x02Copier l’URL WebDAV\x02L’UR" +
+	"L WebDAV a été copiée dans le presse-papiers.\x02Impossible de copier l’" +
+	"URL WebDAV.\x02Nom d’utilisateur : %[1]s · Créé : %[2]s\x02Nom d’utilisa" +
+	"teur : %[1]s · Dernière utilisation : %[2]s\x02Nom d’utilisateur : %[1]s" +
+	" · Révoqué : %[2]s\x02Révoquer ces identifiants WebDAV ?\x02Identifiants" +
+	" WebDAV\x02Ajouter un attribut de champ\x02Attribut mis à jour.\x02Veuil" +
+	"lez d'abord créer un champ.\x02Supprimer cet attribut ?\x02Ajouter un at" +
+	"tribut de liste (groupe d'Tags)\x02nominatif\x02Supprimer ce type de doc" +
+	"ument ?\x02Ajouter un attribut\x02Attribut «%[1]s» créé.\x02Aucun groupe" +
+	" d'Tags disponible pour le moment.\x02Veuillez d'abord créer un groupe d" +
+	"'Tags.\x02Créer un type de document\x02Type de document créé.\x02Attribu" +
+	"t supprimé.\x02Type de document supprimé.\x02Fermer les détails\x02Modif" +
+	"ier l'attribut du champ\x02Modifier l'attribut de l'Tag\x02Attribut «%[1" +
+	"]s» mis à jour.\x02Types de documents importés.\x02Importer depuis la bi" +
+	"bliothèque\x02Importer\x02L'importation est disponible uniquement pour l" +
+	"es Spaces vides.\x02Aucun type de document de bibliothèque disponible po" +
+	"ur le moment.\x02Sélectionnez les types de documents à importer :\x02Imp" +
+	"ossible de convertir l'identifiant en entier.\x02Renommer le type de doc" +
+	"ument\x02Type de document renommé en «%[1]s».\x02Les dossiers ne peuvent" +
+	" pas être prévisualisés.\x02L'aperçu de la source originale n'est dispon" +
+	"ible que pour les fichiers HTML.\x02Impossible de lire le fichier.\x02At" +
+	"tribuer un fichier\x02Attribuer\x02Aucun nouveau fichier trouvé.\x02Fich" +
+	"iers téléversés.\x02Déplacer vers une autre Inbox\x02Recharger les métad" +
+	"onnées\x02Supprimer de l'Inbox\x02Marquer comme terminé\x02La reconnaiss" +
+	"ance de texte (OCR) ne peut pas être appliquée car le fichier est trop v" +
+	"olumineux, les suggestions sont basées uniquement sur le nom du fichier." +
+	"\x02La reconnaissance de texte (OCR) n'est pas encore prête, les suggest" +
+	"ions se basent uniquement sur le nom de fichier.\x02Sélectionner la dest" +
+	"ination manuellement\x02Suggestions basées sur le nom de fichier\x02Filt" +
+	"re de source invalide.\x02Boîte de réception\x02Rechercher dans «Boîte d" +
+	"e réception»\x02Filtrer par source\x02Le fichier n'est pas dans l'Inbox." +
+	"\x02Fichier «%[1]s» marqué comme terminé.\x02Source | Filtre\x02Déplacé " +
+	"vers l’Inbox de «%[1]s».\x02Aucune autre Inbox n’est disponible. Tu dois" +
+	" avoir un accès en écriture à un autre Space, ou son Inbox doit accepter" +
+	" les transferts.\x02Choisir une Inbox\x02Inbox de destination\x02Vous po" +
+	"uvez choisir d'autres Spaces de cette organisation auxquels vous avez ac" +
+	"cès en écriture ou dont les Inbox acceptent les transferts.\x02Message (" +
+	"facultatif)\x02Ton message sera enregistré comme note avec ton nom.\x02L" +
+	"e déplacement efface le type de document, les tags et les champs personn" +
+	"alisés. Les versions et les notes sont conservées.\x02Si tu ne peux pas " +
+	"ouvrir le Space de destination, tu perdras l’accès à ce fichier après le" +
+	" déplacement.\x02Attribuer un utilisateur au Space\x02Aucun Space sélect" +
+	"ionné. Veuillez d'abord sélectionner un Space.\x02Vous n'êtes pas autori" +
+	"sé à attribuer des utilisateurs à des Spaces car vous n'êtes pas le prop" +
+	"riétaire.\x02Utilisateur attribué au Space.\x02Impossible de charger les" +
+	" utilisateurs.\x02Veuillez recharger la page et réessayer.\x02Aucun util" +
+	"isateur non attribué disponible.\x02Veuillez d'abord créer un utilisateu" +
+	"r dans la gestion des utilisateurs de l'organisation.\x02Attribuer un ut" +
+	"ilisateur\x02L'utilisateur est déjà attribué à ce Space.\x02Vous ne pouv" +
+	"ez pas vous désattribuer d'un Space.\x02Désattribuer l'utilisateur du Sp" +
+	"ace\x02Désattribuer\x02Utilisateur désattribué du Space.\x02Désattribuer" +
+	" cet utilisateur du Space ?\x02Aucun utilisateur attribué pour le moment" +
+	".\x02Créer un Tag ou un groupe\x02Supprimer ce Tag ? Il sera retiré de t" +
+	"ous les fichiers.\x02Attribuer des Tags\x02Déplacer vers le groupe\x02Gr" +
+	"oupe, %[1]d Tag\x02Groupe, %[1]d Tags\x02Créer une Tag\x02Super Tag\x02L" +
+	"'identifiant du groupe d'Tags est requis.\x02L'Tag n'est pas un groupe." +
+	"\x02Créer un utilisateur\x02Vous n'êtes pas autorisé à créer des utilisa" +
+	"teurs. Aucune organisation sélectionnée.\x02Vous n'êtes pas autorisé à c" +
+	"réer des utilisateurs car vous n'êtes pas le propriétaire.\x02Utilisateu" +
+	"r créé. Le mot de passe a été envoyé par e-mail. Les propriétaires peuve" +
+	"nt accéder à tous les Spaces sans configuration supplémentaire.\x02Utili" +
+	"sateur créé. Le mot de passe a été envoyé par e-mail. Attribuez ensuite " +
+	"l'utilisateur à un Space.\x02Vous n'êtes pas autorisé à supprimer des ut" +
+	"ilisateurs. Aucune organisation sélectionnée.\x02Vous n'êtes pas autoris" +
+	"é à supprimer des utilisateurs parce que vous n'êtes pas propriétaire." +
+	"\x02Utilisateur retiré de l'organisation et compte supprimé globalement." +
+	"\x02Utilisateur retiré de l'organisation.\x02Retirer cet utilisateur de " +
+	"l'organisation ?\x02Retirer cet utilisateur de l'organisation et supprim" +
+	"er son compte globalement ?\x02Compte membre\x02Compte propriétaire\x02%" +
+	"[1]s · %[2]s\x02Téléversement des fichiers, veuillez patienter un moment" +
+	".\x02La page sera actualisée automatiquement une fois le téléversement t" +
+	"erminé.\x02Veuillez réessayer une fois que vous aurez créé un Space ou q" +
+	"ue vous aurez été invité à en rejoindre un.\x02Sélectionner un Space\x02" +
+	"Le traitement des fichiers partagés a échoué.\x02Fichiers téléversés, ve" +
+	"uillez sélectionner un Space.\x02Corps du téléversement mal formé.\x02Le" +
+	" téléversement est trop volumineux.\x02Fichier téléversé, veuillez sélec" +
+	"tionner un Space.\x02Importer une URL\x02Importer une URL\x02Importer un" +
+	" fichier depuis une URL\x02Télécharger et continuer\x02Créer un champ" +
+	"\x02Champ «%[1]s» créé.\x02Champ supprimé.\x02Modifier le champ\x02Champ" +
+	" mis à jour.\x02Supprimer ce champ ?\x02Space «%[1]s» créé.\x02Créer un " +
+	"Space\x02Sélectionnez les types de documents à ajouter à ce Space :\x02S" +
+	"pace supprimé.\x02Modifier le Space\x02%[1]s (%[2]s)\x02actif\x02Supprim" +
+	"er ce Space ?\x02Spaces\x02La page demandée est introuvable.\x02La page " +
+	"demandée n'a pas pu être chargée.\x02«%[1]s» attribué.\x02Créer et attri" +
+	"buer une Tag\x02«%[1]s» créé et attribué.\x02Tag «%[1]s» créée.\x02«%[1]" +
+	"s» supprimé.\x02Groupe, %[1]d Tags, %[2]d sélectionné(s)\x02Groupe, %[1]" +
+	"d Tag, %[2]d sélectionné(s)\x02Composé de %[1]s\x02Afficher les Tags att" +
+	"ribuées\x02Créer un groupe\x02Tags de «%[1]s»\x02Modifier l'Tag\x02«%[1]" +
+	"s» mis à jour.\x02Mise en page non prise en charge.\x02Modifier les Tags" +
+	" attribuées\x02Groupe «%[1]s»\x02Déplacer l'Tag vers le groupe\x02Retiré" +
+	" du groupe.\x02Déplacé vers le groupe «%[1]s».\x02Désélectionner le grou" +
+	"pe\x02Supprimer entièrement ce Tag ? Il sera retiré de tous les fichiers" +
+	", pas seulement de celui-ci.\x02«%[1]s» désattribué.\x02Créé le\x02Modif" +
+	"ié le\x02Aucune Tag attribuée.\x02Les dossiers ne peuvent pas être resta" +
+	"urés.\x02Le fichier n'est pas supprimé.\x02Le dossier parent d'origine e" +
+	"st manquant. Restauré dans l'Inbox.\x02Fichier restauré.\x02Restaurer" +
+	"\x02La corbeille est vide.\x02Dossier supprimé\x02Dossier supprimé : %[1" +
+	"]s\x02Supprimé : %[1]s\x02Corbeille\x02L'aperçu de fichier n'est pas dis" +
+	"ponible pour les dossiers.\x02Téléversement web\x02Ouvrir avec\x02Import" +
+	" URL\x02WebDAV\x02Extraction système\x02Impossible d'analyser le fichier" +
+	".\x02Impossible d'analyser le formulaire.\x02Impossible de décoder le fo" +
+	"rmulaire.\x02Impossible de valider le formulaire.\x02Impossible d'analys" +
+	"er l'URL actuelle.\x02Impossible de décoder la requête URL.\x02Seuls les" +
+	" propriétaires de l'organisation peuvent gérer les utilisateurs et les p" +
+	"aramètres.\x02OCR réussi le\x02Vous n'êtes pas autorisé à accéder à cett" +
+	"e organisation.\x02Vous n'êtes pas autorisé à accéder à ce Space.\x02Auc" +
+	"un code Backup n’a été renvoyé.\x02Les codes Backup ont été régénérés." +
+	"\x02Impossible de régénérer les codes Backup.\x02Fermer la boîte de dial" +
+	"ogue\x02Fermer\x02Suggestion\x02optionnel\x02requis\x02Cette organisatio" +
+	"n est en mode maintenance. Certaines fonctionnalités peuvent ne pas fonc" +
+	"tionner. Veuillez contacter votre administrateur.\x02Phrase secrète de l" +
+	"’application\x02La phrase secrète est requise.\x02Phrase secrète inval" +
+	"ide.\x02Une erreur s'est produite. Veuillez réessayer.\x02Trop de tentat" +
+	"ives de déverrouillage. Veuillez réessayer plus tard.\x02Application dév" +
+	"errouillée. Démarrage en cours.\x02Actions\x02Ouvrir le menu principal" +
+	"\x02Donnez a ce Passkey un nom facultatif pour le reconnaitre plus tard." +
+	"\x02Après l’inscription, des codes Backup imprimables seront affichés un" +
+	"e seule fois. Enregistre-les avant de fermer.\x02Après la configuration," +
+	" la connexion par mot de passe est désactivée pour ce compte. Utilise pl" +
+	"utôt les clés d’accès et les codes de secours.\x02Nom de la Passkey (fac" +
+	"ultatif)\x02Chargement…\x02Important : ces codes de secours ne sont affi" +
+	"chés qu’une seule fois. Enregistre-les, imprime-les ou télécharge-les ma" +
+	"intenant avant de fermer cette fenêtre.\x02Si tu perds ces codes et ta c" +
+	"lé d’accès, la récupération du compte pourrait ne plus être possible." +
+	"\x02Codes de secours SimpleDMS\x02Généré\x02Garde ces codes de secours d" +
+	"ans un endroit sûr.\x02Ces codes ne sont affichés qu’une seule fois.\x02" +
+	"Codes\x02La boîte de dialogue d’impression est ouverte.\x02Les codes Bac" +
+	"kup ont été copiés dans le presse-papiers.\x02Les codes Backup n’ont pas" +
+	" pu être copiés automatiquement.\x02Les codes Backup ont été téléchargés" +
+	".\x02Imprimer les codes\x02Copier les codes\x02Accepter les transferts v" +
+	"ers l’Inbox\x02Onglet actif\x02M'ajouter comme propriétaire de l'Space" +
+	"\x02Ajouter à l'Inbox\x02Administrateur\x02Autriche\x02Code Backup\x02Be" +
+	"lgique\x02Texte\x02Colonne intégrée\x02Bulgarie\x02Checkbox\x02Valeur de" +
+	" Checkbox\x02Confirmer la nouvelle phrase secrète\x02Confirmer la phrase" +
+	" secrète\x02Confirmer le mot de passe\x02Confirmer l'avertissement\x02Va" +
+	"leurs d’état des identifiants\x02Croatie\x02Mot de passe actuel ou tempo" +
+	"raire\x02Phrase secrète actuelle\x02Chypre\x02République tchèque\x02Vale" +
+	"ur de date\x02Supprimer en cas de succès\x02Danemark\x02Description\x02D" +
+	"estination\x02E-mail\x02Anglais\x02Estonie\x02Champ\x02Fichier\x02Nom de" +
+	" fichier\x02Finlande\x02Prénom\x02Nom du dossier\x02France\x02Français" +
+	"\x02Allemand\x02Allemagne\x02Grèce\x02Groupe\x02Hongrie\x02Islande\x02Ir" +
+	"lande\x02Est nominatif\x02Est illimité\x02Italien\x02Italie\x02Libellé" +
+	"\x02Langue\x02Nom\x02Lettonie\x02Disposition\x02Clés de modèles de bibli" +
+	"othèque\x02Liechtenstein\x02Lituanie\x02Local\x02Luxembourg\x02Malte\x02" +
+	"Taille max du téléversement MiB\x02Message\x02Argent\x02Valeur monétaire" +
+	"\x02Pays-Bas\x02Nouveau nom de fichier\x02Nouveau nom de dossier\x02Nouv" +
+	"eau nom\x02Nouvelle phrase secrète\x02Nouveau mot de passe\x02Norvège" +
+	"\x02Nombre\x02Valeur numérique\x02Uniquement attribué\x02Opération\x02Op" +
+	"érateur\x02Autre\x02Propriétaire\x02Phrase secrète\x02Mot de passe\x02E" +
+	"n attente\x02Pologne\x02Portugal\x02Onglet d’aperçu\x02Pro\x02URL push" +
+	"\x02Rôle\x02Roumanie\x02S 3\x02Requête de recherche\x02Afficher l’histor" +
+	"ique\x02Afficher les Tags\x02Simple\x02Slovaquie\x02Slovénie\x02Espagne" +
+	"\x02S'abonner à la newsletter\x02Super\x02Supporter\x02Suède\x02Suisse" +
+	"\x02Tag\x02Clés de modèle\x02Session temporaire\x02Texte\x02Valeur de te" +
+	"xte\x02Essai\x02URL\x02Unité\x02Utilisateur\x02Valeur\x02Valeur de fin" +
+	"\x02Valeur de début\x02Numéro de version\x02Mode d'affichage\x02Propriét" +
+	"és\x02Tailles\x02S'inscrire\x02Inscription\x02Essai gratuit de 30 jours" +
+	", sans carte de crédit requise.\x02Nom de l'organisation\x02Pays\x02Acce" +
+	"pter les conditions d'utilisation\x02Accepter la politique de confidenti" +
+	"alité\x02Inscription réussie, veuillez vérifier vos e-mails pour votre m" +
+	"ot de passe.\x02Mentions légales\x02Politique de confidentialité\x02Cond" +
+	"itions d'utilisation\x02La connexion avec Passkey est requise pour ce co" +
+	"mpte.\x02Trop de tentatives de connexion. Veuillez réessayer dans 10 sec" +
+	"ondes.\x02Impossible de générer les codes Backup.\x02Le mot de passe tem" +
+	"poraire a expiré.\x02Impossible de générer le mot de passe temporaire." +
+	"\x02Impossible de générer le sel.\x02Le mot de passe actuel est invalide" +
+	".\x02Le nouveau mot de passe doit être différent du mot de passe actuel." +
+	"\x02Un mot de passe est déjà défini. Utilise plutôt le formulaire « Chan" +
+	"ger le mot de passe ».\x02Le mot de passe doit contenir au moins douze c" +
+	"aractères.\x02Les mots de passe ne correspondent pas.\x02Connexion Passk" +
+	"ey invalide.\x02Echec de la connexion avec Passkey.\x02La connexion avec" +
+	" Passkey n'est pas activée pour ce compte.\x02Echec de l enregistrement " +
+	"de la Passkey.\x02Tu as besoin d’au moins un passkey avant de créer des " +
+	"codes Backup.\x02Identifiants de connexion Backup invalides.\x02Trop de " +
+	"tentatives de connexion Backup. Réessaie dans 10 secondes.\x02Le compte " +
+	"cible n a aucune Passkey configuree.\x02Passkey introuvable.\x02Compte n" +
+	"on trouvé.\x02Configuration d origine Passkey invalide.\x02Configuration" +
+	" de l ID RP Passkey manquante.\x02Impossible d initialiser le service Pa" +
+	"sskey.\x02Le challenge Passkey est invalide ou expire.\x02Identifiant Pa" +
+	"sskey inconnu.\x02Compte Passkey introuvable.\x02L'application est déjà " +
+	"initialisée.\x02Votre mot de passe temporaire est\x02Expire le\x02Nouvel" +
+	"le inscription d'organisation\x02Ceci est un message automatisé, veuille" +
+	"z ne pas répondre.\x02Bienvenue sur SimpleDMS\x0202-01-2006 à 15:04\x02R" +
+	"éinitialisation du mot de passe SimpleDMS\x02Votre compte a été créé av" +
+	"ec succès.\x02Veuillez vous connecter et changer votre mot de passe dès " +
+	"que possible.\x02Ouvrir la page de connexion\x02Une réinitialisation du " +
+	"mot de passe a été demandée pour votre compte.\x02Votre ancien mot de pa" +
+	"sse fonctionnera encore jusqu'à ce que vous le changiez.\x02«%[1]s» vous" +
+	" a invité au locataire «%[2]s».\x02«%[1]s» vous a invité.\x02Identifiant" +
+	"s introuvables.\x02Identifiant MCP invalide.\x02L'application est déjà d" +
+	"éverrouillée.\x02L'application n'est pas chiffrée avec une phrase secrè" +
+	"te.\x02Aucune phrase secrète définie.\x02La nouvelle phrase secrète est " +
+	"requise.\x02La nouvelle phrase secrète ne correspond pas à la confirmati" +
+	"on.\x02L'ancienne phrase secrète est requise.\x02La taille max du téléve" +
+	"rsement doit être supérieure ou égale à 0.\x02Général\x02Origine publiqu" +
+	"e\x02ID de la partie de confiance WebAuthn\x02Protection par phrase secr" +
+	"ète\x02Chiffrement des fichiers\x02Cookies non sécurisés\x02Taille maxi" +
+	"male de téléversement\x02Remplacer la configuration enregistrée au démar" +
+	"rage\x02Mode développement\x02Le mode développement est activé. Ne l’uti" +
+	"lisez pas en production.\x02Aucune origine publique n’est définie. Les e" +
+	"-mails ne peuvent pas contenir de lien vers l’application.\x02L’origine " +
+	"publique n’est pas une URL valide.\x02L’origine publique n’utilise pas H" +
+	"TTPS.\x02L’ID de la partie de confiance WebAuthn ne correspond pas à l’o" +
+	"rigine publique. Les passkeys ne fonctionnent pas.\x02Les cookies de Ses" +
+	"sion sont aussi envoyés via des connexions non chiffrées.\x02Stockage" +
+	"\x02Point de terminaison\x02Bucket\x02ID de clé d’accès\x02Clé d’accès s" +
+	"ecrète\x02SSL/TLS\x02Aucun stockage n’est configuré. Les fichiers ne peu" +
+	"vent pas être téléversés.\x02Connexion\x02La connexion au stockage n’est" +
+	" pas chiffrée.\x02OCR\x02Extraction de texte\x02Xberg, Tika pour les for" +
+	"mats non pris en charge\x02Désactivé\x02Ni Xberg ni Tika n’est configuré" +
+	". Le texte des documents n’est pas extrait et ne peut pas être recherché" +
+	".\x02Taille maximale de fichier\x02URL Xberg\x02L’URL Xberg n’est pas va" +
+	"lide.\x02Connexion Xberg\x02URL Tika\x02L’URL Tika n’est pas valide.\x02" +
+	"Connexion Tika\x02Aperçus PDF\x02URL Gotenberg\x02Gotenberg n’est pas co" +
+	"nfiguré. Les aperçus PDF des fichiers Office, HTML et Markdown sont désa" +
+	"ctivés.\x02L’URL Gotenberg n’est pas valide.\x02Hôte\x02Port\x02Adresse " +
+	"de l’expéditeur\x02SSL/TLS implicite\x02Vérification du certificat\x02E-" +
+	"mails en attente d’envoi\x02E-mails qui n’ont pas pu être envoyés\x02Auc" +
+	"un serveur de messagerie n’est configuré. Les e-mails, par exemple pour " +
+	"réinitialiser un mot de passe, ne sont pas envoyés.\x02Aucune adresse d’" +
+	"expéditeur n’est configurée. Les e-mails ne peuvent pas être envoyés." +
+	"\x02Le certificat du serveur de messagerie n’est pas vérifié.\x02%[1]d e" +
+	"-mails n’ont pas pu être envoyés après %[2]d tentatives.\x02TLS\x02Mode" +
+	"\x02Certificats automatiques de Let's Encrypt\x02Hôtes\x02Aucun hôte n’e" +
+	"st configuré pour les certificats automatiques.\x02HTTP, HTTPS doit être" +
+	" fourni par un reverse proxy\x02Seul le fichier de certificat ou le fich" +
+	"ier de clé privée est défini. TLS est désactivé.\x02Fichiers de certific" +
+	"at\x02Fichier de certificat\x02Fichier de clé privée\x02Le certificat n’" +
+	"a pas pu être chargé : %[1]s\x02Certificat valide jusqu’au\x02Le certifi" +
+	"cat a expiré le %[1]s.\x02Le certificat expire le %[1]s.\x02Inaccessible" +
+	"\x02%[1]s est inaccessible : %[2]s\x02Connecté\x02Connecté (%[1]s)\x02No" +
+	"n défini\x02Défini\x02Activé\x02Autorisé\x02Non autorisé\x02Impossible d" +
+	"e télécharger le fichier depuis l’URL.\x02SimpleDMS n'a pas pu enregistr" +
+	"er le fichier importé. Réessayez ou demandez de l'aide à votre équipe d'" +
+	"administration.\x02Le traitement du fichier téléchargé a échoué.\x02URL " +
+	"invalide.\x02Le nom du fichier OpenCloud n'est pas pris en charge. Renom" +
+	"mez le fichier et lancez un nouvel export.\x02Impossible de déterminer l" +
+	"e nom du fichier.\x02SimpleDMS n'a pas pu établir de connexion sécurisée" +
+	" avec OpenCloud. Demandez de l'aide à votre équipe d'administration.\x02" +
+	"OpenCloud a mis trop de temps à répondre. Réessayez.\x02SimpleDMS n'a pa" +
+	"s pu se connecter à OpenCloud. Réessayez plus tard ou demandez de l'aide" +
+	" à votre équipe d'administration.\x02OpenCloud a refusé le mot de passe " +
+	"de l'intégration. Demandez à votre équipe d'administration de vérifier l" +
+	"es paramètres de l'intégration.\x02OpenCloud n'autorise pas le télécharg" +
+	"ement de ce fichier. Demandez l'accès à la personne propriétaire du fich" +
+	"ier ou à votre équipe d'administration.\x02Le lien OpenCloud a expiré ou" +
+	" n'est plus disponible. Lancez un nouvel export depuis OpenCloud.\x02Ope" +
+	"nCloud reçoit trop de requêtes. Patientez un instant et réessayez.\x02Si" +
+	"mpleDMS n'a pas pu télécharger le fichier en toute sécurité. Demandez à " +
+	"votre équipe d'administration de vérifier les paramètres de l'intégratio" +
+	"n.\x02OpenCloud n'a pas pu fournir le fichier pour le moment. Réessayez " +
+	"plus tard.\x02Impossible de télécharger le fichier depuis OpenCloud. Rée" +
+	"ssayez ou demandez de l'aide à votre équipe d'administration.\x02L’URL e" +
+	"st obligatoire.\x02Seules les URL HTTP et HTTPS sont autorisées.\x02Les " +
+	"identifiants dans l’URL ne sont pas autorisés.\x02Les URL locales ne son" +
+	"t pas autorisées.\x02L’hôte cible n’est pas autorisé.\x02Trop de redirec" +
+	"tions.\x02L'application n'est pas encore déverrouillée. Veuillez réessay" +
+	"er plus tard.\x02L'organisation n'est pas encore initialisée. Veuillez r" +
+	"éessayer plus tard.\x02Erreur lors de l'ouverture de la base de données" +
+	" de l'organisation. Veuillez réessayer plus tard.\x02Un utilisateur avec" +
+	" cette adresse e-mail existe déjà, veuillez contacter l'assistance si vo" +
+	"us souhaitez tout de même ajouter cet utilisateur.\x02Vous ne pouvez pas" +
+	" supprimer votre propre utilisateur dans la gestion de l'organisation." +
+	"\x02La taille max du téléversement doit être supérieure ou égale à 0 MiB" +
+	".\x02La taille max du téléversement est trop grande.\x02La taille max du" +
+	" téléversement doit être supérieure à 0 MiB lorsque « Illimité » est dés" +
+	"activé.\x02L'organisation est obligatoire.\x02Vous devez être connecté p" +
+	"our gérer les limites de téléversement.\x02Vous devez être administrateu" +
+	"r pour gérer les limites de téléversement.\x02Le libellé des identifiant" +
+	"s est obligatoire.\x02Impossible de créer les identifiants.\x02Une entit" +
+	"é similaire existe déjà.\x02La longueur du secret doit être comprise en" +
+	"tre %[1]d et %[2]d caractères.\x02Le fichier est un dossier.\x02Veuillez" +
+	" sélectionner au moins un type de document.\x02L’attribut doit faire réf" +
+	"érence à un groupe de Tags.\x02Le groupe d'Tags «%[1]s» est déjà ajouté" +
+	" à ce type de document.\x02Le champ «%[1]s» est déjà ajouté à ce type de" +
+	" document.\x02Note introuvable.\x02Le titre de la note ne doit pas être " +
+	"vide.\x02Le texte de la note ne doit pas être vide.\x02Les fichiers sour" +
+	"ce et cible doivent être différents.\x02Document introuvable.\x02Tu ne p" +
+	"eux pas accéder aux notes de ce document.\x02La note a déjà été modifiée" +
+	". Recharge la page.\x02Le fichier n'a pas de dossier parent.\x02Plage de" +
+	" texte invalide.\x02Le fichier source n'a pas de versions.\x02Impossible" +
+	" de lire la version source.\x02Le fichier source n'a pas de fichier stoc" +
+	"ké.\x02Impossible de lire les versions cibles.\x02Impossible de mettre à" +
+	" jour le fichier cible.\x02Impossible de supprimer les versions source." +
+	"\x02Impossible de supprimer le fichier source.\x02Le fichier n'appartien" +
+	"t pas au Space actuel.\x02Impossible de fusionner les dossiers.\x02Le fi" +
+	"chier source est supprimé.\x02Le fichier source n'est pas dans l'Inbox." +
+	"\x02Ordre de tri invalide.\x02L’Inbox de destination n’est pas disponibl" +
+	"e.\x02Transfert vers l’Inbox\x02Le fichier a été modifié. Recharge la pa" +
+	"ge.\x02Seuls les fichiers dans l’Inbox peuvent être transférés.\x02Impos" +
+	"sible de classer le dossier racine du Space.\x02Le mode dossier n'est pa" +
+	"s activé.\x02L'élément du chemin est un fichier, pas un dossier.\x02Le n" +
+	"om de fichier fourni n'est pas autorisé.\x02L'élément parent n'est pas u" +
+	"n dossier.\x02Un dossier portant ce nom existe déjà.\x02La destination n" +
+	"'est pas un dossier.\x02Nom de fichier invalide.\x02Impossible de déplac" +
+	"er un dossier dans lui-même.\x02La destination est l'emplacement actuel." +
+	"\x02Impossible de déplacer un dossier dans l'un de ses sous-dossiers." +
+	"\x02Le nouveau nom de fichier est vide.\x02Le nouveau nom de fichier est" +
+	" identique à l'ancien.\x02Cycle détecté dans l'arborescence des dossiers" +
+	".\x02Impossible de charger le chemin du fichier.\x02Impossible d'obtenir" +
+	" le nom de l'objet.\x02Impossible d'ouvrir le fichier.\x02Le chemin de s" +
+	"tockage est vide.\x02Le fichier existe déjà.\x02Le téléversement est vid" +
+	"e.\x02La taille du téléversement ne correspond pas.\x02Le téléversement " +
+	"n’est plus actif.\x02Le nom du bucket est vide.\x02Impossible d'enregist" +
+	"rer le fichier.\x02Le nom de fichier existe déjà.\x02Impossible de vérif" +
+	"ier le fichier stocké.\x02Impossible d'obtenir l'identité x25519.\x02Le " +
+	"nom de fichier de stockage ne correspond pas.\x02Impossible de prendre e" +
+	"n charge le fichier téléversé.\x02Impossible de vérifier le fichier temp" +
+	"oraire.\x02L'application n'est pas encore déverrouillée.\x02L’intégrité " +
+	"du fichier temporaire ne correspond pas.\x02Le fichier téléversé est déj" +
+	"à en cours de traitement.\x02Base de données de l'organisation introuva" +
+	"ble.\x02Le traitement du fichier téléversé a été repris.\x02Impossible d" +
+	"e copier le fichier temporaire.\x02Impossible de vérifier la limite de t" +
+	"aille de téléversement.\x02Le téléversement est trop volumineux. La tail" +
+	"le maximale autorisée est %[1]s.\x02Impossible de vérifier la limite de " +
+	"stockage.\x02Limite de stockage atteinte pour cette organisation. Utilis" +
+	"é : %[1]s sur %[2]s.\x02Facture\x02Numéro de facture\x02Date de facture" +
+	"\x02Fournisseur\x02Date d'échéance\x02Statut\x02Ouvert\x02Payé\x02En ret" +
+	"ard\x02Statut de facture\x02Reçu\x02Date du reçu\x02Vendeur\x02Mode de p" +
+	"aiement\x02Catégorie du reçu\x02Voyage\x02Repas\x02Bureau\x02Logiciel" +
+	"\x02Contrat\x02Nom du contrat\x02Parties\x02Date de début\x02Date de fin" +
+	"\x02Brouillon\x02Expiré\x02Résilié\x02Statut du contrat\x02Type de contr" +
+	"at\x02Service\x02Vente\x02NDA\x02Bon de commande\x02Numéro de commande" +
+	"\x02Date de commande\x02Demandé par\x02Envoyé\x02Approuvé\x02Exécuté\x02" +
+	"Statut du bon de commande\x02Politique\x02Nom de la politique\x02Date d'" +
+	"entrée en vigueur\x02Archivé\x02Statut de la politique\x02Département de" +
+	" la politique\x02Département\x02RH\x02IT\x02Finance\x02Opérations\x02Doc" +
+	"ument de projet\x02Nom du projet\x02Date cible\x02En cours\x02Terminé" +
+	"\x02En pause\x02Statut du projet\x02Type de projet\x02Plan\x02Rapport" +
+	"\x02Spécification\x02Notes de réunion\x02Date de réunion\x02Organisateur" +
+	"\x02Participants\x02Interne\x02Client\x02Final\x02Type de réunion\x02Sta" +
+	"tut de la réunion\x02Note de frais\x02Période du rapport\x02Employé\x02D" +
+	"ate de soumission\x02Soumis\x02Rejeté\x02Statut des frais\x02Département" +
+	" des frais\x02Personne\x02Modèle de type de document inconnu.\x02Impossi" +
+	"ble d'ajouter un groupe d'Tags comme enfant.\x02La destination doit être" +
+	" un groupe de Tags.\x02Une composition nécessite un Tag composé et un so" +
+	"us-Tag simple.\x02Impossible de supprimer une entité encore utilisée." +
 	"\x02Une violation de contrainte de base de données s'est produite. Veuil" +
 	"lez contacter le support.\x02La validation des données a échoué.\x02Vous" +
 	" n'êtes pas connecté. Veuillez vous connecter pour continuer.\x02Impossi" +
@@ -3765,12 +4068,16 @@ const frData string = "" + // Size: 34154 bytes
 	"ête.\x02Plage de pagination ou de recherche invalide.\x02L’identifiant " +
 	"du fichier est nécessaire.\x02Identifiant de dossier invalide.\x02Gérer " +
 	"le Space\x02Organisations\x02MCP\x02Déconnexion\x02À propos de SimpleDMS" +
-	"\x02Cookie d'authentification déjà défini.\x02Impossible de générer la v" +
-	"aleur de session.\x02Vous n'êtes pas autorisé à accéder à la ressource d" +
-	"emandée.\x02Impossible de démarrer la transaction.\x02Impossible de lire" +
-	" les données.\x02Taille de téléversement invalide."
+	"\x02Aucun problème trouvé\x021 problème nécessite votre attention\x02%[1" +
+	"]d problèmes nécessitent votre attention\x02Dernière vérification : %[1]" +
+	"s. Les modifications de la configuration prennent effet après un redémar" +
+	"rage.\x02Erreur\x02Avertissement\x02Non configuré\x02OK\x02Cookie d'auth" +
+	"entification déjà défini.\x02Impossible de générer la valeur de session." +
+	"\x02Vous n'êtes pas autorisé à accéder à la ressource demandée.\x02Impos" +
+	"sible de démarrer la transaction.\x02Impossible de lire les données.\x02" +
+	"Taille de téléversement invalide."
 
-var itIndex = []uint32{ // 1074 elements
+var itIndex = []uint32{ // 1161 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000046, 0x00000082,
 	0x00000099, 0x000000a9, 0x000000b5, 0x000000d6,
@@ -3811,272 +4118,297 @@ var itIndex = []uint32{ // 1074 elements
 	0x00000f00, 0x00000f0b, 0x00000f1f, 0x00000f47,
 	0x00000f59, 0x00000f9f, 0x00000fb9, 0x00000fcb,
 	0x00001003, 0x00001010, 0x00001020, 0x00001032,
-	0x0000104a, 0x00001059, 0x00001060, 0x00001074,
-	0x000010ab, 0x000010fb, 0x00001104, 0x0000110a,
-	0x0000111a, 0x00001124, 0x00001131, 0x00001145,
-	0x00001151, 0x0000115a, 0x00001178, 0x00001185,
-	0x00001195, 0x0000119f, 0x000011a9, 0x000011b5,
+	0x0000104a, 0x00001059, 0x0000106b, 0x00001072,
+	0x00001086, 0x000010bd, 0x0000110d, 0x00001116,
+	0x0000111c, 0x0000112c, 0x00001136, 0x00001143,
+	0x00001157, 0x00001163, 0x0000116c, 0x0000118a,
+	0x00001197, 0x000011a7, 0x000011b1, 0x000011bb,
 	// Entry A0 - BF
-	0x000011e8, 0x00001202, 0x0000120a, 0x00001255,
-	0x000012c0, 0x000012e6, 0x000012fe, 0x0000130e,
-	0x0000131f, 0x00001335, 0x00001354, 0x00001377,
-	0x00001398, 0x0000139d, 0x000013a2, 0x000013ab,
-	0x000013b0, 0x000013bb, 0x000013c5, 0x000013de,
-	0x000013e2, 0x000013e5, 0x000013ea, 0x000013f3,
-	0x000013fd, 0x0000141f, 0x00001430, 0x0000146a,
-	0x0000149a, 0x000014be, 0x0000155b, 0x00001571,
+	0x000011c7, 0x000011fa, 0x00001214, 0x0000121c,
+	0x00001267, 0x000012d2, 0x000012f8, 0x00001310,
+	0x00001320, 0x00001331, 0x00001347, 0x00001366,
+	0x00001389, 0x000013aa, 0x000013af, 0x000013b4,
+	0x000013bd, 0x000013c2, 0x000013cd, 0x000013d7,
+	0x000013f0, 0x000013f4, 0x000013f7, 0x000013fc,
+	0x00001405, 0x0000140f, 0x00001431, 0x00001442,
+	0x0000147c, 0x000014ac, 0x000014d0, 0x0000156d,
 	// Entry C0 - DF
-	0x00001594, 0x000015bd, 0x000015df, 0x000015ff,
-	0x0000161f, 0x0000163c, 0x0000165b, 0x0000166e,
-	0x00001684, 0x000016a9, 0x000016d1, 0x000016e9,
-	0x000016f0, 0x00001714, 0x00001743, 0x00001761,
-	0x00001767, 0x0000177a, 0x00001786, 0x000017a9,
-	0x000017b0, 0x000017b8, 0x000017d9, 0x000017f3,
-	0x000017fc, 0x00001807, 0x00001810, 0x0000181c,
-	0x00001826, 0x0000182a, 0x00001843, 0x00001860,
+	0x00001583, 0x000015a6, 0x000015cf, 0x000015f1,
+	0x00001611, 0x00001631, 0x0000164e, 0x0000166d,
+	0x00001680, 0x00001696, 0x000016bb, 0x000016e3,
+	0x000016fb, 0x00001702, 0x00001726, 0x00001755,
+	0x00001773, 0x00001779, 0x0000178c, 0x00001798,
+	0x000017bb, 0x000017c2, 0x000017ca, 0x000017eb,
+	0x00001805, 0x0000180e, 0x00001819, 0x00001822,
+	0x0000182e, 0x00001838, 0x0000183c, 0x00001855,
 	// Entry E0 - FF
-	0x0000186d, 0x0000188c, 0x00001899, 0x0000189e,
-	0x000018b0, 0x000018be, 0x000018e5, 0x000018ef,
-	0x00001906, 0x00001919, 0x00001927, 0x00001940,
-	0x00001954, 0x0000198a, 0x000019be, 0x000019f5,
-	0x00001a13, 0x00001a2f, 0x00001a47, 0x00001a5a,
-	0x00001a6c, 0x00001a7c, 0x00001a87, 0x00001a9f,
-	0x00001ac2, 0x00001ae7, 0x00001b0b, 0x00001b38,
-	0x00001b69, 0x00001b7c, 0x00001b99, 0x00001bcd,
+	0x00001872, 0x0000187f, 0x0000189e, 0x000018ab,
+	0x000018b0, 0x000018c2, 0x000018d0, 0x000018f7,
+	0x00001901, 0x00001918, 0x0000192b, 0x00001939,
+	0x00001952, 0x00001966, 0x0000199c, 0x000019d0,
+	0x00001a07, 0x00001a25, 0x00001a41, 0x00001a59,
+	0x00001a6c, 0x00001a7e, 0x00001a8e, 0x00001a99,
+	0x00001ab1, 0x00001ad4, 0x00001af9, 0x00001b1d,
+	0x00001b4a, 0x00001b7b, 0x00001b8e, 0x00001bab,
 	// Entry 100 - 11F
-	0x00001c00, 0x00001c07, 0x00001c2b, 0x00001c65,
-	0x00001c7a, 0x00001c97, 0x00001cd8, 0x00001cff,
-	0x00001d2e, 0x00001d58, 0x00001d64, 0x00001d7d,
-	0x00001d90, 0x00001d95, 0x00001d9d, 0x00001dc1,
-	0x00001de4, 0x00001e06, 0x00001e1b, 0x00001e2e,
-	0x00001e6c, 0x00001e72, 0x00001e87, 0x00001e9e,
-	0x00001ed5, 0x00001edd, 0x00001ee3, 0x00001efd,
-	0x00001f13, 0x00001f7a, 0x00001f93, 0x00002006,
+	0x00001bdf, 0x00001c12, 0x00001c19, 0x00001c3d,
+	0x00001c77, 0x00001c8c, 0x00001ca9, 0x00001cea,
+	0x00001d11, 0x00001d40, 0x00001d6a, 0x00001d76,
+	0x00001d8f, 0x00001da2, 0x00001da7, 0x00001daf,
+	0x00001dd3, 0x00001df6, 0x00001e18, 0x00001e2d,
+	0x00001e40, 0x00001e7e, 0x00001e84, 0x00001e99,
+	0x00001eb0, 0x00001ee7, 0x00001eef, 0x00001ef5,
+	0x00001f0f, 0x00001f25, 0x00001f8c, 0x00001fa5,
 	// Entry 120 - 13F
-	0x0000201e, 0x00002038, 0x00002043, 0x00002054,
-	0x00002060, 0x00002068, 0x00002086, 0x000020b4,
-	0x000020c0, 0x000020e9, 0x00002104, 0x00002121,
-	0x00002130, 0x00002149, 0x00002163, 0x0000216c,
-	0x000021a8, 0x000021c7, 0x000021df, 0x0000224d,
-	0x00002266, 0x000022ad, 0x000022bf, 0x000022ed,
-	0x000022f5, 0x00002316, 0x00002370, 0x0000238c,
-	0x00002398, 0x000023aa, 0x000023ba, 0x0000241d,
+	0x00002018, 0x00002030, 0x0000204a, 0x00002055,
+	0x00002066, 0x00002072, 0x0000207a, 0x00002098,
+	0x000020c6, 0x000020d2, 0x000020fb, 0x00002116,
+	0x00002133, 0x00002142, 0x0000215b, 0x00002175,
+	0x0000217e, 0x000021ba, 0x000021d9, 0x000021f1,
+	0x0000225f, 0x00002278, 0x000022bf, 0x000022d1,
+	0x000022ff, 0x00002307, 0x00002328, 0x00002382,
+	0x0000239e, 0x000023aa, 0x000023bc, 0x000023cc,
 	// Entry 140 - 15F
-	0x00002426, 0x00002435, 0x00002445, 0x00002460,
-	0x000024d8, 0x000024ed, 0x00002508, 0x000025a4,
-	0x000025c5, 0x0000260f, 0x0000262b, 0x0000263b,
-	0x00002673, 0x00002686, 0x00002699, 0x000026ca,
-	0x000026d9, 0x000026f0, 0x000026f8, 0x00002717,
-	0x00002721, 0x0000273a, 0x0000274d, 0x00002769,
-	0x00002783, 0x0000278a, 0x00002793, 0x000027b3,
-	0x000027ed, 0x000027ff, 0x0000282b, 0x0000284c,
+	0x0000242f, 0x00002438, 0x00002447, 0x00002457,
+	0x00002472, 0x000024ea, 0x000024ff, 0x0000251a,
+	0x000025b6, 0x000025d7, 0x00002621, 0x0000263d,
+	0x0000264d, 0x00002685, 0x00002698, 0x000026ab,
+	0x000026dc, 0x000026eb, 0x00002702, 0x0000270a,
+	0x00002729, 0x00002733, 0x0000274c, 0x0000275f,
+	0x0000277b, 0x00002795, 0x0000279c, 0x000027a5,
+	0x000027c5, 0x000027ff, 0x00002811, 0x0000283d,
 	// Entry 160 - 17F
-	0x00002859, 0x0000286d, 0x00002884, 0x0000289d,
-	0x000028a4, 0x000028c5, 0x000028d5, 0x000028e2,
-	0x000028f1, 0x00002908, 0x0000296f, 0x00002989,
-	0x000029fe, 0x00002a15, 0x00002a7a, 0x00002a89,
-	0x00002aa3, 0x00002abd, 0x00002af0, 0x00002b0d,
-	0x00002b2d, 0x00002b3c, 0x00002b43, 0x00002b89,
-	0x00002bc7, 0x00002be3, 0x00002c1c, 0x00002c4b,
-	0x00002c7d, 0x00002c9a, 0x00002cbd, 0x00002d10,
+	0x0000285e, 0x0000286b, 0x0000287f, 0x00002896,
+	0x000028af, 0x000028b6, 0x000028d7, 0x000028e7,
+	0x000028f4, 0x00002903, 0x0000291a, 0x00002981,
+	0x0000299b, 0x00002a10, 0x00002a27, 0x00002a8c,
+	0x00002a9b, 0x00002ab5, 0x00002acf, 0x00002b02,
+	0x00002b1f, 0x00002b3f, 0x00002b4e, 0x00002b55,
+	0x00002b9b, 0x00002bb3, 0x00002bf3, 0x00002c05,
+	0x00002c17, 0x00002c55, 0x00002c71, 0x00002caa,
 	// Entry 180 - 19F
-	0x00002d25, 0x00002d54, 0x00002d78, 0x00002d9c,
-	0x00002dc9, 0x00002def, 0x00002e13, 0x00002e26,
-	0x00002e3f, 0x00002e55, 0x00002e6a, 0x00002e86,
-	0x00002eb0, 0x00002ec6, 0x00002eea, 0x00002efd,
-	0x00002f19, 0x00002f42, 0x00002f5f, 0x00002f76,
-	0x00002f8d, 0x00002fa2, 0x00002fbc, 0x00002fcc,
-	0x00002fe5, 0x00002ffc, 0x0000301c, 0x00003039,
-	0x00003052, 0x0000305a, 0x0000308f, 0x000030d1,
+	0x00002cd9, 0x00002d0b, 0x00002d28, 0x00002d4b,
+	0x00002d9e, 0x00002db3, 0x00002de2, 0x00002e06,
+	0x00002e2a, 0x00002e57, 0x00002e7d, 0x00002ea1,
+	0x00002eb4, 0x00002ecd, 0x00002ee3, 0x00002ef8,
+	0x00002f14, 0x00002f3e, 0x00002f54, 0x00002f78,
+	0x00002f8b, 0x00002fa7, 0x00002fd0, 0x00002fed,
+	0x00003004, 0x0000301b, 0x00003030, 0x0000304a,
+	0x0000305a, 0x00003073, 0x0000308a, 0x000030aa,
 	// Entry 1A0 - 1BF
-	0x000030fd, 0x00003124, 0x0000313f, 0x00003167,
-	0x000031a1, 0x000031eb, 0x00003208, 0x00003215,
-	0x0000321d, 0x00003238, 0x00003247, 0x00003262,
-	0x00003274, 0x00003287, 0x0000329d, 0x0000332c,
-	0x00003391, 0x000033b4, 0x000033d6, 0x000033f1,
-	0x000033f7, 0x0000340a, 0x0000341b, 0x0000342d,
-	0x00003448, 0x00003470, 0x00003481, 0x000034a5,
-	0x0000352e, 0x00003540, 0x00003556, 0x000035d3,
+	0x000030c7, 0x000030e0, 0x000030e8, 0x0000311d,
+	0x0000315f, 0x0000318b, 0x000031b2, 0x000031cd,
+	0x000031f5, 0x0000322f, 0x00003279, 0x00003296,
+	0x000032a3, 0x000032ab, 0x000032c6, 0x000032d5,
+	0x000032f0, 0x00003302, 0x00003315, 0x0000332b,
+	0x000033ba, 0x0000341f, 0x00003442, 0x00003464,
+	0x0000347f, 0x00003485, 0x00003498, 0x000034a9,
+	0x000034c4, 0x000034ec, 0x000034fd, 0x00003521,
 	// Entry 1C0 - 1DF
-	0x000035eb, 0x00003626, 0x0000369d, 0x00003702,
-	0x0000371c, 0x00003752, 0x000037a3, 0x000037c0,
-	0x000037e1, 0x000037ff, 0x00003828, 0x00003868,
-	0x00003877, 0x000038a2, 0x000038d7, 0x000038ff,
-	0x00003914, 0x0000393d, 0x00003974, 0x00003994,
-	0x000039a6, 0x000039dc, 0x000039e8, 0x000039fa,
-	0x00003a0c, 0x00003a1e, 0x00003a27, 0x00003a31,
-	0x00003a59, 0x00003a72, 0x00003a7e, 0x00003ac4,
+	0x000035aa, 0x000035bc, 0x000035d2, 0x0000364f,
+	0x00003667, 0x000036a2, 0x00003719, 0x0000377e,
+	0x00003798, 0x000037ce, 0x0000381f, 0x0000383c,
+	0x0000385d, 0x0000387b, 0x000038a4, 0x000038e4,
+	0x000038f3, 0x0000391e, 0x00003953, 0x0000397b,
+	0x00003990, 0x000039b9, 0x000039f0, 0x00003a10,
+	0x00003a22, 0x00003a58, 0x00003a64, 0x00003a76,
+	0x00003a88, 0x00003a9a, 0x00003aa3, 0x00003aad,
 	// Entry 1E0 - 1FF
-	0x00003b06, 0x00003b8f, 0x00003be8, 0x00003c33,
-	0x00003c7a, 0x00003cbe, 0x00003ce2, 0x00003d0f,
-	0x00003d64, 0x00003d73, 0x00003d88, 0x00003d97,
-	0x00003dca, 0x00003e1a, 0x00003e63, 0x00003e73,
-	0x00003ea1, 0x00003ec5, 0x00003ee7, 0x00003f08,
-	0x00003f2c, 0x00003f38, 0x00003f44, 0x00003f58,
-	0x00003f6b, 0x00003f76, 0x00003f8e, 0x00003f9f,
-	0x00003fae, 0x00003fc0, 0x00003fd8, 0x00003ff0,
+	0x00003ad5, 0x00003aee, 0x00003afa, 0x00003b40,
+	0x00003b82, 0x00003c0b, 0x00003c64, 0x00003caf,
+	0x00003cf6, 0x00003d3a, 0x00003d5e, 0x00003d8b,
+	0x00003de0, 0x00003def, 0x00003e04, 0x00003e13,
+	0x00003e46, 0x00003e96, 0x00003edf, 0x00003eef,
+	0x00003f1d, 0x00003f41, 0x00003f63, 0x00003f84,
+	0x00003fa8, 0x00003fb4, 0x00003fc0, 0x00003fd4,
+	0x00003fe7, 0x00003ff2, 0x0000400a, 0x0000401b,
 	// Entry 200 - 21F
-	0x00003ffb, 0x00004037, 0x00004048, 0x00004057,
-	0x00004065, 0x0000406c, 0x00004084, 0x0000408a,
-	0x000040b4, 0x000040e2, 0x000040f7, 0x0000410a,
-	0x00004128, 0x0000413e, 0x00004153, 0x00004178,
-	0x0000419d, 0x000041af, 0x000041c4, 0x000041d0,
-	0x000041e1, 0x000041ee, 0x00004204, 0x0000421b,
-	0x00004232, 0x00004243, 0x00004259, 0x0000426d,
-	0x0000428c, 0x0000429f, 0x000042f7, 0x00004310,
+	0x0000402a, 0x0000403c, 0x00004054, 0x0000406c,
+	0x00004077, 0x000040b3, 0x000040c4, 0x000040d3,
+	0x000040e1, 0x000040e8, 0x00004100, 0x00004106,
+	0x00004130, 0x0000415e, 0x00004173, 0x00004186,
+	0x000041a4, 0x000041ba, 0x000041cf, 0x000041f4,
+	0x00004219, 0x0000422b, 0x00004240, 0x0000424c,
+	0x0000425d, 0x0000426a, 0x00004280, 0x00004297,
+	0x000042ae, 0x000042bf, 0x000042d5, 0x000042e9,
 	// Entry 220 - 23F
-	0x0000431a, 0x00004328, 0x0000433e, 0x0000436b,
-	0x00004385, 0x000043c3, 0x000043d6, 0x000043e1,
-	0x000043f6, 0x00004409, 0x00004423, 0x00004434,
-	0x0000443c, 0x00004475, 0x00004485, 0x0000448e,
-	0x0000449f, 0x000044a6, 0x000044bc, 0x000044dc,
-	0x000044fe, 0x00004522, 0x00004542, 0x00004569,
-	0x00004590, 0x000045de, 0x000045f2, 0x0000462b,
-	0x0000465b, 0x00004688, 0x000046af, 0x000046d7,
+	0x00004308, 0x0000431b, 0x00004373, 0x0000438c,
+	0x00004396, 0x000043a4, 0x000043ba, 0x000043e7,
+	0x00004401, 0x0000443f, 0x00004452, 0x0000445d,
+	0x00004472, 0x00004485, 0x0000449f, 0x000044b0,
+	0x000044b8, 0x000044f1, 0x00004501, 0x0000450a,
+	0x0000451b, 0x00004522, 0x00004538, 0x00004558,
+	0x0000457a, 0x0000459e, 0x000045be, 0x000045e5,
+	0x0000460c, 0x0000465a, 0x0000466e, 0x000046a7,
 	// Entry 240 - 25F
-	0x000046e7, 0x000046ee, 0x000046fb, 0x00004705,
-	0x00004712, 0x00004796, 0x000047b5, 0x000047d4,
-	0x000047eb, 0x0000481a, 0x0000484b, 0x00004873,
-	0x0000487a, 0x0000488f, 0x000048dd, 0x00004949,
-	0x000049c2, 0x000049e3, 0x000049f2, 0x00004a87,
-	0x00004aed, 0x00004b08, 0x00004b11, 0x00004b46,
-	0x00004b75, 0x00004b7c, 0x00004b97, 0x00004bc9,
-	0x00004bfe, 0x00004c24, 0x00004c32, 0x00004c3f,
+	0x000046d7, 0x00004704, 0x0000472b, 0x00004753,
+	0x00004763, 0x0000476a, 0x00004777, 0x00004781,
+	0x0000478e, 0x00004812, 0x00004831, 0x00004850,
+	0x00004867, 0x00004896, 0x000048c7, 0x000048ef,
+	0x000048f6, 0x0000490b, 0x00004959, 0x000049c5,
+	0x00004a3e, 0x00004a5f, 0x00004a6e, 0x00004b03,
+	0x00004b69, 0x00004b84, 0x00004b8d, 0x00004bc2,
+	0x00004bf1, 0x00004bf8, 0x00004c13, 0x00004c45,
 	// Entry 260 - 27F
-	0x00004c62, 0x00004c70, 0x00004c99, 0x00004cac,
-	0x00004cb2, 0x00004cba, 0x00004cc8, 0x00004ccf,
-	0x00004cd5, 0x00004ce7, 0x00004cf0, 0x00004cf9,
-	0x00004d09, 0x00004d23, 0x00004d37, 0x00004d49,
-	0x00004d59, 0x00004d7b, 0x00004d83, 0x00004da1,
-	0x00004db4, 0x00004dba, 0x00004dca, 0x00004dd6,
-	0x00004df2, 0x00004dfc, 0x00004e08, 0x00004e15,
-	0x00004e1b, 0x00004e23, 0x00004e2b, 0x00004e31,
+	0x00004c7a, 0x00004ca0, 0x00004cae, 0x00004cbb,
+	0x00004cde, 0x00004cec, 0x00004d15, 0x00004d28,
+	0x00004d2e, 0x00004d36, 0x00004d44, 0x00004d4b,
+	0x00004d51, 0x00004d63, 0x00004d6c, 0x00004d75,
+	0x00004d85, 0x00004d9f, 0x00004db3, 0x00004dc5,
+	0x00004dd5, 0x00004df7, 0x00004dff, 0x00004e1d,
+	0x00004e30, 0x00004e36, 0x00004e46, 0x00004e52,
+	0x00004e6e, 0x00004e78, 0x00004e84, 0x00004e91,
 	// Entry 280 - 29F
-	0x00004e36, 0x00004e40, 0x00004e4a, 0x00004e4f,
-	0x00004e5d, 0x00004e65, 0x00004e6e, 0x00004e76,
-	0x00004e7f, 0x00004e86, 0x00004e8d, 0x00004e96,
-	0x00004e9e, 0x00004ea6, 0x00004ebf, 0x00004ecd,
-	0x00004ed6, 0x00004edd, 0x00004ee7, 0x00004eee,
-	0x00004ef6, 0x00004eff, 0x00004f06, 0x00004f2a,
-	0x00004f38, 0x00004f41, 0x00004f48, 0x00004f54,
-	0x00004f5a, 0x00004f7d, 0x00004f87, 0x00004f8e,
+	0x00004e97, 0x00004e9f, 0x00004ea7, 0x00004ead,
+	0x00004eb2, 0x00004ebc, 0x00004ec6, 0x00004ecb,
+	0x00004ed9, 0x00004ee1, 0x00004eea, 0x00004ef2,
+	0x00004efb, 0x00004f02, 0x00004f09, 0x00004f12,
+	0x00004f1a, 0x00004f22, 0x00004f3b, 0x00004f49,
+	0x00004f52, 0x00004f59, 0x00004f63, 0x00004f6a,
+	0x00004f72, 0x00004f7b, 0x00004f82, 0x00004fa6,
+	0x00004fb4, 0x00004fbd, 0x00004fc4, 0x00004fd0,
 	// Entry 2A0 - 2BF
-	0x00004f9f, 0x00004fab, 0x00004fbb, 0x00004fcf,
-	0x00004fda, 0x00004feb, 0x00004ffa, 0x00005003,
-	0x0000500a, 0x0000501a, 0x00005029, 0x00005034,
-	0x0000503e, 0x00005044, 0x00005051, 0x0000505c,
-	0x00005065, 0x00005070, 0x00005078, 0x00005083,
-	0x00005094, 0x00005098, 0x000050a1, 0x000050a7,
-	0x000050af, 0x000050b3, 0x000050c4, 0x000050d6,
-	0x000050e3, 0x000050ec, 0x000050f7, 0x00005100,
+	0x00004fd6, 0x00004ff9, 0x00005003, 0x0000500a,
+	0x0000501b, 0x00005027, 0x00005037, 0x0000504b,
+	0x00005056, 0x00005067, 0x00005076, 0x0000507f,
+	0x00005086, 0x00005096, 0x000050a5, 0x000050b0,
+	0x000050ba, 0x000050c0, 0x000050cd, 0x000050d8,
+	0x000050e1, 0x000050ec, 0x000050f4, 0x000050ff,
+	0x00005110, 0x00005114, 0x0000511d, 0x00005123,
+	0x0000512b, 0x0000512f, 0x00005140, 0x00005152,
 	// Entry 2C0 - 2DF
-	0x00005107, 0x00005121, 0x00005127, 0x00005133,
-	0x0000513a, 0x00005143, 0x00005147, 0x0000515a,
-	0x0000516d, 0x00005173, 0x00005180, 0x00005186,
-	0x0000518a, 0x00005191, 0x00005198, 0x0000519f,
-	0x000051ad, 0x000051bd, 0x000051cd, 0x000051ea,
-	0x000051f5, 0x00005200, 0x0000520b, 0x00005219,
-	0x0000525a, 0x0000526e, 0x00005274, 0x00005292,
-	0x000052b6, 0x000052f8, 0x00005304, 0x0000531e,
+	0x0000515f, 0x00005168, 0x00005173, 0x0000517c,
+	0x00005183, 0x0000519d, 0x000051a3, 0x000051af,
+	0x000051b6, 0x000051bf, 0x000051c3, 0x000051d6,
+	0x000051e9, 0x000051ef, 0x000051fc, 0x00005202,
+	0x00005206, 0x0000520d, 0x00005214, 0x0000521b,
+	0x00005229, 0x00005239, 0x00005249, 0x00005266,
+	0x00005271, 0x0000527c, 0x00005287, 0x00005295,
+	0x000052d6, 0x000052ea, 0x000052f0, 0x0000530e,
 	// Entry 2E0 - 2FF
-	0x00005332, 0x00005368, 0x0000539d, 0x000053c3,
-	0x000053e0, 0x0000540d, 0x0000542b, 0x0000544e,
-	0x0000548c, 0x000054d6, 0x0000550a, 0x00005529,
-	0x00005549, 0x0000556b, 0x000055a6, 0x000055ca,
-	0x00005606, 0x00005630, 0x0000566c, 0x000056a3,
-	0x000056b8, 0x000056cd, 0x000056fd, 0x00005729,
-	0x00005758, 0x00005787, 0x000057a8, 0x000057c5,
-	0x000057e2, 0x00005800, 0x00005809, 0x00005831,
+	0x00005332, 0x00005374, 0x00005380, 0x0000539a,
+	0x000053ae, 0x000053e4, 0x00005419, 0x0000543f,
+	0x0000545c, 0x00005489, 0x000054a7, 0x000054ca,
+	0x00005508, 0x00005552, 0x00005586, 0x000055a5,
+	0x000055c5, 0x000055e7, 0x00005622, 0x00005646,
+	0x00005682, 0x000056ac, 0x000056e8, 0x0000571f,
+	0x00005734, 0x00005749, 0x00005779, 0x000057a5,
+	0x000057d4, 0x00005803, 0x00005824, 0x00005841,
 	// Entry 300 - 31F
-	0x00005864, 0x0000587b, 0x00005891, 0x000058b3,
-	0x000058e0, 0x00005914, 0x0000592b, 0x00005974,
-	0x000059bb, 0x000059e9, 0x00005a03, 0x00005a1c,
-	0x00005a38, 0x00005a51, 0x00005a77, 0x00005a95,
-	0x00005aba, 0x00005aed, 0x00005b14, 0x00005b5d,
-	0x00005b85, 0x00005beb, 0x00005c1e, 0x00005c2e,
-	0x00005c8d, 0x00005cb3, 0x00005d24, 0x00005d5f,
-	0x00005dce, 0x00005e57, 0x00005eda, 0x00005f3d,
+	0x0000585e, 0x0000587c, 0x00005885, 0x000058ad,
+	0x000058e0, 0x000058f7, 0x0000590d, 0x0000592f,
+	0x0000595c, 0x00005990, 0x000059a7, 0x000059f0,
+	0x00005a37, 0x00005a65, 0x00005a7f, 0x00005a98,
+	0x00005ab4, 0x00005acd, 0x00005af3, 0x00005b11,
+	0x00005b36, 0x00005b69, 0x00005b90, 0x00005bd9,
+	0x00005be2, 0x00005bf3, 0x00005c13, 0x00005c2d,
+	0x00005c43, 0x00005c55, 0x00005c77, 0x00005ca9,
 	// Entry 320 - 33F
-	0x00005f85, 0x00006012, 0x0000605a, 0x000060b9,
-	0x000060cb, 0x000060f2, 0x0000611f, 0x00006143,
-	0x0000616d, 0x00006186, 0x000061b9, 0x000061fb,
-	0x00006246, 0x000062b8, 0x00006304, 0x00006351,
-	0x00006389, 0x000063f3, 0x00006415, 0x00006459,
-	0x00006499, 0x000064ca, 0x000064ed, 0x0000650c,
-	0x00006557, 0x00006570, 0x00006597, 0x000065cf,
-	0x00006614, 0x00006651, 0x00006663, 0x0000668f,
+	0x00005cbf, 0x00005cfd, 0x00005d51, 0x00005d7c,
+	0x00005da0, 0x00005e07, 0x00005e58, 0x00005e66,
+	0x00005e6f, 0x00005e76, 0x00005e8b, 0x00005ea5,
+	0x00005ead, 0x00005ef0, 0x00005efc, 0x00005f35,
+	0x00005f39, 0x00005f4e, 0x00005f77, 0x00005f83,
+	0x00005fe8, 0x00006004, 0x0000600e, 0x0000602b,
+	0x0000603d, 0x00006046, 0x00006062, 0x00006073,
+	0x00006081, 0x0000608f, 0x000060f1, 0x00006112,
 	// Entry 340 - 35F
-	0x000066ba, 0x000066ee, 0x00006705, 0x00006736,
-	0x0000676c, 0x00006793, 0x000067b3, 0x000067df,
-	0x000067fe, 0x0000681d, 0x00006841, 0x00006863,
-	0x0000688d, 0x000068b9, 0x000068ea, 0x0000691a,
-	0x00006946, 0x0000696e, 0x00006986, 0x000069b4,
-	0x000069cf, 0x00006a00, 0x00006a32, 0x00006a6d,
-	0x00006a95, 0x00006acb, 0x00006af3, 0x00006b1d,
-	0x00006b47, 0x00006b6c, 0x00006b82, 0x00006bb3,
+	0x00006117, 0x0000611d, 0x00006134, 0x00006146,
+	0x0000615f, 0x00006179, 0x000061a3, 0x0000620f,
+	0x00006260, 0x00006299, 0x000062db, 0x000062df,
+	0x000062e9, 0x00006311, 0x00006316, 0x0000634c,
+	0x00006380, 0x000063de, 0x000063f3, 0x00006408,
+	0x00006422, 0x0000644d, 0x00006468, 0x0000648c,
+	0x000064ab, 0x000064bd, 0x000064df, 0x000064e8,
+	0x000064f9, 0x00006507, 0x00006511, 0x0000651a,
 	// Entry 360 - 37F
-	0x00006bdd, 0x00006c1f, 0x00006c3c, 0x00006c68,
-	0x00006c96, 0x00006cc1, 0x00006cec, 0x00006d08,
-	0x00006d2f, 0x00006d44, 0x00006d5d, 0x00006d8c,
-	0x00006daf, 0x00006dcc, 0x00006de9, 0x00006e03,
-	0x00006e2e, 0x00006e57, 0x00006e86, 0x00006eae,
-	0x00006ed9, 0x00006ef8, 0x00006f2c, 0x00006f5e,
-	0x00006f88, 0x00006fc5, 0x00006fed, 0x0000702d,
-	0x00007079, 0x000070ac, 0x00007105, 0x0000710d,
+	0x00006525, 0x00006534, 0x0000655c, 0x000065c2,
+	0x000065f5, 0x00006605, 0x00006664, 0x0000668a,
+	0x000066fb, 0x00006736, 0x000067a5, 0x0000682e,
+	0x000068b1, 0x00006914, 0x0000695c, 0x000069e9,
+	0x00006a31, 0x00006a90, 0x00006aa2, 0x00006ac9,
+	0x00006af6, 0x00006b1a, 0x00006b44, 0x00006b5d,
+	0x00006b90, 0x00006bd2, 0x00006c1d, 0x00006c8f,
+	0x00006cdb, 0x00006d28, 0x00006d60, 0x00006dca,
 	// Entry 380 - 39F
-	0x0000711c, 0x00007129, 0x00007133, 0x00007144,
-	0x0000714a, 0x00007151, 0x00007158, 0x00007163,
-	0x00007171, 0x0000717a, 0x00007188, 0x00007192,
-	0x000071a6, 0x000071b9, 0x000071c1, 0x000071c7,
-	0x000071cf, 0x000071d8, 0x000071e2, 0x000071f1,
-	0x000071f7, 0x00007203, 0x0000720d, 0x00007213,
-	0x0000721b, 0x00007225, 0x00007235, 0x00007247,
-	0x00007250, 0x00007258, 0x0000725c, 0x0000726f,
+	0x00006dec, 0x00006e30, 0x00006e70, 0x00006ea1,
+	0x00006ec4, 0x00006ee3, 0x00006f2e, 0x00006f47,
+	0x00006f6e, 0x00006fa6, 0x00006feb, 0x00007028,
+	0x0000703a, 0x00007066, 0x00007091, 0x000070c5,
+	0x000070dc, 0x0000710d, 0x00007143, 0x0000716a,
+	0x0000718a, 0x000071ac, 0x000071d6, 0x00007202,
+	0x00007233, 0x00007263, 0x0000728f, 0x000072b7,
+	0x000072e3, 0x00007302, 0x00007321, 0x00007345,
 	// Entry 3A0 - 3BF
-	0x0000727d, 0x00007289, 0x00007296, 0x0000729e,
-	0x000072a8, 0x000072ae, 0x000072c7, 0x000072d0,
-	0x000072e4, 0x000072f6, 0x00007301, 0x00007316,
-	0x0000732d, 0x00007335, 0x00007338, 0x0000733b,
-	0x00007343, 0x0000734e, 0x00007364, 0x00007372,
-	0x00007381, 0x0000738a, 0x00007395, 0x0000739e,
-	0x000073b1, 0x000073c2, 0x000073c8, 0x000073d1,
-	0x000073dc, 0x000073ea, 0x000073f8, 0x00007406,
+	0x0000735d, 0x0000738b, 0x000073a6, 0x000073d7,
+	0x00007409, 0x00007444, 0x0000746c, 0x000074a2,
+	0x000074ca, 0x000074f4, 0x0000751e, 0x00007543,
+	0x00007559, 0x0000758a, 0x000075b4, 0x000075f6,
+	0x00007613, 0x0000763f, 0x0000766d, 0x00007698,
+	0x000076c3, 0x000076df, 0x00007706, 0x0000771b,
+	0x00007734, 0x00007763, 0x00007786, 0x000077a3,
+	0x000077c0, 0x000077da, 0x00007805, 0x0000782e,
 	// Entry 3C0 - 3DF
-	0x00007413, 0x0000741b, 0x00007423, 0x0000742a,
-	0x0000743b, 0x00007450, 0x0000745b, 0x00007470,
-	0x0000747b, 0x00007489, 0x00007491, 0x0000749b,
-	0x000074a7, 0x000074b5, 0x000074bd, 0x000074e7,
-	0x0000751c, 0x0000754a, 0x0000758d, 0x000075bd,
-	0x0000760c, 0x0000762a, 0x0000765f, 0x0000767d,
-	0x000076a1, 0x000076c0, 0x000076e0, 0x000076fb,
-	0x00007712, 0x00007779, 0x000077a9, 0x000077c8,
+	0x0000785d, 0x00007885, 0x000078b0, 0x000078cf,
+	0x00007903, 0x00007935, 0x0000795f, 0x0000799c,
+	0x000079c4, 0x00007a04, 0x00007a50, 0x00007a83,
+	0x00007adc, 0x00007ae4, 0x00007af3, 0x00007b00,
+	0x00007b0a, 0x00007b1b, 0x00007b21, 0x00007b28,
+	0x00007b2f, 0x00007b3a, 0x00007b48, 0x00007b51,
+	0x00007b5f, 0x00007b69, 0x00007b7d, 0x00007b90,
+	0x00007b98, 0x00007b9e, 0x00007ba6, 0x00007baf,
 	// Entry 3E0 - 3FF
-	0x000077e0, 0x000077ef, 0x000077fe, 0x00007802,
-	0x0000780e, 0x00007828, 0x00007851, 0x00007880,
-	0x000078b8, 0x000078dc, 0x000078f8, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
+	0x00007bb9, 0x00007bc8, 0x00007bce, 0x00007bda,
+	0x00007be4, 0x00007bea, 0x00007bf2, 0x00007bfc,
+	0x00007c0c, 0x00007c1e, 0x00007c27, 0x00007c2f,
+	0x00007c33, 0x00007c46, 0x00007c54, 0x00007c60,
+	0x00007c6d, 0x00007c75, 0x00007c7f, 0x00007c85,
+	0x00007c9e, 0x00007ca7, 0x00007cbb, 0x00007ccd,
+	0x00007cd8, 0x00007ced, 0x00007d04, 0x00007d0c,
+	0x00007d0f, 0x00007d12, 0x00007d1a, 0x00007d25,
 	// Entry 400 - 41F
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
+	0x00007d3b, 0x00007d49, 0x00007d58, 0x00007d61,
+	0x00007d6c, 0x00007d75, 0x00007d88, 0x00007d99,
+	0x00007d9f, 0x00007da8, 0x00007db3, 0x00007dc1,
+	0x00007dcf, 0x00007ddd, 0x00007dea, 0x00007df2,
+	0x00007dfa, 0x00007e01, 0x00007e12, 0x00007e27,
+	0x00007e32, 0x00007e47, 0x00007e52, 0x00007e60,
+	0x00007e68, 0x00007e72, 0x00007e7e, 0x00007e8c,
+	0x00007e94, 0x00007ebe, 0x00007ef3, 0x00007f21,
 	// Entry 420 - 43F
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f, 0x0000791f, 0x0000791f,
-	0x0000791f, 0x0000791f,
-} // Size: 4320 bytes
+	0x00007f64, 0x00007f94, 0x00007fe3, 0x00008001,
+	0x00008036, 0x00008054, 0x00008078, 0x00008097,
+	0x000080b7, 0x000080d2, 0x000080e9, 0x00008150,
+	0x00008180, 0x0000819f, 0x000081b7, 0x000081c6,
+	0x000081d5, 0x000081d9, 0x000081e5, 0x000081ff,
+	0x00008217, 0x00008236, 0x0000825b, 0x000082b4,
+	0x000082bb, 0x000082c2, 0x000082d2, 0x000082d5,
+	0x000082fe, 0x0000832d, 0x00008365, 0x00008389,
+	// Entry 440 - 45F
+	0x000083a5, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	// Entry 460 - 47F
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	// Entry 480 - 49F
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc, 0x000083cc, 0x000083cc, 0x000083cc,
+	0x000083cc,
+} // Size: 4668 bytes
 
-const itData string = "" + // Size: 31007 bytes
+const itData string = "" + // Size: 33740 bytes
 	"\x02Cambia passphrase\x02Devi aver effettuato l'accesso per sbloccare l'" +
 	"app.\x02Devi essere un amministratore per sbloccare l'applicazione.\x02P" +
 	"assphrase modificata.\x02Inizializza app\x02Inizializza\x02Le passphrase" +
@@ -4141,411 +4473,452 @@ const itData string = "" + // Size: 31007 bytes
 	"to file.\x02Nessun duplicato trovato.\x02Duplicati trovati\x02Questo fil" +
 	"e esiste già nelle seguenti %[1]d posizioni:\x02Space: %[1]s\x02Cartella" +
 	": %[1]s\x02Caricato il %[1]s\x02Versione corrente %[1]d\x02Versione %[1]" +
-	"d\x02Sposta\x02Decomprimi archivio\x02Eliminare questo file? Puoi ripris" +
-	"tinarlo dal cestino.\x02Eliminare questa cartella? I suoi file possono e" +
-	"ssere ripristinati dal cestino.\x02Dettagli\x02Fonte\x02Dimensione file" +
-	"\x02Tipo MIME\x02Hash SHA-256\x02Nome file originale\x02Caricato il\x02V" +
-	"ersione\x02Versione corrente caricata il\x02Eliminato il\x02Creato il %[" +
-	"1]s\x02Anteprima\x02Originale\x02Scarica PDF\x02Non è stato possibile ge" +
-	"nerare l’anteprima PDF.\x02Riprova a generare il PDF\x02Scarica\x02L’ant" +
-	"eprima PDF non è disponibile perché Gotenberg non è configurato.\x02L’an" +
-	"teprima PDF è in fase di generazione. Attendi un momento; la pagina si a" +
-	"ggiornerà automaticamente.\x02L’anteprima PDF non è disponibile.\x02Rend" +
-	"ering non riuscito.\x02Mostra dettagli\x02Chiudi anteprima\x02Versione n" +
-	"on trovata.\x02Nessun campo assegnato finora.\x02Rimuovere questo valore" +
-	" del campo?\x02Caricamento di altri elementi…\x02Nome\x02Tipo\x02Metadat" +
-	"i\x02Data\x02Dimensione\x02Etichette\x02Nessun dato disponibile.\x02Sì" +
-	"\x02No\x02Info\x02Versioni\x02Duplicati\x02Impossibile caricare i duplic" +
-	"ati.\x02Caricamento file\x02Conferma che i metadati del file sorgente an" +
-	"dranno persi.\x02Sono richiesti file sorgente e di destinazione.\x02Aggi" +
-	"unta nuova versione dall'Inbox.\x02Capisco che i metadati del file dell'" +
-	"Inbox (tipo di documento, Tag, campi) andranno persi durante l'unione. L" +
-	"e note e la loro cronologia verranno mantenute.\x02Cerca file nell'Inbox" +
-	"\x02Aggiungi nuova versione dall'Inbox\x02Il file di destinazione è obbl" +
-	"igatorio.\x02Il file sorgente è obbligatorio.\x02Il file deve essere nel" +
-	"l'Inbox.\x02Nessuna corrispondenza trovata.\x02Numero di versione mancan" +
-	"te.\x02Numero di versione non valido.\x02Anteprima versione\x02Carica nu" +
-	"ova versione\x02Nessuna versione disponibile finora.\x02Carica una nuova" +
-	" versione per iniziare.\x02Aggiungi nuova versione\x02Filtri\x02Nessun f" +
-	"ile disponibile al momento.\x02Nessun file o cartella disponibile al mom" +
-	"ento.\x02Torna alla cartella superiore\x02Cerca\x02Cerca in «%[1]s»\x02O" +
-	"rdina file\x02Cambia visualizzazione elenco file\x02Elenco\x02Tabella" +
-	"\x02Nessun campo disponibile finora.\x02Nessun campo disponibile.\x02Con" +
-	"tiene\x02Inizia con\x02Uguale a\x02Maggiore di\x02Minore di\x02Tra\x02«%" +
-	"[1]s» è selezionato\x02«%[1]s» non è selezionato\x02Tag | Filtro\x02Ness" +
-	"un Tag disponibile finora.\x02Gestisci Tag\x02Crea\x02«%[1]s» creato." +
-	"\x02Apri cartella\x02Consentito solo in modalità cartella.\x02Apri file" +
-	"\x02Spostato in «%[1]s».\x02«%[1]s» rimosso.\x02Rinomina file\x02Rinomin" +
-	"ato in «%[1]s».\x02Filtri reimpostati.\x02La conversione dell'anteprima " +
-	"PDF non è configurata.\x02L'anteprima PDF non è pronta per essere riprov" +
-	"ata.\x02La generazione dell’anteprima PDF è stata accodata.\x02Tipo docu" +
-	"mento deselezionato.\x02Tipo documento selezionato.\x02Migliore corrispo" +
-	"ndenza\x02Più recenti prima\x02Più vecchi prima\x02Ordina per nome\x02De" +
-	"comprimi\x02Non è un archivio ZIP.\x02Impossibile aprire l'archivio ZIP." +
-	"\x02Impossibile decomprimere l'archivio.\x02Impossibile leggere l'archiv" +
-	"io ZIP.\x02Impossibile creare la struttura di cartelle.\x02Impossibile e" +
-	"strarre tutti i file dall'archivio.\x02Archivio estratto.\x02L'archivio " +
-	"è troppo grande.\x02Impossibile verificare la dimensione dell'archivio." +
-	"\x02La data di fine è precedente alla data di inizio.\x02Carica\x02Nessu" +
-	"na cartella superiore fornita.\x02È richiesto un contesto della richiest" +
-	"a in sola lettura.\x02Nessun file fornito.\x02«%[1]s» è stato caricato." +
-	"\x02I metadati del caricamento devono essere inviati prima del file.\x02" +
-	"Nuova versione caricata per «%[1]s».\x02Impossibile caricare versioni pe" +
-	"r le cartelle.\x02Le cartelle non possono essere scaricate.\x02Sposta fi" +
-	"le\x02Sposta file in «%[1]s»\x02Cartella superiore\x02Home\x02Account" +
-	"\x02È necessaria una Session completa.\x02Convalida del modulo non riusc" +
-	"ita.\x02Nessuno Space disponibile finora.\x02Etichetta del client\x02Con" +
-	"senti modifiche\x02Senza modifiche, il client MCP può solo leggere i doc" +
-	"umenti.\x02Space\x02Crea credenziale MCP\x02Credenziale MCP creata\x02Co" +
-	"pia subito il segreto. Non verrà mostrato di nuovo.\x02URL MCP\x02Token" +
-	"\x02Etichetta del dispositivo\x02Lunghezza del segreto\x02Riduci la lung" +
-	"hezza del segreto solo se il tuo dispositivo limita la lunghezza massima" +
-	" della password.\x02Modalità compatibilità\x02Usa solo lettere, numeri, " +
-	"trattini e trattini bassi per i dispositivi con supporto limitato ai car" +
-	"atteri speciali.\x02Crea credenziali WebDAV\x02Credenziali WebDAV create" +
-	"\x02URL WebDAV\x02URL WebDAV Inbox\x02Nome utente\x02Segreto\x02Destinaz" +
-	"ione non disponibile.\x02Non puoi creare credenziali per questo Space." +
-	"\x02Copia %[1]s\x02Copia di %[1]s negli appunti completata.\x02Impossibi" +
-	"le copiare %[1]s.\x02Destinazione non disponibile\x02Apri attività\x02Or" +
-	"ganizzazione «%[1]s»\x02Nessun Passkey registrato\x02Passkeys\x02Registr" +
-	"a un Passkey per abilitare l accesso senza password.\x02Aggiungi una pas" +
-	"skey di backup\x02Raccomandazione passkey\x02Configura una seconda passk" +
-	"ey su un altro dispositivo come backup nel caso in cui un dispositivo ve" +
-	"nga perso.\x02Rigenera i codici Backup\x02Rigenerare i codici Backup? I " +
-	"codici esistenti non funzioneranno più.\x02Account «%[1]s»\x02Account «%" +
-	"[1]s», di proprietà di «%[2]s»\x02Sistema\x02Configurazione Passkey rich" +
-	"iesta\x02La tua organizzazione richiede l accesso con Passkey. Registra " +
-	"un Passkey per continuare.\x02Restano %[1]d codici Backup\x02Abbonamento" +
-	"\x02Non inizializzato\x02Attendere prego\x02L'organizzazione non è ancor" +
-	"a inizializzata, attendi fino al completamento dell'inizializzazione." +
-	"\x02Aggiorna\x02Utilizzo quota\x02Non disponibile\x02Nessuna password im" +
-	"postata\x02Hai effettuato l'accesso con una password temporanea. Imposta" +
-	" una password per proteggere il tuo account e usare l'app.\x02Imposta pa" +
-	"ssword ora\x02Password temporanea attiva\x02Il tuo account ha una passwo" +
-	"rd temporanea attiva. Cambia la tua password o rimuovi la password tempo" +
-	"ranea il prima possibile per proteggere il tuo account.\x02Nessuno Space" +
-	" disponibile finora\x02Non hai il permesso di accedere a nessuno Space d" +
-	"i questa organizzazione.\x02Crea una voce per iniziare.\x02Gestisci Spac" +
-	"es\x02L'app è sbloccata e non è protetta da una passphrase.\x02L'app è b" +
-	"loccata.\x02Imposta passphrase\x02L'app è sbloccata e protetta da una pa" +
-	"ssphrase.\x02Stato dell'app\x02Ultimo utilizzo: %[1]s\x02Passkey\x02Gest" +
-	"isci limite di caricamento\x02Dashboard\x02Modifica credenziale MCP\x02M" +
-	"odifiche salvate.\x02Modifica credenziale WebDAV\x02Filtra le credenzial" +
-	"i MCP\x02Attivo\x02Revocate\x02Ancora nessuna credenziale MCP.\x02Crea c" +
-	"redenziali per collegare un client MCP a uno Space.\x02Copia l’URL MCP" +
-	"\x02L’URL MCP è stato copiato negli appunti.\x02Impossibile copiare l’UR" +
-	"L MCP.\x02Sola lettura\x02Lettura e scrittura\x02%[1]s · Creato: %[2]s" +
-	"\x02%[1]s · Revocato: %[2]s\x02Revoca\x02Revocare questa credenziale MCP" +
-	"?\x02Credenziali MCP\x02Impostazioni\x02Organizzazione\x02Attiva obbligo" +
-	" Passkey\x02Attivare l’obbligo Passkey per questa organizzazione? I memb" +
-	"ri dovranno usare Passkeys per accedere.\x02Disattiva obbligo Passkey" +
-	"\x02Disattivare l’obbligo Passkey per questa organizzazione? I membri po" +
-	"tranno di nuovo usare password, se consentito.\x02Elimina organizzazione" +
-	"\x02Eliminare questa organizzazione? Tutti gli account di sua proprietà " +
-	"verranno eliminati globalmente.\x02Scarica backup\x02Eliminare questo Pa" +
-	"sskey?\x02Credenziale MCP revocata.\x02Non sei autorizzato a revocare qu" +
-	"este credenziali.\x02Credenziali WebDAV revocate.\x02Modifica nella vist" +
-	"a «Spaces»\x02Tipi documento\x02Utenti\x02Devi essere amministratore per" +
-	" accedere alle impostazioni di sistema.\x02Devi aver effettuato l'access" +
-	"o per gestire le organizzazioni.\x02Organizzazione non trovata.\x02Solo " +
-	"i proprietari possono modificare l obbligo Passkey.\x02Obbligo Passkey a" +
-	"ttivato per l organizzazione.\x02Obbligo Passkey disattivato per l organ" +
-	"izzazione.\x02Filtra le credenziali WebDAV\x02Ancora nessuna credenziale" +
-	" WebDAV.\x02Crea credenziali per un dispositivo per caricare file in una" +
-	" Inbox tramite WebDAV.\x02Copia l’URL WebDAV\x02L’URL WebDAV è stato cop" +
-	"iato negli appunti.\x02Impossibile copiare l’URL WebDAV.\x02Nome utente:" +
-	" %[1]s · Creato: %[2]s\x02Nome utente: %[1]s · Ultimo utilizzo: %[2]s" +
-	"\x02Nome utente: %[1]s · Revocato: %[2]s\x02Revocare queste credenziali " +
-	"WebDAV?\x02Credenziali WebDAV\x02Aggiungi attributo campo\x02Attributo a" +
-	"ggiornato.\x02Crea prima un campo.\x02Eliminare questo attributo?\x02Agg" +
-	"iungi attributo elenco (gruppo di Tag)\x02attribuzione del nome\x02Elimi" +
-	"nare questo tipo di documento?\x02Aggiungi attributo\x02Attributo «%[1]s" +
-	"» creato.\x02Nessun gruppo di Tag disponibile finora.\x02Crea prima un " +
-	"gruppo di Tag.\x02Crea tipo di documento\x02Tipo documento creato.\x02At" +
-	"tributo eliminato.\x02Tipo documento eliminato.\x02Chiudi dettagli\x02Mo" +
-	"difica attributo campo\x02Modifica attributo Tag\x02Attributo «%[1]s» ag" +
-	"giornato.\x02Tipi di documento importati.\x02Importa dalla biblioteca" +
-	"\x02Importa\x02L'importazione è disponibile solo per Spaces vuoti.\x02Ne" +
-	"ssun tipo di documento della biblioteca disponibile al momento.\x02Selez" +
-	"iona i tipi di documento da importare:\x02Impossibile convertire l'id in" +
-	" intero.\x02Rinomina tipo di documento\x02Tipo documento rinominato in «" +
-	"%[1]s».\x02Non è possibile visualizzare l'anteprima delle cartelle.\x02L" +
-	"'anteprima della sorgente originale è disponibile solo per i file HTML." +
-	"\x02Impossibile leggere il file.\x02Assegna file\x02Assegna\x02Nessun nu" +
-	"ovo file trovato.\x02File caricati.\x02Sposta in un’altra Inbox\x02Ricar" +
-	"ica metadati\x02Elimina dall'Inbox\x02Segna come completato\x02Il ricono" +
-	"scimento del testo (OCR) non può essere applicato perché il file è tropp" +
-	"o grande, i suggerimenti si basano solo sul nome del file.\x02Il riconos" +
-	"cimento del testo (OCR) non è ancora pronto, i suggerimenti si basano so" +
-	"lo sul nome file.\x02Seleziona destinazione manualmente\x02Suggerimenti " +
-	"basati sul nome file\x02Filtro origine non valido.\x02Inbox\x02Cerca in " +
-	"«Inbox»\x02Filtra per fonte\x02File non trovato.\x02Il file non è nell'" +
-	"Inbox.\x02File «%[1]s» segnato come completato.\x02Origine | Filtro\x02S" +
-	"postato nell’Inbox di «%[1]s».\x02Nessun’altra Inbox è disponibile. Devi" +
-	" avere accesso in scrittura a un altro Space, oppure la sua Inbox deve a" +
-	"ccettare trasferimenti.\x02Scegli un’Inbox\x02Inbox di destinazione\x02P" +
-	"uoi scegliere altri Spaces di questa organizzazione in cui hai accesso i" +
-	"n scrittura o le cui Inbox accettano trasferimenti.\x02Messaggio (facolt" +
-	"ativo)\x02Il tuo messaggio verrà salvato come nota con il tuo nome.\x02L" +
-	"o spostamento rimuove il tipo di documento, i tag e i campi personalizza" +
-	"ti. Le versioni e le note vengono conservate.\x02Se non puoi aprire il S" +
-	"pace di destinazione, perderai l’accesso a questo file dopo lo spostamen" +
-	"to.\x02Assegna utente allo Space\x02Nessuno Space selezionato. Seleziona" +
-	" prima uno Space.\x02Non ti è permesso assegnare utenti agli Spaces perc" +
-	"hé non sei il proprietario.\x02Utente assegnato allo Space.\x02Impossibi" +
-	"le caricare gli utenti.\x02Ricarica la pagina e riprova.\x02Nessun utent" +
-	"e non assegnato disponibile.\x02Crea prima un utente nella gestione uten" +
-	"ti dell'organizzazione.\x02Assegna utente\x02L'utente è già assegnato a " +
-	"questo Space.\x02Non puoi rimuovere la tua assegnazione da uno Space." +
-	"\x02Rimuovi assegnazione utente dallo Space\x02Rimuovi assegnazione\x02A" +
-	"ssegnazione utente rimossa dallo Space.\x02Rimuovere l'assegnazione di q" +
-	"uesto utente dallo Space?\x02Ancora nessun utente assegnato.\x02Crea Tag" +
-	" o gruppo\x02Eliminare questo Tag? Verrà rimosso da tutti i file.\x02Ass" +
-	"egna Tag\x02Sposta nel gruppo\x02Gruppo, %[1]d Tag\x02Gruppo, %[1]d Tag" +
-	"\x02Crea Tag\x02Super Tag\x02L'ID del gruppo di Tag è obbligatorio.\x02I" +
-	"l Tag non è un gruppo.\x02Crea utente\x02Non ti è permesso creare utenti" +
-	". Nessuna organizzazione selezionata.\x02Non ti è permesso creare utenti" +
-	" perché non sei il proprietario.\x02Utente creato. La password è stata i" +
-	"nviata via email. I proprietari possono accedere a tutti gli Spaces senz" +
-	"a ulteriori configurazioni.\x02Utente creato. La password è stata inviat" +
-	"a via email. Ora assegna l'utente a uno Space.\x02Non ti è consentito el" +
-	"iminare utenti. Nessuna organizzazione selezionata.\x02Non ti è consenti" +
-	"to eliminare utenti perché non sei il proprietario.\x02Utente rimosso da" +
-	"ll'organizzazione e account eliminato globalmente.\x02Utente rimosso dal" +
-	"l'organizzazione.\x02Rimuovere questo utente dall'organizzazione?\x02Rim" +
-	"uovere questo utente dall'organizzazione ed eliminare il suo account glo" +
-	"balmente?\x02Account membro\x02Account proprietario\x02%[1]s · %[2]s\x02" +
-	"Caricamento dei file in corso, attendi un momento.\x02La pagina verrà ag" +
-	"giornata automaticamente una volta terminato il caricamento.\x02Riprova " +
-	"quando hai creato uno Space o sei stato invitato a unirti a uno.\x02Sele" +
-	"ziona Space\x02L'elaborazione dei file condivisi è fallita.\x02File cari" +
-	"cati, seleziona uno Space.\x02Corpo del caricamento non valido.\x02Il ca" +
-	"ricamento è troppo grande.\x02File caricato, seleziona uno Space.\x02Imp" +
-	"orta URL\x02Importa URL\x02Importa file da URL\x02Scarica e continua\x02" +
-	"Crea campo\x02Campo «%[1]s» creato.\x02Campo eliminato.\x02Modifica camp" +
-	"o\x02Campo aggiornato.\x02Eliminare questo campo?\x02Space «%[1]s» creat" +
-	"o.\x02Crea Space\x02Seleziona i tipi di documento da aggiungere a questo" +
-	" Space:\x02Space eliminato.\x02Modifica Space\x02%[1]s (%[2]s)\x02attivo" +
-	"\x02Eliminare questo Space?\x02Spazi\x02La pagina richiesta non è stata " +
-	"trovata.\x02La pagina richiesta non può essere caricata.\x02«%[1]s» asse" +
-	"gnato.\x02Crea e assegna Tag\x02«%[1]s» creato e assegnato.\x02Tag «%[1]" +
-	"s» creato.\x02«%[1]s» eliminato.\x02Gruppo, %[1]d Tag, %[2]d selezionati" +
-	"\x02Gruppo, %[1]d Tag, %[2]d selezionati\x02Composto da %[1]s\x02Mostra " +
-	"Tag assegnati\x02Crea gruppo\x02Tag di «%[1]s»\x02Modifica Tag\x02«%[1]s" +
-	"» aggiornato.\x02Layout non supportato.\x02Modifica Tag assegnati\x02Gr" +
-	"uppo «%[1]s»\x02Sposta Tag nel gruppo\x02Rimosso dal gruppo.\x02Spostato" +
-	" nel gruppo «%[1]s».\x02Deseleziona gruppo\x02Eliminare completamente qu" +
-	"esto Tag? Verrà rimosso da tutti i file, non solo da questo.\x02«%[1]s» " +
-	"non assegnato.\x02Creato il\x02Modificato il\x02Nessun Tag assegnato." +
-	"\x02Le cartelle non possono essere ripristinate.\x02Il file non è elimin" +
-	"ato.\x02La cartella superiore originale manca. Ripristinato in Inbox." +
-	"\x02File ripristinato.\x02Ripristina\x02Il cestino è vuoto.\x02Cartella " +
-	"eliminata\x02Cartella eliminata: %[1]s\x02Eliminato: %[1]s\x02Cestino" +
-	"\x02L'anteprima del file non è disponibile per le cartelle.\x02Caricamen" +
-	"to web\x02Apri con\x02Importazione URL\x02WebDAV\x02Estrazione di sistem" +
-	"a\x02Impossibile analizzare il file.\x02Impossibile analizzare il modulo" +
-	".\x02Impossibile decodificare il modulo.\x02Impossibile validare il modu" +
-	"lo.\x02Impossibile analizzare l'URL corrente.\x02Impossibile decodificar" +
-	"e la query url.\x02Solo i proprietari dell'organizzazione possono gestir" +
-	"e utenti e impostazioni.\x02OCR completato alle\x02Non sei autorizzato a" +
-	"d accedere a questa organizzazione.\x02Non sei autorizzato ad accedere a" +
-	" questo Space.\x02Non è stato restituito alcun codice Backup.\x02I codic" +
-	"i Backup sono stati rigenerati.\x02Impossibile rigenerare i codici Backu" +
-	"p.\x02Chiudi finestra\x02Chiudi\x02Suggerimento\x02opzionale\x02obbligat" +
-	"orio\x02Questa organizzazione è in modalità manutenzione. Alcune funzion" +
-	"alità potrebbero non funzionare. Contatta il tuo amministratore.\x02Pass" +
-	"phrase dell’applicazione\x02La passphrase è obbligatoria.\x02Passphrase " +
-	"non valida.\x02Qualcosa è andato storto. Riprova per favore.\x02Troppi t" +
-	"entativi di sblocco. Riprova più tardi.\x02Applicazione sbloccata. Avvio" +
-	" in corso.\x02Azioni\x02Apri menu principale\x02Dai a questo Passkey un " +
-	"nome facoltativo cosi potrai riconoscerlo in seguito.\x02Dopo la registr" +
-	"azione verranno mostrati una sola volta codici Backup stampabili. Salval" +
-	"i prima di chiudere.\x02Dopo la configurazione, l'accesso con password è" +
-	" disattivato per questo account. Usa invece passkey e codici di backup." +
-	"\x02Nome della Passkey (facoltativo)\x02Caricamento…\x02Importante: ques" +
-	"ti codici di backup vengono mostrati una sola volta. Salvali, stampali o" +
-	" scaricali ora prima di chiudere questa finestra di dialogo.\x02Se perdi" +
-	" questi codici e la tua passkey, il recupero dell'account potrebbe non e" +
-	"ssere più possibile.\x02Codici di backup SimpleDMS\x02Generato\x02Conser" +
-	"va questi codici di backup in un luogo sicuro.\x02Questi codici vengono " +
-	"mostrati una sola volta.\x02Codici\x02Finestra di stampa aperta.\x02I co" +
-	"dici Backup sono stati copiati negli appunti.\x02Impossibile copiare aut" +
-	"omaticamente i codici Backup.\x02I codici Backup sono stati scaricati." +
-	"\x02Stampa codici\x02Copia codici\x02Accetta trasferimenti nell’Inbox" +
-	"\x02Scheda attiva\x02Aggiungimi come proprietario dello Space\x02Aggiung" +
-	"i all'Inbox\x02Admin\x02Austria\x02Codice Backup\x02Belgio\x02Testo\x02C" +
-	"olonna integrata\x02Bulgaria\x02Checkbox\x02Valore Checkbox\x02Conferma " +
-	"nuova passphrase\x02Conferma passphrase\x02Conferma password\x02Conferma" +
-	" avviso\x02Valori di stato delle credenziali\x02Croazia\x02Password attu" +
-	"ale o temporanea\x02Passphrase attuale\x02Cipro\x02Repubblica Ceca\x02Va" +
-	"lore data\x02Elimina in caso di successo\x02Danimarca\x02Descrizione\x02" +
-	"Destinazione\x02Email\x02Inglese\x02Estonia\x02Campo\x02File\x02Nome fil" +
-	"e\x02Finlandia\x02Nome\x02Nome cartella\x02Francia\x02Francese\x02Tedesc" +
-	"o\x02Germania\x02Grecia\x02Gruppo\x02Ungheria\x02Islanda\x02Irlanda\x02È" +
-	" attribuzione del nome\x02È illimitato\x02Italiano\x02Italia\x02Etichett" +
-	"a\x02Lingua\x02Cognome\x02Lettonia\x02Layout\x02Chiavi dei modelli della" +
-	" biblioteca\x02Liechtenstein\x02Lituania\x02Locale\x02Lussemburgo\x02Mal" +
-	"ta\x02Dimensione massima caricamento MiB\x02Messaggio\x02Denaro\x02Valor" +
-	"e monetario\x02Paesi Bassi\x02Nuovo nome file\x02Nuovo nome cartella\x02" +
-	"Nuovo nome\x02Nuova passphrase\x02Nuova password\x02Norvegia\x02Numero" +
-	"\x02Valore numerico\x02Solo assegnati\x02Operazione\x02Operatore\x02Altr" +
-	"o\x02Proprietario\x02Passphrase\x02Password\x02In sospeso\x02Polonia\x02" +
-	"Portogallo\x02Scheda anteprima\x02Pro\x02URL push\x02Ruolo\x02Romania" +
-	"\x02S 3\x02Query di ricerca\x02Mostra cronologia\x02Mostra i Tag\x02Semp" +
-	"lice\x02Slovacchia\x02Slovenia\x02Spagna\x02Iscriviti alla newsletter" +
-	"\x02Super\x02Sostenitore\x02Svezia\x02Svizzera\x02Tag\x02Chiavi del mode" +
-	"llo\x02Session temporanea\x02Testo\x02Valore testo\x02Prova\x02URL\x02Un" +
-	"ità\x02Utente\x02Valore\x02Valore finale\x02Valore iniziale\x02Numero ve" +
-	"rsione\x02Modalità di visualizzazione\x02Proprietà\x02Dimensioni\x02Regi" +
-	"strati\x02Registrazione\x02Prova gratuita di 30 giorni, nessuna carta di" +
-	" credito richiesta.\x02Nome organizzazione\x02Paese\x02Accetta i termini" +
-	" di servizio\x02Accetta l'informativa sulla privacy\x02Registrazione com" +
-	"pletata, controlla le tue email per la password.\x02Note legali\x02Infor" +
-	"mativa sulla privacy\x02Termini di servizio\x02Per questo account e rich" +
-	"iesto l accesso con Passkey.\x02Troppi tentativi di accesso. Riprova tra" +
-	" 10 secondi.\x02Impossibile generare i codici Backup.\x02Password tempor" +
-	"anea scaduta.\x02Impossibile generare la password temporanea.\x02Impossi" +
-	"bile generare il salt.\x02La password attuale non è valida.\x02La nuova " +
-	"password deve essere diversa dalla password attuale.\x02Una password è g" +
-	"ià impostata. Usa invece il modulo «Cambia password».\x02La password dev" +
-	"e contenere almeno dodici caratteri.\x02Le password non corrispondono." +
-	"\x02Accesso con Passkey non valido.\x02Accesso con Passkey non riuscito." +
-	"\x02L'accesso con Passkey non è abilitato per questo account.\x02Registr" +
-	"azione Passkey non riuscita.\x02Ti serve almeno un passkey prima di crea" +
-	"re i codici Backup.\x02Credenziali di accesso Backup non valide.\x02Trop" +
-	"pi tentativi di accesso Backup. Riprova tra 10 secondi.\x02L account di " +
-	"destinazione non ha Passkeys configurati.\x02Passkey non trovata.\x02Acc" +
-	"ount non trovato.\x02Configurazione dell origine Passkey non valida.\x02" +
-	"Configurazione dell ID RP Passkey mancante.\x02Impossibile inizializzare" +
-	" il servizio Passkey.\x02La challenge Passkey non e valida o e scaduta." +
-	"\x02Credenziale Passkey sconosciuta.\x02Account Passkey non trovato.\x02" +
-	"L'app è già inizializzata.\x02La tua password temporanea è\x02Scade il" +
-	"\x02Nuova registrazione dell'organizzazione\x02Questo è un messaggio aut" +
-	"omatico, non rispondere.\x02Benvenuto in SimpleDMS\x0202-01-2006 alle 15" +
-	":04\x02Reimpostazione password SimpleDMS\x02Il tuo account è stato creat" +
-	"o con successo.\x02Accedi e cambia la tua password il prima possibile." +
-	"\x02Apri pagina di accesso\x02È stata richiesta una reimpostazione della" +
-	" password per il tuo account.\x02La tua vecchia password continuerà a fu" +
-	"nzionare finché non la cambi.\x02«%[1]s» ti ha invitato al tenant «%[2]s" +
-	"».\x02«%[1]s» ti ha invitato.\x02Credenziali non trovate.\x02Credenzial" +
-	"e MCP non valida.\x02L'app è già sbloccata.\x02L'app non è criptata con " +
-	"passphrase.\x02Nessuna passphrase impostata.\x02La nuova passphrase è ob" +
-	"bligatoria.\x02La nuova passphrase non corrisponde alla conferma.\x02La " +
-	"vecchia passphrase è obbligatoria.\x02La dimensione massima del caricame" +
-	"nto deve essere maggiore o uguale a 0.\x02Impossibile scaricare il file " +
-	"dall'URL.\x02SimpleDMS non ha potuto salvare il file importato. Riprova " +
-	"o chiedi aiuto al team di amministrazione.\x02L'elaborazione del file sc" +
-	"aricato non è riuscita.\x02URL non valido.\x02Il nome del file OpenCloud" +
-	" non è supportato. Rinomina il file e avvia una nuova esportazione.\x02I" +
-	"mpossibile determinare il nome file.\x02SimpleDMS non ha potuto stabilir" +
-	"e una connessione sicura con OpenCloud. Chiedi aiuto al team di amminist" +
-	"razione.\x02OpenCloud ha impiegato troppo tempo a rispondere. Riprova." +
-	"\x02SimpleDMS non ha potuto connettersi a OpenCloud. Riprova più tardi o" +
-	" chiedi aiuto al team di amministrazione.\x02OpenCloud ha rifiutato la p" +
-	"assword dell'integrazione. Chiedi al team di amministrazione di verifica" +
-	"re le impostazioni dell'integrazione.\x02OpenCloud non consente di scari" +
-	"care questo file. Chiedi l'accesso alla persona proprietaria del file o " +
-	"al team di amministrazione.\x02Il link OpenCloud è scaduto o non è più d" +
-	"isponibile. Avvia una nuova esportazione da OpenCloud.\x02OpenCloud sta " +
-	"ricevendo troppe richieste. Attendi un momento e riprova.\x02SimpleDMS n" +
-	"on ha potuto scaricare il file in modo sicuro. Chiedi al team di amminis" +
-	"trazione di verificare le impostazioni dell'integrazione.\x02OpenCloud n" +
-	"on ha potuto fornire il file al momento. Riprova più tardi.\x02Impossibi" +
-	"le scaricare il file da OpenCloud. Riprova o chiedi aiuto al team di amm" +
-	"inistrazione.\x02URL obbligatorio.\x02Sono consentiti solo URL HTTP e HT" +
-	"TPS.\x02Le credenziali nell'URL non sono consentite.\x02Gli URL locali n" +
-	"on sono consentiti.\x02L'host di destinazione non è consentito.\x02Tropp" +
-	"i reindirizzamenti.\x02L'app non è ancora sbloccata. Riprova più tardi." +
-	"\x02L'organizzazione non è ancora inizializzata. Riprova più tardi.\x02E" +
-	"rrore nell'apertura del database dell'organizzazione. Riprova più tardi." +
-	"\x02Esiste già un utente con questo indirizzo email, contatta il support" +
-	"o se vuoi comunque aggiungere questo utente.\x02Non puoi eliminare il tu" +
-	"o stesso utente nella gestione dell'organizzazione.\x02La dimensione mas" +
-	"sima del caricamento deve essere maggiore o uguale a 0 MiB.\x02La dimens" +
-	"ione massima del caricamento è troppo grande.\x02La dimensione massima d" +
-	"el caricamento deve essere maggiore di 0 MiB quando «Illimitato» è disat" +
-	"tivato.\x02L'organizzazione è obbligatoria.\x02Devi aver effettuato l'ac" +
-	"cesso per gestire i limiti di caricamento.\x02Devi essere amministratore" +
-	" per gestire i limiti di caricamento.\x02L’etichetta delle credenziali è" +
-	" obbligatoria.\x02Impossibile creare le credenziali.\x02Esiste già un'en" +
-	"tità simile.\x02La lunghezza del segreto deve essere compresa tra %[1]d " +
-	"e %[2]d caratteri.\x02Il file è una cartella.\x02Seleziona almeno un tip" +
-	"o di documento.\x02L’attributo deve fare riferimento a un gruppo di Tag." +
-	"\x02Il gruppo di Tag «%[1]s» è già aggiunto a questo tipo documento.\x02" +
-	"Il campo «%[1]s» è già aggiunto a questo tipo documento.\x02Nota non tro" +
-	"vata.\x02Il titolo della nota non può essere vuoto.\x02Il testo della no" +
-	"ta non deve essere vuoto.\x02Sorgente e destinazione devono essere file " +
-	"diversi.\x02Documento non trovato.\x02Non puoi accedere alle note di que" +
-	"sto documento.\x02La nota è già stata modificata. Ricarica la pagina." +
-	"\x02Il file non ha una cartella superiore.\x02Intervallo di testo non va" +
-	"lido.\x02Il file non appartiene allo Space corrente.\x02Impossibile unir" +
-	"e le cartelle.\x02Il file sorgente è eliminato.\x02Il file sorgente non " +
-	"è nell'Inbox.\x02Il file sorgente non ha versioni.\x02Impossibile legge" +
-	"re la versione sorgente.\x02Il file sorgente non ha un file archiviato." +
-	"\x02Impossibile leggere le versioni di destinazione.\x02Impossibile aggi" +
-	"ornare il file di destinazione.\x02Impossibile rimuovere le versioni sor" +
-	"gente.\x02Impossibile eliminare il file sorgente.\x02Ordinamento non val" +
-	"ido.\x02L’Inbox di destinazione non è disponibile.\x02Trasferimento nell" +
-	"’Inbox\x02Il file è stato modificato. Ricarica la pagina.\x02È possibi" +
-	"le trasferire solo i file nell’Inbox.\x02Impossibile archiviare la carte" +
-	"lla principale dello Space.\x02La modalità cartella non è abilitata.\x02" +
-	"L'elemento del percorso è un file, non una cartella.\x02Il nome file for" +
-	"nito non è consentito.\x02L'elemento superiore non è una cartella.\x02Es" +
-	"iste già una cartella con questo nome.\x02La destinazione non è una cart" +
-	"ella.\x02Nome file non valido.\x02Impossibile spostare una cartella in s" +
-	"é stessa.\x02La destinazione è la posizione corrente.\x02Impossibile sp" +
-	"ostare una cartella in una delle sue sottocartelle.\x02Il nuovo nome fil" +
-	"e è vuoto.\x02Il nuovo nome file è uguale al precedente.\x02Rilevato un " +
-	"ciclo nell'albero delle cartelle.\x02Impossibile caricare il percorso de" +
-	"l file.\x02Impossibile ottenere il nome dell'oggetto.\x02Impossibile apr" +
-	"ire il file.\x02Il percorso di archiviazione è vuoto.\x02Il file esiste " +
-	"già.\x02Il caricamento è vuoto.\x02La dimensione del caricamento non cor" +
-	"risponde.\x02Il caricamento non è più attivo.\x02Il nome del bucket è vu" +
-	"oto.\x02Impossibile salvare il file.\x02Il nome file esiste già.\x02Impo" +
-	"ssibile verificare il file archiviato.\x02Impossibile ottenere l'identit" +
-	"à x25519.\x02Il nome file di archiviazione non corrisponde.\x02Impossib" +
-	"ile acquisire il file caricato.\x02Impossibile verificare il file tempor" +
-	"aneo.\x02L'app non è ancora sbloccata.\x02L’integrità del file temporane" +
-	"o non corrisponde.\x02Il file caricato è già in fase di elaborazione." +
-	"\x02Database dell'organizzazione non trovato.\x02L’elaborazione del file" +
-	" caricato è stata presa in carico.\x02Impossibile copiare il file tempor" +
-	"aneo.\x02Impossibile verificare il limite di dimensione del caricamento." +
-	"\x02Il caricamento è troppo grande. La dimensione massima consentita è %" +
-	"[1]s.\x02Impossibile verificare il limite di archiviazione.\x02Limite di" +
-	" archiviazione raggiunta per questa organizzazione. Utilizzato: %[1]s di" +
-	" %[2]s.\x02Fattura\x02Numero fattura\x02Data fattura\x02Fornitore\x02Dat" +
-	"a di scadenza\x02Stato\x02Aperto\x02Pagato\x02In ritardo\x02Stato fattur" +
-	"a\x02Ricevuta\x02Data ricevuta\x02Venditore\x02Metodo di pagamento\x02Ca" +
-	"tegoria ricevuta\x02Viaggio\x02Pasti\x02Ufficio\x02Software\x02Contratto" +
-	"\x02Nome contratto\x02Parti\x02Data inizio\x02Data fine\x02Bozza\x02Scad" +
-	"uto\x02Terminato\x02Stato contratto\x02Tipo di contratto\x02Servizio\x02" +
-	"Vendita\x02NDA\x02Ordine di acquisto\x02Numero ordine\x02Data ordine\x02" +
-	"Richiesto da\x02Inviato\x02Approvato\x02Evaso\x02Stato ordine di acquist" +
-	"o\x02Politica\x02Nome della politica\x02Data di validità\x02Archiviato" +
-	"\x02Stato della politica\x02Reparto della politica\x02Reparto\x02HR\x02I" +
-	"T\x02Finanza\x02Operazioni\x02Documento di progetto\x02Nome progetto\x02" +
-	"Data obiettivo\x02In corso\x02Completato\x02In pausa\x02Stato del proget" +
-	"to\x02Tipo di progetto\x02Piano\x02Rapporto\x02Specifiche\x02Note riunio" +
-	"ne\x02Data riunione\x02Organizzatore\x02Partecipanti\x02Interno\x02Clien" +
-	"te\x02Finale\x02Tipo di riunione\x02Stato della riunione\x02Nota spese" +
-	"\x02Periodo del rapporto\x02Dipendente\x02Data di invio\x02Inviato\x02Ri" +
-	"fiutato\x02Stato spese\x02Reparto spese\x02Persona\x02Modello di tipo di" +
-	" documento sconosciuto.\x02Impossibile aggiungere un gruppo di Tag come " +
-	"figlio.\x02La destinazione deve essere un gruppo di Tag.\x02Una composiz" +
-	"ione richiede un Tag composto e un sotto-Tag semplice.\x02Impossibile el" +
-	"iminare un'entità ancora in uso.\x02Si è verificata una violazione di vi" +
-	"ncolo del database. Contatta il supporto.\x02Validazione dei dati fallit" +
-	"a.\x02Non hai effettuato l'accesso. Accedi per continuare.\x02Impossibil" +
-	"e analizzare l'URL.\x02Registra un Passkey per continuare.\x02Impossibil" +
-	"e leggere il cookie.\x02Cookie impostato ma non valido.\x02Cookie impost" +
-	"ato ma vuoto.\x02Modalità manutenzione\x02La modalità manutenzione è att" +
-	"ivata. Attendere fino a quando l'applicazione sarà nuovamente pronta." +
-	"\x02Intervallo di paginazione o ricerca non valido.\x02L’ID del file è n" +
-	"ecessario.\x02ID cartella non valido.\x02Gestisci Space\x02Organizzazion" +
-	"i\x02MCP\x02Disconnetti\x02Informazioni su SimpleDMS\x02Cookie di autent" +
-	"icazione già impostato.\x02Impossibile generare il valore della sessione" +
-	".\x02Non sei autorizzato ad accedere alla risorsa richiesta.\x02Impossib" +
-	"ile avviare la transazione.\x02Impossibile leggere i dati.\x02Dimensione" +
-	" del caricamento non valida."
+	"d\x02File non trovato.\x02Sposta\x02Decomprimi archivio\x02Eliminare que" +
+	"sto file? Puoi ripristinarlo dal cestino.\x02Eliminare questa cartella? " +
+	"I suoi file possono essere ripristinati dal cestino.\x02Dettagli\x02Font" +
+	"e\x02Dimensione file\x02Tipo MIME\x02Hash SHA-256\x02Nome file originale" +
+	"\x02Caricato il\x02Versione\x02Versione corrente caricata il\x02Eliminat" +
+	"o il\x02Creato il %[1]s\x02Anteprima\x02Originale\x02Scarica PDF\x02Non " +
+	"è stato possibile generare l’anteprima PDF.\x02Riprova a generare il PD" +
+	"F\x02Scarica\x02L’anteprima PDF non è disponibile perché Gotenberg non è" +
+	" configurato.\x02L’anteprima PDF è in fase di generazione. Attendi un mo" +
+	"mento; la pagina si aggiornerà automaticamente.\x02L’anteprima PDF non è" +
+	" disponibile.\x02Rendering non riuscito.\x02Mostra dettagli\x02Chiudi an" +
+	"teprima\x02Versione non trovata.\x02Nessun campo assegnato finora.\x02Ri" +
+	"muovere questo valore del campo?\x02Caricamento di altri elementi…\x02No" +
+	"me\x02Tipo\x02Metadati\x02Data\x02Dimensione\x02Etichette\x02Nessun dato" +
+	" disponibile.\x02Sì\x02No\x02Info\x02Versioni\x02Duplicati\x02Impossibil" +
+	"e caricare i duplicati.\x02Caricamento file\x02Conferma che i metadati d" +
+	"el file sorgente andranno persi.\x02Sono richiesti file sorgente e di de" +
+	"stinazione.\x02Aggiunta nuova versione dall'Inbox.\x02Capisco che i meta" +
+	"dati del file dell'Inbox (tipo di documento, Tag, campi) andranno persi " +
+	"durante l'unione. Le note e la loro cronologia verranno mantenute.\x02Ce" +
+	"rca file nell'Inbox\x02Aggiungi nuova versione dall'Inbox\x02Il file di " +
+	"destinazione è obbligatorio.\x02Il file sorgente è obbligatorio.\x02Il f" +
+	"ile deve essere nell'Inbox.\x02Nessuna corrispondenza trovata.\x02Numero" +
+	" di versione mancante.\x02Numero di versione non valido.\x02Anteprima ve" +
+	"rsione\x02Carica nuova versione\x02Nessuna versione disponibile finora." +
+	"\x02Carica una nuova versione per iniziare.\x02Aggiungi nuova versione" +
+	"\x02Filtri\x02Nessun file disponibile al momento.\x02Nessun file o carte" +
+	"lla disponibile al momento.\x02Torna alla cartella superiore\x02Cerca" +
+	"\x02Cerca in «%[1]s»\x02Ordina file\x02Cambia visualizzazione elenco fil" +
+	"e\x02Elenco\x02Tabella\x02Nessun campo disponibile finora.\x02Nessun cam" +
+	"po disponibile.\x02Contiene\x02Inizia con\x02Uguale a\x02Maggiore di\x02" +
+	"Minore di\x02Tra\x02«%[1]s» è selezionato\x02«%[1]s» non è selezionato" +
+	"\x02Tag | Filtro\x02Nessun Tag disponibile finora.\x02Gestisci Tag\x02Cr" +
+	"ea\x02«%[1]s» creato.\x02Apri cartella\x02Consentito solo in modalità ca" +
+	"rtella.\x02Apri file\x02Spostato in «%[1]s».\x02«%[1]s» rimosso.\x02Rino" +
+	"mina file\x02Rinominato in «%[1]s».\x02Filtri reimpostati.\x02La convers" +
+	"ione dell'anteprima PDF non è configurata.\x02L'anteprima PDF non è pron" +
+	"ta per essere riprovata.\x02La generazione dell’anteprima PDF è stata ac" +
+	"codata.\x02Tipo documento deselezionato.\x02Tipo documento selezionato." +
+	"\x02Migliore corrispondenza\x02Più recenti prima\x02Più vecchi prima\x02" +
+	"Ordina per nome\x02Decomprimi\x02Non è un archivio ZIP.\x02Impossibile a" +
+	"prire l'archivio ZIP.\x02Impossibile decomprimere l'archivio.\x02Impossi" +
+	"bile leggere l'archivio ZIP.\x02Impossibile creare la struttura di carte" +
+	"lle.\x02Impossibile estrarre tutti i file dall'archivio.\x02Archivio est" +
+	"ratto.\x02L'archivio è troppo grande.\x02Impossibile verificare la dimen" +
+	"sione dell'archivio.\x02La data di fine è precedente alla data di inizio" +
+	".\x02Carica\x02Nessuna cartella superiore fornita.\x02È richiesto un con" +
+	"testo della richiesta in sola lettura.\x02Nessun file fornito.\x02«%[1]s" +
+	"» è stato caricato.\x02I metadati del caricamento devono essere inviati" +
+	" prima del file.\x02Nuova versione caricata per «%[1]s».\x02Impossibile " +
+	"caricare versioni per le cartelle.\x02Le cartelle non possono essere sca" +
+	"ricate.\x02Sposta file\x02Sposta file in «%[1]s»\x02Cartella superiore" +
+	"\x02Home\x02Account\x02È necessaria una Session completa.\x02Convalida d" +
+	"el modulo non riuscita.\x02Nessuno Space disponibile finora.\x02Etichett" +
+	"a del client\x02Consenti modifiche\x02Senza modifiche, il client MCP può" +
+	" solo leggere i documenti.\x02Space\x02Crea credenziale MCP\x02Credenzia" +
+	"le MCP creata\x02Copia subito il segreto. Non verrà mostrato di nuovo." +
+	"\x02URL MCP\x02Token\x02Etichetta del dispositivo\x02Lunghezza del segre" +
+	"to\x02Riduci la lunghezza del segreto solo se il tuo dispositivo limita " +
+	"la lunghezza massima della password.\x02Modalità compatibilità\x02Usa so" +
+	"lo lettere, numeri, trattini e trattini bassi per i dispositivi con supp" +
+	"orto limitato ai caratteri speciali.\x02Crea credenziali WebDAV\x02Crede" +
+	"nziali WebDAV create\x02URL WebDAV\x02URL WebDAV Inbox\x02Nome utente" +
+	"\x02Segreto\x02Destinazione non disponibile.\x02Non puoi creare credenzi" +
+	"ali per questo Space.\x02Copia %[1]s\x02Copia di %[1]s negli appunti com" +
+	"pletata.\x02Impossibile copiare %[1]s.\x02Destinazione non disponibile" +
+	"\x02Apri attività\x02Organizzazione «%[1]s»\x02Nessun Passkey registrato" +
+	"\x02Passkeys\x02Registra un Passkey per abilitare l accesso senza passwo" +
+	"rd.\x02Aggiungi una passkey di backup\x02Raccomandazione passkey\x02Conf" +
+	"igura una seconda passkey su un altro dispositivo come backup nel caso i" +
+	"n cui un dispositivo venga perso.\x02Rigenera i codici Backup\x02Rigener" +
+	"are i codici Backup? I codici esistenti non funzioneranno più.\x02Accoun" +
+	"t «%[1]s»\x02Account «%[1]s», di proprietà di «%[2]s»\x02Sistema\x02Conf" +
+	"igurazione Passkey richiesta\x02La tua organizzazione richiede l accesso" +
+	" con Passkey. Registra un Passkey per continuare.\x02Restano %[1]d codic" +
+	"i Backup\x02Abbonamento\x02Non inizializzato\x02Attendere prego\x02L'org" +
+	"anizzazione non è ancora inizializzata, attendi fino al completamento de" +
+	"ll'inizializzazione.\x02Aggiorna\x02Utilizzo quota\x02Non disponibile" +
+	"\x02Nessuna password impostata\x02Hai effettuato l'accesso con una passw" +
+	"ord temporanea. Imposta una password per proteggere il tuo account e usa" +
+	"re l'app.\x02Imposta password ora\x02Password temporanea attiva\x02Il tu" +
+	"o account ha una password temporanea attiva. Cambia la tua password o ri" +
+	"muovi la password temporanea il prima possibile per proteggere il tuo ac" +
+	"count.\x02Nessuno Space disponibile finora\x02Non hai il permesso di acc" +
+	"edere a nessuno Space di questa organizzazione.\x02Crea una voce per ini" +
+	"ziare.\x02Gestisci Spaces\x02L'app è sbloccata e non è protetta da una p" +
+	"assphrase.\x02L'app è bloccata.\x02Imposta passphrase\x02L'app è sblocca" +
+	"ta e protetta da una passphrase.\x02Stato dell'app\x02Ultimo utilizzo: %" +
+	"[1]s\x02Passkey\x02Gestisci limite di caricamento\x02Dashboard\x02Modifi" +
+	"ca credenziale MCP\x02Modifiche salvate.\x02Modifica credenziale WebDAV" +
+	"\x02Filtra le credenziali MCP\x02Attivo\x02Revocate\x02Ancora nessuna cr" +
+	"edenziale MCP.\x02Crea credenziali per collegare un client MCP a uno Spa" +
+	"ce.\x02Copia l’URL MCP\x02L’URL MCP è stato copiato negli appunti.\x02Im" +
+	"possibile copiare l’URL MCP.\x02Sola lettura\x02Lettura e scrittura\x02%" +
+	"[1]s · Creato: %[2]s\x02%[1]s · Revocato: %[2]s\x02Revoca\x02Revocare qu" +
+	"esta credenziale MCP?\x02Credenziali MCP\x02Impostazioni\x02Organizzazio" +
+	"ne\x02Attiva obbligo Passkey\x02Attivare l’obbligo Passkey per questa or" +
+	"ganizzazione? I membri dovranno usare Passkeys per accedere.\x02Disattiv" +
+	"a obbligo Passkey\x02Disattivare l’obbligo Passkey per questa organizzaz" +
+	"ione? I membri potranno di nuovo usare password, se consentito.\x02Elimi" +
+	"na organizzazione\x02Eliminare questa organizzazione? Tutti gli account " +
+	"di sua proprietà verranno eliminati globalmente.\x02Scarica backup\x02El" +
+	"iminare questo Passkey?\x02Credenziale MCP revocata.\x02Non sei autorizz" +
+	"ato a revocare queste credenziali.\x02Credenziali WebDAV revocate.\x02Mo" +
+	"difica nella vista «Spaces»\x02Tipi documento\x02Utenti\x02Devi essere a" +
+	"mministratore per accedere alle impostazioni di sistema.\x02Impostazioni" +
+	" di sistema\x02Devi essere amministratore per accedere allo stato del si" +
+	"stema.\x02Stato del sistema\x02Verifica di nuovo\x02Devi aver effettuato" +
+	" l'accesso per gestire le organizzazioni.\x02Organizzazione non trovata." +
+	"\x02Solo i proprietari possono modificare l obbligo Passkey.\x02Obbligo " +
+	"Passkey attivato per l organizzazione.\x02Obbligo Passkey disattivato pe" +
+	"r l organizzazione.\x02Filtra le credenziali WebDAV\x02Ancora nessuna cr" +
+	"edenziale WebDAV.\x02Crea credenziali per un dispositivo per caricare fi" +
+	"le in una Inbox tramite WebDAV.\x02Copia l’URL WebDAV\x02L’URL WebDAV è " +
+	"stato copiato negli appunti.\x02Impossibile copiare l’URL WebDAV.\x02Nom" +
+	"e utente: %[1]s · Creato: %[2]s\x02Nome utente: %[1]s · Ultimo utilizzo:" +
+	" %[2]s\x02Nome utente: %[1]s · Revocato: %[2]s\x02Revocare queste creden" +
+	"ziali WebDAV?\x02Credenziali WebDAV\x02Aggiungi attributo campo\x02Attri" +
+	"buto aggiornato.\x02Crea prima un campo.\x02Eliminare questo attributo?" +
+	"\x02Aggiungi attributo elenco (gruppo di Tag)\x02attribuzione del nome" +
+	"\x02Eliminare questo tipo di documento?\x02Aggiungi attributo\x02Attribu" +
+	"to «%[1]s» creato.\x02Nessun gruppo di Tag disponibile finora.\x02Crea p" +
+	"rima un gruppo di Tag.\x02Crea tipo di documento\x02Tipo documento creat" +
+	"o.\x02Attributo eliminato.\x02Tipo documento eliminato.\x02Chiudi dettag" +
+	"li\x02Modifica attributo campo\x02Modifica attributo Tag\x02Attributo «%" +
+	"[1]s» aggiornato.\x02Tipi di documento importati.\x02Importa dalla bibli" +
+	"oteca\x02Importa\x02L'importazione è disponibile solo per Spaces vuoti." +
+	"\x02Nessun tipo di documento della biblioteca disponibile al momento." +
+	"\x02Seleziona i tipi di documento da importare:\x02Impossibile convertir" +
+	"e l'id in intero.\x02Rinomina tipo di documento\x02Tipo documento rinomi" +
+	"nato in «%[1]s».\x02Non è possibile visualizzare l'anteprima delle carte" +
+	"lle.\x02L'anteprima della sorgente originale è disponibile solo per i fi" +
+	"le HTML.\x02Impossibile leggere il file.\x02Assegna file\x02Assegna\x02N" +
+	"essun nuovo file trovato.\x02File caricati.\x02Sposta in un’altra Inbox" +
+	"\x02Ricarica metadati\x02Elimina dall'Inbox\x02Segna come completato\x02" +
+	"Il riconoscimento del testo (OCR) non può essere applicato perché il fil" +
+	"e è troppo grande, i suggerimenti si basano solo sul nome del file.\x02I" +
+	"l riconoscimento del testo (OCR) non è ancora pronto, i suggerimenti si " +
+	"basano solo sul nome file.\x02Seleziona destinazione manualmente\x02Sugg" +
+	"erimenti basati sul nome file\x02Filtro origine non valido.\x02Inbox\x02" +
+	"Cerca in «Inbox»\x02Filtra per fonte\x02Il file non è nell'Inbox.\x02Fil" +
+	"e «%[1]s» segnato come completato.\x02Origine | Filtro\x02Spostato nell’" +
+	"Inbox di «%[1]s».\x02Nessun’altra Inbox è disponibile. Devi avere access" +
+	"o in scrittura a un altro Space, oppure la sua Inbox deve accettare tras" +
+	"ferimenti.\x02Scegli un’Inbox\x02Inbox di destinazione\x02Puoi scegliere" +
+	" altri Spaces di questa organizzazione in cui hai accesso in scrittura o" +
+	" le cui Inbox accettano trasferimenti.\x02Messaggio (facoltativo)\x02Il " +
+	"tuo messaggio verrà salvato come nota con il tuo nome.\x02Lo spostamento" +
+	" rimuove il tipo di documento, i tag e i campi personalizzati. Le versio" +
+	"ni e le note vengono conservate.\x02Se non puoi aprire il Space di desti" +
+	"nazione, perderai l’accesso a questo file dopo lo spostamento.\x02Assegn" +
+	"a utente allo Space\x02Nessuno Space selezionato. Seleziona prima uno Sp" +
+	"ace.\x02Non ti è permesso assegnare utenti agli Spaces perché non sei il" +
+	" proprietario.\x02Utente assegnato allo Space.\x02Impossibile caricare g" +
+	"li utenti.\x02Ricarica la pagina e riprova.\x02Nessun utente non assegna" +
+	"to disponibile.\x02Crea prima un utente nella gestione utenti dell'organ" +
+	"izzazione.\x02Assegna utente\x02L'utente è già assegnato a questo Space." +
+	"\x02Non puoi rimuovere la tua assegnazione da uno Space.\x02Rimuovi asse" +
+	"gnazione utente dallo Space\x02Rimuovi assegnazione\x02Assegnazione uten" +
+	"te rimossa dallo Space.\x02Rimuovere l'assegnazione di questo utente dal" +
+	"lo Space?\x02Ancora nessun utente assegnato.\x02Crea Tag o gruppo\x02Eli" +
+	"minare questo Tag? Verrà rimosso da tutti i file.\x02Assegna Tag\x02Spos" +
+	"ta nel gruppo\x02Gruppo, %[1]d Tag\x02Gruppo, %[1]d Tag\x02Crea Tag\x02S" +
+	"uper Tag\x02L'ID del gruppo di Tag è obbligatorio.\x02Il Tag non è un gr" +
+	"uppo.\x02Crea utente\x02Non ti è permesso creare utenti. Nessuna organiz" +
+	"zazione selezionata.\x02Non ti è permesso creare utenti perché non sei i" +
+	"l proprietario.\x02Utente creato. La password è stata inviata via email." +
+	" I proprietari possono accedere a tutti gli Spaces senza ulteriori confi" +
+	"gurazioni.\x02Utente creato. La password è stata inviata via email. Ora " +
+	"assegna l'utente a uno Space.\x02Non ti è consentito eliminare utenti. N" +
+	"essuna organizzazione selezionata.\x02Non ti è consentito eliminare uten" +
+	"ti perché non sei il proprietario.\x02Utente rimosso dall'organizzazione" +
+	" e account eliminato globalmente.\x02Utente rimosso dall'organizzazione." +
+	"\x02Rimuovere questo utente dall'organizzazione?\x02Rimuovere questo ute" +
+	"nte dall'organizzazione ed eliminare il suo account globalmente?\x02Acco" +
+	"unt membro\x02Account proprietario\x02%[1]s · %[2]s\x02Caricamento dei f" +
+	"ile in corso, attendi un momento.\x02La pagina verrà aggiornata automati" +
+	"camente una volta terminato il caricamento.\x02Riprova quando hai creato" +
+	" uno Space o sei stato invitato a unirti a uno.\x02Seleziona Space\x02L'" +
+	"elaborazione dei file condivisi è fallita.\x02File caricati, seleziona u" +
+	"no Space.\x02Corpo del caricamento non valido.\x02Il caricamento è tropp" +
+	"o grande.\x02File caricato, seleziona uno Space.\x02Importa URL\x02Impor" +
+	"ta URL\x02Importa file da URL\x02Scarica e continua\x02Crea campo\x02Cam" +
+	"po «%[1]s» creato.\x02Campo eliminato.\x02Modifica campo\x02Campo aggior" +
+	"nato.\x02Eliminare questo campo?\x02Space «%[1]s» creato.\x02Crea Space" +
+	"\x02Seleziona i tipi di documento da aggiungere a questo Space:\x02Space" +
+	" eliminato.\x02Modifica Space\x02%[1]s (%[2]s)\x02attivo\x02Eliminare qu" +
+	"esto Space?\x02Spazi\x02La pagina richiesta non è stata trovata.\x02La p" +
+	"agina richiesta non può essere caricata.\x02«%[1]s» assegnato.\x02Crea e" +
+	" assegna Tag\x02«%[1]s» creato e assegnato.\x02Tag «%[1]s» creato.\x02«%" +
+	"[1]s» eliminato.\x02Gruppo, %[1]d Tag, %[2]d selezionati\x02Gruppo, %[1]" +
+	"d Tag, %[2]d selezionati\x02Composto da %[1]s\x02Mostra Tag assegnati" +
+	"\x02Crea gruppo\x02Tag di «%[1]s»\x02Modifica Tag\x02«%[1]s» aggiornato." +
+	"\x02Layout non supportato.\x02Modifica Tag assegnati\x02Gruppo «%[1]s»" +
+	"\x02Sposta Tag nel gruppo\x02Rimosso dal gruppo.\x02Spostato nel gruppo " +
+	"«%[1]s».\x02Deseleziona gruppo\x02Eliminare completamente questo Tag? V" +
+	"errà rimosso da tutti i file, non solo da questo.\x02«%[1]s» non assegna" +
+	"to.\x02Creato il\x02Modificato il\x02Nessun Tag assegnato.\x02Le cartell" +
+	"e non possono essere ripristinate.\x02Il file non è eliminato.\x02La car" +
+	"tella superiore originale manca. Ripristinato in Inbox.\x02File ripristi" +
+	"nato.\x02Ripristina\x02Il cestino è vuoto.\x02Cartella eliminata\x02Cart" +
+	"ella eliminata: %[1]s\x02Eliminato: %[1]s\x02Cestino\x02L'anteprima del " +
+	"file non è disponibile per le cartelle.\x02Caricamento web\x02Apri con" +
+	"\x02Importazione URL\x02WebDAV\x02Estrazione di sistema\x02Impossibile a" +
+	"nalizzare il file.\x02Impossibile analizzare il modulo.\x02Impossibile d" +
+	"ecodificare il modulo.\x02Impossibile validare il modulo.\x02Impossibile" +
+	" analizzare l'URL corrente.\x02Impossibile decodificare la query url." +
+	"\x02Solo i proprietari dell'organizzazione possono gestire utenti e impo" +
+	"stazioni.\x02OCR completato alle\x02Non sei autorizzato ad accedere a qu" +
+	"esta organizzazione.\x02Non sei autorizzato ad accedere a questo Space." +
+	"\x02Non è stato restituito alcun codice Backup.\x02I codici Backup sono " +
+	"stati rigenerati.\x02Impossibile rigenerare i codici Backup.\x02Chiudi f" +
+	"inestra\x02Chiudi\x02Suggerimento\x02opzionale\x02obbligatorio\x02Questa" +
+	" organizzazione è in modalità manutenzione. Alcune funzionalità potrebbe" +
+	"ro non funzionare. Contatta il tuo amministratore.\x02Passphrase dell’ap" +
+	"plicazione\x02La passphrase è obbligatoria.\x02Passphrase non valida." +
+	"\x02Qualcosa è andato storto. Riprova per favore.\x02Troppi tentativi di" +
+	" sblocco. Riprova più tardi.\x02Applicazione sbloccata. Avvio in corso." +
+	"\x02Azioni\x02Apri menu principale\x02Dai a questo Passkey un nome facol" +
+	"tativo cosi potrai riconoscerlo in seguito.\x02Dopo la registrazione ver" +
+	"ranno mostrati una sola volta codici Backup stampabili. Salvali prima di" +
+	" chiudere.\x02Dopo la configurazione, l'accesso con password è disattiva" +
+	"to per questo account. Usa invece passkey e codici di backup.\x02Nome de" +
+	"lla Passkey (facoltativo)\x02Caricamento…\x02Importante: questi codici d" +
+	"i backup vengono mostrati una sola volta. Salvali, stampali o scaricali " +
+	"ora prima di chiudere questa finestra di dialogo.\x02Se perdi questi cod" +
+	"ici e la tua passkey, il recupero dell'account potrebbe non essere più p" +
+	"ossibile.\x02Codici di backup SimpleDMS\x02Generato\x02Conserva questi c" +
+	"odici di backup in un luogo sicuro.\x02Questi codici vengono mostrati un" +
+	"a sola volta.\x02Codici\x02Finestra di stampa aperta.\x02I codici Backup" +
+	" sono stati copiati negli appunti.\x02Impossibile copiare automaticament" +
+	"e i codici Backup.\x02I codici Backup sono stati scaricati.\x02Stampa co" +
+	"dici\x02Copia codici\x02Accetta trasferimenti nell’Inbox\x02Scheda attiv" +
+	"a\x02Aggiungimi come proprietario dello Space\x02Aggiungi all'Inbox\x02A" +
+	"dmin\x02Austria\x02Codice Backup\x02Belgio\x02Testo\x02Colonna integrata" +
+	"\x02Bulgaria\x02Checkbox\x02Valore Checkbox\x02Conferma nuova passphrase" +
+	"\x02Conferma passphrase\x02Conferma password\x02Conferma avviso\x02Valor" +
+	"i di stato delle credenziali\x02Croazia\x02Password attuale o temporanea" +
+	"\x02Passphrase attuale\x02Cipro\x02Repubblica Ceca\x02Valore data\x02Eli" +
+	"mina in caso di successo\x02Danimarca\x02Descrizione\x02Destinazione\x02" +
+	"Email\x02Inglese\x02Estonia\x02Campo\x02File\x02Nome file\x02Finlandia" +
+	"\x02Nome\x02Nome cartella\x02Francia\x02Francese\x02Tedesco\x02Germania" +
+	"\x02Grecia\x02Gruppo\x02Ungheria\x02Islanda\x02Irlanda\x02È attribuzione" +
+	" del nome\x02È illimitato\x02Italiano\x02Italia\x02Etichetta\x02Lingua" +
+	"\x02Cognome\x02Lettonia\x02Layout\x02Chiavi dei modelli della biblioteca" +
+	"\x02Liechtenstein\x02Lituania\x02Locale\x02Lussemburgo\x02Malta\x02Dimen" +
+	"sione massima caricamento MiB\x02Messaggio\x02Denaro\x02Valore monetario" +
+	"\x02Paesi Bassi\x02Nuovo nome file\x02Nuovo nome cartella\x02Nuovo nome" +
+	"\x02Nuova passphrase\x02Nuova password\x02Norvegia\x02Numero\x02Valore n" +
+	"umerico\x02Solo assegnati\x02Operazione\x02Operatore\x02Altro\x02Proprie" +
+	"tario\x02Passphrase\x02Password\x02In sospeso\x02Polonia\x02Portogallo" +
+	"\x02Scheda anteprima\x02Pro\x02URL push\x02Ruolo\x02Romania\x02S 3\x02Qu" +
+	"ery di ricerca\x02Mostra cronologia\x02Mostra i Tag\x02Semplice\x02Slova" +
+	"cchia\x02Slovenia\x02Spagna\x02Iscriviti alla newsletter\x02Super\x02Sos" +
+	"tenitore\x02Svezia\x02Svizzera\x02Tag\x02Chiavi del modello\x02Session t" +
+	"emporanea\x02Testo\x02Valore testo\x02Prova\x02URL\x02Unità\x02Utente" +
+	"\x02Valore\x02Valore finale\x02Valore iniziale\x02Numero versione\x02Mod" +
+	"alità di visualizzazione\x02Proprietà\x02Dimensioni\x02Registrati\x02Reg" +
+	"istrazione\x02Prova gratuita di 30 giorni, nessuna carta di credito rich" +
+	"iesta.\x02Nome organizzazione\x02Paese\x02Accetta i termini di servizio" +
+	"\x02Accetta l'informativa sulla privacy\x02Registrazione completata, con" +
+	"trolla le tue email per la password.\x02Note legali\x02Informativa sulla" +
+	" privacy\x02Termini di servizio\x02Per questo account e richiesto l acce" +
+	"sso con Passkey.\x02Troppi tentativi di accesso. Riprova tra 10 secondi." +
+	"\x02Impossibile generare i codici Backup.\x02Password temporanea scaduta" +
+	".\x02Impossibile generare la password temporanea.\x02Impossibile generar" +
+	"e il salt.\x02La password attuale non è valida.\x02La nuova password dev" +
+	"e essere diversa dalla password attuale.\x02Una password è già impostata" +
+	". Usa invece il modulo «Cambia password».\x02La password deve contenere " +
+	"almeno dodici caratteri.\x02Le password non corrispondono.\x02Accesso co" +
+	"n Passkey non valido.\x02Accesso con Passkey non riuscito.\x02L'accesso " +
+	"con Passkey non è abilitato per questo account.\x02Registrazione Passkey" +
+	" non riuscita.\x02Ti serve almeno un passkey prima di creare i codici Ba" +
+	"ckup.\x02Credenziali di accesso Backup non valide.\x02Troppi tentativi d" +
+	"i accesso Backup. Riprova tra 10 secondi.\x02L account di destinazione n" +
+	"on ha Passkeys configurati.\x02Passkey non trovata.\x02Account non trova" +
+	"to.\x02Configurazione dell origine Passkey non valida.\x02Configurazione" +
+	" dell ID RP Passkey mancante.\x02Impossibile inizializzare il servizio P" +
+	"asskey.\x02La challenge Passkey non e valida o e scaduta.\x02Credenziale" +
+	" Passkey sconosciuta.\x02Account Passkey non trovato.\x02L'app è già ini" +
+	"zializzata.\x02La tua password temporanea è\x02Scade il\x02Nuova registr" +
+	"azione dell'organizzazione\x02Questo è un messaggio automatico, non risp" +
+	"ondere.\x02Benvenuto in SimpleDMS\x0202-01-2006 alle 15:04\x02Reimpostaz" +
+	"ione password SimpleDMS\x02Il tuo account è stato creato con successo." +
+	"\x02Accedi e cambia la tua password il prima possibile.\x02Apri pagina d" +
+	"i accesso\x02È stata richiesta una reimpostazione della password per il " +
+	"tuo account.\x02La tua vecchia password continuerà a funzionare finché n" +
+	"on la cambi.\x02«%[1]s» ti ha invitato al tenant «%[2]s».\x02«%[1]s» ti " +
+	"ha invitato.\x02Credenziali non trovate.\x02Credenziale MCP non valida." +
+	"\x02L'app è già sbloccata.\x02L'app non è criptata con passphrase.\x02Ne" +
+	"ssuna passphrase impostata.\x02La nuova passphrase è obbligatoria.\x02La" +
+	" nuova passphrase non corrisponde alla conferma.\x02La vecchia passphras" +
+	"e è obbligatoria.\x02La dimensione massima del caricamento deve essere m" +
+	"aggiore o uguale a 0.\x02Generale\x02Origine pubblica\x02ID della relyin" +
+	"g party WebAuthn\x02Protezione con passphrase\x02Crittografia dei file" +
+	"\x02Cookie non sicuri\x02Dimensione massima di caricamento\x02Sovrascriv" +
+	"i la configurazione salvata all’avvio\x02Modalità di sviluppo\x02La moda" +
+	"lità di sviluppo è attiva. Non usarla in produzione.\x02Nessuna origine " +
+	"pubblica impostata. Le e-mail non possono contenere link all’app.\x02L’o" +
+	"rigine pubblica non è un URL valido.\x02L’origine pubblica non usa HTTPS" +
+	".\x02L’ID della relying party WebAuthn non corrisponde all’origine pubbl" +
+	"ica. Le passkey non funzionano.\x02I cookie di Session vengono inviati a" +
+	"nche tramite connessioni non crittografate.\x02Archiviazione\x02Endpoint" +
+	"\x02Bucket\x02ID chiave di accesso\x02Chiave di accesso segreta\x02SSL/T" +
+	"LS\x02Nessuna archiviazione configurata. Non è possibile caricare file." +
+	"\x02Connessione\x02La connessione all’archiviazione non è crittografata." +
+	"\x02OCR\x02Estrazione del testo\x02Xberg, Tika per i formati non support" +
+	"ati\x02Disattivato\x02Né Xberg né Tika sono configurati. Il testo dei do" +
+	"cumenti non viene estratto e non è ricercabile.\x02Dimensione massima de" +
+	"l file\x02URL Xberg\x02L’URL Xberg non è valido.\x02Connessione Xberg" +
+	"\x02URL Tika\x02L’URL Tika non è valido.\x02Connessione Tika\x02Anteprim" +
+	"e PDF\x02URL Gotenberg\x02Gotenberg non è configurato. Le anteprime PDF " +
+	"dei file Office, HTML e Markdown sono disattivate.\x02L’URL Gotenberg no" +
+	"n è valido.\x02Host\x02Porta\x02Indirizzo del mittente\x02SSL/TLS implic" +
+	"ito\x02Verifica del certificato\x02E-mail in attesa di invio\x02E-mail c" +
+	"he non è stato possibile inviare\x02Nessun server di posta configurato. " +
+	"Le e-mail, ad esempio per reimpostare la password, non vengono inviate." +
+	"\x02Nessun indirizzo del mittente configurato. Le e-mail non possono ess" +
+	"ere inviate.\x02Il certificato del server di posta non viene verificato." +
+	"\x02Non è stato possibile inviare %[1]d e-mail dopo %[2]d tentativi.\x02" +
+	"TLS\x02Modalità\x02Certificati automatici da Let's Encrypt\x02Host\x02Ne" +
+	"ssun host configurato per i certificati automatici.\x02HTTP, HTTPS deve " +
+	"essere fornito da un reverse proxy\x02È impostato solo il file del certi" +
+	"ficato o il file della chiave privata. TLS è disattivato.\x02File del ce" +
+	"rtificato\x02File del certificato\x02File della chiave privata\x02Imposs" +
+	"ibile caricare il certificato: %[1]s\x02Certificato valido fino al\x02Il" +
+	" certificato è scaduto il %[1]s.\x02Il certificato scade il %[1]s.\x02No" +
+	"n raggiungibile\x02%[1]s non è raggiungibile: %[2]s\x02Connesso\x02Conne" +
+	"sso (%[1]s)\x02Non impostato\x02Impostato\x02Attivato\x02Consentito\x02N" +
+	"on consentito\x02Impossibile scaricare il file dall'URL.\x02SimpleDMS no" +
+	"n ha potuto salvare il file importato. Riprova o chiedi aiuto al team di" +
+	" amministrazione.\x02L'elaborazione del file scaricato non è riuscita." +
+	"\x02URL non valido.\x02Il nome del file OpenCloud non è supportato. Rino" +
+	"mina il file e avvia una nuova esportazione.\x02Impossibile determinare " +
+	"il nome file.\x02SimpleDMS non ha potuto stabilire una connessione sicur" +
+	"a con OpenCloud. Chiedi aiuto al team di amministrazione.\x02OpenCloud h" +
+	"a impiegato troppo tempo a rispondere. Riprova.\x02SimpleDMS non ha potu" +
+	"to connettersi a OpenCloud. Riprova più tardi o chiedi aiuto al team di " +
+	"amministrazione.\x02OpenCloud ha rifiutato la password dell'integrazione" +
+	". Chiedi al team di amministrazione di verificare le impostazioni dell'i" +
+	"ntegrazione.\x02OpenCloud non consente di scaricare questo file. Chiedi " +
+	"l'accesso alla persona proprietaria del file o al team di amministrazion" +
+	"e.\x02Il link OpenCloud è scaduto o non è più disponibile. Avvia una nuo" +
+	"va esportazione da OpenCloud.\x02OpenCloud sta ricevendo troppe richiest" +
+	"e. Attendi un momento e riprova.\x02SimpleDMS non ha potuto scaricare il" +
+	" file in modo sicuro. Chiedi al team di amministrazione di verificare le" +
+	" impostazioni dell'integrazione.\x02OpenCloud non ha potuto fornire il f" +
+	"ile al momento. Riprova più tardi.\x02Impossibile scaricare il file da O" +
+	"penCloud. Riprova o chiedi aiuto al team di amministrazione.\x02URL obbl" +
+	"igatorio.\x02Sono consentiti solo URL HTTP e HTTPS.\x02Le credenziali ne" +
+	"ll'URL non sono consentite.\x02Gli URL locali non sono consentiti.\x02L'" +
+	"host di destinazione non è consentito.\x02Troppi reindirizzamenti.\x02L'" +
+	"app non è ancora sbloccata. Riprova più tardi.\x02L'organizzazione non è" +
+	" ancora inizializzata. Riprova più tardi.\x02Errore nell'apertura del da" +
+	"tabase dell'organizzazione. Riprova più tardi.\x02Esiste già un utente c" +
+	"on questo indirizzo email, contatta il supporto se vuoi comunque aggiung" +
+	"ere questo utente.\x02Non puoi eliminare il tuo stesso utente nella gest" +
+	"ione dell'organizzazione.\x02La dimensione massima del caricamento deve " +
+	"essere maggiore o uguale a 0 MiB.\x02La dimensione massima del caricamen" +
+	"to è troppo grande.\x02La dimensione massima del caricamento deve essere" +
+	" maggiore di 0 MiB quando «Illimitato» è disattivato.\x02L'organizzazion" +
+	"e è obbligatoria.\x02Devi aver effettuato l'accesso per gestire i limiti" +
+	" di caricamento.\x02Devi essere amministratore per gestire i limiti di c" +
+	"aricamento.\x02L’etichetta delle credenziali è obbligatoria.\x02Impossib" +
+	"ile creare le credenziali.\x02Esiste già un'entità simile.\x02La lunghez" +
+	"za del segreto deve essere compresa tra %[1]d e %[2]d caratteri.\x02Il f" +
+	"ile è una cartella.\x02Seleziona almeno un tipo di documento.\x02L’attri" +
+	"buto deve fare riferimento a un gruppo di Tag.\x02Il gruppo di Tag «%[1]" +
+	"s» è già aggiunto a questo tipo documento.\x02Il campo «%[1]s» è già agg" +
+	"iunto a questo tipo documento.\x02Nota non trovata.\x02Il titolo della n" +
+	"ota non può essere vuoto.\x02Il testo della nota non deve essere vuoto." +
+	"\x02Sorgente e destinazione devono essere file diversi.\x02Documento non" +
+	" trovato.\x02Non puoi accedere alle note di questo documento.\x02La nota" +
+	" è già stata modificata. Ricarica la pagina.\x02Il file non ha una carte" +
+	"lla superiore.\x02Intervallo di testo non valido.\x02Il file sorgente no" +
+	"n ha versioni.\x02Impossibile leggere la versione sorgente.\x02Il file s" +
+	"orgente non ha un file archiviato.\x02Impossibile leggere le versioni di" +
+	" destinazione.\x02Impossibile aggiornare il file di destinazione.\x02Imp" +
+	"ossibile rimuovere le versioni sorgente.\x02Impossibile eliminare il fil" +
+	"e sorgente.\x02Il file non appartiene allo Space corrente.\x02Impossibil" +
+	"e unire le cartelle.\x02Il file sorgente è eliminato.\x02Il file sorgent" +
+	"e non è nell'Inbox.\x02Ordinamento non valido.\x02L’Inbox di destinazion" +
+	"e non è disponibile.\x02Trasferimento nell’Inbox\x02Il file è stato modi" +
+	"ficato. Ricarica la pagina.\x02È possibile trasferire solo i file nell’I" +
+	"nbox.\x02Impossibile archiviare la cartella principale dello Space.\x02L" +
+	"a modalità cartella non è abilitata.\x02L'elemento del percorso è un fil" +
+	"e, non una cartella.\x02Il nome file fornito non è consentito.\x02L'elem" +
+	"ento superiore non è una cartella.\x02Esiste già una cartella con questo" +
+	" nome.\x02La destinazione non è una cartella.\x02Nome file non valido." +
+	"\x02Impossibile spostare una cartella in sé stessa.\x02La destinazione è" +
+	" la posizione corrente.\x02Impossibile spostare una cartella in una dell" +
+	"e sue sottocartelle.\x02Il nuovo nome file è vuoto.\x02Il nuovo nome fil" +
+	"e è uguale al precedente.\x02Rilevato un ciclo nell'albero delle cartell" +
+	"e.\x02Impossibile caricare il percorso del file.\x02Impossibile ottenere" +
+	" il nome dell'oggetto.\x02Impossibile aprire il file.\x02Il percorso di " +
+	"archiviazione è vuoto.\x02Il file esiste già.\x02Il caricamento è vuoto." +
+	"\x02La dimensione del caricamento non corrisponde.\x02Il caricamento non" +
+	" è più attivo.\x02Il nome del bucket è vuoto.\x02Impossibile salvare il " +
+	"file.\x02Il nome file esiste già.\x02Impossibile verificare il file arch" +
+	"iviato.\x02Impossibile ottenere l'identità x25519.\x02Il nome file di ar" +
+	"chiviazione non corrisponde.\x02Impossibile acquisire il file caricato." +
+	"\x02Impossibile verificare il file temporaneo.\x02L'app non è ancora sbl" +
+	"occata.\x02L’integrità del file temporaneo non corrisponde.\x02Il file c" +
+	"aricato è già in fase di elaborazione.\x02Database dell'organizzazione n" +
+	"on trovato.\x02L’elaborazione del file caricato è stata presa in carico." +
+	"\x02Impossibile copiare il file temporaneo.\x02Impossibile verificare il" +
+	" limite di dimensione del caricamento.\x02Il caricamento è troppo grande" +
+	". La dimensione massima consentita è %[1]s.\x02Impossibile verificare il" +
+	" limite di archiviazione.\x02Limite di archiviazione raggiunta per quest" +
+	"a organizzazione. Utilizzato: %[1]s di %[2]s.\x02Fattura\x02Numero fattu" +
+	"ra\x02Data fattura\x02Fornitore\x02Data di scadenza\x02Stato\x02Aperto" +
+	"\x02Pagato\x02In ritardo\x02Stato fattura\x02Ricevuta\x02Data ricevuta" +
+	"\x02Venditore\x02Metodo di pagamento\x02Categoria ricevuta\x02Viaggio" +
+	"\x02Pasti\x02Ufficio\x02Software\x02Contratto\x02Nome contratto\x02Parti" +
+	"\x02Data inizio\x02Data fine\x02Bozza\x02Scaduto\x02Terminato\x02Stato c" +
+	"ontratto\x02Tipo di contratto\x02Servizio\x02Vendita\x02NDA\x02Ordine di" +
+	" acquisto\x02Numero ordine\x02Data ordine\x02Richiesto da\x02Inviato\x02" +
+	"Approvato\x02Evaso\x02Stato ordine di acquisto\x02Politica\x02Nome della" +
+	" politica\x02Data di validità\x02Archiviato\x02Stato della politica\x02R" +
+	"eparto della politica\x02Reparto\x02HR\x02IT\x02Finanza\x02Operazioni" +
+	"\x02Documento di progetto\x02Nome progetto\x02Data obiettivo\x02In corso" +
+	"\x02Completato\x02In pausa\x02Stato del progetto\x02Tipo di progetto\x02" +
+	"Piano\x02Rapporto\x02Specifiche\x02Note riunione\x02Data riunione\x02Org" +
+	"anizzatore\x02Partecipanti\x02Interno\x02Cliente\x02Finale\x02Tipo di ri" +
+	"unione\x02Stato della riunione\x02Nota spese\x02Periodo del rapporto\x02" +
+	"Dipendente\x02Data di invio\x02Inviato\x02Rifiutato\x02Stato spese\x02Re" +
+	"parto spese\x02Persona\x02Modello di tipo di documento sconosciuto.\x02I" +
+	"mpossibile aggiungere un gruppo di Tag come figlio.\x02La destinazione d" +
+	"eve essere un gruppo di Tag.\x02Una composizione richiede un Tag compost" +
+	"o e un sotto-Tag semplice.\x02Impossibile eliminare un'entità ancora in " +
+	"uso.\x02Si è verificata una violazione di vincolo del database. Contatta" +
+	" il supporto.\x02Validazione dei dati fallita.\x02Non hai effettuato l'a" +
+	"ccesso. Accedi per continuare.\x02Impossibile analizzare l'URL.\x02Regis" +
+	"tra un Passkey per continuare.\x02Impossibile leggere il cookie.\x02Cook" +
+	"ie impostato ma non valido.\x02Cookie impostato ma vuoto.\x02Modalità ma" +
+	"nutenzione\x02La modalità manutenzione è attivata. Attendere fino a quan" +
+	"do l'applicazione sarà nuovamente pronta.\x02Intervallo di paginazione o" +
+	" ricerca non valido.\x02L’ID del file è necessario.\x02ID cartella non v" +
+	"alido.\x02Gestisci Space\x02Organizzazioni\x02MCP\x02Disconnetti\x02Info" +
+	"rmazioni su SimpleDMS\x02Nessun problema trovato\x021 problema richiede " +
+	"attenzione\x02%[1]d problemi richiedono attenzione\x02Ultimo controllo: " +
+	"%[1]s. Le modifiche alla configurazione hanno effetto dopo un riavvio." +
+	"\x02Errore\x02Avviso\x02Non configurato\x02OK\x02Cookie di autenticazion" +
+	"e già impostato.\x02Impossibile generare il valore della sessione.\x02No" +
+	"n sei autorizzato ad accedere alla risorsa richiesta.\x02Impossibile avv" +
+	"iare la transazione.\x02Impossibile leggere i dati.\x02Dimensione del ca" +
+	"ricamento non valida."
 
-	// Total table size 146858 bytes (143KiB); checksum: F34CDF86
+	// Total table size 159343 bytes (155KiB); checksum: 35B0AFB5

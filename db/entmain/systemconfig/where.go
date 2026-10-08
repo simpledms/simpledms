@@ -171,6 +171,11 @@ func OcrTikaURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrTikaURL, v))
 }
 
+// OcrXbergURL applies equality check predicate on the "ocr_xberg_url" field. It's identical to OcrXbergURLEQ.
+func OcrXbergURL(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldOcrXbergURL, v))
+}
+
 // GotenbergURL applies equality check predicate on the "gotenberg_url" field. It's identical to GotenbergURLEQ.
 func GotenbergURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldGotenbergURL, v))
@@ -1199,6 +1204,81 @@ func OcrTikaURLEqualFold(v string) predicate.SystemConfig {
 // OcrTikaURLContainsFold applies the ContainsFold predicate on the "ocr_tika_url" field.
 func OcrTikaURLContainsFold(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldContainsFold(FieldOcrTikaURL, v))
+}
+
+// OcrXbergURLEQ applies the EQ predicate on the "ocr_xberg_url" field.
+func OcrXbergURLEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLNEQ applies the NEQ predicate on the "ocr_xberg_url" field.
+func OcrXbergURLNEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLIn applies the In predicate on the "ocr_xberg_url" field.
+func OcrXbergURLIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldOcrXbergURL, vs...))
+}
+
+// OcrXbergURLNotIn applies the NotIn predicate on the "ocr_xberg_url" field.
+func OcrXbergURLNotIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldOcrXbergURL, vs...))
+}
+
+// OcrXbergURLGT applies the GT predicate on the "ocr_xberg_url" field.
+func OcrXbergURLGT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLGTE applies the GTE predicate on the "ocr_xberg_url" field.
+func OcrXbergURLGTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLLT applies the LT predicate on the "ocr_xberg_url" field.
+func OcrXbergURLLT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLLTE applies the LTE predicate on the "ocr_xberg_url" field.
+func OcrXbergURLLTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLContains applies the Contains predicate on the "ocr_xberg_url" field.
+func OcrXbergURLContains(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContains(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLHasPrefix applies the HasPrefix predicate on the "ocr_xberg_url" field.
+func OcrXbergURLHasPrefix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasPrefix(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLHasSuffix applies the HasSuffix predicate on the "ocr_xberg_url" field.
+func OcrXbergURLHasSuffix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasSuffix(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLIsNil applies the IsNil predicate on the "ocr_xberg_url" field.
+func OcrXbergURLIsNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIsNull(FieldOcrXbergURL))
+}
+
+// OcrXbergURLNotNil applies the NotNil predicate on the "ocr_xberg_url" field.
+func OcrXbergURLNotNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotNull(FieldOcrXbergURL))
+}
+
+// OcrXbergURLEqualFold applies the EqualFold predicate on the "ocr_xberg_url" field.
+func OcrXbergURLEqualFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEqualFold(FieldOcrXbergURL, v))
+}
+
+// OcrXbergURLContainsFold applies the ContainsFold predicate on the "ocr_xberg_url" field.
+func OcrXbergURLContainsFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContainsFold(FieldOcrXbergURL, v))
 }
 
 // GotenbergURLEQ applies the EQ predicate on the "gotenberg_url" field.

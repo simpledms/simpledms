@@ -262,6 +262,20 @@ func (_c *SystemConfigCreate) SetNillableOcrTikaURL(v *string) *SystemConfigCrea
 	return _c
 }
 
+// SetOcrXbergURL sets the "ocr_xberg_url" field.
+func (_c *SystemConfigCreate) SetOcrXbergURL(v string) *SystemConfigCreate {
+	_c.mutation.SetOcrXbergURL(v)
+	return _c
+}
+
+// SetNillableOcrXbergURL sets the "ocr_xberg_url" field if the given value is not nil.
+func (_c *SystemConfigCreate) SetNillableOcrXbergURL(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetOcrXbergURL(*v)
+	}
+	return _c
+}
+
 // SetGotenbergURL sets the "gotenberg_url" field.
 func (_c *SystemConfigCreate) SetGotenbergURL(v string) *SystemConfigCreate {
 	_c.mutation.SetGotenbergURL(v)
@@ -644,6 +658,10 @@ func (_c *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
 		_node.OcrTikaURL = value
+	}
+	if value, ok := _c.mutation.OcrXbergURL(); ok {
+		_spec.SetField(systemconfig.FieldOcrXbergURL, field.TypeString, value)
+		_node.OcrXbergURL = value
 	}
 	if value, ok := _c.mutation.GotenbergURL(); ok {
 		_spec.SetField(systemconfig.FieldGotenbergURL, field.TypeString, value)

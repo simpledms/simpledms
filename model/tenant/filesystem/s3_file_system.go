@@ -102,6 +102,10 @@ func (qq *S3FileSystem) StorageQuota() *StorageQuota {
 	return qq.storageQuota
 }
 
+func (qq *S3FileSystem) IsFileEncryptionDisabled() bool {
+	return qq.disableFileEncryption
+}
+
 // caller has to close io.ReadCloser
 // TODO OpenFile or CopyFile?
 func (qq *S3FileSystem) OpenFile(ctx ctxx.Context, file *storedfilemodel.StoredFile) (io.ReadCloser, error) {

@@ -1137,6 +1137,13 @@
             "fuzzy": true
         },
         {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": "File not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Move",
             "message": "Move",
             "translation": "Move",
@@ -1799,7 +1806,6 @@
             "id": "Open folder",
             "message": "Open folder",
             "translation": "Open folder",
-            "comment": "TODO Go to, open, show?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1814,7 +1820,6 @@
             "id": "Open file",
             "message": "Open file",
             "translation": "Open file",
-            "comment": "TODO Go to, or Open?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3012,6 +3017,34 @@
             "fuzzy": true
         },
         {
+            "id": "System settings",
+            "message": "System settings",
+            "translation": "System settings",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access the system status.",
+            "message": "You must be an admin to access the system status.",
+            "translation": "You must be an admin to access the system status.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "System status",
+            "message": "System status",
+            "translation": "System status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Check again",
+            "message": "Check again",
+            "translation": "Check again",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "You must be signed in to manage organizations.",
             "message": "You must be signed in to manage organizations.",
             "translation": "You must be signed in to manage organizations.",
@@ -3534,13 +3567,6 @@
             "id": "Filter by source",
             "message": "Filter by source",
             "translation": "Filter by source",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File not found.",
-            "message": "File not found.",
-            "translation": "File not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6242,7 +6268,10 @@
             "fuzzy": true
         },
         {
-            "id": "Please sign in and change your password as soon as possible.",
+            "id": [
+                "changePasswordReminder",
+                "Please sign in and change your password as soon as possible."
+            ],
             "message": "Please sign in and change your password as soon as possible.",
             "translation": "Please sign in and change your password as soon as possible.",
             "translatorComment": "Copied from source.",
@@ -6378,6 +6407,600 @@
             "id": "Max upload size must be greater than or equal to 0.",
             "message": "Max upload size must be greater than or equal to 0.",
             "translation": "Max upload size must be greater than or equal to 0.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "General",
+            "message": "General",
+            "translation": "General",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Public origin",
+            "message": "Public origin",
+            "translation": "Public origin",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebAuthn relying party ID",
+            "message": "WebAuthn relying party ID",
+            "translation": "WebAuthn relying party ID",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase protection",
+            "message": "Passphrase protection",
+            "translation": "Passphrase protection",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File encryption",
+            "message": "File encryption",
+            "translation": "File encryption",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Insecure cookies",
+            "message": "Insecure cookies",
+            "translation": "Insecure cookies",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size",
+            "message": "Max upload size",
+            "translation": "Max upload size",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Override stored config on startup",
+            "message": "Override stored config on startup",
+            "translation": "Override stored config on startup",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Development mode",
+            "message": "Development mode",
+            "translation": "Development mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Development mode is enabled. Do not use it in production.",
+            "message": "Development mode is enabled. Do not use it in production.",
+            "translation": "Development mode is enabled. Do not use it in production.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No public origin is set. Emails cannot link to the app.",
+            "message": "No public origin is set. Emails cannot link to the app.",
+            "translation": "No public origin is set. Emails cannot link to the app.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The public origin is not a valid URL.",
+            "message": "The public origin is not a valid URL.",
+            "translation": "The public origin is not a valid URL.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The public origin does not use HTTPS.",
+            "message": "The public origin does not use HTTPS.",
+            "translation": "The public origin does not use HTTPS.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "message": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "translation": "The WebAuthn relying party ID does not match the public origin. Passkeys do not work.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Session cookies are also sent over unencrypted connections.",
+            "message": "Session cookies are also sent over unencrypted connections.",
+            "translation": "Session cookies are also sent over unencrypted connections.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage",
+            "message": "Storage",
+            "translation": "Storage",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Endpoint",
+            "message": "Endpoint",
+            "translation": "Endpoint",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Bucket",
+            "message": "Bucket",
+            "translation": "Bucket",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Access key ID",
+            "message": "Access key ID",
+            "translation": "Access key ID",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret access key",
+            "message": "Secret access key",
+            "translation": "Secret access key",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SSL/TLS",
+            "message": "SSL/TLS",
+            "translation": "SSL/TLS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No storage is configured. Files cannot be uploaded.",
+            "message": "No storage is configured. Files cannot be uploaded.",
+            "translation": "No storage is configured. Files cannot be uploaded.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Connection",
+            "message": "Connection",
+            "translation": "Connection",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The connection to the storage is not encrypted.",
+            "message": "The connection to the storage is not encrypted.",
+            "translation": "The connection to the storage is not encrypted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OCR",
+            "message": "OCR",
+            "translation": "OCR",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Text extraction",
+            "message": "Text extraction",
+            "translation": "Text extraction",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg, Tika for unsupported formats",
+            "message": "Xberg, Tika for unsupported formats",
+            "translation": "Xberg, Tika for unsupported formats",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Disabled",
+            "message": "Disabled",
+            "translation": "Disabled",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "message": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "translation": "Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Max file size",
+            "message": "Max file size",
+            "translation": "Max file size",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg URL",
+            "message": "Xberg URL",
+            "translation": "Xberg URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The Xberg URL is not valid.",
+            "message": "The Xberg URL is not valid.",
+            "translation": "The Xberg URL is not valid.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Xberg connection",
+            "message": "Xberg connection",
+            "translation": "Xberg connection",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tika URL",
+            "message": "Tika URL",
+            "translation": "Tika URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The Tika URL is not valid.",
+            "message": "The Tika URL is not valid.",
+            "translation": "The Tika URL is not valid.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tika connection",
+            "message": "Tika connection",
+            "translation": "Tika connection",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF previews",
+            "message": "PDF previews",
+            "translation": "PDF previews",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Gotenberg URL",
+            "message": "Gotenberg URL",
+            "translation": "Gotenberg URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "message": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "translation": "Gotenberg is not configured. PDF previews of office, HTML and Markdown files are disabled.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The Gotenberg URL is not valid.",
+            "message": "The Gotenberg URL is not valid.",
+            "translation": "The Gotenberg URL is not valid.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Host",
+            "message": "Host",
+            "translation": "Host",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Port",
+            "message": "Port",
+            "translation": "Port",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sender address",
+            "message": "Sender address",
+            "translation": "Sender address",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Implicit SSL/TLS",
+            "message": "Implicit SSL/TLS",
+            "translation": "Implicit SSL/TLS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate verification",
+            "message": "Certificate verification",
+            "translation": "Certificate verification",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Emails waiting to be sent",
+            "message": "Emails waiting to be sent",
+            "translation": "Emails waiting to be sent",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Emails that could not be sent",
+            "message": "Emails that could not be sent",
+            "translation": "Emails that could not be sent",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "message": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "translation": "No mail server is configured. Emails, for example for password resets, are not sent.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No sender address is configured. Emails cannot be sent.",
+            "message": "No sender address is configured. Emails cannot be sent.",
+            "translation": "No sender address is configured. Emails cannot be sent.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate of the mail server is not verified.",
+            "message": "The certificate of the mail server is not verified.",
+            "translation": "The certificate of the mail server is not verified.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "message": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "translation": "{FailedMailCount} emails could not be sent after {MaxMailAttempts} attempts.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "FailedMailCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "failedMailCount"
+                },
+                {
+                    "id": "MaxMailAttempts",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "maxMailAttempts"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "TLS",
+            "message": "TLS",
+            "translation": "TLS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": "Mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Automatic certificates from Let's Encrypt",
+            "message": "Automatic certificates from Let's Encrypt",
+            "translation": "Automatic certificates from Let's Encrypt",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Hosts",
+            "message": "Hosts",
+            "translation": "Hosts",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No hosts are configured for automatic certificates.",
+            "message": "No hosts are configured for automatic certificates.",
+            "translation": "No hosts are configured for automatic certificates.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "HTTP, HTTPS must be provided by a reverse proxy",
+            "message": "HTTP, HTTPS must be provided by a reverse proxy",
+            "translation": "HTTP, HTTPS must be provided by a reverse proxy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "message": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "translation": "Only one of certificate file and private key file is set. TLS is disabled.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate files",
+            "message": "Certificate files",
+            "translation": "Certificate files",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate file",
+            "message": "Certificate file",
+            "translation": "Certificate file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Private key file",
+            "message": "Private key file",
+            "translation": "Private key file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate could not be loaded: {Error}",
+            "message": "The certificate could not be loaded: {Error}",
+            "translation": "The certificate could not be loaded: {Error}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Error",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "err.Error()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Certificate valid until",
+            "message": "Certificate valid until",
+            "translation": "Certificate valid until",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate expired on {ValidUntil}.",
+            "message": "The certificate expired on {ValidUntil}.",
+            "translation": "The certificate expired on {ValidUntil}.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "validUntil"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "The certificate expires on {ValidUntil}.",
+            "message": "The certificate expires on {ValidUntil}.",
+            "translation": "The certificate expires on {ValidUntil}.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ValidUntil",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "validUntil"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Not reachable",
+            "message": "Not reachable",
+            "translation": "Not reachable",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{ServiceName} is not reachable: {Error}",
+            "message": "{ServiceName} is not reachable: {Error}",
+            "translation": "{ServiceName} is not reachable: {Error}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ServiceName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "serviceName"
+                },
+                {
+                    "id": "Error",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "err.Error()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Connected",
+            "message": "Connected",
+            "translation": "Connected",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Connected ({Detail})",
+            "message": "Connected ({Detail})",
+            "translation": "Connected ({Detail})",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Detail",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "detail"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Not set",
+            "message": "Not set",
+            "translation": "Not set",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Set",
+            "message": "Set",
+            "translation": "Set",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Enabled",
+            "message": "Enabled",
+            "translation": "Enabled",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Allowed",
+            "message": "Allowed",
+            "translation": "Allowed",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Not allowed",
+            "message": "Not allowed",
+            "translation": "Not allowed",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6819,34 +7442,6 @@
             "fuzzy": true
         },
         {
-            "id": "File does not belong to the current Space.",
-            "message": "File does not belong to the current Space.",
-            "translation": "File does not belong to the current Space.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Cannot merge folders.",
-            "message": "Cannot merge folders.",
-            "translation": "Cannot merge folders.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": "Source file is deleted.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in the Inbox.",
-            "message": "Source file is not in the Inbox.",
-            "translation": "Source file is not in the Inbox.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Source file has no versions.",
             "message": "Source file has no versions.",
             "translation": "Source file has no versions.",
@@ -6892,6 +7487,34 @@
             "id": "Could not delete source file.",
             "message": "Could not delete source file.",
             "translation": "Could not delete source file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File does not belong to the current Space.",
+            "message": "File does not belong to the current Space.",
+            "translation": "File does not belong to the current Space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot merge folders.",
+            "message": "Cannot merge folders.",
+            "translation": "Cannot merge folders.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": "Source file is deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is not in the Inbox.",
+            "message": "Source file is not in the Inbox.",
+            "translation": "Source file is not in the Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7050,7 +7673,10 @@
             "fuzzy": true
         },
         {
-            "id": "Detected cycle in folder tree.",
+            "id": [
+                "folderTreeCycleMessage",
+                "Detected cycle in folder tree."
+            ],
             "message": "Detected cycle in folder tree.",
             "translation": "Detected cycle in folder tree.",
             "translatorComment": "Copied from source.",
@@ -7906,6 +8532,13 @@
             "fuzzy": true
         },
         {
+            "id": "Tag is still assigned to files.",
+            "message": "Tag is still assigned to files.",
+            "translation": "Tag is still assigned to files.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "File or Tag not found.",
             "message": "File or Tag not found.",
             "translation": "File or Tag not found.",
@@ -8280,6 +8913,82 @@
             "id": "About SimpleDMS",
             "message": "About SimpleDMS",
             "translation": "About SimpleDMS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No problems found",
+            "message": "No problems found",
+            "translation": "No problems found",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "1 problem needs attention",
+            "message": "1 problem needs attention",
+            "translation": "1 problem needs attention",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{ProblemCount} problems need attention",
+            "message": "{ProblemCount} problems need attention",
+            "translation": "{ProblemCount} problems need attention",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ProblemCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "problemCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "message": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "translation": "Last checked: {CheckedAt}. Configuration changes take effect after a restart.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "CheckedAt",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "qq.CheckedAt"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Error",
+            "message": "Error",
+            "translation": "Error",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Warning",
+            "message": "Warning",
+            "translation": "Warning",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Not configured",
+            "message": "Not configured",
+            "translation": "Not configured",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OK",
+            "message": "OK",
+            "translation": "OK",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

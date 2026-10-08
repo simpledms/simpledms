@@ -13,6 +13,8 @@ services:
         condition: service_started
       gotenberg:
         condition: service_started
+      # xberg:
+      #   condition: service_started
     restart: unless-stopped
     # if you run SimpleDMS locally, you probably want to use other ports
     ports:
@@ -22,10 +24,22 @@ services:
       - simpledms_data:/srv
     environment:
       SIMPLEDMS_GOTENBERG_URL: http://gotenberg:3000
+      # SIMPLEDMS_OCR_XBERG_URL: http://xberg:8000
 
   tika:
     image: apache/tika:latest-full
     restart: unless-stopped
+
+  # optional alternative to Tika for OCR; if both are configured, Xberg is used and Tika is
+  # the fallback for formats Xberg does not support and for empty Xberg results
+  # xberg:
+  #   # core is sufficient because SimpleDMS only uses Tesseract; pinned because the OCR
+  #   # options SimpleDMS sends are validated strictly and were verified with this version
+  #   image: ghcr.io/xberg-io/xberg:1.3.6-core
+  #   environment:
+  #     # blocks Hugging Face model downloads; SimpleDMS needs no models
+  #     HF_HUB_OFFLINE: "1"
+  #   restart: unless-stopped
 
   gotenberg:
     image: gotenberg/gotenberg:8

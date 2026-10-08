@@ -83,6 +83,26 @@ func IsValidGotenbergURL(rawURL string) bool {
 	return err == nil
 }
 
+// Health returns an error if Gotenberg or one of its modules (Chromium, LibreOffice) is down.
+func (qq *GotenbergClient) Health(ctx context.Context) error {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, qq.baseURL+"/health", nil)
+	if err != nil {
+		return err
+	}
+
+	response, err := qq.httpClient.Do(request)
+	if err != nil {
+		return fmt.Errorf("gotenberg request failed: %w", err)
+	}
+	_ = response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf("gotenberg health check failed with status %d", response.StatusCode)
+	}
+
+	return nil
+}
+
 func (qq *GotenbergClient) Convert(
 	ctx context.Context,
 	classification *previewconversion.Classification,
