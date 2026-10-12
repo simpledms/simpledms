@@ -2,14 +2,16 @@ package scheduler
 
 import (
 	"context"
-	"io"
 	"log"
+	"regexp"
 	"runtime/debug"
+	"strings"
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
+	"github.com/marcobeierer/go-tika"
 
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -25,8 +27,8 @@ import (
 )
 
 func (qq *Scheduler) applyOCR() {
-	if qq.textExtractorNilable == nil {
-		log.Println("neither Xberg nor Tika configured, OCR disabled")
+	if qq.tikaClientNilable == nil {
+		log.Println("tika client not initialized")
 		return
 	}
 
@@ -71,18 +73,10 @@ func (qq *Scheduler) applyOCRForTenant(
 	tenantDB *sqlx.TenantDB,
 	dateThreshold time.Time,
 ) {
-	// TODO is tx necessary on mainDB?
-	tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
-	if err != nil {
-		if entmain.IsNotFound(err) {
-			// can happen if tenant was deleted and not removed from tenantDBs yet
-			log.Println("tenant not found", tenantID)
-			return
-		}
-		log.Println(err)
+	tenantIdentity, found := qq.ocrTenantIdentity(ctx, tenantID)
+	if !found {
 		return
 	}
-	tenantIdentity := tenantx.X25519IdentityEncrypted.Identity()
 
 	// TODO transaction? if so, make sure OCRRetryCount gets increased
 	// TODO ensure that only files at final destination get processed;
@@ -111,6 +105,25 @@ func (qq *Scheduler) applyOCRForTenant(
 			return
 		}
 	}
+}
+
+// The bool is false if the tenant cannot be loaded; the reason is logged.
+func (qq *Scheduler) ocrTenantIdentity(
+	ctx context.Context,
+	tenantID int64,
+) (*age.X25519Identity, bool) {
+	// TODO is tx necessary on mainDB?
+	tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
+	if err != nil {
+		if entmain.IsNotFound(err) {
+			// can happen if tenant was deleted and not removed from tenantDBs yet
+			log.Println("tenant not found", tenantID)
+			return nil, false
+		}
+		log.Println(err)
+		return nil, false
+	}
+	return tenantx.X25519IdentityEncrypted.Identity(), true
 }
 
 // The result indicates whether processing can continue with the next pending file.
@@ -157,6 +170,7 @@ func (qq *Scheduler) applyOCRPendingFile(
 		SetOcrLastTriedAt(time.Time{}).
 		SetOcrSuccessAt(time.Now()).
 		SetOcrContent(content).
+		SetIsOcrContentFromMarkdown(false).
 		Exec(ctx)
 	if err != nil {
 		log.Println(err)
@@ -171,6 +185,9 @@ func (qq *Scheduler) applyOCROneFile(
 	tenantIdentity *age.X25519Identity,
 	currentVersion *storedfilemodel.StoredFile,
 ) (string, bool, bool, error) {
+	// TODO use language of user?
+	tikaHeader := tika.NewHeader().AcceptText().SetOCRLanguage("eng+deu+fra+ita+spa")
+
 	if ocrutil.IsFileTooLarge(currentVersion.Data.Size) {
 		return "", false, true, nil
 	}
@@ -179,21 +196,52 @@ func (qq *Scheduler) applyOCROneFile(
 		return "", true, false, nil
 	}
 
-	openFile := func() (io.ReadCloser, error) {
-		return qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, currentVersion)
+	openedFile, err := qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, currentVersion)
+	if err != nil {
+		log.Println(err)
+		return "", false, false, err
 	}
-	parsedContent, err := qq.textExtractorNilable.ExtractText(
-		ctx,
-		currentVersion.Data.Filename,
-		currentVersion.Data.MimeType,
-		openFile,
-	)
+	defer func() {
+		err := openedFile.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+
+	parsedContent, err := qq.tikaClientNilable.Parse(context.Background(), openedFile, tikaHeader)
 	if err != nil {
 		log.Println(err)
 		return "", false, false, err
 	}
 
-	return parsedContent, false, false, nil
+	return removeAllWhitespace(parsedContent), false, false, nil
+}
+
+var regexpEndsAlphanumeric = regexp.MustCompile("[a-zA-Z0-9]$")
+
+func removeAllWhitespace(text string) string {
+	parsedContentSlice := strings.Split(text, "\n")
+	var contentSlice []string
+
+	// remove all whitespace
+	for _, paragraph := range parsedContentSlice {
+		trimmed := strings.TrimSpace(paragraph)
+
+		if trimmed == "" {
+			continue
+		}
+
+		// add dot if last char is alphanumeric
+		// TODO not a perfect solution, sometimes to many dots are added,
+		// 		for example if paragraph was not detected correctly by OCR
+		if regexpEndsAlphanumeric.MatchString(trimmed) {
+			trimmed += "."
+		}
+
+		contentSlice = append(contentSlice, trimmed)
+	}
+
+	return strings.Join(contentSlice, " ")
 }
 
 // hasVersionAtFinalDestination is file.HasVersionsWith(

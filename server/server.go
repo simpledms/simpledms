@@ -43,7 +43,6 @@ import (
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/internal/gotenberg"
-	"github.com/simpledms/simpledms/internal/ocr"
 	"github.com/simpledms/simpledms/internal/xberg"
 	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/model/main/common/country"
@@ -1068,7 +1067,8 @@ func (qq *Server) startScheduler(
 		tenantDBs,
 		minioClient,
 		systemConfig.S3().S3BucketName,
-		ocr.NewNilableTextExtractor(xbergClientNilable, tikaClientNilable),
+		tikaClientNilable,
+		xbergClientNilable,
 		gotenbergClientNilable,
 	)
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)

@@ -1,6 +1,7 @@
 volumes:
   simpledms_data:
   versitygw_data:
+  # xberg_cache:
 
 services:
   simpledms:
@@ -30,15 +31,15 @@ services:
     image: apache/tika:latest-full
     restart: unless-stopped
 
-  # optional alternative to Tika for OCR; if both are configured, Xberg is used and Tika is
-  # the fallback for formats Xberg does not support and for empty Xberg results
+  # optional; markdown with tables for LLMs (MCP). Tika stays the source for full-text search
+  # if both are configured.
   # xberg:
-  #   # core is sufficient because SimpleDMS only uses Tesseract; pinned because the OCR
-  #   # options SimpleDMS sends are validated strictly and were verified with this version
+  #   # pinned because the options SimpleDMS sends are validated strictly and were verified
+  #   # with this version; core includes PaddleOCR and the layout models SimpleDMS uses
   #   image: ghcr.io/xberg-io/xberg:1.3.6-core
-  #   environment:
-  #     # blocks Hugging Face model downloads; SimpleDMS needs no models
-  #     HF_HUB_OFFLINE: "1"
+  #   volumes:
+  #     # models are downloaded on first use; persisted so that they are not downloaded again
+  #     - xberg_cache:/app/.xberg
   #   restart: unless-stopped
 
   gotenberg:

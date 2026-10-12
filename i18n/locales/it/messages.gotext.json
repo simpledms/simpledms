@@ -9521,9 +9521,9 @@
             "fuzzy": true
         },
         {
-            "id": "Xberg, Tika for unsupported formats",
-            "message": "Xberg, Tika for unsupported formats",
-            "translation": "Xberg, Tika per i formati non supportati",
+            "id": "Tika for search, Xberg for LLMs",
+            "message": "Tika for search, Xberg for LLMs",
+            "translation": "Tika per la ricerca, Xberg per gli LLM",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },

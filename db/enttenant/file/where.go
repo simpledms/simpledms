@@ -167,6 +167,31 @@ func OcrLastTriedAt(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldOcrLastTriedAt, v))
 }
 
+// OcrMarkdown applies equality check predicate on the "ocr_markdown" field. It's identical to OcrMarkdownEQ.
+func OcrMarkdown(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownSuccessAt applies equality check predicate on the "ocr_markdown_success_at" field. It's identical to OcrMarkdownSuccessAtEQ.
+func OcrMarkdownSuccessAt(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownRetryCount applies equality check predicate on the "ocr_markdown_retry_count" field. It's identical to OcrMarkdownRetryCountEQ.
+func OcrMarkdownRetryCount(v int) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownLastTriedAt applies equality check predicate on the "ocr_markdown_last_tried_at" field. It's identical to OcrMarkdownLastTriedAtEQ.
+func OcrMarkdownLastTriedAt(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// IsOcrContentFromMarkdown applies equality check predicate on the "is_ocr_content_from_markdown" field. It's identical to IsOcrContentFromMarkdownEQ.
+func IsOcrContentFromMarkdown(v bool) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldIsOcrContentFromMarkdown, v))
+}
+
 // DeletedByEQ applies the EQ predicate on the "deleted_by" field.
 func DeletedByEQ(v int64) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldDeletedBy, v))
@@ -1060,6 +1085,251 @@ func OcrLastTriedAtLT(v time.Time) predicate.File {
 // OcrLastTriedAtLTE applies the LTE predicate on the "ocr_last_tried_at" field.
 func OcrLastTriedAtLTE(v time.Time) predicate.File {
 	return predicate.File(sql.FieldLTE(FieldOcrLastTriedAt, v))
+}
+
+// OcrMarkdownEQ applies the EQ predicate on the "ocr_markdown" field.
+func OcrMarkdownEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownNEQ applies the NEQ predicate on the "ocr_markdown" field.
+func OcrMarkdownNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownIn applies the In predicate on the "ocr_markdown" field.
+func OcrMarkdownIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldOcrMarkdown, vs...))
+}
+
+// OcrMarkdownNotIn applies the NotIn predicate on the "ocr_markdown" field.
+func OcrMarkdownNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldOcrMarkdown, vs...))
+}
+
+// OcrMarkdownGT applies the GT predicate on the "ocr_markdown" field.
+func OcrMarkdownGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownGTE applies the GTE predicate on the "ocr_markdown" field.
+func OcrMarkdownGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownLT applies the LT predicate on the "ocr_markdown" field.
+func OcrMarkdownLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownLTE applies the LTE predicate on the "ocr_markdown" field.
+func OcrMarkdownLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownContains applies the Contains predicate on the "ocr_markdown" field.
+func OcrMarkdownContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownHasPrefix applies the HasPrefix predicate on the "ocr_markdown" field.
+func OcrMarkdownHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownHasSuffix applies the HasSuffix predicate on the "ocr_markdown" field.
+func OcrMarkdownHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownIsNil applies the IsNil predicate on the "ocr_markdown" field.
+func OcrMarkdownIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldOcrMarkdown))
+}
+
+// OcrMarkdownNotNil applies the NotNil predicate on the "ocr_markdown" field.
+func OcrMarkdownNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldOcrMarkdown))
+}
+
+// OcrMarkdownEqualFold applies the EqualFold predicate on the "ocr_markdown" field.
+func OcrMarkdownEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownContainsFold applies the ContainsFold predicate on the "ocr_markdown" field.
+func OcrMarkdownContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldOcrMarkdown, v))
+}
+
+// OcrMarkdownSuccessAtEQ applies the EQ predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtNEQ applies the NEQ predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtNEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtIn applies the In predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldIn(FieldOcrMarkdownSuccessAt, vs...))
+}
+
+// OcrMarkdownSuccessAtNotIn applies the NotIn predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtNotIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldOcrMarkdownSuccessAt, vs...))
+}
+
+// OcrMarkdownSuccessAtGT applies the GT predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtGT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGT(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtGTE applies the GTE predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtGTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtLT applies the LT predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtLT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLT(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtLTE applies the LTE predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtLTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldOcrMarkdownSuccessAt, v))
+}
+
+// OcrMarkdownSuccessAtIsNil applies the IsNil predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldOcrMarkdownSuccessAt))
+}
+
+// OcrMarkdownSuccessAtNotNil applies the NotNil predicate on the "ocr_markdown_success_at" field.
+func OcrMarkdownSuccessAtNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldOcrMarkdownSuccessAt))
+}
+
+// OcrMarkdownRetryCountEQ applies the EQ predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountEQ(v int) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountNEQ applies the NEQ predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountNEQ(v int) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountIn applies the In predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountIn(vs ...int) predicate.File {
+	return predicate.File(sql.FieldIn(FieldOcrMarkdownRetryCount, vs...))
+}
+
+// OcrMarkdownRetryCountNotIn applies the NotIn predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountNotIn(vs ...int) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldOcrMarkdownRetryCount, vs...))
+}
+
+// OcrMarkdownRetryCountGT applies the GT predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountGT(v int) predicate.File {
+	return predicate.File(sql.FieldGT(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountGTE applies the GTE predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountGTE(v int) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountLT applies the LT predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountLT(v int) predicate.File {
+	return predicate.File(sql.FieldLT(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountLTE applies the LTE predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountLTE(v int) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldOcrMarkdownRetryCount, v))
+}
+
+// OcrMarkdownRetryCountIsNil applies the IsNil predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldOcrMarkdownRetryCount))
+}
+
+// OcrMarkdownRetryCountNotNil applies the NotNil predicate on the "ocr_markdown_retry_count" field.
+func OcrMarkdownRetryCountNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldOcrMarkdownRetryCount))
+}
+
+// OcrMarkdownLastTriedAtEQ applies the EQ predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtNEQ applies the NEQ predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtNEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtIn applies the In predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldIn(FieldOcrMarkdownLastTriedAt, vs...))
+}
+
+// OcrMarkdownLastTriedAtNotIn applies the NotIn predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtNotIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldOcrMarkdownLastTriedAt, vs...))
+}
+
+// OcrMarkdownLastTriedAtGT applies the GT predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtGT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGT(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtGTE applies the GTE predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtGTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtLT applies the LT predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtLT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLT(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtLTE applies the LTE predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtLTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldOcrMarkdownLastTriedAt, v))
+}
+
+// OcrMarkdownLastTriedAtIsNil applies the IsNil predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldOcrMarkdownLastTriedAt))
+}
+
+// OcrMarkdownLastTriedAtNotNil applies the NotNil predicate on the "ocr_markdown_last_tried_at" field.
+func OcrMarkdownLastTriedAtNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldOcrMarkdownLastTriedAt))
+}
+
+// IsOcrContentFromMarkdownEQ applies the EQ predicate on the "is_ocr_content_from_markdown" field.
+func IsOcrContentFromMarkdownEQ(v bool) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldIsOcrContentFromMarkdown, v))
+}
+
+// IsOcrContentFromMarkdownNEQ applies the NEQ predicate on the "is_ocr_content_from_markdown" field.
+func IsOcrContentFromMarkdownNEQ(v bool) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldIsOcrContentFromMarkdown, v))
+}
+
+// IsOcrContentFromMarkdownIsNil applies the IsNil predicate on the "is_ocr_content_from_markdown" field.
+func IsOcrContentFromMarkdownIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldIsOcrContentFromMarkdown))
+}
+
+// IsOcrContentFromMarkdownNotNil applies the NotNil predicate on the "is_ocr_content_from_markdown" field.
+func IsOcrContentFromMarkdownNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldIsOcrContentFromMarkdown))
 }
 
 // HasDeleter applies the HasEdge predicate on the "deleter" edge.

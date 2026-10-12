@@ -160,7 +160,9 @@ func TestMCPMetadataProductionMigrationFreshAndPopulated(t *testing.T) {
 			if documentType.Name != "Invoice" {
 				t.Fatalf("document type changed during migration: %v", documentType)
 			}
-			filex := tenantDB.ReadOnlyConn.File.Query().Where(file.Name("invoice.pdf")).OnlyX(ctx)
+			// selects only columns that existed at the migrated version
+			filex := tenantDB.ReadOnlyConn.File.Query().Where(file.Name("invoice.pdf")).
+				Select(file.FieldID, file.FieldDocumentTypeID).OnlyX(ctx)
 			if filex.DocumentTypeID != documentType.ID {
 				t.Fatalf("document type assignment changed during migration: %v", filex)
 			}

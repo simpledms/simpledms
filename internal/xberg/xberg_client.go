@@ -54,16 +54,15 @@ func NewXbergClient(rawURL string) (*XbergClient, error) {
 	}, nil
 }
 
-// ExtractText returns the plain text of source. mimeType is optional; if empty, Xberg detects
+// ExtractMarkdown returns source as markdown. mimeType is optional; if empty, Xberg detects
 // the format from the filename extension and the content.
-func (qq *XbergClient) ExtractText(
+func (qq *XbergClient) ExtractMarkdown(
 	ctx context.Context,
 	filename string,
 	mimeType string,
-	ocrLanguage string,
 	source io.Reader,
 ) (string, error) {
-	configJSON, err := json.Marshal(newExtractConfig(ocrLanguage))
+	configJSON, err := json.Marshal(newExtractConfig())
 	if err != nil {
 		return "", err
 	}

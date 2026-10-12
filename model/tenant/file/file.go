@@ -209,6 +209,28 @@ func (qq *File) HasOCRSuccess(ctx ctxx.Context) bool {
 	return qq.Data.OcrSuccessAt != nil && !qq.Data.OcrSuccessAt.IsZero()
 }
 
+func (qq *File) HasOCRMarkdownSuccess(ctx ctxx.Context) bool {
+	return qq.Data.OcrMarkdownSuccessAt != nil && !qq.Data.OcrMarkdownSuccessAt.IsZero()
+}
+
+// HasLLMText reports whether LLMText has a result.
+func (qq *File) HasLLMText(ctx ctxx.Context) bool {
+	return qq.HasOCRSuccess(ctx) || qq.HasOCRMarkdownSuccess(ctx)
+}
+
+// LLMText prefers the Xberg markdown because it keeps tables; the Tika OCR text is the
+// fallback if there is no markdown, for example because Xberg is not configured or does not
+// support the format. The bool reports whether the text is markdown.
+func (qq *File) LLMText(ctx ctxx.Context) (string, bool) {
+	if qq.HasOCRMarkdownSuccess(ctx) && qq.Data.OcrMarkdown != "" {
+		return qq.Data.OcrMarkdown, true
+	}
+	if qq.HasOCRSuccess(ctx) {
+		return qq.Data.OcrContent, false
+	}
+	return qq.Data.OcrMarkdown, true
+}
+
 func (qq *File) Size(ctx ctxx.Context) int64 {
 	if qq.Data.IsDirectory {
 		// TODO is this a good value?

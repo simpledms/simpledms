@@ -313,6 +313,76 @@ func (_c *FileCreate) SetNillableOcrLastTriedAt(v *time.Time) *FileCreate {
 	return _c
 }
 
+// SetOcrMarkdown sets the "ocr_markdown" field.
+func (_c *FileCreate) SetOcrMarkdown(v string) *FileCreate {
+	_c.mutation.SetOcrMarkdown(v)
+	return _c
+}
+
+// SetNillableOcrMarkdown sets the "ocr_markdown" field if the given value is not nil.
+func (_c *FileCreate) SetNillableOcrMarkdown(v *string) *FileCreate {
+	if v != nil {
+		_c.SetOcrMarkdown(*v)
+	}
+	return _c
+}
+
+// SetOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field.
+func (_c *FileCreate) SetOcrMarkdownSuccessAt(v time.Time) *FileCreate {
+	_c.mutation.SetOcrMarkdownSuccessAt(v)
+	return _c
+}
+
+// SetNillableOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field if the given value is not nil.
+func (_c *FileCreate) SetNillableOcrMarkdownSuccessAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetOcrMarkdownSuccessAt(*v)
+	}
+	return _c
+}
+
+// SetOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field.
+func (_c *FileCreate) SetOcrMarkdownRetryCount(v int) *FileCreate {
+	_c.mutation.SetOcrMarkdownRetryCount(v)
+	return _c
+}
+
+// SetNillableOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field if the given value is not nil.
+func (_c *FileCreate) SetNillableOcrMarkdownRetryCount(v *int) *FileCreate {
+	if v != nil {
+		_c.SetOcrMarkdownRetryCount(*v)
+	}
+	return _c
+}
+
+// SetOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field.
+func (_c *FileCreate) SetOcrMarkdownLastTriedAt(v time.Time) *FileCreate {
+	_c.mutation.SetOcrMarkdownLastTriedAt(v)
+	return _c
+}
+
+// SetNillableOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field if the given value is not nil.
+func (_c *FileCreate) SetNillableOcrMarkdownLastTriedAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetOcrMarkdownLastTriedAt(*v)
+	}
+	return _c
+}
+
+// SetIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field.
+func (_c *FileCreate) SetIsOcrContentFromMarkdown(v bool) *FileCreate {
+	_c.mutation.SetIsOcrContentFromMarkdown(v)
+	return _c
+}
+
+// SetNillableIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field if the given value is not nil.
+func (_c *FileCreate) SetNillableIsOcrContentFromMarkdown(v *bool) *FileCreate {
+	if v != nil {
+		_c.SetIsOcrContentFromMarkdown(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *FileCreate) SetID(v int64) *FileCreate {
 	_c.mutation.SetID(v)
@@ -725,6 +795,26 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OcrLastTriedAt(); ok {
 		_spec.SetField(file.FieldOcrLastTriedAt, field.TypeTime, value)
 		_node.OcrLastTriedAt = value
+	}
+	if value, ok := _c.mutation.OcrMarkdown(); ok {
+		_spec.SetField(file.FieldOcrMarkdown, field.TypeString, value)
+		_node.OcrMarkdown = value
+	}
+	if value, ok := _c.mutation.OcrMarkdownSuccessAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownSuccessAt, field.TypeTime, value)
+		_node.OcrMarkdownSuccessAt = &value
+	}
+	if value, ok := _c.mutation.OcrMarkdownRetryCount(); ok {
+		_spec.SetField(file.FieldOcrMarkdownRetryCount, field.TypeInt, value)
+		_node.OcrMarkdownRetryCount = value
+	}
+	if value, ok := _c.mutation.OcrMarkdownLastTriedAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownLastTriedAt, field.TypeTime, value)
+		_node.OcrMarkdownLastTriedAt = &value
+	}
+	if value, ok := _c.mutation.IsOcrContentFromMarkdown(); ok {
+		_spec.SetField(file.FieldIsOcrContentFromMarkdown, field.TypeBool, value)
+		_node.IsOcrContentFromMarkdown = value
 	}
 	if nodes := _c.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

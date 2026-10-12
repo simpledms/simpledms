@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
+	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/internal/gotenberg"
-	"github.com/simpledms/simpledms/internal/ocr"
+	"github.com/simpledms/simpledms/internal/xberg"
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
@@ -25,7 +26,8 @@ type Scheduler struct {
 	tenantDBs              *tenantdbs.TenantDBs
 	s3Client               *minio.Client
 	bucketName             string
-	textExtractorNilable   *ocr.TextExtractor
+	tikaClientNilable      *tika.Client
+	xbergClientNilable     *xberg.XbergClient
 	gotenbergClientNilable *gotenberg.GotenbergClient
 	previewDiscoveryCursor map[*sqlx.TenantDB]int64
 	lastOrphanObjectScan   time.Time
@@ -37,7 +39,8 @@ func NewScheduler(
 	tenantDBs *tenantdbs.TenantDBs,
 	s3Client *minio.Client,
 	bucketName string,
-	textExtractor *ocr.TextExtractor,
+	tikaClient *tika.Client,
+	xbergClient *xberg.XbergClient,
 	gotenbergClient *gotenberg.GotenbergClient,
 ) *Scheduler {
 	return &Scheduler{
@@ -46,7 +49,8 @@ func NewScheduler(
 		tenantDBs:              tenantDBs,
 		s3Client:               s3Client,
 		bucketName:             bucketName,
-		textExtractorNilable:   textExtractor,
+		tikaClientNilable:      tikaClient,
+		xbergClientNilable:     xbergClient,
 		gotenbergClientNilable: gotenbergClient,
 		previewDiscoveryCursor: make(map[*sqlx.TenantDB]int64),
 	}
@@ -91,6 +95,12 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 	go func() {
 		qq.applyOCR()
 	}()
+
+	if qq.xbergClientNilable != nil {
+		go func() {
+			qq.applyOCRMarkdown()
+		}()
+	}
 
 	go func() {
 		qq.backfillContentHashes()

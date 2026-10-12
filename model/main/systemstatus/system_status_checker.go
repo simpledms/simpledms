@@ -241,12 +241,13 @@ func (qq *SystemStatusChecker) ocrStatus(
 	tikaURL := strings.TrimSpace(config.TikaURL)
 	xbergURL := strings.TrimSpace(config.XbergURL)
 
-	// mirrors ocr.TextExtractor
+	// mirrors the scheduler: Tika fills the search content, Xberg the markdown for MCP, and
+	// without Tika also the search content
 	switch {
 	case xbergURL != "" && tikaURL != "":
 		status.AddSetting(
 			widget.T("Text extraction"),
-			widget.T("Xberg, Tika for unsupported formats"),
+			widget.T("Tika for search, Xberg for LLMs"),
 		)
 	case xbergURL != "":
 		status.AddSetting(widget.T("Text extraction"), widget.Tu("Xberg"))

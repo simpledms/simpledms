@@ -2346,6 +2346,11 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 		ClearOcrSuccessAt().
 		SetOcrRetryCount(0).
 		SetOcrLastTriedAt(time.Time{}).
+		ClearIsOcrContentFromMarkdown().
+		SetOcrMarkdown("").
+		ClearOcrMarkdownSuccessAt().
+		SetOcrMarkdownRetryCount(0).
+		ClearOcrMarkdownLastTriedAt().
 		Exec(ctx); err != nil {
 		return err
 	}

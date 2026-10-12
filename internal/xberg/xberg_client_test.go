@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestXbergClientRequestsMarkdownWithTesseractOnlyTextOCR(t *testing.T) {
+func TestXbergClientRequestsLayoutMarkdownWithPaddleOCR(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		if req.Method != http.MethodPost || req.URL.Path != "/extract" {
 			t.Errorf("unexpected request %s %s", req.Method, req.URL.Path)
@@ -37,10 +37,8 @@ func TestXbergClientRequestsMarkdownWithTesseractOnlyTextOCR(t *testing.T) {
 		if contentType := fileHeader.Header.Get("Content-Type"); contentType != "application/pdf" {
 			t.Errorf("unexpected content type %q", contentType)
 		}
-		expectedConfig := `{"output_format":"markdown","ocr":{"language":"eng+deu",` +
-			`"pipeline":{"stages":[` +
-			`{"backend":"tesseract","priority":100,"language":"eng+deu",` +
-			`"tesseract_config":{"output_format":"text"}}]}}}`
+		expectedConfig := `{"output_format":"markdown","use_layout_for_markdown":true,` +
+			`"layout":{"table_model":"tatr"},"ocr":{"backend":"paddle-ocr","language":"latin"}}`
 		if config := req.FormValue("config"); config != expectedConfig {
 			t.Errorf("unexpected config %q", config)
 		}
@@ -54,11 +52,10 @@ func TestXbergClientRequestsMarkdownWithTesseractOnlyTextOCR(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	content, err := client.ExtractText(
+	content, err := client.ExtractMarkdown(
 		context.Background(),
 		"scan.pdf",
 		"application/pdf",
-		"eng+deu",
 		strings.NewReader("file content"),
 	)
 	if err != nil {
@@ -82,7 +79,7 @@ func TestXbergClientMapsUnsupportedFormatError(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = client.ExtractText(context.Background(), "file", "", "eng", strings.NewReader("x"))
+	_, err = client.ExtractMarkdown(context.Background(), "file", "", strings.NewReader("x"))
 	if !errors.Is(err, ErrUnsupportedFormat) {
 		t.Fatalf("expected unsupported format error, got %v", err)
 	}

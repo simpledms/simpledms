@@ -6593,9 +6593,9 @@
             "fuzzy": true
         },
         {
-            "id": "Xberg, Tika for unsupported formats",
-            "message": "Xberg, Tika for unsupported formats",
-            "translation": "Xberg, Tika for unsupported formats",
+            "id": "Tika for search, Xberg for LLMs",
+            "message": "Tika for search, Xberg for LLMs",
+            "translation": "Tika for search, Xberg for LLMs",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

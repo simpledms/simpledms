@@ -64,6 +64,16 @@ const (
 	FieldOcrRetryCount = "ocr_retry_count"
 	// FieldOcrLastTriedAt holds the string denoting the ocr_last_tried_at field in the database.
 	FieldOcrLastTriedAt = "ocr_last_tried_at"
+	// FieldOcrMarkdown holds the string denoting the ocr_markdown field in the database.
+	FieldOcrMarkdown = "ocr_markdown"
+	// FieldOcrMarkdownSuccessAt holds the string denoting the ocr_markdown_success_at field in the database.
+	FieldOcrMarkdownSuccessAt = "ocr_markdown_success_at"
+	// FieldOcrMarkdownRetryCount holds the string denoting the ocr_markdown_retry_count field in the database.
+	FieldOcrMarkdownRetryCount = "ocr_markdown_retry_count"
+	// FieldOcrMarkdownLastTriedAt holds the string denoting the ocr_markdown_last_tried_at field in the database.
+	FieldOcrMarkdownLastTriedAt = "ocr_markdown_last_tried_at"
+	// FieldIsOcrContentFromMarkdown holds the string denoting the is_ocr_content_from_markdown field in the database.
+	FieldIsOcrContentFromMarkdown = "is_ocr_content_from_markdown"
 	// EdgeDeleter holds the string denoting the deleter edge name in mutations.
 	EdgeDeleter = "deleter"
 	// EdgeCreator holds the string denoting the creator edge name in mutations.
@@ -199,6 +209,11 @@ var Columns = []string{
 	FieldOcrSuccessAt,
 	FieldOcrRetryCount,
 	FieldOcrLastTriedAt,
+	FieldOcrMarkdown,
+	FieldOcrMarkdownSuccessAt,
+	FieldOcrMarkdownRetryCount,
+	FieldOcrMarkdownLastTriedAt,
+	FieldIsOcrContentFromMarkdown,
 }
 
 var (
@@ -383,6 +398,31 @@ func ByOcrRetryCount(opts ...sql.OrderTermOption) OrderOption {
 // ByOcrLastTriedAt orders the results by the ocr_last_tried_at field.
 func ByOcrLastTriedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOcrLastTriedAt, opts...).ToFunc()
+}
+
+// ByOcrMarkdown orders the results by the ocr_markdown field.
+func ByOcrMarkdown(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMarkdown, opts...).ToFunc()
+}
+
+// ByOcrMarkdownSuccessAt orders the results by the ocr_markdown_success_at field.
+func ByOcrMarkdownSuccessAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMarkdownSuccessAt, opts...).ToFunc()
+}
+
+// ByOcrMarkdownRetryCount orders the results by the ocr_markdown_retry_count field.
+func ByOcrMarkdownRetryCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMarkdownRetryCount, opts...).ToFunc()
+}
+
+// ByOcrMarkdownLastTriedAt orders the results by the ocr_markdown_last_tried_at field.
+func ByOcrMarkdownLastTriedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMarkdownLastTriedAt, opts...).ToFunc()
+}
+
+// ByIsOcrContentFromMarkdown orders the results by the is_ocr_content_from_markdown field.
+func ByIsOcrContentFromMarkdown(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsOcrContentFromMarkdown, opts...).ToFunc()
 }
 
 // ByDeleterField orders the results by deleter field.

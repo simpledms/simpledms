@@ -80,7 +80,9 @@ func NewHandler(config Config) *Handler {
 	registerRead(server, handler, "list_inbox", "List or search Inbox documents.", handler.listInbox)
 	registerRead(server, handler, "get_file", "Read a live file's metadata.", handler.getFile)
 	registerRead(
-		server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText,
+		server, handler, "read_file_text",
+		"Read bounded existing OCR text, as markdown with tables when available.",
+		handler.readText,
 	)
 	registerRead(
 		server, handler, "download_file", "Read original bytes as a bounded base64 chunk.",
@@ -482,6 +484,7 @@ func (qq *Handler) listInbox(
 	}).Select(
 		file.FieldID, file.FieldPublicID, file.FieldName, file.FieldIsDirectory,
 		file.FieldIsInInbox, file.FieldSource, file.FieldOcrSuccessAt,
+		file.FieldOcrMarkdownSuccessAt,
 	).Offset(input.Offset).Limit(limit + 1).All(ctx)
 	if err != nil {
 		return result, err
@@ -516,7 +519,7 @@ func (qq *Handler) summary(
 		IsDirectory:  filex.IsDirectory,
 		IsInInbox:    filex.IsInInbox,
 		Source:       filex.Source.String(),
-		OCRAvailable: filex.OcrSuccessAt != nil && !filex.OcrSuccessAt.IsZero(),
+		OCRAvailable: filemodel.NewFile(filex).HasLLMText(ctx),
 	}
 }
 
@@ -618,7 +621,12 @@ func (qq *Handler) readText(
 	result.VersionNumber = data.VersionNumber
 	result.Available = data.OCRAvailable
 	if result.Available {
-		result.Text, result.HasMore, err = reader.TextWindow(filex.OcrContent, input.Offset, length)
+		text, isMarkdown := filemodel.NewFile(filex).LLMText(ctx)
+		result.Format = TextFormatText
+		if isMarkdown {
+			result.Format = TextFormatMarkdown
+		}
+		result.Text, result.HasMore, err = reader.TextWindow(text, input.Offset, length)
 		if result.HasMore {
 			next := input.Offset + length
 			result.NextOffset = &next
@@ -833,6 +841,7 @@ func (qq *Handler) searchFiles(
 		file.FieldIsInInbox,
 		file.FieldSource,
 		file.FieldOcrSuccessAt,
+		file.FieldOcrMarkdownSuccessAt,
 	).Offset(input.Offset).Limit(limit + 1).All(ctx)
 	if err != nil {
 		return result, err

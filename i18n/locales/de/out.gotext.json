@@ -6525,9 +6525,9 @@
             "fuzzy": true
         },
         {
-            "id": "Xberg, Tika for unsupported formats",
-            "message": "Xberg, Tika for unsupported formats",
-            "translation": "Xberg, Tika für nicht unterstützte Formate",
+            "id": "Tika for search, Xberg for LLMs",
+            "message": "Tika for search, Xberg for LLMs",
+            "translation": "Tika für die Suche, Xberg für LLMs",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },
