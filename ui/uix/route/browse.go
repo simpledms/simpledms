@@ -50,10 +50,6 @@ func BrowseWithState(data any) func(string, string, string) string {
 	return WithState(Browse, data)
 }
 
-func BrowseRootWithState(data any) func(string, string) string {
-	return RootWithState(BrowseRoot, data)
-}
-
 /*
 // Deprecated: use Browse with new query support instead
 func BrowseWithActiveTab(activeTab string) func(int64) string {

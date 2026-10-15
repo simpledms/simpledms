@@ -2,7 +2,6 @@ package auth
 
 import (
 	"log"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -76,7 +75,7 @@ func (qq *AdminPasskeyRecoveryCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		targetAccountx.ID,
 	)
 
-	return writeJSONResponse(rw, http.StatusOK, struct {
+	return writeJSONResponse(rw, struct {
 		RecoveryCodes []string `json:"recoveryCodes"`
 	}{
 		RecoveryCodes: recoveryCodes,

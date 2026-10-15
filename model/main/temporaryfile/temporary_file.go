@@ -8,7 +8,6 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
 )
 
 type TemporaryFile struct {
@@ -32,9 +31,4 @@ func (qq *TemporaryFile) ObjectNameWithPrefix() (string, error) {
 	}
 
 	return path, nil
-}
-
-func (qq *TemporaryFile) SizeString() string {
-	return fileutil.FormatSize(qq.Data.Size)
-	// return fmt.Sprintf("%.f kB", math.Ceil(float64(qq.Data.Size)/1014))
 }

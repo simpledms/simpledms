@@ -210,12 +210,12 @@ func (qq *Handler) authenticatedWebDAVCredential(
 	credentialx, ok, err := qq.authenticateWebDAVCredential(req.Context(), username, secret)
 	if err != nil {
 		log.Println(err)
-		qq.limiter.allow(rateLimitAddr, username)
+		qq.limiter.recordFailedAttempt(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
 	if !ok || credentialx.RevokedAt != nil {
-		qq.limiter.allow(rateLimitAddr, username)
+		qq.limiter.recordFailedAttempt(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}

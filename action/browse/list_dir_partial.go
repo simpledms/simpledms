@@ -372,7 +372,7 @@ func (qq *ListDirPartial) Widget(
 		Widget: widget.Widget[widget.ListDetailLayout]{
 			ID: qq.WrapperID(),
 		},
-		AppBar: qq.appBar(ctx, state, dirWithParent, selectedFileID),
+		AppBar: qq.appBar(ctx, state, dirWithParent),
 		// the empty refresh trigger is kept outside of the gapped column; otherwise it takes a
 		// gap slot and shifts the content down
 		List: []widget.IWidget{
@@ -638,7 +638,6 @@ func (qq *ListDirPartial) appBar(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *filemodel.File,
-	selectedFileID string,
 ) *widget.AppBar {
 	var leadingButton widget.IWidget
 

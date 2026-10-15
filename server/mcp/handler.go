@@ -489,12 +489,7 @@ func (qq *Handler) listInbox(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(files) > limit
-	if result.HasMore {
-		files = files[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	files, result.HasMore, result.NextOffset = trimPage(files, input.Offset, limit)
 	for _, filex := range files {
 		result.Files = append(result.Files, qq.summary(requestCtx, ctx, filex, filex.Edges.Parent))
 	}
@@ -846,12 +841,7 @@ func (qq *Handler) searchFiles(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(files) > limit
-	if result.HasMore {
-		files = files[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	files, result.HasMore, result.NextOffset = trimPage(files, input.Offset, limit)
 	for _, filex := range files {
 		result.Files = append(result.Files, qq.summary(requestCtx, ctx, filex, filex.Edges.Parent))
 	}
@@ -1072,12 +1062,7 @@ func (qq *Handler) listTags(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(tags) > limit
-	if result.HasMore {
-		tags = tags[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	tags, result.HasMore, result.NextOffset = trimPage(tags, input.Offset, limit)
 	for _, tagx := range tags {
 		data, err := tagProjection(tagx)
 		if err != nil {
@@ -1107,12 +1092,7 @@ func (qq *Handler) listProperties(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(properties) > limit
-	if result.HasMore {
-		properties = properties[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	properties, result.HasMore, result.NextOffset = trimPage(properties, input.Offset, limit)
 	for _, propertyx := range properties {
 		data, err := propertyProjection(propertyx)
 		if err != nil {
@@ -1142,12 +1122,7 @@ func (qq *Handler) listDocumentTypes(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(documentTypes) > limit
-	if result.HasMore {
-		documentTypes = documentTypes[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	documentTypes, result.HasMore, result.NextOffset = trimPage(documentTypes, input.Offset, limit)
 	for _, documentTypex := range documentTypes {
 		data, err := documentTypeProjection(documentTypex)
 		if err != nil {
@@ -1807,12 +1782,7 @@ func (qq *Handler) listDocumentNotes(
 	if err != nil {
 		return result, err
 	}
-	result.HasMore = len(notes) > limit
-	if result.HasMore {
-		notes = notes[:limit]
-		next := input.Offset + limit
-		result.NextOffset = &next
-	}
+	notes, result.HasMore, result.NextOffset = trimPage(notes, input.Offset, limit)
 	for _, note := range notes {
 		data, err := documentNoteProjection(ctx, cred, doc, note, 0, 1000)
 		if err != nil {
@@ -2206,6 +2176,16 @@ func (qq *Handler) removeFileProperty(
 		Property: projection,
 		Assigned: false,
 	}, nil
+}
+
+// trimPage drops the lookahead item that list queries fetch with Limit(limit+1) to
+// detect whether another page exists.
+func trimPage[T any](items []T, offset int, limit int) ([]T, bool, *int) {
+	if len(items) <= limit {
+		return items, false, nil
+	}
+	next := offset + limit
+	return items[:limit], true, &next
 }
 
 func resolveFileAndProperty(

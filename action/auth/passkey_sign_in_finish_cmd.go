@@ -75,7 +75,7 @@ func (qq *PasskeySignInFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.Re
 		return err
 	}
 
-	return writeJSONResponse(rw, http.StatusOK, struct {
+	return writeJSONResponse(rw, struct {
 		Redirect string `json:"redirect"`
 	}{
 		Redirect: route.Dashboard(),

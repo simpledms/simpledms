@@ -28,10 +28,6 @@ func ParseDate(str string) (Date, error) {
 	return NewDate(timex), nil
 }
 
-func NewDateToday() Date {
-	return NewDate(TimeNow())
-}
-
 func (qd Date) MarshalJSON() ([]byte, error) {
 	if qd.IsZero() {
 		return []byte("\"\""), nil
@@ -58,7 +54,6 @@ func (qd *Date) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// TODO identical for Date, DateTime and Time
 func (qd *Date) Scan(value interface{}) error {
 	if value == nil {
 		return nil
@@ -81,7 +76,6 @@ func (qd *Date) Scan(value interface{}) error {
 	return nil
 }
 
-// TODO identical for Date, DateTime and Time
 func (qd Date) Value() (driver.Value, error) {
 	t := qd.Time // just for convenience
 	tt := time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), time.Local)

@@ -57,7 +57,7 @@ func (qq *InboxTransferService) Transfer(
 	if err != nil {
 		return nil, err
 	}
-	if _, err := NewDocumentNotes().editable(ctx, doc); err != nil {
+	if err := NewDocumentNotes().ensureEditable(ctx, doc); err != nil {
 		return nil, err
 	}
 	// Re-read destination access and opt-in; knowing a Space's public ID is insufficient.

@@ -72,5 +72,5 @@ func (qq *PasskeySignInBeginCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		Options:     result.Options,
 	}
 
-	return writeJSONResponse(rw, http.StatusOK, response)
+	return writeJSONResponse(rw, response)
 }

@@ -90,14 +90,6 @@ func CloseDetailsHeader() template.JS {
 	})
 }
 
-func CloseDialogHeader() template.JS {
-	return util.JSON(struct {
-		CloseDialog bool `json:"Close-Dialog"`
-	}{
-		CloseDialog: true,
-	})
-}
-
 // anonymous functions don't support generics...
 /*
 was for gorilla/schema

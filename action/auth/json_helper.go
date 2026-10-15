@@ -9,7 +9,7 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-func writeJSONResponse(rw httpx.ResponseWriter, statusCode int, value any) error {
+func writeJSONResponse(rw httpx.ResponseWriter, value any) error {
 	data, err := json.Marshal(value)
 	if err != nil {
 		log.Println(err)
@@ -19,7 +19,7 @@ func writeJSONResponse(rw httpx.ResponseWriter, statusCode int, value any) error
 	rw.Header().Set("Cache-Control", "no-store")
 	rw.Header().Set("Pragma", "no-cache")
 	rw.Header().Set("Content-Type", "application/json")
-	rw.WriteData(data, statusCode)
+	rw.WriteData(data, http.StatusOK)
 	return nil
 }
 

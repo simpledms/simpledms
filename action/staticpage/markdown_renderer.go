@@ -82,40 +82,40 @@ func (qq *MarkdownRenderer) styleMarkdown(raw string) (string, error) {
 
 		switch node.Data {
 		case "h1":
-			qq.appendAttr(node, "class", "headline-md text-on-surface mt-7 mb-3")
+			qq.appendClass(node, "headline-md text-on-surface mt-7 mb-3")
 		case "h2":
-			qq.appendAttr(node, "class", "headline-sm text-on-surface mt-6 mb-3")
+			qq.appendClass(node, "headline-sm text-on-surface mt-6 mb-3")
 		case "h3", "h4", "h5", "h6":
-			qq.appendAttr(node, "class", "title-lg text-on-surface mt-5 mb-2")
+			qq.appendClass(node, "title-lg text-on-surface mt-5 mb-2")
 		case "p":
-			qq.appendAttr(node, "class", "text-on-surface my-2")
+			qq.appendClass(node, "text-on-surface my-2")
 		case "ul":
-			qq.appendAttr(node, "class", "text-on-surface list-disc ml-6 my-3")
+			qq.appendClass(node, "text-on-surface list-disc ml-6 my-3")
 		case "ol":
-			qq.appendAttr(node, "class", "text-on-surface list-decimal ml-6 my-3")
+			qq.appendClass(node, "text-on-surface list-decimal ml-6 my-3")
 		case "li":
-			qq.appendAttr(node, "class", "my-1")
+			qq.appendClass(node, "my-1")
 		case "a":
-			qq.appendAttr(node, "class", "text-tertiary")
-			qq.appendAttr(node, "class", "underline")
+			qq.appendClass(node, "text-tertiary")
+			qq.appendClass(node, "underline")
 			href := qq.getAttr(node, "href")
 			if strings.HasPrefix(href, "http://") || strings.HasPrefix(href, "https://") {
 				qq.setAttr(node, "target", "_blank")
 				qq.setAttr(node, "rel", "noopener noreferrer")
 			}
 		case "pre":
-			qq.appendAttr(node, "class", "body-sm my-3 p-3 rounded-xl overflow-x-auto bg-surface-container-low")
+			qq.appendClass(node, "body-sm my-3 p-3 rounded-xl overflow-x-auto bg-surface-container-low")
 		case "code":
 			if node.Parent != nil && node.Parent.Data == "pre" {
-				qq.appendAttr(node, "class", "body-sm")
+				qq.appendClass(node, "body-sm")
 				break
 			}
 
-			qq.appendAttr(node, "class", "body-sm px-1 py-[2px] rounded-xs bg-surface-container-high")
+			qq.appendClass(node, "body-sm px-1 py-[2px] rounded-xs bg-surface-container-high")
 		case "blockquote":
-			qq.appendAttr(node, "class", "text-on-surface my-3 py-1 pl-4 border-l-4 border-outline-variant")
+			qq.appendClass(node, "text-on-surface my-3 py-1 pl-4 border-l-4 border-outline-variant")
 		case "hr":
-			qq.appendAttr(node, "class", "my-4 border-t border-outline-variant")
+			qq.appendClass(node, "my-4 border-t border-outline-variant")
 		}
 	})
 
@@ -136,14 +136,14 @@ func (qq *MarkdownRenderer) visitNodes(node *html.Node, fn func(*html.Node)) {
 	}
 }
 
-func (qq *MarkdownRenderer) appendAttr(node *html.Node, key, value string) {
-	currentValue := strings.TrimSpace(qq.getAttr(node, key))
+func (qq *MarkdownRenderer) appendClass(node *html.Node, value string) {
+	currentValue := strings.TrimSpace(qq.getAttr(node, "class"))
 	if currentValue == "" {
-		qq.setAttr(node, key, value)
+		qq.setAttr(node, "class", value)
 		return
 	}
 
-	qq.setAttr(node, key, currentValue+" "+value)
+	qq.setAttr(node, "class", currentValue+" "+value)
 }
 
 func (qq *MarkdownRenderer) getAttr(node *html.Node, key string) string {

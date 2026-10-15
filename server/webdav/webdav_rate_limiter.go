@@ -7,10 +7,14 @@ import (
 	"time"
 )
 
+const (
+	webDAVRateLimitWindow      = 5 * time.Minute
+	webDAVRateLimitMaxFailures = 10
+)
+
 type webDAVRateLimiter struct {
 	mu       sync.Mutex
 	attempts map[string][]time.Time
-	order    []string
 	maxKeys  int
 }
 
@@ -21,36 +25,25 @@ func newWebDAVRateLimiter(maxKeys int) *webDAVRateLimiter {
 	}
 }
 
-func (qq *webDAVRateLimiter) allow(remoteAddr string, username string) bool {
+// recordFailedAttempt remembers a failed authentication; blocked reports whether
+// too many failures happened recently.
+func (qq *webDAVRateLimiter) recordFailedAttempt(remoteAddr string, username string) {
 	key := webDAVRateLimitKey(remoteAddr, username)
 	if key == "" {
-		return true
+		return
 	}
 
 	qq.mu.Lock()
 	defer qq.mu.Unlock()
 
-	if _, ok := qq.attempts[key]; !ok {
-		qq.order = append(qq.order, key)
-	}
-	qq.trimLocked()
-
 	now := time.Now()
-	cutoff := now.Add(-5 * time.Minute)
-	history := qq.attempts[key]
-	filtered := make([]time.Time, 0, len(history)+1)
-	for _, attemptedAt := range history {
-		if attemptedAt.After(cutoff) {
-			filtered = append(filtered, attemptedAt)
-		}
+	recentFailures := qq.recentFailuresLocked(key, now)
+	// further failures are not needed to keep the key blocked
+	if len(recentFailures) < webDAVRateLimitMaxFailures {
+		recentFailures = append(recentFailures, now)
 	}
-	if len(filtered) >= 10 {
-		qq.attempts[key] = filtered
-		return false
-	}
-
-	qq.attempts[key] = append(filtered, now)
-	return true
+	qq.attempts[key] = recentFailures
+	qq.evictLocked(now)
 }
 
 func (qq *webDAVRateLimiter) blocked(remoteAddr string, username string) bool {
@@ -61,26 +54,54 @@ func (qq *webDAVRateLimiter) blocked(remoteAddr string, username string) bool {
 
 	qq.mu.Lock()
 	defer qq.mu.Unlock()
-	now := time.Now()
-	cutoff := now.Add(-5 * time.Minute)
-	history := qq.attempts[key]
-	filtered := history[:0]
-	for _, attemptedAt := range history {
-		if attemptedAt.After(cutoff) {
-			filtered = append(filtered, attemptedAt)
-		}
+
+	recentFailures := qq.recentFailuresLocked(key, time.Now())
+	if len(recentFailures) == 0 {
+		delete(qq.attempts, key)
+		return false
 	}
-	qq.attempts[key] = filtered
-	return len(filtered) >= 10
+	qq.attempts[key] = recentFailures
+	return len(recentFailures) >= webDAVRateLimitMaxFailures
 }
 
-func (qq *webDAVRateLimiter) trimLocked() {
-	if qq.maxKeys <= 0 {
+func (qq *webDAVRateLimiter) recentFailuresLocked(key string, now time.Time) []time.Time {
+	cutoff := now.Add(-webDAVRateLimitWindow)
+	history := qq.attempts[key]
+	recentFailures := history[:0]
+	for _, attemptedAt := range history {
+		if attemptedAt.After(cutoff) {
+			recentFailures = append(recentFailures, attemptedAt)
+		}
+	}
+	return recentFailures
+}
+
+// evictLocked drops expired keys and then the keys with the oldest last failure until at
+// most maxKeys remain. The linear scans are fine because the map is bounded by maxKeys
+// and they only run once it is full.
+func (qq *webDAVRateLimiter) evictLocked(now time.Time) {
+	if qq.maxKeys <= 0 || len(qq.attempts) <= qq.maxKeys {
 		return
 	}
-	for len(qq.order) > qq.maxKeys {
-		delete(qq.attempts, qq.order[0])
-		qq.order = qq.order[1:]
+
+	cutoff := now.Add(-webDAVRateLimitWindow)
+	for key, failures := range qq.attempts {
+		if len(failures) == 0 || !failures[len(failures)-1].After(cutoff) {
+			delete(qq.attempts, key)
+		}
+	}
+
+	for len(qq.attempts) > qq.maxKeys {
+		oldestKey := ""
+		var oldestLastFailure time.Time
+		for key, failures := range qq.attempts {
+			lastFailure := failures[len(failures)-1]
+			if oldestKey == "" || lastFailure.Before(oldestLastFailure) {
+				oldestKey = key
+				oldestLastFailure = lastFailure
+			}
+		}
+		delete(qq.attempts, oldestKey)
 	}
 }
 

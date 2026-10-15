@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"net/http"
-
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -57,5 +55,5 @@ func (qq *PasskeyRegisterBeginCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		Options:     result.Options,
 	}
 
-	return writeJSONResponse(rw, http.StatusOK, response)
+	return writeJSONResponse(rw, response)
 }

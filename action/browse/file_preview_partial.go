@@ -201,7 +201,6 @@ func (qq *FilePreviewPartial) PreviewWidget(
 					FileURL: qq.originalPreviewURL(
 						ctx,
 						filex,
-						source,
 						classification.Family,
 						versionNumber,
 					),
@@ -294,7 +293,6 @@ func (qq *FilePreviewPartial) previewStatusMessage(text *widget.Text) *widget.Pa
 func (qq *FilePreviewPartial) originalPreviewURL(
 	ctx ctxx.Context,
 	filex *filemodel.File,
-	source *enttenant.StoredFile,
 	family previewmodel.Family,
 	versionNumber string,
 ) string {

@@ -1,7 +1,6 @@
 package browse
 
 import (
-	"log"
 	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -62,13 +61,7 @@ func (qq *BrowsePage) Handler(
 		return qq.infra.Renderer().Render(rw, ctx, &widget.DetailsWithSheet{})
 	}
 
-	browsePage, err := qq.widget(req, ctx, state, dirx)
-	if err != nil {
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
-	}
-
-	qq.render(rw, req, ctx, browsePage)
+	qq.render(rw, req, ctx, qq.widget(ctx, state, dirx))
 	return nil
 }
 
@@ -88,11 +81,10 @@ func (qq *BrowsePage) render(
 }
 
 func (qq *BrowsePage) widget(
-	req *httpx.Request,
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *enttenant.File,
-) (renderable.Renderable, error) {
+) renderable.Renderable {
 	listDetailLayout := qq.actions.ListDirPartial.Widget(
 		ctx,
 		state,
@@ -157,5 +149,5 @@ func (qq *BrowsePage) widget(
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    content,
 	}
-	return mainLayout, nil
+	return mainLayout
 }

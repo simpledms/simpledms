@@ -1,9 +1,5 @@
 package route
 
-func AuthRoute() string {
-	return "GET /auth/"
-}
-
 // TODO call login or auth
 func AuthActionsRoute() string {
 	return "/auth/"

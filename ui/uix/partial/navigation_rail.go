@@ -74,11 +74,6 @@ func SpacesNavigationRailValue(tenantID string) string {
 	return "spaces-" + tenantID
 }
 
-// SpaceNavigationRailValue returns the active value for a single space item.
-func SpaceNavigationRailValue(spaceID string) string {
-	return "space-" + spaceID
-}
-
 // TenantUsersNavigationRailValue returns the active value for a tenant Users item.
 func TenantUsersNavigationRailValue(tenantID string) string {
 	return "tenant-users-" + tenantID
