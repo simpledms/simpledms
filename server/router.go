@@ -534,7 +534,7 @@ func (qq *Router) handleManualError(
 		rw.WriteHeader(httpErr.StatusCode())
 		rw.AddRenderables(httpErr.Snackbar())
 	} else {
-		log.Println(err)
+		log.Printf("request failed: %T", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
@@ -559,18 +559,14 @@ func isTWARequest(req *http.Request) bool {
 
 func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	if req == nil {
-		log.Printf("recovered panic with nil request; panic_type=%T panic=%v stack=%s", recovered, recovered, debug.Stack())
+		log.Printf("recovered panic with nil request; panic_type=%T stack=%s", recovered, debug.Stack())
 		return
 	}
 
 	log.Printf(
-		"recovered panic; method=%s path=%s raw_query=%q upload_token=%q hx_current_url=%q panic_type=%T panic=%v stack=%s",
+		"recovered panic; method=%s path=%q panic_type=%T stack=%s",
 		req.Method,
 		req.URL.Path,
-		req.URL.RawQuery,
-		req.URL.Query().Get("upload_token"),
-		req.Header.Get("HX-Current-URL"),
-		recovered,
 		recovered,
 		debug.Stack(),
 	)
@@ -640,7 +636,7 @@ func (qq *Router) handleError(
 				*/
 			}
 			if entErr == nil {
-				log.Println(errx)
+				log.Printf("unhandled database constraint: %T", errx)
 				entErr = e.NewHTTPErrorf(
 					http.StatusInternalServerError,
 					"A database constraint violation happened. Please contact the support.",
@@ -655,7 +651,7 @@ func (qq *Router) handleError(
 		if isEntMValErr || isEntTValErr {
 			// logged because I currently don't know if this is triggered in simpledms
 			// and if so, if handling can be improved
-			log.Println(err)
+			log.Printf("database validation failed: %T", err)
 
 			// TODO error message?
 			entErr = e.NewHTTPErrorf(http.StatusBadRequest, "Data validation failed.")
@@ -674,7 +670,7 @@ func (qq *Router) handleError(
 			statusCode = httpErr.StatusCode()
 			message = httpErr.Message()
 		} else {
-			log.Println(err)
+			log.Printf("request failed: %T", err)
 		}
 
 		data, err := json.Marshal(struct {
@@ -692,7 +688,7 @@ func (qq *Router) handleError(
 		rw.WriteHeader(httpErr.StatusCode())
 		rw.AddRenderables(httpErr.Snackbar())
 	} else {
-		log.Println(err)
+		log.Printf("request failed: %T", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}

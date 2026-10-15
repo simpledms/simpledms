@@ -6,14 +6,18 @@ import (
 	"time"
 )
 
+const maxRequestRateLimitKeys = 4096
+
 type RequestRateLimiter struct {
-	mu       sync.Mutex
-	attempts map[string][]time.Time
+	mu        sync.Mutex
+	attempts  map[string][]time.Time
+	expiresAt map[string]time.Time
 }
 
 func NewRequestRateLimiter() *RequestRateLimiter {
 	return &RequestRateLimiter{
-		attempts: make(map[string][]time.Time),
+		attempts:  make(map[string][]time.Time),
+		expiresAt: make(map[string]time.Time),
 	}
 }
 
@@ -31,6 +35,17 @@ func (qq *RequestRateLimiter) Allow(key string, window time.Duration, limit int)
 
 	now := time.Now()
 	cutoff := now.Add(-window)
+	if _, exists := qq.attempts[key]; !exists && len(qq.attempts) >= maxRequestRateLimitKeys {
+		for existingKey, expiresAt := range qq.expiresAt {
+			if !expiresAt.After(now) {
+				delete(qq.attempts, existingKey)
+				delete(qq.expiresAt, existingKey)
+			}
+		}
+		if len(qq.attempts) >= maxRequestRateLimitKeys {
+			return false
+		}
+	}
 
 	history := qq.attempts[key]
 	filteredHistory := make([]time.Time, 0, len(history)+1)
@@ -47,6 +62,7 @@ func (qq *RequestRateLimiter) Allow(key string, window time.Duration, limit int)
 
 	filteredHistory = append(filteredHistory, now)
 	qq.attempts[key] = filteredHistory
+	qq.expiresAt[key] = now.Add(window)
 
 	return true
 }

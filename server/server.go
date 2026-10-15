@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
+	"io"
 	"io/fs"
 	"log"
 	"net/http"
@@ -127,6 +129,12 @@ func newMaintenanceModeHandler(
 	})
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
+		if req.Method != http.MethodPost {
+			rw.Header().Set("Allow", http.MethodPost)
+			rw.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		req.Body = http.MaxBytesReader(rw, req.Body, 64*1024)
 		defer func() {
 			if err := req.Body.Close(); err != nil {
 				log.Println(err)
@@ -137,9 +145,18 @@ func newMaintenanceModeHandler(
 			Passphrase string `json:"passphrase"`
 		}
 
-		err := json.NewDecoder(req.Body).Decode(&reqBody)
+		payload, err := io.ReadAll(req.Body)
+		if err == nil {
+			err = json.Unmarshal(payload, &reqBody)
+		}
 		if err != nil {
-			log.Println(err)
+			log.Printf("maintenance unlock payload rejected: %T", err)
+			var maxBytesErr *http.MaxBytesError
+			if errors.As(err, &maxBytesErr) {
+				rw.WriteHeader(http.StatusRequestEntityTooLarge)
+				_, _ = rw.Write([]byte("Request payload is too large"))
+				return
+			}
 			rw.WriteHeader(http.StatusBadRequest)
 			_, _ = rw.Write([]byte("Invalid request payload"))
 			return

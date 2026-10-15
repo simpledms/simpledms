@@ -231,13 +231,21 @@ func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
 	storagePath string,
 	storageFilename string,
 ) error {
+	suffix := filepath.Ext(originalFilename) + ".gz.age"
+	if !filenamex.IsAllowed(storageFilename) || !strings.HasSuffix(storageFilename, suffix) {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid storage filename.")
+	}
+	storageFilenameWithoutExt := strings.TrimSuffix(storageFilename, suffix)
+	if storageFilenameWithoutExt == "" {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid storage filename.")
+	}
 	_, _, _, err := qq.saveFile(
 		ctx,
 		x25519Identity,
 		fileToSave,
 		originalFilename,
+		storageFilenameWithoutExt,
 		storagePath,
-		storageFilename,
 		nil,
 	)
 

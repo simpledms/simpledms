@@ -110,7 +110,7 @@ func converterFunc[T any](strFunc func(str string) (T, error)) func(vals []strin
 	return func(vals []string) (interface{}, error) {
 		val, err := strFunc(vals[0])
 		if err != nil {
-			log.Println(err)
+			log.Printf("form value conversion failed: %T", err)
 			return nil, err
 		}
 		return val, nil
@@ -131,6 +131,9 @@ func FormDataX[T any](
 	skipValidation bool,
 ) (*T, error) {
 	data := new(T)
+	if req.Body != nil {
+		req.Body = http.MaxBytesReader(rw, req.Body, 1024*1024)
+	}
 
 	// necessary because can be a value like:
 	// multipart/form-data; boundary=----WebKitFormBoundaryAb4I2KBu0OZAKU8h
@@ -139,10 +142,10 @@ func FormDataX[T any](
 	contentType = contentTypeArr[0]
 
 	if contentType == "multipart/form-data" {
-		// 50 MB in memory, rest in tmp file
+		// File uploads use dedicated streaming handlers; ordinary forms are bounded above.
 		err := req.ParseMultipartForm(50 * 1024)
 		if err != nil {
-			log.Println(err)
+			log.Printf("multipart form parsing failed: %T", err)
 
 			var maxBytesErr *http.MaxBytesError
 			if errors.As(err, &maxBytesErr) {
@@ -154,7 +157,11 @@ func FormDataX[T any](
 	} else {
 		err := req.ParseForm()
 		if err != nil {
-			log.Println(err)
+			log.Printf("form parsing failed: %T", err)
+			var maxBytesErr *http.MaxBytesError
+			if errors.As(err, &maxBytesErr) {
+				return data, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Form is too large.")
+			}
 			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse form.")
 		}
 	}
@@ -175,7 +182,7 @@ func FormDataX[T any](
 
 	err := decoder.Decode(data, req.PostForm)
 	if err != nil {
-		log.Println(err)
+		log.Printf("form decoding failed: %T", err)
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot decode form.")
 	}
 
@@ -210,17 +217,7 @@ func FormDataX[T any](
 			var validationErrs validator.ValidationErrors
 			if errors.As(validationErrsUntyped, &validationErrs) {
 				for _, erry := range validationErrs {
-					log.Println(erry.Namespace())
-					log.Println(erry.Field())
-					log.Println(erry.StructNamespace())
-					log.Println(erry.StructField())
-					log.Println(erry.Tag())
-					log.Println(erry.ActualTag())
-					log.Println(erry.Kind())
-					log.Println(erry.Type())
-					log.Println(erry.Value())
-					log.Println(erry.Param())
-					log.Println()
+					log.Printf("form validation failed: field=%s rule=%s", erry.StructField(), erry.Tag())
 				}
 
 				// TODO is it a good choice to only show first error?
