@@ -166,7 +166,10 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		// rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(data.CurrentDirID))
 
 		// dir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
-		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		dir, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+		if err != nil {
+			return err
+		}
 		fileList := qq.filesList(
 			ctx,
 			state,
@@ -210,7 +213,10 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			}
 		}
 
-		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		dir, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+		if err != nil {
+			return err
+		}
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
@@ -271,9 +277,13 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	}
 	view := qq.Widget(ctx, state, data.CurrentDirID, data.SelectedFileID)
 	if selected != nil {
+		currentDir, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+		if err != nil {
+			return err
+		}
 		view.Detail, err = qq.actions.FilePreviewPartial.Widget(
 			ctx, autil.StateX[FilePreviewPartialState](rw, req),
-			qq.infra.FileRepo.GetX(ctx, data.CurrentDirID), filemodel.NewFile(selected),
+			currentDir, filemodel.NewFile(selected),
 		)
 		if err != nil {
 			return err

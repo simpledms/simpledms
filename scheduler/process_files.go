@@ -3,7 +3,6 @@ package scheduler
 import (
 	"context"
 	"log"
-	"runtime/debug"
 	"strings"
 	"time"
 
@@ -34,20 +33,6 @@ const (
 )
 
 func (qq *Scheduler) processFiles() {
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(1 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.processFiles()
-		}
-	}()
-
 	for {
 		ctx := context.Background()
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)

@@ -26,7 +26,7 @@ func NewSelectDocumentTypeCmd(infra *common.Infra, actions *Actions) *SelectDocu
 	config := actionx.NewConfig(
 		actions.Route("select-document-type-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &SelectDocumentTypeCmd{
 		infra:   infra,
 		actions: actions,
@@ -47,7 +47,10 @@ func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	isSelected, _, err := documenttypemodel.NewAssignmentService().Toggle(
 		ctx, filex.Data.ID, data.DocumentTypeID,
 	)

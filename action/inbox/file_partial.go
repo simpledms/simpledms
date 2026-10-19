@@ -57,7 +57,10 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	view, err := qq.Widget(ctx, state, filex)
 	if err != nil {

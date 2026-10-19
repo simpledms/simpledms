@@ -44,8 +44,14 @@ func (qq *BrowseWithSelectionPage) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
-	dirx := qq.infra.FileRepo.GetX(ctx, dirIDStr)
+	filex, err := qq.infra.FileRepo.Get(ctx, fileIDStr)
+	if err != nil {
+		return err
+	}
+	dirx, err := qq.infra.FileRepo.Get(ctx, dirIDStr)
+	if err != nil {
+		return err
+	}
 
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 

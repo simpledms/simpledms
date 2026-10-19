@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"log"
-	"runtime/debug"
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
@@ -24,17 +23,6 @@ import (
 // applyOCRMarkdown stores Xberg markdown, which keeps tables, for LLMs (MCP). It runs
 // independently of the Tika OCR in applyOCR, which provides the full-text search content.
 func (qq *Scheduler) applyOCRMarkdown() {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			time.Sleep(1 * time.Minute)
-
-			qq.applyOCRMarkdown()
-		}
-	}()
-
 	for {
 		ctx := context.Background()
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)

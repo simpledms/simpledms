@@ -76,7 +76,10 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return err
 	}
 
-	filem := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filem, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	if !filem.IsZIPArchive(ctx) {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Not a ZIP archive.")

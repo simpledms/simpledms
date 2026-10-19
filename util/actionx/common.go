@@ -9,13 +9,10 @@ import (
 type Config struct {
 	endpoint            string
 	method              string
-	isReadOnly          bool
+	txPolicy            TxPolicy
 	allowInSetupSession bool
+	isPublic            bool
 	usesSeparatedCmd    bool // TODO reference to cmd instead?
-	// some actions open their own write transactions and should avoid long-lived
-	// request transactions
-	useManualTxManagement bool
-	commitBeforeResponse  bool
 }
 
 func NewConfig(
@@ -23,10 +20,14 @@ func NewConfig(
 	// method string,
 	isReadOnly bool,
 ) *Config {
+	txPolicy := TxPolicyReadWrite
+	if isReadOnly {
+		txPolicy = TxPolicyReadOnly
+	}
 	return &Config{
-		endpoint:   endpoint,
-		method:     "POST",
-		isReadOnly: isReadOnly,
+		endpoint: endpoint,
+		method:   "POST",
+		txPolicy: txPolicy,
 	}
 }
 
@@ -58,16 +59,8 @@ func (qq *Config) EndpointWithParams(wrapper ResponseWrapper, hxTarget string) s
 	return qq.endpointWithParams(qq.Endpoint(), wrapper, hxTarget)
 }
 
-// TODO
-//
-//	rename to something more meaningful, also var where value is used
-//	maybe IsReadOnlyTx or UseReadOnlyTx?
-func (qq *Config) IsReadOnly() bool {
-	return qq.isReadOnly || qq.UseManualTxManagement()
-}
-
-func (qq *Config) UseManualTxManagement() bool {
-	return qq.useManualTxManagement
+func (qq *Config) TxPolicy() TxPolicy {
+	return qq.txPolicy
 }
 
 func (qq *Config) AllowInSetupSession() bool {
@@ -79,19 +72,21 @@ func (qq *Config) EnableSetupSessionAccess() *Config {
 	return qq
 }
 
+func (qq *Config) IsPublic() bool {
+	return qq.isPublic
+}
+
+// EnablePublicAccess makes the action and its form reachable without being signed in.
+func (qq *Config) EnablePublicAccess() *Config {
+	qq.isPublic = true
+	return qq
+}
+
+// EnableManualTxManagement is for actions that open their own write transactions and should
+// avoid long-lived request transactions.
 func (qq *Config) EnableManualTxManagement() *Config {
-	qq.useManualTxManagement = true
+	qq.txPolicy = TxPolicyManual
 	return qq
-}
-
-// EnableCommittedResponse delays a bounded browser response until the router commits.
-func (qq *Config) EnableCommittedResponse() *Config {
-	qq.commitBeforeResponse = true
-	return qq
-}
-
-func (qq *Config) CommitBeforeResponse() bool {
-	return qq.commitBeforeResponse
 }
 
 func (qq *Config) SetUsesSeparatedCmd(val bool) *Config {
@@ -150,7 +145,7 @@ func (qq *Config) endpointWithParams(endpoint string, wrapper ResponseWrapper, h
 }
 
 func (qq *Config) FormRoute() string {
-	if qq.isReadOnly && !qq.useManualTxManagement && !qq.usesSeparatedCmd {
+	if qq.txPolicy == TxPolicyReadOnly && !qq.usesSeparatedCmd {
 		return ""
 	}
 	return fmt.Sprintf("POST %s", qq.FormEndpoint())

@@ -59,7 +59,7 @@ func (qq *ConsumeUploadsCmd) Handler(
 		return err
 	}
 	for _, tmpFile := range tmpFiles {
-		if _, err := qq.infra.FileSystem().PreparePersistingTemporaryAccountFile(
+		if _, err := qq.infra.FileSystem().AccountFileConversion().Persist(
 			ctx, tmpFile, rootID, true,
 		); err != nil {
 			log.Println(err)

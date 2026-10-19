@@ -33,7 +33,7 @@ func TestMarkAsDoneCommitFailureDoesNotReleaseSuccessResponse(t *testing.T) {
 	h := newActionTestHarness(t)
 	fixture := newMCPFixtureWithWrites(t, h, "mark-done-commit-failure")
 	cmd := h.actions.Inbox.MarkAsDoneCmd
-	wrapped := h.router.wrapTxResponse(h.router.wrapCommand(func(
+	wrapped := h.router.wrapTx(h.router.wrapCommand(func(
 		rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
 	) error {
 		ctx.TenantCtx().TTx.OnCommit(func(enttenant.Committer) enttenant.Committer {
@@ -42,7 +42,7 @@ func TestMarkAsDoneCommitFailureDoesNotReleaseSuccessResponse(t *testing.T) {
 			})
 		})
 		return cmd.Handler(rw, req, ctx)
-	}), false, cmd.CommitBeforeResponse())
+	}), false)
 	request := httptest.NewRequest(http.MethodPost, cmd.Endpoint(), strings.NewReader(
 		url.Values{"FileID": {fixture.fileID}}.Encode(),
 	))

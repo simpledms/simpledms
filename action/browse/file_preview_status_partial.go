@@ -89,7 +89,10 @@ func (qq *FilePreviewStatusPartial) Handler(
 			}
 		}
 	}
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	source, err := qq.actions.FilePreviewPartial.versionSource(ctx, filex, data.VersionNumber)
 	if err != nil {
 		log.Println(err)

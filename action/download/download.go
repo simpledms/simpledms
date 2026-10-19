@@ -31,7 +31,10 @@ func (qq *Download) Handler(
 	ctx ctxx.Context,
 ) error {
 	fileIDStr := req.PathValue("file_id")
-	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
+	filex, err := qq.infra.FileRepo.Get(ctx, fileIDStr)
+	if err != nil {
+		return err
+	}
 
 	if filex.Data.IsDirectory {
 		// TODO impl support for this? download as zip archive?

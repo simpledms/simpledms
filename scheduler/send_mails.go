@@ -3,7 +3,6 @@ package scheduler
 import (
 	"context"
 	"log"
-	"runtime/debug"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -17,19 +16,6 @@ import (
 )
 
 func (qq *Scheduler) sendMails() {
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(1 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.sendMails()
-		}
-	}()
 	for {
 		// TODO in transaction or not? if so, don't forget rollback in recovery logic
 

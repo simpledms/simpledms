@@ -29,7 +29,8 @@ func NewPasskeySignInBeginCmd(
 	passkeyService *account2.PasskeyService,
 	requestRateLimiter *account2.RequestRateLimiter,
 ) *PasskeySignInBeginCmd {
-	config := actionx.NewConfig(actions.Route("passkey-sign-in-begin-cmd"), false)
+	config := actionx.NewConfig(actions.Route("passkey-sign-in-begin-cmd"), false).
+		EnablePublicAccess()
 	return &PasskeySignInBeginCmd{
 		infra:              infra,
 		actions:            actions,

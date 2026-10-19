@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "sequence",
+  "quality": "showcase",
+  "specification": {
+    "path": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/candidate.json",
+    "sha256": "394f6030afc82ae37af12e4e8824be942289c2ee046809dd74008bc16b6f2773",
+    "bytes": 9217
+  },
+  "artifact": {
+    "path": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/web-request.html",
+    "sha256": "6c192deeed036024bc4c801e59246976db6d5d9b06ee3da4369441824eb4ca25",
+    "bytes": 829314
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/web-request.finalize.json",
+    "summaryReceipt": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/web-request.finalize-summary.json",
+    "browserCheckReceipt": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/web-request.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.1.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-18T19:20:16.352Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 1986,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

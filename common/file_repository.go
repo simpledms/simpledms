@@ -1,8 +1,10 @@
 package common
 
 import (
+	"errors"
+	"log"
+
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/entx"
@@ -15,58 +17,59 @@ func NewFileRepository() *FileRepository {
 	return &FileRepository{}
 }
 
-func (qq *FileRepository) GetWithParentX(ctx ctxx.Context, id string) *filemodel.FileWithParent {
-	filex := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctx)
-
-	if filex.ParentID == 0 {
-		panic("parent id is 0")
-	}
-
-	return filemodel.NewFileWithParent(filemodel.NewFile(filex))
-}
-
-func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *filemodel.File {
-	/*
-		stmt := dd.SELECT(dt.Files.AllColumns).
-			FROM(dt.Files).
-			WHERE(dt.Files.ID.EQ(dd.Int64(id)))
-		dest := &dm.Files{}
-		err := stmt.Query(tx, dest)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-	*/
-
-	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, id)
-	filex, err := filemodel.NewFileReader().Get(ctx, id)
-	if err != nil {
-		panic(err) // compatibility for callers using the legacy GetX contract
-	}
-	return filemodel.NewFile(filex)
-}
-
-func (qq *FileRepository) GetWithDeletedX(ctx ctxx.Context, id string) *filemodel.File {
-	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctxWithDeleted)
-	return filemodel.NewFile(filex)
-}
-
-// Deprecated: just a workaround for legacy code
-func (qq *FileRepository) GetXX(filex *enttenant.File) *filemodel.File {
-	return filemodel.NewFile(filex)
-}
-
-/*
-func (qq *FileRepo) Save(ctx *ctxx.Context, filex *filemodel.File) error {
-	updateStmt := dt.Files.UPDATE(dt.Files.MutableColumns).
-		MODEL(filex.Data).
-		WHERE(dt.Files.ID.EQ(dd.Int32(filex.Data.ID)))
-	_, err := updateStmt.Exec(tx)
+func (qq *FileRepository) GetWithParent(ctx ctxx.Context, id string) (*filemodel.FileWithParent, error) {
+	filex, err := ctx.TenantCtx().TTx.File.Query().
+		WithParent().
+		Where(file.PublicIDEQ(entx.NewCIText(id))).
+		Only(ctx)
 	if err != nil {
 		log.Println(err)
-		return err
+		return nil, err
 	}
-	return nil
+	if filex.ParentID == 0 {
+		err = errors.New("parent id is 0")
+		log.Println(err)
+		return nil, err
+	}
+
+	return filemodel.NewFileWithParent(filemodel.NewFile(filex)), nil
 }
-*/
+
+func (qq *FileRepository) Get(ctx ctxx.Context, id string) (*filemodel.File, error) {
+	filex, err := filemodel.NewFileReader().Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return filemodel.NewFile(filex), nil
+}
+
+// Deprecated: panics on error; only kept for widget builders without an error result. Use Get.
+func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *filemodel.File {
+	filex, err := qq.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return filex
+}
+
+func (qq *FileRepository) GetWithDeleted(ctx ctxx.Context, id string) (*filemodel.File, error) {
+	ctxWithDeleted := schema.SkipSoftDelete(ctx)
+	filex, err := ctx.SpaceCtx().Space.QueryFiles().
+		Where(file.PublicIDEQ(entx.NewCIText(id))).
+		Only(ctxWithDeleted)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return filemodel.NewFile(filex), nil
+}
+
+// Deprecated: panics on error; only kept for widget builders without an error result. Use
+// GetWithDeleted.
+func (qq *FileRepository) GetWithDeletedX(ctx ctxx.Context, id string) *filemodel.File {
+	filex, err := qq.GetWithDeleted(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return filex
+}

@@ -1,24 +1,9 @@
 package common
 
-type Factory struct {
-	// TODO on factory or infra?
-	// inboxDirInfo   *ent.FileInfo
-	// storageDirInfo *ent.FileInfo
-}
+// Deprecated: Factory has no behavior. It is only kept because NewInfra accepts it and
+// simpledms-saas constructs Infra in its tests.
+type Factory struct{}
 
 func NewFactory() *Factory {
-	return &Factory{
-		// inboxDirInfo:   inboxDirInfo,
-		// storageDirInfo: storageDirInfo,
-	}
+	return &Factory{}
 }
-
-/*
-func (qq *Factory) InboxDirInfo() *ent.FileInfo {
-	return qq.inboxDirInfo
-}
-
-func (qq *Factory) StorageDirInfo() *ent.FileInfo {
-	return qq.storageDirInfo
-}
-*/

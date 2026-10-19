@@ -101,7 +101,10 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	filex, err = qq.infra.FileSystem().Rename(ctx, filex, data.NewFilename)
 	if err != nil {
 		log.Println(err)

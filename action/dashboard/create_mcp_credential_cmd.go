@@ -28,8 +28,7 @@ type CreateMCPCredentialCmd struct {
 }
 
 func NewCreateMCPCredentialCmd(infra *common.Infra, actions *Actions) *CreateMCPCredentialCmd {
-	config := actionx.NewConfig(actions.Route("create-mcp-credential-cmd"), false).
-		EnableCommittedResponse()
+	config := actionx.NewConfig(actions.Route("create-mcp-credential-cmd"), false)
 	return &CreateMCPCredentialCmd{
 		infra:       infra,
 		actions:     actions,

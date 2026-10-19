@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"runtime/debug"
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
@@ -34,15 +33,6 @@ const (
 )
 
 func (qq *Scheduler) convertPreviews() {
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			log.Printf("%v: %s", recovered, debug.Stack())
-			log.Println("preview conversion loop recovered")
-			time.Sleep(time.Minute)
-			qq.convertPreviews()
-		}
-	}()
-
 	for {
 		ctx := tenantprivacy.DecisionContext(context.Background(), tenantprivacy.Allow)
 		qq.convertPreviewsOnce(ctx)

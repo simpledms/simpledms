@@ -193,6 +193,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	)
 	actions := action.NewActions(infra, tenantDBs, true, systemStatusChecker)
 	router.RegisterActions(actions)
+	router.registerSignInPage(actions.Auth.SignInPage.Handler)
 
 	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
@@ -615,14 +616,6 @@ func TestAuthenticatedRootRedirectsToDashboard(t *testing.T) {
 	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.Owner, true)
 
 	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
-	harness.router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		if req.Method == http.MethodGet && req.URL.Path == "/" {
-			harness.router.wrapTx(harness.actions.Auth.SignInPage.Handler, true)(rw, req)
-			return
-		}
-
-		rw.WriteHeader(http.StatusNotFound)
-	})
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	req.AddCookie(sessionCookie)

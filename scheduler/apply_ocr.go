@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"regexp"
-	"runtime/debug"
 	"strings"
 	"time"
 
@@ -31,20 +30,6 @@ func (qq *Scheduler) applyOCR() {
 		log.Println("tika client not initialized")
 		return
 	}
-
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(1 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.applyOCR()
-		}
-	}()
 
 	for {
 		ctx := context.Background()

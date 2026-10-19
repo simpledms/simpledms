@@ -186,7 +186,7 @@ func TestMCPConnectionCommitFailureDoesNotDiscloseToken(t *testing.T) {
 	f := newMCPFixture(t, h, "commit")
 	queryCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	before := h.mainDB.ReadOnlyConn.MCPCredential.Query().CountX(queryCtx)
-	wrapped := h.router.wrapTxResponse(func(
+	wrapped := h.router.wrapTx(func(
 		rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
 	) error {
 		ctx.MainCtx().MainTx.OnCommit(func(entmain.Committer) entmain.Committer {
@@ -195,7 +195,7 @@ func TestMCPConnectionCommitFailureDoesNotDiscloseToken(t *testing.T) {
 			})
 		})
 		return h.actions.Dashboard.CreateMCPCredentialCmd.Handler(rw, req, ctx)
-	}, false, true)
+	}, false)
 	values := url.Values{
 		"Label":       {"must roll back"},
 		"Destination": {f.tenant.PublicID.String() + ":" + f.spaceID},

@@ -35,7 +35,8 @@ func NewResetPasswordCmd(
 	actions *Actions,
 	requestRateLimiter *account2.RequestRateLimiter,
 ) *ResetPasswordCmd {
-	config := actionx.NewConfig(actions.Route("reset-password-cmd"), false)
+	config := actionx.NewConfig(actions.Route("reset-password-cmd"), false).
+		EnablePublicAccess()
 	return &ResetPasswordCmd{
 		infra:              infra,
 		actions:            actions,

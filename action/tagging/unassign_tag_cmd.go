@@ -26,7 +26,7 @@ func NewUnassignTagCmd(infra *common.Infra, actions *Actions) *UnassignTagCmd {
 	config := actionx.NewConfig(
 		actions.Route("unassign-tag-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &UnassignTagCmd{
 		infra:   infra,
 		actions: actions,
@@ -47,7 +47,10 @@ func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	tag, err := taggingmodel.NewTagService().UnassignFromFile(ctx, filex.Data.ID, data.TagID)
 	if err != nil {

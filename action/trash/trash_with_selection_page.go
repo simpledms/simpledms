@@ -40,7 +40,10 @@ func (qq *TrashWithSelectionPage) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
+	filex, err := qq.infra.FileRepo.GetWithDeleted(ctx, fileIDStr)
+	if err != nil {
+		return err
+	}
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File preview is not available for folders.")
 	}

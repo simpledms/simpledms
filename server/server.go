@@ -925,16 +925,7 @@ func (qq *Server) registerCoreRoutes(
 	// use GET for all read requests and POST for all write requests?
 	// restful for default CRUD on main resource? falls apart quickly, see AddConsumption
 
-	// workaround to prevent route conflict between `GET /` and `/webdav/`
-	router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		if req.Method == "GET" && req.URL.Path == "/" {
-			// router.wrapTx(pages.Browse.Handler)(rw, req)
-			// router.wrapTx(actions.Spaces.SpacesPage.Handler)(rw, req)
-			router.wrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
-			return
-		}
-		rw.WriteHeader(http.StatusNotFound)
-	})
+	router.registerSignInPage(actions.Auth.SignInPage.Handler)
 
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
@@ -949,6 +940,8 @@ func (qq *Server) registerCoreRoutes(
 	router.RegisterPage(route2.SystemStatusRoute(), actions.Dashboard.SystemStatusPage.Handler)
 	router.RegisterPage(route2.OrganizationSettingsRoute(), actions.Dashboard.OrganizationSettingsPage.Handler)
 	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
+	// StaticPageRoute has a wildcard; only the about page is public
+	router.allowPublicPath(route2.AboutPage())
 
 	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
 	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)

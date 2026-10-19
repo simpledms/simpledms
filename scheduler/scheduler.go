@@ -3,6 +3,8 @@ package scheduler
 import (
 	"context"
 	"io/fs"
+	"log"
+	"runtime/debug"
 	"time"
 
 	"entgo.io/ent/privacy"
@@ -76,39 +78,42 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 		tenantdatamigration.NewRunner(),
 	)
 
-	go func() {
+	go qq.runRecovering("initialize tenants", time.Minute, func() {
 		qq.initializeTenants(devMode, metaPath, migrationsTenantFS)
-	}()
-
-	go func() {
-		qq.sendMails()
-	}()
-
-	go func() {
-		qq.cleanupSessions()
-	}()
-
-	go func() {
-		qq.processFiles()
-	}()
-
-	go func() {
-		qq.applyOCR()
-	}()
-
+	})
+	go qq.runRecovering("send mails", time.Minute, qq.sendMails)
+	// runs once per start; only retried if it panics
+	go qq.runRecovering("cleanup sessions", 5*time.Minute, qq.cleanupSessions)
+	go qq.runRecovering("process files", time.Minute, qq.processFiles)
+	go qq.runRecovering("apply OCR", time.Minute, qq.applyOCR)
 	if qq.xbergClientNilable != nil {
-		go func() {
-			qq.applyOCRMarkdown()
-		}()
+		go qq.runRecovering("apply OCR markdown", time.Minute, qq.applyOCRMarkdown)
 	}
-
-	go func() {
-		qq.backfillContentHashes()
-	}()
-
+	go qq.runRecovering("backfill content hashes", time.Minute, qq.backfillContentHashes)
 	if qq.gotenbergClientNilable != nil {
-		go func() {
-			qq.convertPreviews()
-		}()
+		go qq.runRecovering("convert previews", time.Minute, qq.convertPreviews)
 	}
+}
+
+// runRecovering runs a job and restarts it after recoverDelay whenever it panics. Each job
+// recovers independently, so a panic in one loop never stops another loop mid-execution.
+// It returns when the job returns normally.
+//
+// TODO what is a good recover delay?
+func (qq *Scheduler) runRecovering(name string, recoverDelay time.Duration, job func()) {
+	for runUntilPanic(name, job) {
+		time.Sleep(recoverDelay)
+	}
+}
+
+func runUntilPanic(name string, job func()) (hasPanicked bool) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("%v: %s", r, debug.Stack())
+			log.Println("trying to recover scheduler job:", name)
+			hasPanicked = true
+		}
+	}()
+	job()
+	return false
 }

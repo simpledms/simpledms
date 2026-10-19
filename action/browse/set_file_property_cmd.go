@@ -42,7 +42,7 @@ func NewSetFilePropertyCmd(infra *common.Infra, actions *Actions) *SetFileProper
 	config := actionx.NewConfig(
 		actions.Route("set-file-property-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &SetFilePropertyCmd{
 		infra:   infra,
 		actions: actions,
@@ -67,7 +67,10 @@ func (qq *SetFilePropertyCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 	service := propertymodel.NewFilePropertyAssignmentService()

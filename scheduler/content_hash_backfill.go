@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -37,15 +36,6 @@ func (qq *Scheduler) backfillContentHashes() {
 		log.Println("content hash backfill disabled")
 		return
 	}
-
-	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-			time.Sleep(1 * time.Minute)
-			qq.backfillContentHashes()
-		}
-	}()
 
 	for {
 		ctx := context.Background()

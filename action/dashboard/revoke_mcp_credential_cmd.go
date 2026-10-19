@@ -22,8 +22,7 @@ type RevokeMCPCredentialCmd struct {
 }
 
 func NewRevokeMCPCredentialCmd(infra *common.Infra, actions *Actions) *RevokeMCPCredentialCmd {
-	config := actionx.NewConfig(actions.Route("revoke-mcp-credential-cmd"), false).
-		EnableCommittedResponse()
+	config := actionx.NewConfig(actions.Route("revoke-mcp-credential-cmd"), false)
 	return &RevokeMCPCredentialCmd{
 		infra:       infra,
 		actions:     actions,

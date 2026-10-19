@@ -165,7 +165,10 @@ func (qq *Preview) source(
 	versionNumber string,
 	fileID string,
 ) (*filemodel.File, *enttenant.StoredFile, error) {
-	filex := qq.infra.FileRepo.GetX(ctx, fileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, fileID)
+	if err != nil {
+		return nil, nil, err
+	}
 	if filex.Data.IsDirectory {
 		return filex, nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be previewed.")
 	}

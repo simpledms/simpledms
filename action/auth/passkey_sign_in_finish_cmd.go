@@ -27,7 +27,8 @@ func NewPasskeySignInFinishCmd(
 	actions *Actions,
 	passkeyService *account2.PasskeyService,
 ) *PasskeySignInFinishCmd {
-	config := actionx.NewConfig(actions.Route("passkey-sign-in-finish-cmd"), false)
+	config := actionx.NewConfig(actions.Route("passkey-sign-in-finish-cmd"), false).
+		EnablePublicAccess()
 	return &PasskeySignInFinishCmd{
 		infra:          infra,
 		actions:        actions,

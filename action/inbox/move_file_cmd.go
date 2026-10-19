@@ -27,7 +27,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("move-file-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &MoveFileCmd{
 		MoveFile: acommon.NewMoveFile(infra, actions.Common, config),
 		infra:    infra,
@@ -52,8 +52,14 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		log.Println(err)
 		return err
 	}
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
-	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+	filex, err := qq.infra.FileRepo.GetWithParent(ctx, fileData.PublicID.String())
+	if err != nil {
+		return err
+	}
+	destDir, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+	if err != nil {
+		return err
+	}
 
 	action := &widget.Link{
 		Href: route.BrowseFile(
