@@ -22,7 +22,11 @@ func TestXbergClientRequestsLayoutMarkdownWithPaddleOCR(t *testing.T) {
 			t.Error(err)
 			return
 		}
-		defer file.Close()
+		defer func() {
+			if err := file.Close(); err != nil {
+				t.Errorf("closing uploaded file: %v", err)
+			}
+		}()
 		fileContent, err := io.ReadAll(file)
 		if err != nil {
 			t.Error(err)
