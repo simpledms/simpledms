@@ -26,8 +26,10 @@ func NewSMTPClient(config *appmodel.MailerConfig) (*gomail.Client, error) {
 		log.Println(err)
 		return nil, err
 	}
+	// Certificate and hostname verification are disabled only by explicit administrator opt-in.
+	// This intentionally permits unverified SMTP servers and risks man-in-the-middle attacks.
 	if config.MailerInsecureSkipVerify {
-		err = mailClient.SetTLSConfig(&tls.Config{
+		err = mailClient.SetTLSConfig(&tls.Config{ // NOSONAR: Intentional admin-configured TLS bypass.
 			// ServerName and MinVersion are set in mailer.NewClient() too;
 			// could not find a way to modify default tlsConfig
 			ServerName:         config.MailerHost,
