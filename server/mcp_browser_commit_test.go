@@ -28,7 +28,7 @@ func TestMCPBrowserMarkAsDoneDoesNotReleaseResponseBeforeCommit(t *testing.T) {
 	h := newActionTestHarness(t)
 	fixture := newMCPFixtureWithWrites(t, h, "browser-commit-done")
 	cmd := h.actions.Inbox.MarkAsDoneCmd
-	wrapped := h.router.wrapTxResponse(h.router.wrapCommand(func(
+	wrapped := h.router.wrapTx(h.router.wrapCommand(func(
 		rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
 	) error {
 		ctx.TenantCtx().TTx.OnCommit(func(enttenant.Committer) enttenant.Committer {
@@ -37,7 +37,7 @@ func TestMCPBrowserMarkAsDoneDoesNotReleaseResponseBeforeCommit(t *testing.T) {
 			})
 		})
 		return cmd.Handler(rw, req, ctx)
-	}), false, cmd.CommitBeforeResponse())
+	}), false)
 
 	request := httptest.NewRequest(http.MethodPost, cmd.Endpoint(), strings.NewReader(
 		url.Values{"FileID": {fixture.fileID}}.Encode(),
@@ -87,7 +87,7 @@ func TestMCPBrowserSetTypedPropertyDoesNotReleaseResponseBeforeCommit(t *testing
 	}
 
 	cmd := h.actions.Browse.SetFilePropertyCmd
-	wrapped := h.router.wrapTxResponse(h.router.wrapCommand(func(
+	wrapped := h.router.wrapTx(h.router.wrapCommand(func(
 		rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
 	) error {
 		ctx.TenantCtx().TTx.OnCommit(func(enttenant.Committer) enttenant.Committer {
@@ -96,7 +96,7 @@ func TestMCPBrowserSetTypedPropertyDoesNotReleaseResponseBeforeCommit(t *testing
 			})
 		})
 		return cmd.Handler(rw, req, ctx)
-	}), false, cmd.CommitBeforeResponse())
+	}), false)
 
 	form := url.Values{
 		"FileID":     {fixture.fileID},

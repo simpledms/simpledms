@@ -3,7 +3,6 @@ package auth
 import (
 	"encoding/json"
 	"log"
-	"net/http"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -70,7 +69,7 @@ func (qq *RegeneratePasskeyCodesCmd) Handler(rw httpx.ResponseWriter, req *httpx
 		rw.Header().Set("HX-Trigger", string(triggerPayload))
 	}
 
-	return writeJSONResponse(rw, http.StatusOK, struct {
+	return writeJSONResponse(rw, struct {
 		RecoveryCodesToken string `json:"recoveryCodesToken"`
 	}{
 		RecoveryCodesToken: recoveryCodesToken,

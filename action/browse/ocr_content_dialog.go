@@ -56,7 +56,10 @@ func (qq *OCRContentDialog) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.GetWithDeleted(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,

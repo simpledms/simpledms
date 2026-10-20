@@ -3233,64 +3233,70 @@ func (m *DocumentTypeMutation) ResetEdge(name string) error {
 // FileMutation represents an operation that mutates the File nodes in the graph.
 type FileMutation struct {
 	config
-	op                         Op
-	typ                        string
-	id                         *int64
-	deleted_at                 *time.Time
-	public_id                  *entx.CIText
-	created_at                 *time.Time
-	updated_at                 *time.Time
-	name                       *string
-	source                     *filesource.FileSource
-	is_directory               *bool
-	notes                      *string
-	modified_at                *time.Time
-	indexed_at                 *time.Time
-	indexing_completed_at      *time.Time
-	is_in_inbox                *bool
-	is_root_dir                *bool
-	ocr_content                *string
-	ocr_success_at             *time.Time
-	ocr_retry_count            *int
-	addocr_retry_count         *int
-	ocr_last_tried_at          *time.Time
-	clearedFields              map[string]struct{}
-	deleter                    *int64
-	cleareddeleter             bool
-	creator                    *int64
-	clearedcreator             bool
-	updater                    *int64
-	clearedupdater             bool
-	space                      *int64
-	clearedspace               bool
-	versions                   map[int64]struct{}
-	removedversions            map[int64]struct{}
-	clearedversions            bool
-	children                   map[int64]struct{}
-	removedchildren            map[int64]struct{}
-	clearedchildren            bool
-	parent                     *int64
-	clearedparent              bool
-	document_type              *int64
-	cleareddocument_type       bool
-	tags                       map[int64]struct{}
-	removedtags                map[int64]struct{}
-	clearedtags                bool
-	properties                 map[int64]struct{}
-	removedproperties          map[int64]struct{}
-	clearedproperties          bool
-	file_versions              map[int64]struct{}
-	removedfile_versions       map[int64]struct{}
-	clearedfile_versions       bool
-	tag_assignment             map[int64]struct{}
-	removedtag_assignment      map[int64]struct{}
-	clearedtag_assignment      bool
-	property_assignment        map[int64]struct{}
-	removedproperty_assignment map[int64]struct{}
-	clearedproperty_assignment bool
-	done                       bool
-	oldValue                   func(context.Context) (*File, error)
-	predicates                 []predicate.File
+	op                           Op
+	typ                          string
+	id                           *int64
+	deleted_at                   *time.Time
+	public_id                    *entx.CIText
+	created_at                   *time.Time
+	updated_at                   *time.Time
+	name                         *string
+	source                       *filesource.FileSource
+	is_directory                 *bool
+	notes                        *string
+	modified_at                  *time.Time
+	indexed_at                   *time.Time
+	indexing_completed_at        *time.Time
+	is_in_inbox                  *bool
+	is_root_dir                  *bool
+	ocr_content                  *string
+	ocr_success_at               *time.Time
+	ocr_retry_count              *int
+	addocr_retry_count           *int
+	ocr_last_tried_at            *time.Time
+	ocr_markdown                 *string
+	ocr_markdown_success_at      *time.Time
+	ocr_markdown_retry_count     *int
+	addocr_markdown_retry_count  *int
+	ocr_markdown_last_tried_at   *time.Time
+	is_ocr_content_from_markdown *bool
+	clearedFields                map[string]struct{}
+	deleter                      *int64
+	cleareddeleter               bool
+	creator                      *int64
+	clearedcreator               bool
+	updater                      *int64
+	clearedupdater               bool
+	space                        *int64
+	clearedspace                 bool
+	versions                     map[int64]struct{}
+	removedversions              map[int64]struct{}
+	clearedversions              bool
+	children                     map[int64]struct{}
+	removedchildren              map[int64]struct{}
+	clearedchildren              bool
+	parent                       *int64
+	clearedparent                bool
+	document_type                *int64
+	cleareddocument_type         bool
+	tags                         map[int64]struct{}
+	removedtags                  map[int64]struct{}
+	clearedtags                  bool
+	properties                   map[int64]struct{}
+	removedproperties            map[int64]struct{}
+	clearedproperties            bool
+	file_versions                map[int64]struct{}
+	removedfile_versions         map[int64]struct{}
+	clearedfile_versions         bool
+	tag_assignment               map[int64]struct{}
+	removedtag_assignment        map[int64]struct{}
+	clearedtag_assignment        bool
+	property_assignment          map[int64]struct{}
+	removedproperty_assignment   map[int64]struct{}
+	clearedproperty_assignment   bool
+	done                         bool
+	oldValue                     func(context.Context) (*File, error)
+	predicates                   []predicate.File
 }
 
 var _ ent.Mutation = (*FileMutation)(nil)
@@ -4375,6 +4381,272 @@ func (m *FileMutation) ResetOcrLastTriedAt() {
 	m.ocr_last_tried_at = nil
 }
 
+// SetOcrMarkdown sets the "ocr_markdown" field.
+func (m *FileMutation) SetOcrMarkdown(s string) {
+	m.ocr_markdown = &s
+}
+
+// OcrMarkdown returns the value of the "ocr_markdown" field in the mutation.
+func (m *FileMutation) OcrMarkdown() (r string, exists bool) {
+	v := m.ocr_markdown
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMarkdown returns the old "ocr_markdown" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldOcrMarkdown(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMarkdown is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMarkdown requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMarkdown: %w", err)
+	}
+	return oldValue.OcrMarkdown, nil
+}
+
+// ClearOcrMarkdown clears the value of the "ocr_markdown" field.
+func (m *FileMutation) ClearOcrMarkdown() {
+	m.ocr_markdown = nil
+	m.clearedFields[file.FieldOcrMarkdown] = struct{}{}
+}
+
+// OcrMarkdownCleared returns if the "ocr_markdown" field was cleared in this mutation.
+func (m *FileMutation) OcrMarkdownCleared() bool {
+	_, ok := m.clearedFields[file.FieldOcrMarkdown]
+	return ok
+}
+
+// ResetOcrMarkdown resets all changes to the "ocr_markdown" field.
+func (m *FileMutation) ResetOcrMarkdown() {
+	m.ocr_markdown = nil
+	delete(m.clearedFields, file.FieldOcrMarkdown)
+}
+
+// SetOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field.
+func (m *FileMutation) SetOcrMarkdownSuccessAt(t time.Time) {
+	m.ocr_markdown_success_at = &t
+}
+
+// OcrMarkdownSuccessAt returns the value of the "ocr_markdown_success_at" field in the mutation.
+func (m *FileMutation) OcrMarkdownSuccessAt() (r time.Time, exists bool) {
+	v := m.ocr_markdown_success_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMarkdownSuccessAt returns the old "ocr_markdown_success_at" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldOcrMarkdownSuccessAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMarkdownSuccessAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMarkdownSuccessAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMarkdownSuccessAt: %w", err)
+	}
+	return oldValue.OcrMarkdownSuccessAt, nil
+}
+
+// ClearOcrMarkdownSuccessAt clears the value of the "ocr_markdown_success_at" field.
+func (m *FileMutation) ClearOcrMarkdownSuccessAt() {
+	m.ocr_markdown_success_at = nil
+	m.clearedFields[file.FieldOcrMarkdownSuccessAt] = struct{}{}
+}
+
+// OcrMarkdownSuccessAtCleared returns if the "ocr_markdown_success_at" field was cleared in this mutation.
+func (m *FileMutation) OcrMarkdownSuccessAtCleared() bool {
+	_, ok := m.clearedFields[file.FieldOcrMarkdownSuccessAt]
+	return ok
+}
+
+// ResetOcrMarkdownSuccessAt resets all changes to the "ocr_markdown_success_at" field.
+func (m *FileMutation) ResetOcrMarkdownSuccessAt() {
+	m.ocr_markdown_success_at = nil
+	delete(m.clearedFields, file.FieldOcrMarkdownSuccessAt)
+}
+
+// SetOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field.
+func (m *FileMutation) SetOcrMarkdownRetryCount(i int) {
+	m.ocr_markdown_retry_count = &i
+	m.addocr_markdown_retry_count = nil
+}
+
+// OcrMarkdownRetryCount returns the value of the "ocr_markdown_retry_count" field in the mutation.
+func (m *FileMutation) OcrMarkdownRetryCount() (r int, exists bool) {
+	v := m.ocr_markdown_retry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMarkdownRetryCount returns the old "ocr_markdown_retry_count" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldOcrMarkdownRetryCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMarkdownRetryCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMarkdownRetryCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMarkdownRetryCount: %w", err)
+	}
+	return oldValue.OcrMarkdownRetryCount, nil
+}
+
+// AddOcrMarkdownRetryCount adds i to the "ocr_markdown_retry_count" field.
+func (m *FileMutation) AddOcrMarkdownRetryCount(i int) {
+	if m.addocr_markdown_retry_count != nil {
+		*m.addocr_markdown_retry_count += i
+	} else {
+		m.addocr_markdown_retry_count = &i
+	}
+}
+
+// AddedOcrMarkdownRetryCount returns the value that was added to the "ocr_markdown_retry_count" field in this mutation.
+func (m *FileMutation) AddedOcrMarkdownRetryCount() (r int, exists bool) {
+	v := m.addocr_markdown_retry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearOcrMarkdownRetryCount clears the value of the "ocr_markdown_retry_count" field.
+func (m *FileMutation) ClearOcrMarkdownRetryCount() {
+	m.ocr_markdown_retry_count = nil
+	m.addocr_markdown_retry_count = nil
+	m.clearedFields[file.FieldOcrMarkdownRetryCount] = struct{}{}
+}
+
+// OcrMarkdownRetryCountCleared returns if the "ocr_markdown_retry_count" field was cleared in this mutation.
+func (m *FileMutation) OcrMarkdownRetryCountCleared() bool {
+	_, ok := m.clearedFields[file.FieldOcrMarkdownRetryCount]
+	return ok
+}
+
+// ResetOcrMarkdownRetryCount resets all changes to the "ocr_markdown_retry_count" field.
+func (m *FileMutation) ResetOcrMarkdownRetryCount() {
+	m.ocr_markdown_retry_count = nil
+	m.addocr_markdown_retry_count = nil
+	delete(m.clearedFields, file.FieldOcrMarkdownRetryCount)
+}
+
+// SetOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field.
+func (m *FileMutation) SetOcrMarkdownLastTriedAt(t time.Time) {
+	m.ocr_markdown_last_tried_at = &t
+}
+
+// OcrMarkdownLastTriedAt returns the value of the "ocr_markdown_last_tried_at" field in the mutation.
+func (m *FileMutation) OcrMarkdownLastTriedAt() (r time.Time, exists bool) {
+	v := m.ocr_markdown_last_tried_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMarkdownLastTriedAt returns the old "ocr_markdown_last_tried_at" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldOcrMarkdownLastTriedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMarkdownLastTriedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMarkdownLastTriedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMarkdownLastTriedAt: %w", err)
+	}
+	return oldValue.OcrMarkdownLastTriedAt, nil
+}
+
+// ClearOcrMarkdownLastTriedAt clears the value of the "ocr_markdown_last_tried_at" field.
+func (m *FileMutation) ClearOcrMarkdownLastTriedAt() {
+	m.ocr_markdown_last_tried_at = nil
+	m.clearedFields[file.FieldOcrMarkdownLastTriedAt] = struct{}{}
+}
+
+// OcrMarkdownLastTriedAtCleared returns if the "ocr_markdown_last_tried_at" field was cleared in this mutation.
+func (m *FileMutation) OcrMarkdownLastTriedAtCleared() bool {
+	_, ok := m.clearedFields[file.FieldOcrMarkdownLastTriedAt]
+	return ok
+}
+
+// ResetOcrMarkdownLastTriedAt resets all changes to the "ocr_markdown_last_tried_at" field.
+func (m *FileMutation) ResetOcrMarkdownLastTriedAt() {
+	m.ocr_markdown_last_tried_at = nil
+	delete(m.clearedFields, file.FieldOcrMarkdownLastTriedAt)
+}
+
+// SetIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field.
+func (m *FileMutation) SetIsOcrContentFromMarkdown(b bool) {
+	m.is_ocr_content_from_markdown = &b
+}
+
+// IsOcrContentFromMarkdown returns the value of the "is_ocr_content_from_markdown" field in the mutation.
+func (m *FileMutation) IsOcrContentFromMarkdown() (r bool, exists bool) {
+	v := m.is_ocr_content_from_markdown
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsOcrContentFromMarkdown returns the old "is_ocr_content_from_markdown" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldIsOcrContentFromMarkdown(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsOcrContentFromMarkdown is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsOcrContentFromMarkdown requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsOcrContentFromMarkdown: %w", err)
+	}
+	return oldValue.IsOcrContentFromMarkdown, nil
+}
+
+// ClearIsOcrContentFromMarkdown clears the value of the "is_ocr_content_from_markdown" field.
+func (m *FileMutation) ClearIsOcrContentFromMarkdown() {
+	m.is_ocr_content_from_markdown = nil
+	m.clearedFields[file.FieldIsOcrContentFromMarkdown] = struct{}{}
+}
+
+// IsOcrContentFromMarkdownCleared returns if the "is_ocr_content_from_markdown" field was cleared in this mutation.
+func (m *FileMutation) IsOcrContentFromMarkdownCleared() bool {
+	_, ok := m.clearedFields[file.FieldIsOcrContentFromMarkdown]
+	return ok
+}
+
+// ResetIsOcrContentFromMarkdown resets all changes to the "is_ocr_content_from_markdown" field.
+func (m *FileMutation) ResetIsOcrContentFromMarkdown() {
+	m.is_ocr_content_from_markdown = nil
+	delete(m.clearedFields, file.FieldIsOcrContentFromMarkdown)
+}
+
 // SetDeleterID sets the "deleter" edge to the User entity by id.
 func (m *FileMutation) SetDeleterID(id int64) {
 	m.deleter = &id
@@ -4988,7 +5260,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 28)
 	if m.deleter != nil {
 		fields = append(fields, file.FieldDeletedBy)
 	}
@@ -5058,6 +5330,21 @@ func (m *FileMutation) Fields() []string {
 	if m.ocr_last_tried_at != nil {
 		fields = append(fields, file.FieldOcrLastTriedAt)
 	}
+	if m.ocr_markdown != nil {
+		fields = append(fields, file.FieldOcrMarkdown)
+	}
+	if m.ocr_markdown_success_at != nil {
+		fields = append(fields, file.FieldOcrMarkdownSuccessAt)
+	}
+	if m.ocr_markdown_retry_count != nil {
+		fields = append(fields, file.FieldOcrMarkdownRetryCount)
+	}
+	if m.ocr_markdown_last_tried_at != nil {
+		fields = append(fields, file.FieldOcrMarkdownLastTriedAt)
+	}
+	if m.is_ocr_content_from_markdown != nil {
+		fields = append(fields, file.FieldIsOcrContentFromMarkdown)
+	}
 	return fields
 }
 
@@ -5112,6 +5399,16 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.OcrRetryCount()
 	case file.FieldOcrLastTriedAt:
 		return m.OcrLastTriedAt()
+	case file.FieldOcrMarkdown:
+		return m.OcrMarkdown()
+	case file.FieldOcrMarkdownSuccessAt:
+		return m.OcrMarkdownSuccessAt()
+	case file.FieldOcrMarkdownRetryCount:
+		return m.OcrMarkdownRetryCount()
+	case file.FieldOcrMarkdownLastTriedAt:
+		return m.OcrMarkdownLastTriedAt()
+	case file.FieldIsOcrContentFromMarkdown:
+		return m.IsOcrContentFromMarkdown()
 	}
 	return nil, false
 }
@@ -5167,6 +5464,16 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldOcrRetryCount(ctx)
 	case file.FieldOcrLastTriedAt:
 		return m.OldOcrLastTriedAt(ctx)
+	case file.FieldOcrMarkdown:
+		return m.OldOcrMarkdown(ctx)
+	case file.FieldOcrMarkdownSuccessAt:
+		return m.OldOcrMarkdownSuccessAt(ctx)
+	case file.FieldOcrMarkdownRetryCount:
+		return m.OldOcrMarkdownRetryCount(ctx)
+	case file.FieldOcrMarkdownLastTriedAt:
+		return m.OldOcrMarkdownLastTriedAt(ctx)
+	case file.FieldIsOcrContentFromMarkdown:
+		return m.OldIsOcrContentFromMarkdown(ctx)
 	}
 	return nil, fmt.Errorf("unknown File field %s", name)
 }
@@ -5337,6 +5644,41 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOcrLastTriedAt(v)
 		return nil
+	case file.FieldOcrMarkdown:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMarkdown(v)
+		return nil
+	case file.FieldOcrMarkdownSuccessAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMarkdownSuccessAt(v)
+		return nil
+	case file.FieldOcrMarkdownRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMarkdownRetryCount(v)
+		return nil
+	case file.FieldOcrMarkdownLastTriedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMarkdownLastTriedAt(v)
+		return nil
+	case file.FieldIsOcrContentFromMarkdown:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsOcrContentFromMarkdown(v)
+		return nil
 	}
 	return fmt.Errorf("unknown File field %s", name)
 }
@@ -5348,6 +5690,9 @@ func (m *FileMutation) AddedFields() []string {
 	if m.addocr_retry_count != nil {
 		fields = append(fields, file.FieldOcrRetryCount)
 	}
+	if m.addocr_markdown_retry_count != nil {
+		fields = append(fields, file.FieldOcrMarkdownRetryCount)
+	}
 	return fields
 }
 
@@ -5358,6 +5703,8 @@ func (m *FileMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case file.FieldOcrRetryCount:
 		return m.AddedOcrRetryCount()
+	case file.FieldOcrMarkdownRetryCount:
+		return m.AddedOcrMarkdownRetryCount()
 	}
 	return nil, false
 }
@@ -5373,6 +5720,13 @@ func (m *FileMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddOcrRetryCount(v)
+		return nil
+	case file.FieldOcrMarkdownRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOcrMarkdownRetryCount(v)
 		return nil
 	}
 	return fmt.Errorf("unknown File numeric field %s", name)
@@ -5411,6 +5765,21 @@ func (m *FileMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(file.FieldOcrSuccessAt) {
 		fields = append(fields, file.FieldOcrSuccessAt)
+	}
+	if m.FieldCleared(file.FieldOcrMarkdown) {
+		fields = append(fields, file.FieldOcrMarkdown)
+	}
+	if m.FieldCleared(file.FieldOcrMarkdownSuccessAt) {
+		fields = append(fields, file.FieldOcrMarkdownSuccessAt)
+	}
+	if m.FieldCleared(file.FieldOcrMarkdownRetryCount) {
+		fields = append(fields, file.FieldOcrMarkdownRetryCount)
+	}
+	if m.FieldCleared(file.FieldOcrMarkdownLastTriedAt) {
+		fields = append(fields, file.FieldOcrMarkdownLastTriedAt)
+	}
+	if m.FieldCleared(file.FieldIsOcrContentFromMarkdown) {
+		fields = append(fields, file.FieldIsOcrContentFromMarkdown)
 	}
 	return fields
 }
@@ -5455,6 +5824,21 @@ func (m *FileMutation) ClearField(name string) error {
 		return nil
 	case file.FieldOcrSuccessAt:
 		m.ClearOcrSuccessAt()
+		return nil
+	case file.FieldOcrMarkdown:
+		m.ClearOcrMarkdown()
+		return nil
+	case file.FieldOcrMarkdownSuccessAt:
+		m.ClearOcrMarkdownSuccessAt()
+		return nil
+	case file.FieldOcrMarkdownRetryCount:
+		m.ClearOcrMarkdownRetryCount()
+		return nil
+	case file.FieldOcrMarkdownLastTriedAt:
+		m.ClearOcrMarkdownLastTriedAt()
+		return nil
+	case file.FieldIsOcrContentFromMarkdown:
+		m.ClearIsOcrContentFromMarkdown()
 		return nil
 	}
 	return fmt.Errorf("unknown File nullable field %s", name)
@@ -5532,6 +5916,21 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldOcrLastTriedAt:
 		m.ResetOcrLastTriedAt()
+		return nil
+	case file.FieldOcrMarkdown:
+		m.ResetOcrMarkdown()
+		return nil
+	case file.FieldOcrMarkdownSuccessAt:
+		m.ResetOcrMarkdownSuccessAt()
+		return nil
+	case file.FieldOcrMarkdownRetryCount:
+		m.ResetOcrMarkdownRetryCount()
+		return nil
+	case file.FieldOcrMarkdownLastTriedAt:
+		m.ResetOcrMarkdownLastTriedAt()
+		return nil
+	case file.FieldIsOcrContentFromMarkdown:
+		m.ResetIsOcrContentFromMarkdown()
 		return nil
 	}
 	return fmt.Errorf("unknown File field %s", name)

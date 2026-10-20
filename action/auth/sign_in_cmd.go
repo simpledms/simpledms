@@ -43,7 +43,7 @@ func NewSignInCmd(
 	config := actionx.NewConfig(
 		actions.Route("sign-in-cmd"),
 		false,
-	)
+	).EnablePublicAccess()
 	return &SignInCmd{
 		infra:              infra,
 		actions:            actions,

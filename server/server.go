@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
+	"io"
 	"io/fs"
 	"log"
 	"net/http"
@@ -43,12 +45,14 @@ import (
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/internal/gotenberg"
+	"github.com/simpledms/simpledms/internal/xberg"
 	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	signupmodel "github.com/simpledms/simpledms/model/main/signup"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/model/main/systemstatus"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
@@ -125,6 +129,12 @@ func newMaintenanceModeHandler(
 	})
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
+		if req.Method != http.MethodPost {
+			rw.Header().Set("Allow", http.MethodPost)
+			rw.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		req.Body = http.MaxBytesReader(rw, req.Body, 64*1024)
 		defer func() {
 			if err := req.Body.Close(); err != nil {
 				log.Println(err)
@@ -135,9 +145,18 @@ func newMaintenanceModeHandler(
 			Passphrase string `json:"passphrase"`
 		}
 
-		err := json.NewDecoder(req.Body).Decode(&reqBody)
+		payload, err := io.ReadAll(req.Body)
+		if err == nil {
+			err = json.Unmarshal(payload, &reqBody)
+		}
 		if err != nil {
-			log.Println(err)
+			log.Printf("maintenance unlock payload rejected: %T", err)
+			var maxBytesErr *http.MaxBytesError
+			if errors.As(err, &maxBytesErr) {
+				rw.WriteHeader(http.StatusRequestEntityTooLarge)
+				_, _ = rw.Write([]byte("Request payload is too large"))
+				return
+			}
 			rw.WriteHeader(http.StatusBadRequest)
 			_, _ = rw.Write([]byte("Invalid request payload"))
 			return
@@ -381,6 +400,13 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
+	systemStatusChecker := systemstatus.NewSystemStatusChecker(
+		systemConfig,
+		minioClient,
+		qq.devMode,
+		infra.FileSystem().IsFileEncryptionDisabled(),
+		overrideDBConfig,
+	)
 	router := NewRouter(
 		mainDB,
 		tenantDBs,
@@ -390,7 +416,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		i18nx,
 		trustedProxies,
 	)
-	actions := action.NewActions(infra, tenantDBs, qq.devMode)
+	actions := action.NewActions(infra, tenantDBs, qq.devMode, systemStatusChecker)
 	downloadHandler := download.NewDownload(infra)
 	previewDownloadHandler := download.NewPreview(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
@@ -492,6 +518,7 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 			},
 			appmodel.OCRConfig{
 				TikaURL:        os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
+				XbergURL:       os.Getenv("SIMPLEDMS_OCR_XBERG_URL"),
 				GotenbergURL:   os.Getenv("SIMPLEDMS_GOTENBERG_URL"),
 				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
 			},
@@ -771,6 +798,9 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
+	if val, set := os.LookupEnv("SIMPLEDMS_OCR_XBERG_URL"); set {
+		updateQuery.SetOcrXbergURL(val)
+	}
 	if val, set := os.LookupEnv("SIMPLEDMS_GOTENBERG_URL"); set {
 		updateQuery.SetGotenbergURL(val)
 	}
@@ -895,16 +925,7 @@ func (qq *Server) registerCoreRoutes(
 	// use GET for all read requests and POST for all write requests?
 	// restful for default CRUD on main resource? falls apart quickly, see AddConsumption
 
-	// workaround to prevent route conflict between `GET /` and `/webdav/`
-	router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		if req.Method == "GET" && req.URL.Path == "/" {
-			// router.wrapTx(pages.Browse.Handler)(rw, req)
-			// router.wrapTx(actions.Spaces.SpacesPage.Handler)(rw, req)
-			router.wrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
-			return
-		}
-		rw.WriteHeader(http.StatusNotFound)
-	})
+	router.registerSignInPage(actions.Auth.SignInPage.Handler)
 
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
@@ -916,8 +937,11 @@ func (qq *Server) registerCoreRoutes(
 		actions.Dashboard.WebDAVCredentialsPage.Handler,
 	)
 	router.RegisterPage(route2.SystemRoute(), actions.Dashboard.SystemPage.Handler)
+	router.RegisterPage(route2.SystemStatusRoute(), actions.Dashboard.SystemStatusPage.Handler)
 	router.RegisterPage(route2.OrganizationSettingsRoute(), actions.Dashboard.OrganizationSettingsPage.Handler)
 	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
+	// StaticPageRoute has a wildcard; only the about page is public
+	router.allowPublicPath(route2.AboutPage())
 
 	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
 	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)
@@ -1024,8 +1048,18 @@ func (qq *Server) startScheduler(
 		tikaClientNilable = tika.NewDefaultClient(rawSystemConfig.OcrTikaURL)
 	}
 
-	var gotenbergClientNilable *gotenberg.GotenbergClient
+	var xbergClientNilable *xberg.XbergClient
 	var err error
+	xbergURL := strings.TrimSpace(rawSystemConfig.OcrXbergURL)
+	if xbergURL != "" {
+		xbergClientNilable, err = xberg.NewXbergClient(xbergURL)
+		if err != nil {
+			log.Println(err, "; Xberg OCR disabled")
+			xbergClientNilable = nil
+		}
+	}
+
+	var gotenbergClientNilable *gotenberg.GotenbergClient
 	gotenbergURL := strings.TrimSpace(rawSystemConfig.GotenbergURL)
 	if gotenbergURL == "" {
 		log.Println("Gotenberg URL is not configured; PDF preview conversion disabled")
@@ -1044,6 +1078,7 @@ func (qq *Server) startScheduler(
 		minioClient,
 		systemConfig.S3().S3BucketName,
 		tikaClientNilable,
+		xbergClientNilable,
 		gotenbergClientNilable,
 	)
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)

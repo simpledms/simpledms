@@ -325,6 +325,26 @@ func (_u *SystemConfigUpdate) SetNillableOcrTikaURL(v *string) *SystemConfigUpda
 	return _u
 }
 
+// SetOcrXbergURL sets the "ocr_xberg_url" field.
+func (_u *SystemConfigUpdate) SetOcrXbergURL(v string) *SystemConfigUpdate {
+	_u.mutation.SetOcrXbergURL(v)
+	return _u
+}
+
+// SetNillableOcrXbergURL sets the "ocr_xberg_url" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableOcrXbergURL(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetOcrXbergURL(*v)
+	}
+	return _u
+}
+
+// ClearOcrXbergURL clears the value of the "ocr_xberg_url" field.
+func (_u *SystemConfigUpdate) ClearOcrXbergURL() *SystemConfigUpdate {
+	_u.mutation.ClearOcrXbergURL()
+	return _u
+}
+
 // SetGotenbergURL sets the "gotenberg_url" field.
 func (_u *SystemConfigUpdate) SetGotenbergURL(v string) *SystemConfigUpdate {
 	_u.mutation.SetGotenbergURL(v)
@@ -555,6 +575,12 @@ func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OcrXbergURL(); ok {
+		_spec.SetField(systemconfig.FieldOcrXbergURL, field.TypeString, value)
+	}
+	if _u.mutation.OcrXbergURLCleared() {
+		_spec.ClearField(systemconfig.FieldOcrXbergURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.GotenbergURL(); ok {
 		_spec.SetField(systemconfig.FieldGotenbergURL, field.TypeString, value)
@@ -921,6 +947,26 @@ func (_u *SystemConfigUpdateOne) SetNillableOcrTikaURL(v *string) *SystemConfigU
 	return _u
 }
 
+// SetOcrXbergURL sets the "ocr_xberg_url" field.
+func (_u *SystemConfigUpdateOne) SetOcrXbergURL(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetOcrXbergURL(v)
+	return _u
+}
+
+// SetNillableOcrXbergURL sets the "ocr_xberg_url" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableOcrXbergURL(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetOcrXbergURL(*v)
+	}
+	return _u
+}
+
+// ClearOcrXbergURL clears the value of the "ocr_xberg_url" field.
+func (_u *SystemConfigUpdateOne) ClearOcrXbergURL() *SystemConfigUpdateOne {
+	_u.mutation.ClearOcrXbergURL()
+	return _u
+}
+
 // SetGotenbergURL sets the "gotenberg_url" field.
 func (_u *SystemConfigUpdateOne) SetGotenbergURL(v string) *SystemConfigUpdateOne {
 	_u.mutation.SetGotenbergURL(v)
@@ -1181,6 +1227,12 @@ func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConf
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OcrXbergURL(); ok {
+		_spec.SetField(systemconfig.FieldOcrXbergURL, field.TypeString, value)
+	}
+	if _u.mutation.OcrXbergURLCleared() {
+		_spec.ClearField(systemconfig.FieldOcrXbergURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.GotenbergURL(); ok {
 		_spec.SetField(systemconfig.FieldGotenbergURL, field.TypeString, value)

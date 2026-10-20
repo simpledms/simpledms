@@ -48,7 +48,10 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	}
 
 	// destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
-	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+	destDir, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+	if err != nil {
+		return err
+	}
 	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 	fileWithParent := filemodel.NewFile(fileWithParentx)
 

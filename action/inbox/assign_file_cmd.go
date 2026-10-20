@@ -33,7 +33,7 @@ func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("assign-file-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	formHelper := autil.NewFormHelperX[AssignFileCmdData](
 		infra,
 		config,
@@ -116,8 +116,14 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		log.Println(err)
 		return err
 	}
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
-	destDir := qq.infra.FileRepo.GetX(ctx, data.DestDirID)
+	filex, err := qq.infra.FileRepo.GetWithParent(ctx, fileData.PublicID.String())
+	if err != nil {
+		return err
+	}
+	destDir, err := qq.infra.FileRepo.Get(ctx, data.DestDirID)
+	if err != nil {
+		return err
+	}
 
 	// TODO snackbar not shown; modal not closed
 	// rw.Header().Set("HX-Location", route.InboxRoot())

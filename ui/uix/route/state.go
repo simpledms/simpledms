@@ -3,21 +3,36 @@ package route
 import (
 	"fmt"
 	"log"
+	"net/url"
 	"slices"
 
 	"github.com/go-playground/form"
 )
 
-func WrapWithState(fn func(string, string, string) string, data any) func(string, string, string) string {
-	return func(tenantID, spaceID, fileID string) string {
-		return WithState(fn, data)(tenantID, spaceID, fileID)
+func RootWithState(fn func(string, string) string, data any) func(string, string) string {
+	return func(tenantID, spaceID string) string {
+		return withQueryState(fn(tenantID, spaceID), data, false)
 	}
 }
 
-// currently only used for spaces
-func RootWithState2(fn func() string, data any) string {
+// FIXME safety?
+func WithState(fn func(string, string, string) string, data any) func(string, string, string) string {
+	return func(tenantID, spaceID, fileID string) string {
+		return withQueryState(fn(tenantID, spaceID, fileID), data, true)
+	}
+}
+
+func WithState2(fn func(string, string, string, string) string, data any) func(string, string, string, string) string {
+	return func(tenantID, spaceID, dirID, fileID string) string {
+		return withQueryState(fn(tenantID, spaceID, dirID, fileID), data, false)
+	}
+}
+
+// withQueryState appends data, encoded via its `url` struct tags, as query to path.
+// It returns path unchanged if data is nil, empty, or cannot be encoded.
+func withQueryState(path string, data any, isDeduplicatingValues bool) string {
 	if data == nil {
-		return fn()
+		return path
 	}
 
 	// values := url.Values{}
@@ -30,108 +45,30 @@ func RootWithState2(fn func() string, data any) string {
 	values, err := encoder.Encode(data)
 	if err != nil {
 		log.Println(err)
-		return fn()
+		return path
 	}
 
 	if len(values) == 0 {
-		return fn()
+		return path
+	}
+
+	if isDeduplicatingValues {
+		removeDuplicateValues(values)
 	}
 
 	// TODO use same method as in actionx.Common to get normalized URL?
-	return fmt.Sprintf("%s?%s", fn(), values.Encode())
+	return fmt.Sprintf("%s?%s", path, values.Encode())
 }
 
-func RootWithState(fn func(string, string) string, data any) func(string, string) string {
-	return func(tenantID, spaceID string) string {
-		if data == nil {
-			return fn(tenantID, spaceID)
-		}
-
-		// values := url.Values{}
-		// encoder := schema.NewEncoder()
-		// encoder.SetAliasTag("url")
-
-		encoder := form.NewEncoder()
-		encoder.SetTagName("url")
-
-		values, err := encoder.Encode(data)
-		if err != nil {
-			log.Println(err)
-			return fn(tenantID, spaceID)
-		}
-
-		if len(values) == 0 {
-			return fn(tenantID, spaceID)
-		}
-
-		// TODO use same method as in actionx.Common to get normalized URL?
-		return fmt.Sprintf("%s?%s", fn(tenantID, spaceID), values.Encode())
-	}
-}
-
-// FIXME safety?
-func WithState(fn func(string, string, string) string, data any) func(string, string, string) string {
-	return func(tenantID, spaceID, fileID string) string {
-		if data == nil {
-			return fn(tenantID, spaceID, fileID)
-		}
-
-		// values := url.Values{}
-		// encoder := schema.NewEncoder()
-		// encoder.SetAliasTag("url")
-
-		encoder := form.NewEncoder()
-		encoder.SetTagName("url")
-
-		values, err := encoder.Encode(data)
-		if err != nil {
-			log.Println(err)
-			return fn(tenantID, spaceID, fileID)
-		}
-
-		if len(values) == 0 {
-			return fn(tenantID, spaceID, fileID)
-		}
-
-		// remove duplicate values from slices
-		//
-		// custom encoder doesn't work because signature just allows to return one string value
-		// and not a slice of strings
-		for k, v := range values {
-			slices.Sort(v)
-			v = slices.Compact(v)
-			// v = slices.Clip(v) // TODO necessary? seems not
-			values[k] = v
-		}
-
-		// TODO use same method as in actionx.Common to get normalized URL?
-		return fmt.Sprintf("%s?%s", fn(tenantID, spaceID, fileID), values.Encode())
-	}
-}
-
-func WithState2(fn func(string, string, string, string) string, data any) func(string, string, string, string) string {
-	return func(tenantID, spaceID, dirID, fileID string) string {
-		if data == nil {
-			return fn(tenantID, spaceID, dirID, fileID)
-		}
-
-		// values := url.Values{}
-		// encoder := schema.NewEncoder()
-		// encoder.SetAliasTag("url")
-		encoder := form.NewEncoder()
-		encoder.SetTagName("url")
-
-		values, err := encoder.Encode(data)
-		if err != nil {
-			log.Println(err)
-			return fn(tenantID, spaceID, dirID, fileID)
-		}
-
-		if len(values) == 0 {
-			return fn(tenantID, spaceID, dirID, fileID)
-		}
-
-		// TODO use same method as in actionx.Common to get normalized URL?
-		return fmt.Sprintf("%s?%s", fn(tenantID, spaceID, dirID, fileID), values.Encode())
+// remove duplicate values from slices
+//
+// custom encoder doesn't work because signature just allows to return one string value
+// and not a slice of strings
+func removeDuplicateValues(values url.Values) {
+	for k, v := range values {
+		slices.Sort(v)
+		v = slices.Compact(v)
+		// v = slices.Clip(v) // TODO necessary? seems not
+		values[k] = v
 	}
 }

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "fd03f6a8-23b8-4b0e-a3dd-f42044e2f966",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/candidate.json",
+  "output": "/home/marco/workspace.go/src/github.com/simpledms/simpledms/.archify/sequence-web-request-20261018-211941/web-request.html",
+  "specification": {
+    "sha256": "394f6030afc82ae37af12e4e8824be942289c2ee046809dd74008bc16b6f2773",
+    "bytes": 9217
+  },
+  "artifact": {
+    "sha256": "6c192deeed036024bc4c801e59246976db6d5d9b06ee3da4369441824eb4ca25",
+    "bytes": 829314
+  }
+}

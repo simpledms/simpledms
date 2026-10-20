@@ -201,7 +201,6 @@ func (qq *FilePreviewPartial) PreviewWidget(
 					FileURL: qq.originalPreviewURL(
 						ctx,
 						filex,
-						source,
 						classification.Family,
 						versionNumber,
 					),
@@ -294,7 +293,6 @@ func (qq *FilePreviewPartial) previewStatusMessage(text *widget.Text) *widget.Pa
 func (qq *FilePreviewPartial) originalPreviewURL(
 	ctx ctxx.Context,
 	filex *filemodel.File,
-	source *enttenant.StoredFile,
 	family previewmodel.Family,
 	versionNumber string,
 ) string {
@@ -378,8 +376,14 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
-	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	dirx, err := qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+	if err != nil {
+		return err
+	}
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	viewx, err := qq.Widget(ctx, state, dirx, filex)
 	if err != nil {

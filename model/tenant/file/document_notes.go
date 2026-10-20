@@ -111,7 +111,7 @@ func (qq *DocumentNotes) Create(
 	if err != nil {
 		return nil, err
 	}
-	if _, err := qq.editable(ctx, doc); err != nil {
+	if err := qq.ensureEditable(ctx, doc); err != nil {
 		return nil, err
 	}
 	if strings.TrimSpace(title) == "" {
@@ -208,10 +208,10 @@ func (qq *DocumentNotes) Transfer(
 	if err != nil {
 		return false, err
 	}
-	if _, err := qq.editable(ctx, sourceDoc); err != nil {
+	if err := qq.ensureEditable(ctx, sourceDoc); err != nil {
 		return false, err
 	}
-	if _, err := qq.editable(ctx, targetDoc); err != nil {
+	if err := qq.ensureEditable(ctx, targetDoc); err != nil {
 		return false, err
 	}
 	if sourceDoc.Notes != "" {
@@ -283,11 +283,11 @@ func (qq *DocumentNotes) access(ctx ctxx.Context) (bool, error) {
 	return assignment.Role == spacerole.Owner, nil
 }
 
-func (qq *DocumentNotes) editable(ctx ctxx.Context, doc *enttenant.File) (bool, error) {
+func (qq *DocumentNotes) ensureEditable(ctx ctxx.Context, doc *enttenant.File) error {
 	if !doc.DeletedAt.IsZero() || ctx.TenantCtx().IsReadOnlyTx() {
-		return false, qq.failure(http.StatusForbidden, "Notes in Trash are read-only.")
+		return qq.failure(http.StatusForbidden, "Notes in Trash are read-only.")
 	}
-	return true, nil
+	return nil
 }
 
 func (qq *DocumentNotes) changeable(
@@ -297,7 +297,7 @@ func (qq *DocumentNotes) changeable(
 	if err != nil {
 		return nil, err
 	}
-	if _, err := qq.editable(ctx, doc); err != nil {
+	if err := qq.ensureEditable(ctx, doc); err != nil {
 		return nil, err
 	}
 	authorID := int64(0)

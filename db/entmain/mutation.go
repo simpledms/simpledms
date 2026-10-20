@@ -6417,6 +6417,7 @@ type SystemConfigMutation struct {
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
+	ocr_xberg_url                         *string
 	gotenberg_url                         *string
 	ocr_max_file_size_mib                 *int64
 	addocr_max_file_size_mib              *int64
@@ -7475,6 +7476,55 @@ func (m *SystemConfigMutation) ResetOcrTikaURL() {
 	m.ocr_tika_url = nil
 }
 
+// SetOcrXbergURL sets the "ocr_xberg_url" field.
+func (m *SystemConfigMutation) SetOcrXbergURL(s string) {
+	m.ocr_xberg_url = &s
+}
+
+// OcrXbergURL returns the value of the "ocr_xberg_url" field in the mutation.
+func (m *SystemConfigMutation) OcrXbergURL() (r string, exists bool) {
+	v := m.ocr_xberg_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrXbergURL returns the old "ocr_xberg_url" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldOcrXbergURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrXbergURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrXbergURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrXbergURL: %w", err)
+	}
+	return oldValue.OcrXbergURL, nil
+}
+
+// ClearOcrXbergURL clears the value of the "ocr_xberg_url" field.
+func (m *SystemConfigMutation) ClearOcrXbergURL() {
+	m.ocr_xberg_url = nil
+	m.clearedFields[systemconfig.FieldOcrXbergURL] = struct{}{}
+}
+
+// OcrXbergURLCleared returns if the "ocr_xberg_url" field was cleared in this mutation.
+func (m *SystemConfigMutation) OcrXbergURLCleared() bool {
+	_, ok := m.clearedFields[systemconfig.FieldOcrXbergURL]
+	return ok
+}
+
+// ResetOcrXbergURL resets all changes to the "ocr_xberg_url" field.
+func (m *SystemConfigMutation) ResetOcrXbergURL() {
+	m.ocr_xberg_url = nil
+	delete(m.clearedFields, systemconfig.FieldOcrXbergURL)
+}
+
 // SetGotenbergURL sets the "gotenberg_url" field.
 func (m *SystemConfigMutation) SetGotenbergURL(s string) {
 	m.gotenberg_url = &s
@@ -7786,7 +7836,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -7859,6 +7909,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
+	if m.ocr_xberg_url != nil {
+		fields = append(fields, systemconfig.FieldOcrXbergURL)
+	}
 	if m.gotenberg_url != nil {
 		fields = append(fields, systemconfig.FieldGotenbergURL)
 	}
@@ -7927,6 +7980,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
+	case systemconfig.FieldOcrXbergURL:
+		return m.OcrXbergURL()
 	case systemconfig.FieldGotenbergURL:
 		return m.GotenbergURL()
 	case systemconfig.FieldOcrMaxFileSizeMib:
@@ -7992,6 +8047,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
+	case systemconfig.FieldOcrXbergURL:
+		return m.OldOcrXbergURL(ctx)
 	case systemconfig.FieldGotenbergURL:
 		return m.OldGotenbergURL(ctx)
 	case systemconfig.FieldOcrMaxFileSizeMib:
@@ -8177,6 +8234,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOcrTikaURL(v)
 		return nil
+	case systemconfig.FieldOcrXbergURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrXbergURL(v)
+		return nil
 	case systemconfig.FieldGotenbergURL:
 		v, ok := value.(string)
 		if !ok {
@@ -8283,6 +8347,9 @@ func (m *SystemConfigMutation) ClearedFields() []string {
 	if m.FieldCleared(systemconfig.FieldMailerPassword) {
 		fields = append(fields, systemconfig.FieldMailerPassword)
 	}
+	if m.FieldCleared(systemconfig.FieldOcrXbergURL) {
+		fields = append(fields, systemconfig.FieldOcrXbergURL)
+	}
 	if m.FieldCleared(systemconfig.FieldInitializedAt) {
 		fields = append(fields, systemconfig.FieldInitializedAt)
 	}
@@ -8308,6 +8375,9 @@ func (m *SystemConfigMutation) ClearField(name string) error {
 		return nil
 	case systemconfig.FieldMailerPassword:
 		m.ClearMailerPassword()
+		return nil
+	case systemconfig.FieldOcrXbergURL:
+		m.ClearOcrXbergURL()
 		return nil
 	case systemconfig.FieldInitializedAt:
 		m.ClearInitializedAt()
@@ -8391,6 +8461,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()
+		return nil
+	case systemconfig.FieldOcrXbergURL:
+		m.ResetOcrXbergURL()
 		return nil
 	case systemconfig.FieldGotenbergURL:
 		m.ResetGotenbergURL()

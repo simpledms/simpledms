@@ -80,13 +80,24 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	update := targetFile.Update().
 		SetName(filename).
 		SetOcrRetryCount(0).
-		SetOcrLastTriedAt(time.Time{})
+		SetOcrLastTriedAt(time.Time{}).
+		SetOcrMarkdownRetryCount(0).
+		ClearOcrMarkdownLastTriedAt()
 	if sourceFile.OcrSuccessAt != nil {
 		update.SetOcrContent(sourceFile.OcrContent)
 		update.SetOcrSuccessAt(*sourceFile.OcrSuccessAt)
+		update.SetIsOcrContentFromMarkdown(sourceFile.IsOcrContentFromMarkdown)
 	} else {
 		update.SetOcrContent("")
 		update.ClearOcrSuccessAt()
+		update.ClearIsOcrContentFromMarkdown()
+	}
+	if sourceFile.OcrMarkdownSuccessAt != nil {
+		update.SetOcrMarkdown(sourceFile.OcrMarkdown)
+		update.SetOcrMarkdownSuccessAt(*sourceFile.OcrMarkdownSuccessAt)
+	} else {
+		update.SetOcrMarkdown("")
+		update.ClearOcrMarkdownSuccessAt()
 	}
 	targetFile, err = update.Save(ctx)
 	if err != nil {

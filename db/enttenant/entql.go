@@ -109,29 +109,34 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "File",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			file.FieldDeletedBy:           {Type: field.TypeInt64, Column: file.FieldDeletedBy},
-			file.FieldDeletedAt:           {Type: field.TypeTime, Column: file.FieldDeletedAt},
-			file.FieldPublicID:            {Type: field.TypeString, Column: file.FieldPublicID},
-			file.FieldCreatedAt:           {Type: field.TypeTime, Column: file.FieldCreatedAt},
-			file.FieldCreatedBy:           {Type: field.TypeInt64, Column: file.FieldCreatedBy},
-			file.FieldUpdatedAt:           {Type: field.TypeTime, Column: file.FieldUpdatedAt},
-			file.FieldUpdatedBy:           {Type: field.TypeInt64, Column: file.FieldUpdatedBy},
-			file.FieldSpaceID:             {Type: field.TypeInt64, Column: file.FieldSpaceID},
-			file.FieldName:                {Type: field.TypeString, Column: file.FieldName},
-			file.FieldSource:              {Type: field.TypeEnum, Column: file.FieldSource},
-			file.FieldIsDirectory:         {Type: field.TypeBool, Column: file.FieldIsDirectory},
-			file.FieldNotes:               {Type: field.TypeString, Column: file.FieldNotes},
-			file.FieldModifiedAt:          {Type: field.TypeTime, Column: file.FieldModifiedAt},
-			file.FieldIndexedAt:           {Type: field.TypeTime, Column: file.FieldIndexedAt},
-			file.FieldIndexingCompletedAt: {Type: field.TypeTime, Column: file.FieldIndexingCompletedAt},
-			file.FieldParentID:            {Type: field.TypeInt64, Column: file.FieldParentID},
-			file.FieldDocumentTypeID:      {Type: field.TypeInt64, Column: file.FieldDocumentTypeID},
-			file.FieldIsInInbox:           {Type: field.TypeBool, Column: file.FieldIsInInbox},
-			file.FieldIsRootDir:           {Type: field.TypeBool, Column: file.FieldIsRootDir},
-			file.FieldOcrContent:          {Type: field.TypeString, Column: file.FieldOcrContent},
-			file.FieldOcrSuccessAt:        {Type: field.TypeTime, Column: file.FieldOcrSuccessAt},
-			file.FieldOcrRetryCount:       {Type: field.TypeInt, Column: file.FieldOcrRetryCount},
-			file.FieldOcrLastTriedAt:      {Type: field.TypeTime, Column: file.FieldOcrLastTriedAt},
+			file.FieldDeletedBy:                {Type: field.TypeInt64, Column: file.FieldDeletedBy},
+			file.FieldDeletedAt:                {Type: field.TypeTime, Column: file.FieldDeletedAt},
+			file.FieldPublicID:                 {Type: field.TypeString, Column: file.FieldPublicID},
+			file.FieldCreatedAt:                {Type: field.TypeTime, Column: file.FieldCreatedAt},
+			file.FieldCreatedBy:                {Type: field.TypeInt64, Column: file.FieldCreatedBy},
+			file.FieldUpdatedAt:                {Type: field.TypeTime, Column: file.FieldUpdatedAt},
+			file.FieldUpdatedBy:                {Type: field.TypeInt64, Column: file.FieldUpdatedBy},
+			file.FieldSpaceID:                  {Type: field.TypeInt64, Column: file.FieldSpaceID},
+			file.FieldName:                     {Type: field.TypeString, Column: file.FieldName},
+			file.FieldSource:                   {Type: field.TypeEnum, Column: file.FieldSource},
+			file.FieldIsDirectory:              {Type: field.TypeBool, Column: file.FieldIsDirectory},
+			file.FieldNotes:                    {Type: field.TypeString, Column: file.FieldNotes},
+			file.FieldModifiedAt:               {Type: field.TypeTime, Column: file.FieldModifiedAt},
+			file.FieldIndexedAt:                {Type: field.TypeTime, Column: file.FieldIndexedAt},
+			file.FieldIndexingCompletedAt:      {Type: field.TypeTime, Column: file.FieldIndexingCompletedAt},
+			file.FieldParentID:                 {Type: field.TypeInt64, Column: file.FieldParentID},
+			file.FieldDocumentTypeID:           {Type: field.TypeInt64, Column: file.FieldDocumentTypeID},
+			file.FieldIsInInbox:                {Type: field.TypeBool, Column: file.FieldIsInInbox},
+			file.FieldIsRootDir:                {Type: field.TypeBool, Column: file.FieldIsRootDir},
+			file.FieldOcrContent:               {Type: field.TypeString, Column: file.FieldOcrContent},
+			file.FieldOcrSuccessAt:             {Type: field.TypeTime, Column: file.FieldOcrSuccessAt},
+			file.FieldOcrRetryCount:            {Type: field.TypeInt, Column: file.FieldOcrRetryCount},
+			file.FieldOcrLastTriedAt:           {Type: field.TypeTime, Column: file.FieldOcrLastTriedAt},
+			file.FieldOcrMarkdown:              {Type: field.TypeString, Column: file.FieldOcrMarkdown},
+			file.FieldOcrMarkdownSuccessAt:     {Type: field.TypeTime, Column: file.FieldOcrMarkdownSuccessAt},
+			file.FieldOcrMarkdownRetryCount:    {Type: field.TypeInt, Column: file.FieldOcrMarkdownRetryCount},
+			file.FieldOcrMarkdownLastTriedAt:   {Type: field.TypeTime, Column: file.FieldOcrMarkdownLastTriedAt},
+			file.FieldIsOcrContentFromMarkdown: {Type: field.TypeBool, Column: file.FieldIsOcrContentFromMarkdown},
 		},
 	}
 	graph.Nodes[4] = &sqlgraph.Node{
@@ -1847,6 +1852,31 @@ func (f *FileFilter) WhereOcrRetryCount(p entql.IntP) {
 // WhereOcrLastTriedAt applies the entql time.Time predicate on the ocr_last_tried_at field.
 func (f *FileFilter) WhereOcrLastTriedAt(p entql.TimeP) {
 	f.Where(p.Field(file.FieldOcrLastTriedAt))
+}
+
+// WhereOcrMarkdown applies the entql string predicate on the ocr_markdown field.
+func (f *FileFilter) WhereOcrMarkdown(p entql.StringP) {
+	f.Where(p.Field(file.FieldOcrMarkdown))
+}
+
+// WhereOcrMarkdownSuccessAt applies the entql time.Time predicate on the ocr_markdown_success_at field.
+func (f *FileFilter) WhereOcrMarkdownSuccessAt(p entql.TimeP) {
+	f.Where(p.Field(file.FieldOcrMarkdownSuccessAt))
+}
+
+// WhereOcrMarkdownRetryCount applies the entql int predicate on the ocr_markdown_retry_count field.
+func (f *FileFilter) WhereOcrMarkdownRetryCount(p entql.IntP) {
+	f.Where(p.Field(file.FieldOcrMarkdownRetryCount))
+}
+
+// WhereOcrMarkdownLastTriedAt applies the entql time.Time predicate on the ocr_markdown_last_tried_at field.
+func (f *FileFilter) WhereOcrMarkdownLastTriedAt(p entql.TimeP) {
+	f.Where(p.Field(file.FieldOcrMarkdownLastTriedAt))
+}
+
+// WhereIsOcrContentFromMarkdown applies the entql bool predicate on the is_ocr_content_from_markdown field.
+func (f *FileFilter) WhereIsOcrContentFromMarkdown(p entql.BoolP) {
+	f.Where(p.Field(file.FieldIsOcrContentFromMarkdown))
 }
 
 // WhereHasDeleter applies a predicate to check if query has an edge deleter.

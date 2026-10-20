@@ -89,7 +89,10 @@ func (qq *MoveFile) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	hxTarget := req.URL.Query().Get("hx-target")
 	wrapper := req.URL.Query().Get("wrapper")
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	var currentDir *filemodel.File
 	if data.CurrentDirID == "" {
@@ -100,7 +103,10 @@ func (qq *MoveFile) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 			return err
 		}
 	} else {
-		currentDir = qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		currentDir, err = qq.infra.FileRepo.Get(ctx, data.CurrentDirID)
+		if err != nil {
+			return err
+		}
 	}
 
 	if data.Filename == "" {

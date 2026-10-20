@@ -28,7 +28,10 @@ func (qq *Download) Handler(
 ) error {
 	fileIDStr := req.PathValue("file_id")
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
+	filex, err := qq.infra.FileRepo.GetWithDeleted(ctx, fileIDStr)
+	if err != nil {
+		return err
+	}
 
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be downloaded.")

@@ -67,8 +67,8 @@ own credential model and handlers. A tenant administrator can remove the account
 existing controls; tenant-wide MCP credential management is outside this release.
 
 `get_file` returns basic file data and, when classification is delivered, assigned metadata with
-public IDs and typed values. `read_file_text` exposes existing file-level OCR with explicit
-availability and bounded continuation. Do not wait for OCR before reporting upload success.
+public IDs and typed values. `read_file_text` exposes existing file-level OCR, as markdown when
+available, with explicit availability and bounded continuation. Do not wait for OCR before reporting upload success.
 The architecture's pagination, public projection, error mapping, and protocol rules apply.
 
 ### Upload contract

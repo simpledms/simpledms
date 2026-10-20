@@ -62,6 +62,8 @@ const (
 	FieldMailerUseImplicitSslTLS = "mailer_use_implicit_ssl_tls"
 	// FieldOcrTikaURL holds the string denoting the ocr_tika_url field in the database.
 	FieldOcrTikaURL = "ocr_tika_url"
+	// FieldOcrXbergURL holds the string denoting the ocr_xberg_url field in the database.
+	FieldOcrXbergURL = "ocr_xberg_url"
 	// FieldGotenbergURL holds the string denoting the gotenberg_url field in the database.
 	FieldGotenbergURL = "gotenberg_url"
 	// FieldOcrMaxFileSizeMib holds the string denoting the ocr_max_file_size_mib field in the database.
@@ -119,6 +121,7 @@ var Columns = []string{
 	FieldMailerInsecureSkipVerify,
 	FieldMailerUseImplicitSslTLS,
 	FieldOcrTikaURL,
+	FieldOcrXbergURL,
 	FieldGotenbergURL,
 	FieldOcrMaxFileSizeMib,
 	FieldMaxUploadSizeMib,
@@ -272,6 +275,11 @@ func ByMailerUseImplicitSslTLS(opts ...sql.OrderTermOption) OrderOption {
 // ByOcrTikaURL orders the results by the ocr_tika_url field.
 func ByOcrTikaURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOcrTikaURL, opts...).ToFunc()
+}
+
+// ByOcrXbergURL orders the results by the ocr_xberg_url field.
+func ByOcrXbergURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrXbergURL, opts...).ToFunc()
 }
 
 // ByGotenbergURL orders the results by the gotenberg_url field.

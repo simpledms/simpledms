@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"regexp"
 	"runtime/debug"
-	"slices"
 	"strings"
 	"time"
 
@@ -35,6 +34,7 @@ import (
 	"github.com/simpledms/simpledms/server/mcp"
 	"github.com/simpledms/simpledms/server/webdav"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -46,9 +46,9 @@ type (
 		Route() string
 		Endpoint() string
 		FormRoute() string
-		IsReadOnly() bool
-		UseManualTxManagement() bool
+		TxPolicy() actionx.TxPolicy
 		AllowInSetupSession() bool
+		IsPublic() bool
 		// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
 		Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
 	}
@@ -77,10 +77,14 @@ type Router struct {
 	tenantDBs                *tenantdbs.TenantDBs
 	infra                    *common.Infra
 	setupSessionAllowedPaths map[string]bool
-	devMode                  bool
-	metaPath                 string
-	i18n                     *i18n.I18n
-	trustedProxies           []netip.Prefix
+	// exact paths reachable without being signed in
+	publicPaths map[string]bool
+	// public paths for visitors only; signed-in users are redirected to the dashboard
+	visitorOnlyPaths map[string]bool
+	devMode          bool
+	metaPath         string
+	i18n             *i18n.I18n
+	trustedProxies   []netip.Prefix
 }
 
 func NewRouter(
@@ -98,6 +102,8 @@ func NewRouter(
 		tenantDBs:                tenantDBs,
 		infra:                    infra,
 		setupSessionAllowedPaths: map[string]bool{},
+		publicPaths:              map[string]bool{},
+		visitorOnlyPaths:         map[string]bool{},
 		devMode:                  devMode,
 		metaPath:                 metaPath,
 		i18n:                     i18n,
@@ -156,6 +162,32 @@ func (qq *Router) RegisterPage(pattern string, handlerFn handlerFn) {
 	qq.HandleFunc(pattern, qq.wrapTx(handlerFn, true))
 }
 
+// registerSignInPage registers the sign-in page at `/` for signed-out visitors.
+func (qq *Router) registerSignInPage(handlerFn handlerFn) {
+	qq.allowVisitorOnlyPath("/")
+	// workaround to prevent route conflict between `GET /` and `/webdav/`
+	qq.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" && req.URL.Path == "/" {
+			qq.wrapTx(handlerFn, true)(rw, req)
+			return
+		}
+		rw.WriteHeader(http.StatusNotFound)
+	})
+}
+
+// RegisterPublicPage registers a page that is reachable with and without being signed in.
+func (qq *Router) RegisterPublicPage(pattern string, handlerFn handlerFn) {
+	qq.allowPublicPath(pathFromPattern(pattern))
+	qq.RegisterPage(pattern, handlerFn)
+}
+
+// RegisterVisitorOnlyPage registers a page for signed-out visitors, for example a sign-up page.
+// Signed-in users are redirected to the dashboard.
+func (qq *Router) RegisterVisitorOnlyPage(pattern string, handlerFn handlerFn) {
+	qq.allowVisitorOnlyPath(pathFromPattern(pattern))
+	qq.RegisterPage(pattern, handlerFn)
+}
+
 // RegisterManualTxPage closes authorization transactions before invoking a page
 // that performs storage I/O and opens its own fresh rendering transaction.
 func (qq *Router) RegisterManualTxPage(pattern string, handlerFn handlerFn) {
@@ -182,16 +214,11 @@ func (qq *Router) RegisterAction(
 ) {
 	// wrapCommand is also necessary when readOnly because there are read only commands that
 	// just manipulate the state, for example ToggleDocumentTypeFilter
-	if action.UseManualTxManagement() {
+	if action.TxPolicy() == actionx.TxPolicyManual {
 		qq.HandleFunc(action.Route(), qq.wrapManualTx(qq.wrapCommand(action.Handler)))
 	} else {
-		buffer := !action.IsReadOnly()
-		if committed, ok := action.(interface{ CommitBeforeResponse() bool }); ok {
-			buffer = buffer || committed.CommitBeforeResponse()
-		}
-		qq.HandleFunc(action.Route(), qq.wrapTxResponse(
-			qq.wrapCommand(action.Handler), action.IsReadOnly(), buffer,
-		))
+		isReadOnly := action.TxPolicy() == actionx.TxPolicyReadOnly
+		qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), isReadOnly))
 	}
 
 	if action.AllowInSetupSession() {
@@ -200,12 +227,18 @@ func (qq *Router) RegisterAction(
 			qq.allowSetupSessionPath(setupSessionPathFromRoute(action.FormRoute()))
 		}
 	}
+	if action.IsPublic() {
+		qq.allowPublicPath(action.Endpoint())
+	}
 
 	if actionWithForm, ok := action.(FormActionable); ok {
 		if action.FormRoute() == "" {
 			panic("form route is required, main route was " + action.Route())
 		}
 		qq.HandleFunc(action.FormRoute(), qq.wrapTx(actionWithForm.FormHandler, true))
+		if action.IsPublic() {
+			qq.allowPublicPath(pathFromPattern(action.FormRoute()))
+		}
 	}
 }
 
@@ -229,14 +262,11 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 	}
 }
 
+// wrapTx streams read-only responses. Write responses are buffered until both transactions are
+// committed, so a rollback or commit failure never releases success events or feedback.
+//
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
-	return qq.wrapTxResponse(handlerFn, isReadOnly, !isReadOnly)
-}
-
-func (qq *Router) wrapTxResponse(
-	handlerFn handlerFn, isReadOnly, bufferResponse bool,
-) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		/*
 			//redirect doesn't make sense, should be resposibility of admin to configure domains correctly
@@ -246,9 +276,7 @@ func (qq *Router) wrapTxResponse(
 			}
 		*/
 
-		requestIsReadOnly := isReadOnly
-
-		mainTx, err := qq.mainDB.Tx(req.Context(), requestIsReadOnly)
+		mainTx, err := qq.mainDB.Tx(req.Context(), isReadOnly)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
@@ -259,14 +287,11 @@ func (qq *Router) wrapTxResponse(
 
 		response := http.ResponseWriter(rw)
 		var buffered *transactionResponse
-		if bufferResponse {
+		if !isReadOnly {
 			buffered = newTransactionResponse()
 			response = buffered
 			defer func() {
-				rollbackResponseTransaction(mainTx)
-				if nilableTenantTx != nil {
-					rollbackResponseTransaction(nilableTenantTx)
-				}
+				rollbackRequestTransactions(mainTx, nilableTenantTx)
 			}()
 		}
 		rwx := httpx.NewResponseWriter(response)
@@ -275,21 +300,7 @@ func (qq *Router) wrapTxResponse(
 			errorRW = httpx.NewResponseWriter(rw)
 		}
 		reqx := httpx.NewRequest(req)
-
-		acceptLanguage := req.Header.Get("Accept-Language")
-		clientTimezone := req.Header.Get("X-Client-Timezone") // set for all HTMX requests
-		isHTMXRequest := req.Header.Get("HX-Request") != ""
-		isTWA := isTWARequest(req)
-		visitorCtx := ctxx.NewVisitorContext(
-			req.Context(),
-			mainTx,
-			qq.i18n,
-			acceptLanguage,
-			clientTimezone,
-			isHTMXRequest,
-			isTWA,
-			qq.infra.SystemConfig().CommercialLicenseEnabled(),
-		)
+		visitorCtx := qq.newVisitorContext(req, mainTx)
 
 		defer func() {
 			// tested and works
@@ -322,22 +333,16 @@ func (qq *Router) wrapTxResponse(
 			}
 		}()
 
-		// FIXME is nilableTenantTx assigned to var defined above?
-		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
+		// Assigns the nilableTenantTx declared above (same scope), so the deferred rollback and
+		// panic handler see it.
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, isReadOnly)
 		if err != nil {
 			log.Println(err)
 			qq.handleError(errorRW, reqx, visitorCtx, err, mainTx, nilableTenantTx)
 			return
 		}
 		if isRedirected {
-			if err := mainTx.Rollback(); err != nil {
-				log.Println(err)
-			}
-			if nilableTenantTx != nil {
-				if err := nilableTenantTx.Rollback(); err != nil {
-					log.Println(err)
-				}
-			}
+			rollbackRequestTransactions(mainTx, nilableTenantTx)
 			if buffered != nil {
 				buffered.flush(rw)
 			}
@@ -360,19 +365,8 @@ func (qq *Router) wrapTxResponse(
 			}
 		*/
 
-		err = mainTx.Commit()
-		if err != nil {
-			log.Println(err)
-			errorRW.WriteHeader(http.StatusInternalServerError)
+		if !qq.commitRequestTransactions(errorRW, mainTx, nilableTenantTx) {
 			return
-		}
-		if nilableTenantTx != nil {
-			err = nilableTenantTx.Commit()
-			if err != nil {
-				log.Println(err)
-				errorRW.WriteHeader(http.StatusInternalServerError)
-				return
-			}
 		}
 		if buffered != nil {
 			buffered.flush(rw)
@@ -392,16 +386,7 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 		var nilableTenantTx *enttenant.Tx
 		rwx := httpx.NewResponseWriter(rw)
 		reqx := httpx.NewRequest(req)
-		visitorCtx := ctxx.NewVisitorContext(
-			req.Context(),
-			mainTx,
-			qq.i18n,
-			req.Header.Get("Accept-Language"),
-			req.Header.Get("X-Client-Timezone"),
-			req.Header.Get("HX-Request") != "",
-			isTWARequest(req),
-			qq.infra.SystemConfig().CommercialLicenseEnabled(),
-		)
+		visitorCtx := qq.newVisitorContext(req, mainTx)
 		transactionsOpen := true
 		errorRW := rwx
 
@@ -417,18 +402,19 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 			)
 		}()
 
-		ctx, shouldReturn := qq.manualTxContext(
-			rwx,
-			reqx,
-			visitorCtx,
-			mainTx,
-			&nilableTenantTx,
-		)
-		if shouldReturn {
+		// Assigns the nilableTenantTx declared above (same scope) for the deferred panic handler.
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, true)
+		if err != nil {
+			log.Println(err)
+			qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
+			return
+		}
+		if isRedirected {
+			rollbackRequestTransactions(mainTx, nilableTenantTx)
 			return
 		}
 
-		if !qq.commitManualTransactions(rwx, mainTx, nilableTenantTx) {
+		if !qq.commitRequestTransactions(rwx, mainTx, nilableTenantTx) {
 			return
 		}
 		transactionsOpen = false
@@ -451,35 +437,27 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 	}
 }
 
-func (qq *Router) manualTxContext(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
-	visitorCtx *ctxx.VisitorContext,
-	mainTx *entmain.Tx,
-	nilableTenantTx **enttenant.Tx,
-) (ctxx.Context, bool) {
-	ctx, tenantTx, isRedirected, err := qq.context(rw, req, mainTx, visitorCtx, true)
-	*nilableTenantTx = tenantTx
-	if err != nil {
-		log.Println(err)
-		qq.handleError(rw, req, visitorCtx, err, mainTx, tenantTx)
-		return ctx, true
-	}
-	if !isRedirected {
-		return ctx, false
-	}
-	if err := mainTx.Rollback(); err != nil {
-		log.Println(err)
-	}
-	if tenantTx != nil {
-		if err := tenantTx.Rollback(); err != nil {
-			log.Println(err)
-		}
-	}
-	return ctx, true
+func (qq *Router) newVisitorContext(req *http.Request, mainTx *entmain.Tx) *ctxx.VisitorContext {
+	return ctxx.NewVisitorContext(
+		req.Context(),
+		mainTx,
+		qq.i18n,
+		req.Header.Get("Accept-Language"),
+		req.Header.Get("X-Client-Timezone"), // set for all HTMX requests
+		req.Header.Get("HX-Request") != "",
+		isTWARequest(req),
+		qq.infra.SystemConfig().CommercialLicenseEnabled(),
+	)
 }
 
-func (qq *Router) commitManualTransactions(
+func rollbackRequestTransactions(mainTx *entmain.Tx, nilableTenantTx *enttenant.Tx) {
+	rollbackResponseTransaction(mainTx)
+	if nilableTenantTx != nil {
+		rollbackResponseTransaction(nilableTenantTx)
+	}
+}
+
+func (qq *Router) commitRequestTransactions(
 	rw httpx.ResponseWriter,
 	mainTx *entmain.Tx,
 	nilableTenantTx *enttenant.Tx,
@@ -534,7 +512,7 @@ func (qq *Router) handleManualError(
 		rw.WriteHeader(httpErr.StatusCode())
 		rw.AddRenderables(httpErr.Snackbar())
 	} else {
-		log.Println(err)
+		log.Printf("request failed: %T", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
@@ -559,18 +537,14 @@ func isTWARequest(req *http.Request) bool {
 
 func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	if req == nil {
-		log.Printf("recovered panic with nil request; panic_type=%T panic=%v stack=%s", recovered, recovered, debug.Stack())
+		log.Printf("recovered panic with nil request; panic_type=%T stack=%s", recovered, debug.Stack())
 		return
 	}
 
 	log.Printf(
-		"recovered panic; method=%s path=%s raw_query=%q upload_token=%q hx_current_url=%q panic_type=%T panic=%v stack=%s",
+		"recovered panic; method=%s path=%q panic_type=%T stack=%s",
 		req.Method,
 		req.URL.Path,
-		req.URL.RawQuery,
-		req.URL.Query().Get("upload_token"),
-		req.Header.Get("HX-Current-URL"),
-		recovered,
 		recovered,
 		debug.Stack(),
 	)
@@ -640,7 +614,7 @@ func (qq *Router) handleError(
 				*/
 			}
 			if entErr == nil {
-				log.Println(errx)
+				log.Printf("unhandled database constraint: %T", errx)
 				entErr = e.NewHTTPErrorf(
 					http.StatusInternalServerError,
 					"A database constraint violation happened. Please contact the support.",
@@ -655,7 +629,7 @@ func (qq *Router) handleError(
 		if isEntMValErr || isEntTValErr {
 			// logged because I currently don't know if this is triggered in simpledms
 			// and if so, if handling can be improved
-			log.Println(err)
+			log.Printf("database validation failed: %T", err)
 
 			// TODO error message?
 			entErr = e.NewHTTPErrorf(http.StatusBadRequest, "Data validation failed.")
@@ -674,7 +648,7 @@ func (qq *Router) handleError(
 			statusCode = httpErr.StatusCode()
 			message = httpErr.Message()
 		} else {
-			log.Println(err)
+			log.Printf("request failed: %T", err)
 		}
 
 		data, err := json.Marshal(struct {
@@ -692,7 +666,7 @@ func (qq *Router) handleError(
 		rw.WriteHeader(httpErr.StatusCode())
 		rw.AddRenderables(httpErr.Snackbar())
 	} else {
-		log.Println(err)
+		log.Printf("request failed: %T", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
@@ -737,24 +711,7 @@ func (qq *Router) context(
 	}
 	// TODO is "/" robust enough? should also work if URL is `/?test=123`
 	if !isAuthenticated {
-		// FIXME should be dynamicly generated list (by declaration)...
-		if slices.Contains([]string{
-			"/",
-			"/register/",
-			"/pages/about/",
-			"/pages/imprint/",
-			"/pages/privacy-policy/",
-			"/pages/terms-of-service/",
-			"/-/auth/reset-password-cmd",
-			"/-/auth/reset-password-cmd-form",
-			"/-/auth/sign-up-cmd",
-			"/-/auth/sign-up-cmd-form",
-			"/-/auth/sign-in-cmd",
-			"/-/auth/passkey-sign-in-begin-cmd",
-			"/-/auth/passkey-sign-in-finish-cmd",
-			"/-/auth/passkey-recovery-sign-in-cmd",
-			"/-/auth/passkey-recovery-sign-in-cmd-form",
-		}, req.URL.Path) {
+		if qq.publicPaths[req.URL.Path] || qq.visitorOnlyPaths[req.URL.Path] {
 			return visitorCtx, nil, false, nil
 		} else {
 			// no cookie set
@@ -766,7 +723,7 @@ func (qq *Router) context(
 			return visitorCtx, nil, true, nil
 		}
 	}
-	if req.URL.Path == "/" || req.URL.Path == "/register/" {
+	if qq.visitorOnlyPaths[req.URL.Path] {
 		// authenticated, but accessing login page
 		http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther)
 		return visitorCtx, nil, true, nil
@@ -837,19 +794,13 @@ func (qq *Router) context(
 		}
 		return mainCtx, nil, false, err
 	}
-	tenantClient, ok := qq.tenantDBs.Load(tenantx.ID)
-	if !ok {
-		// IMPORTANT don't initialize here because this could trigger concurrency issues...
-
-		tenantm := tenant2.NewTenant(tenantx)
-
-		tenantClient, err = tenantm.OpenDB(qq.devMode, qq.metaPath)
-		if err != nil {
-			log.Println(err)
-			return mainCtx, nil, false, err
-		}
-
-		qq.tenantDBs.Store(tenantx.ID, tenantClient)
+	// IMPORTANT only open, don't initialize here because this could trigger concurrency issues...
+	tenantClient, err := qq.tenantDBs.LoadOrOpen(tenantx.ID, func() (*sqlx.TenantDB, error) {
+		return tenant2.NewTenant(tenantx).OpenDB(qq.devMode, qq.metaPath)
+	})
+	if err != nil {
+		log.Println(err)
+		return mainCtx, nil, false, err
 	}
 
 	tenantTx, err := tenantClient.Tx(mainCtx, isReadOnly)
@@ -870,6 +821,24 @@ func (qq *Router) isSetupSessionPathAllowed(path string) bool {
 
 func (qq *Router) allowSetupSessionPath(path string) {
 	qq.setupSessionAllowedPaths[normalizeSetupSessionPath(path)] = true
+}
+
+func (qq *Router) allowPublicPath(path string) {
+	qq.publicPaths[path] = true
+}
+
+func (qq *Router) allowVisitorOnlyPath(path string) {
+	qq.visitorOnlyPaths[path] = true
+}
+
+// pathFromPattern strips the method from a ServeMux pattern such as `GET /register/`. Public
+// paths are matched exactly, thus patterns with wildcards are rejected.
+func pathFromPattern(pattern string) string {
+	path := setupSessionPathFromRoute(pattern)
+	if strings.Contains(path, "{") {
+		panic("pattern with wildcards cannot be matched exactly: " + pattern)
+	}
+	return path
 }
 
 func setupSessionPathFromRoute(route string) string {
@@ -995,19 +964,3 @@ func (qq *Router) authenticateAccount(
 
 	return accountm, true, sessionx.IsTemporarySession, nil
 }
-
-/*
-func (qq *Router) RegisterAction(
-	action Actionable,
-	handler func(http.ResponseWriter, *http.Request),
-	formHandler func(http.ResponseWriter, *http.Request), // can be nil
-) {
-	qq.HandleFunc(action.Route(), handler)
-	if formHandler != nil {
-		if action.FormRoute() == "" {
-			panic("form route is required, main route was " + action.Route())
-		}
-		qq.HandleFunc(action.FormRoute(), formHandler)
-	}
-}
-*/

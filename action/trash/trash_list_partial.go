@@ -77,11 +77,8 @@ func (qq *TrashListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		} else if err != nil {
 			return err
 		} else {
-			detail, err = qq.actions.TrashWithSelectionPage.filePreview(ctx,
+			detail = qq.actions.TrashWithSelectionPage.filePreview(ctx,
 				autil.StateX[FileTabsPartialState](rw, req), filemodel.NewFile(filex))
-			if err != nil {
-				return err
-			}
 		}
 	}
 	return qq.infra.Renderer().Render(rw, ctx, &widget.ListDetailLayout{

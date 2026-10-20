@@ -174,7 +174,10 @@ func (qq *InboxPage) Widget(
 	)
 
 	if selectedFileID != "" {
-		filex := qq.infra.FileRepo.GetX(ctx, selectedFileID)
+		filex, err := qq.infra.FileRepo.Get(ctx, selectedFileID)
+		if err != nil {
+			return nil, err
+		}
 		detail, err := qq.actions.FilePartial.Widget(ctx, state, filex)
 		if err != nil {
 			return nil, err

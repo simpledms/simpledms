@@ -2,8 +2,6 @@ package scheduler
 
 import (
 	"context"
-	"log"
-	"runtime/debug"
 	"time"
 
 	"entgo.io/ent/privacy"
@@ -12,20 +10,6 @@ import (
 )
 
 func (qq *Scheduler) cleanupSessions() {
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(5 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.cleanupSessions()
-		}
-	}()
-
 	ctx := context.Background()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 

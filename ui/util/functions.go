@@ -36,12 +36,3 @@ func JSON(qq any) template.JS {
 	}
 	return template.JS(v)
 }
-
-func JSONStr(qq any) string {
-	v, err := json.Marshal(qq)
-	if err != nil {
-		log.Panicln(err)
-		return ""
-	}
-	return string(v)
-}

@@ -57,7 +57,10 @@ func (qq *RetryPDFPreviewCmd) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview conversion is not configured.")
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	source, err := qq.actions.FilePreviewPartial.versionSource(ctx, filex, data.VersionNumber)
 	if err != nil {
 		if enttenant.IsNotFound(err) {

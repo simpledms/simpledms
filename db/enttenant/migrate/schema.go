@@ -196,6 +196,11 @@ var (
 		{Name: "ocr_success_at", Type: field.TypeTime, Nullable: true},
 		{Name: "ocr_retry_count", Type: field.TypeInt, Default: 0},
 		{Name: "ocr_last_tried_at", Type: field.TypeTime},
+		{Name: "ocr_markdown", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "ocr_markdown_success_at", Type: field.TypeTime, Nullable: true},
+		{Name: "ocr_markdown_retry_count", Type: field.TypeInt, Nullable: true},
+		{Name: "ocr_markdown_last_tried_at", Type: field.TypeTime, Nullable: true},
+		{Name: "is_ocr_content_from_markdown", Type: field.TypeBool, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -211,37 +216,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "files_users_deleter",
-				Columns:    []*schema.Column{FilesColumns[18]},
+				Columns:    []*schema.Column{FilesColumns[23]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_users_creator",
-				Columns:    []*schema.Column{FilesColumns[19]},
+				Columns:    []*schema.Column{FilesColumns[24]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_users_updater",
-				Columns:    []*schema.Column{FilesColumns[20]},
+				Columns:    []*schema.Column{FilesColumns[25]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_spaces_space",
-				Columns:    []*schema.Column{FilesColumns[21]},
+				Columns:    []*schema.Column{FilesColumns[26]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_files_parent",
-				Columns:    []*schema.Column{FilesColumns[22]},
+				Columns:    []*schema.Column{FilesColumns[27]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_document_types_document_type",
-				Columns:    []*schema.Column{FilesColumns[23]},
+				Columns:    []*schema.Column{FilesColumns[28]},
 				RefColumns: []*schema.Column{DocumentTypesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -250,12 +255,12 @@ var (
 			{
 				Name:    "file_space_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21]},
+				Columns: []*schema.Column{FilesColumns[26]},
 			},
 			{
 				Name:    "file_space_id_name_parent_id",
 				Unique:  true,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[5], FilesColumns[22]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[5], FilesColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`deleted_at` is null and `is_in_inbox` = false",
 				},
@@ -263,7 +268,7 @@ var (
 			{
 				Name:    "file_space_id_is_root_dir",
 				Unique:  true,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[13]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_root_dir` = true",
 				},
@@ -271,7 +276,7 @@ var (
 			{
 				Name:    "file_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[22]},
+				Columns: []*schema.Column{FilesColumns[27]},
 			},
 			{
 				Name:    "file_is_directory",
@@ -286,12 +291,12 @@ var (
 			{
 				Name:    "file_space_id_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27]},
 			},
 			{
 				Name:    "file_browse_name",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[7].Name: true,
@@ -302,7 +307,7 @@ var (
 			{
 				Name:    "file_browse_created",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -315,7 +320,7 @@ var (
 			{
 				Name:    "file_browse_created_oldest",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[7].Name: true,
@@ -326,7 +331,7 @@ var (
 			{
 				Name:    "file_inbox_created",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[7], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[7], FilesColumns[3]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -337,7 +342,7 @@ var (
 			{
 				Name:    "file_inbox_name",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[7], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`deleted_at` is null and `is_in_inbox` = true",
 				},
@@ -345,7 +350,7 @@ var (
 			{
 				Name:    "file_browse_name_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[7].Name: true,
@@ -355,7 +360,7 @@ var (
 			{
 				Name:    "file_browse_created_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -367,7 +372,7 @@ var (
 			{
 				Name:    "file_browse_created_oldest_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[7].Name: true,
@@ -377,7 +382,7 @@ var (
 			{
 				Name:    "file_inbox_created_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[3]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -387,12 +392,12 @@ var (
 			{
 				Name:    "file_inbox_name_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[5]},
 			},
 			{
 				Name:    "file_inbox_source_created_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -402,19 +407,27 @@ var (
 			{
 				Name:    "file_inbox_source_created_oldest_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
 			},
 			{
 				Name:    "file_inbox_source_name_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[26], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[5]},
 			},
 			{
-				Name:    "file_ocr_pending",
+				Name:    "file_ocr_pending_with_markdown_content",
 				Unique:  false,
 				Columns: []*schema.Column{FilesColumns[17], FilesColumns[0]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "`ocr_success_at` is null and `ocr_retry_count` < 3 and `is_directory` = false",
+					Where: "(`ocr_success_at` is null or `is_ocr_content_from_markdown` = true) and `ocr_retry_count` < 3 and `is_directory` = false",
+				},
+			},
+			{
+				Name:    "file_ocr_markdown_pending",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`ocr_markdown_success_at` is null and coalesce(`ocr_markdown_retry_count`, 0) < 3 and `is_directory` = false",
 				},
 			},
 		},

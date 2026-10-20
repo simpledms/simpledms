@@ -126,21 +126,6 @@ func (qq Event) HxOn(event string) *wx.HxOn {
 	}
 }
 
-// this is safe to use as long as param value is not rendered in frontend; via Go template it
-// is safe
-func (qq Event) HxOnWithQueryParam(event string, paramName string) *wx.HxOn {
-	return &wx.HxOn{
-		Event: event,
-		Handler: template.JS(
-			fmt.Sprintf(
-				"_setQueryParam(event, '%s'); this.dispatchEvent(new CustomEvent('%s', { bubbles: true }))",
-				paramName,
-				qq.String(),
-			),
-		),
-	}
-}
-
 func (qq Event) HxOnWithSearchQueryParamAndRankSortReset(event string, paramName string) *wx.HxOn {
 	return &wx.HxOn{
 		Event: event,
@@ -164,34 +149,6 @@ func (qq Event) UnsafeHxOnWithQueryParamAndValue(event string, paramName string,
 				paramName,
 				paramValue,
 				qq.String(),
-			),
-		),
-	}
-}
-
-// IMPORTANT be careful with value because of XSS
-func UnsafeHxOnQueryParamAppendToSlice(event string, paramName string, paramValue string) *wx.HxOn {
-	return &wx.HxOn{
-		Event: event,
-		Handler: template.JS(
-			fmt.Sprintf(
-				"_appendQueryParamSliceValue('%s', '%s');",
-				paramName,
-				paramValue,
-			),
-		),
-	}
-}
-
-// IMPORTANT be careful with value because of XSS
-func UnsafeHxOnQueryParamDeleteFromSlice(event string, paramName string, paramValue string) *wx.HxOn {
-	return &wx.HxOn{
-		Event: event,
-		Handler: template.JS(
-			fmt.Sprintf(
-				"_deleteQueryParamSliceValue('%s', '%s');",
-				paramName,
-				paramValue,
 			),
 		),
 	}

@@ -71,7 +71,10 @@ func (qq *FileVersionFromInboxCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 
-	targetFile := qq.fileRepo.GetX(ctx, data.TargetFileID)
+	targetFile, err := qq.fileRepo.Get(ctx, data.TargetFileID)
+	if err != nil {
+		return err
+	}
 
 	_, err = qq.service.MergeFromInbox(ctx, sourceFile, targetFile.Data)
 	if err != nil {

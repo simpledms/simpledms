@@ -6,6 +6,7 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/model/main/systemstatus"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -23,6 +24,8 @@ type Actions struct {
 	WebDAVCredentialFilterDialog      *WebDAVCredentialFilterDialog
 	SystemPage                        *SystemPage
 	SystemCardsPartial                *SystemCardsPartial
+	SystemStatusPage                  *SystemStatusPage
+	SystemStatusPartial               *SystemStatusPartial
 	OrganizationSettingsPage          *OrganizationSettingsPage
 	ToggleTenantPasskeyEnforcementCmd *ToggleTenantPasskeyEnforcementCmd
 	CreateWebDAVCredentialCmd         *CreateWebDAVCredentialCmd
@@ -42,6 +45,7 @@ func NewActions(
 	commonActions *acommon.Actions,
 	authActions *auth.Actions,
 	adminActions *admin.Actions,
+	systemStatusChecker *systemstatus.SystemStatusChecker,
 ) *Actions {
 	actions := new(Actions)
 	*actions = Actions{
@@ -58,6 +62,8 @@ func NewActions(
 		WebDAVCredentialFilterDialog:      NewWebDAVCredentialFilterDialog(infra, actions),
 		SystemPage:                        NewSystemPage(infra, actions),
 		SystemCardsPartial:                NewSystemCardsPartial(infra, actions),
+		SystemStatusPage:                  NewSystemStatusPage(infra, actions),
+		SystemStatusPartial:               NewSystemStatusPartial(infra, actions, systemStatusChecker),
 		OrganizationSettingsPage:          NewOrganizationSettingsPage(infra, actions),
 		ToggleTenantPasskeyEnforcementCmd: NewToggleTenantPasskeyEnforcementCmd(infra, actions),
 		CreateWebDAVCredentialCmd:         NewCreateWebDAVCredentialCmd(infra, tenantDBs, actions),

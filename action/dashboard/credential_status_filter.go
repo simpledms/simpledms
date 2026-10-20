@@ -82,6 +82,45 @@ func newCredentialFilterButton(
 	}
 }
 
+// newCredentialStatusFilterDialog renders the status filter side sheet of a credential
+// page; changedEvent refreshes that page's credential list.
+func newCredentialStatusFilterDialog(
+	id string,
+	headline *widget.Text,
+	chipsContainerID string,
+	statusValues []string,
+	changedEvent event.Event,
+) *widget.Dialog {
+	showActive, showRevoked, _ := parseCredentialStatusFilter(statusValues)
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
+			ID: id,
+		},
+		Headline:     headline,
+		IsOpenOnLoad: true,
+		Layout:       widget.DialogLayoutSideSheet,
+		Child: &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: chipsContainerID,
+			},
+			Child: []*widget.FilterChip{
+				newCredentialStatusFilterChip(
+					widget.T("Active"),
+					credentialStatusActive,
+					showActive,
+					changedEvent,
+				),
+				newCredentialStatusFilterChip(
+					widget.T("Revoked"),
+					credentialStatusRevoked,
+					showRevoked,
+					changedEvent,
+				),
+			},
+		},
+	}
+}
+
 func newCredentialStatusFilterChip(
 	label *widget.Text,
 	status string,

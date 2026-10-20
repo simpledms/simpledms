@@ -357,6 +357,113 @@ func (_u *FileUpdate) SetNillableOcrLastTriedAt(v *time.Time) *FileUpdate {
 	return _u
 }
 
+// SetOcrMarkdown sets the "ocr_markdown" field.
+func (_u *FileUpdate) SetOcrMarkdown(v string) *FileUpdate {
+	_u.mutation.SetOcrMarkdown(v)
+	return _u
+}
+
+// SetNillableOcrMarkdown sets the "ocr_markdown" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableOcrMarkdown(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetOcrMarkdown(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdown clears the value of the "ocr_markdown" field.
+func (_u *FileUpdate) ClearOcrMarkdown() *FileUpdate {
+	_u.mutation.ClearOcrMarkdown()
+	return _u
+}
+
+// SetOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field.
+func (_u *FileUpdate) SetOcrMarkdownSuccessAt(v time.Time) *FileUpdate {
+	_u.mutation.SetOcrMarkdownSuccessAt(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableOcrMarkdownSuccessAt(v *time.Time) *FileUpdate {
+	if v != nil {
+		_u.SetOcrMarkdownSuccessAt(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdownSuccessAt clears the value of the "ocr_markdown_success_at" field.
+func (_u *FileUpdate) ClearOcrMarkdownSuccessAt() *FileUpdate {
+	_u.mutation.ClearOcrMarkdownSuccessAt()
+	return _u
+}
+
+// SetOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field.
+func (_u *FileUpdate) SetOcrMarkdownRetryCount(v int) *FileUpdate {
+	_u.mutation.ResetOcrMarkdownRetryCount()
+	_u.mutation.SetOcrMarkdownRetryCount(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableOcrMarkdownRetryCount(v *int) *FileUpdate {
+	if v != nil {
+		_u.SetOcrMarkdownRetryCount(*v)
+	}
+	return _u
+}
+
+// AddOcrMarkdownRetryCount adds value to the "ocr_markdown_retry_count" field.
+func (_u *FileUpdate) AddOcrMarkdownRetryCount(v int) *FileUpdate {
+	_u.mutation.AddOcrMarkdownRetryCount(v)
+	return _u
+}
+
+// ClearOcrMarkdownRetryCount clears the value of the "ocr_markdown_retry_count" field.
+func (_u *FileUpdate) ClearOcrMarkdownRetryCount() *FileUpdate {
+	_u.mutation.ClearOcrMarkdownRetryCount()
+	return _u
+}
+
+// SetOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field.
+func (_u *FileUpdate) SetOcrMarkdownLastTriedAt(v time.Time) *FileUpdate {
+	_u.mutation.SetOcrMarkdownLastTriedAt(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableOcrMarkdownLastTriedAt(v *time.Time) *FileUpdate {
+	if v != nil {
+		_u.SetOcrMarkdownLastTriedAt(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdownLastTriedAt clears the value of the "ocr_markdown_last_tried_at" field.
+func (_u *FileUpdate) ClearOcrMarkdownLastTriedAt() *FileUpdate {
+	_u.mutation.ClearOcrMarkdownLastTriedAt()
+	return _u
+}
+
+// SetIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field.
+func (_u *FileUpdate) SetIsOcrContentFromMarkdown(v bool) *FileUpdate {
+	_u.mutation.SetIsOcrContentFromMarkdown(v)
+	return _u
+}
+
+// SetNillableIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableIsOcrContentFromMarkdown(v *bool) *FileUpdate {
+	if v != nil {
+		_u.SetIsOcrContentFromMarkdown(*v)
+	}
+	return _u
+}
+
+// ClearIsOcrContentFromMarkdown clears the value of the "is_ocr_content_from_markdown" field.
+func (_u *FileUpdate) ClearIsOcrContentFromMarkdown() *FileUpdate {
+	_u.mutation.ClearIsOcrContentFromMarkdown()
+	return _u
+}
+
 // SetDeleterID sets the "deleter" edge to the User entity by ID.
 func (_u *FileUpdate) SetDeleterID(id int64) *FileUpdate {
 	_u.mutation.SetDeleterID(id)
@@ -824,6 +931,39 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.OcrLastTriedAt(); ok {
 		_spec.SetField(file.FieldOcrLastTriedAt, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.OcrMarkdown(); ok {
+		_spec.SetField(file.FieldOcrMarkdown, field.TypeString, value)
+	}
+	if _u.mutation.OcrMarkdownCleared() {
+		_spec.ClearField(file.FieldOcrMarkdown, field.TypeString)
+	}
+	if value, ok := _u.mutation.OcrMarkdownSuccessAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownSuccessAt, field.TypeTime, value)
+	}
+	if _u.mutation.OcrMarkdownSuccessAtCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownSuccessAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.OcrMarkdownRetryCount(); ok {
+		_spec.SetField(file.FieldOcrMarkdownRetryCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOcrMarkdownRetryCount(); ok {
+		_spec.AddField(file.FieldOcrMarkdownRetryCount, field.TypeInt, value)
+	}
+	if _u.mutation.OcrMarkdownRetryCountCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownRetryCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OcrMarkdownLastTriedAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownLastTriedAt, field.TypeTime, value)
+	}
+	if _u.mutation.OcrMarkdownLastTriedAtCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownLastTriedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsOcrContentFromMarkdown(); ok {
+		_spec.SetField(file.FieldIsOcrContentFromMarkdown, field.TypeBool, value)
+	}
+	if _u.mutation.IsOcrContentFromMarkdownCleared() {
+		_spec.ClearField(file.FieldIsOcrContentFromMarkdown, field.TypeBool)
 	}
 	if _u.mutation.DeleterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1638,6 +1778,113 @@ func (_u *FileUpdateOne) SetNillableOcrLastTriedAt(v *time.Time) *FileUpdateOne 
 	return _u
 }
 
+// SetOcrMarkdown sets the "ocr_markdown" field.
+func (_u *FileUpdateOne) SetOcrMarkdown(v string) *FileUpdateOne {
+	_u.mutation.SetOcrMarkdown(v)
+	return _u
+}
+
+// SetNillableOcrMarkdown sets the "ocr_markdown" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableOcrMarkdown(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetOcrMarkdown(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdown clears the value of the "ocr_markdown" field.
+func (_u *FileUpdateOne) ClearOcrMarkdown() *FileUpdateOne {
+	_u.mutation.ClearOcrMarkdown()
+	return _u
+}
+
+// SetOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field.
+func (_u *FileUpdateOne) SetOcrMarkdownSuccessAt(v time.Time) *FileUpdateOne {
+	_u.mutation.SetOcrMarkdownSuccessAt(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownSuccessAt sets the "ocr_markdown_success_at" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableOcrMarkdownSuccessAt(v *time.Time) *FileUpdateOne {
+	if v != nil {
+		_u.SetOcrMarkdownSuccessAt(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdownSuccessAt clears the value of the "ocr_markdown_success_at" field.
+func (_u *FileUpdateOne) ClearOcrMarkdownSuccessAt() *FileUpdateOne {
+	_u.mutation.ClearOcrMarkdownSuccessAt()
+	return _u
+}
+
+// SetOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field.
+func (_u *FileUpdateOne) SetOcrMarkdownRetryCount(v int) *FileUpdateOne {
+	_u.mutation.ResetOcrMarkdownRetryCount()
+	_u.mutation.SetOcrMarkdownRetryCount(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownRetryCount sets the "ocr_markdown_retry_count" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableOcrMarkdownRetryCount(v *int) *FileUpdateOne {
+	if v != nil {
+		_u.SetOcrMarkdownRetryCount(*v)
+	}
+	return _u
+}
+
+// AddOcrMarkdownRetryCount adds value to the "ocr_markdown_retry_count" field.
+func (_u *FileUpdateOne) AddOcrMarkdownRetryCount(v int) *FileUpdateOne {
+	_u.mutation.AddOcrMarkdownRetryCount(v)
+	return _u
+}
+
+// ClearOcrMarkdownRetryCount clears the value of the "ocr_markdown_retry_count" field.
+func (_u *FileUpdateOne) ClearOcrMarkdownRetryCount() *FileUpdateOne {
+	_u.mutation.ClearOcrMarkdownRetryCount()
+	return _u
+}
+
+// SetOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field.
+func (_u *FileUpdateOne) SetOcrMarkdownLastTriedAt(v time.Time) *FileUpdateOne {
+	_u.mutation.SetOcrMarkdownLastTriedAt(v)
+	return _u
+}
+
+// SetNillableOcrMarkdownLastTriedAt sets the "ocr_markdown_last_tried_at" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableOcrMarkdownLastTriedAt(v *time.Time) *FileUpdateOne {
+	if v != nil {
+		_u.SetOcrMarkdownLastTriedAt(*v)
+	}
+	return _u
+}
+
+// ClearOcrMarkdownLastTriedAt clears the value of the "ocr_markdown_last_tried_at" field.
+func (_u *FileUpdateOne) ClearOcrMarkdownLastTriedAt() *FileUpdateOne {
+	_u.mutation.ClearOcrMarkdownLastTriedAt()
+	return _u
+}
+
+// SetIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field.
+func (_u *FileUpdateOne) SetIsOcrContentFromMarkdown(v bool) *FileUpdateOne {
+	_u.mutation.SetIsOcrContentFromMarkdown(v)
+	return _u
+}
+
+// SetNillableIsOcrContentFromMarkdown sets the "is_ocr_content_from_markdown" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableIsOcrContentFromMarkdown(v *bool) *FileUpdateOne {
+	if v != nil {
+		_u.SetIsOcrContentFromMarkdown(*v)
+	}
+	return _u
+}
+
+// ClearIsOcrContentFromMarkdown clears the value of the "is_ocr_content_from_markdown" field.
+func (_u *FileUpdateOne) ClearIsOcrContentFromMarkdown() *FileUpdateOne {
+	_u.mutation.ClearIsOcrContentFromMarkdown()
+	return _u
+}
+
 // SetDeleterID sets the "deleter" edge to the User entity by ID.
 func (_u *FileUpdateOne) SetDeleterID(id int64) *FileUpdateOne {
 	_u.mutation.SetDeleterID(id)
@@ -2135,6 +2382,39 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if value, ok := _u.mutation.OcrLastTriedAt(); ok {
 		_spec.SetField(file.FieldOcrLastTriedAt, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.OcrMarkdown(); ok {
+		_spec.SetField(file.FieldOcrMarkdown, field.TypeString, value)
+	}
+	if _u.mutation.OcrMarkdownCleared() {
+		_spec.ClearField(file.FieldOcrMarkdown, field.TypeString)
+	}
+	if value, ok := _u.mutation.OcrMarkdownSuccessAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownSuccessAt, field.TypeTime, value)
+	}
+	if _u.mutation.OcrMarkdownSuccessAtCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownSuccessAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.OcrMarkdownRetryCount(); ok {
+		_spec.SetField(file.FieldOcrMarkdownRetryCount, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOcrMarkdownRetryCount(); ok {
+		_spec.AddField(file.FieldOcrMarkdownRetryCount, field.TypeInt, value)
+	}
+	if _u.mutation.OcrMarkdownRetryCountCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownRetryCount, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OcrMarkdownLastTriedAt(); ok {
+		_spec.SetField(file.FieldOcrMarkdownLastTriedAt, field.TypeTime, value)
+	}
+	if _u.mutation.OcrMarkdownLastTriedAtCleared() {
+		_spec.ClearField(file.FieldOcrMarkdownLastTriedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsOcrContentFromMarkdown(); ok {
+		_spec.SetField(file.FieldIsOcrContentFromMarkdown, field.TypeBool, value)
+	}
+	if _u.mutation.IsOcrContentFromMarkdownCleared() {
+		_spec.ClearField(file.FieldIsOcrContentFromMarkdown, field.TypeBool)
 	}
 	if _u.mutation.DeleterCleared() {
 		edge := &sqlgraph.EdgeSpec{

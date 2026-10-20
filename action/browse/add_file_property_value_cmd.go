@@ -42,7 +42,7 @@ func NewAddFilePropertyValueCmd(infra *common.Infra, actions *Actions) *AddFileP
 	config := actionx.NewConfig(
 		actions.Route("add-file-property-value-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &AddFilePropertyValueCmd{
 		infra:   infra,
 		actions: actions,
@@ -67,7 +67,10 @@ func (qq *AddFilePropertyValueCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 
 	if err := qq.validateValue(req, propertyx.Type, data); err != nil {

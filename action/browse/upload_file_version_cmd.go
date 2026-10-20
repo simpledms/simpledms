@@ -111,7 +111,10 @@ func (qq *UploadFileVersionCmd) prepareUpload(
 	}
 
 	result, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*prepareResult, error) {
-		filex := qq.infra.FileRepo.GetX(writeCtx, fileID)
+		filex, err := qq.infra.FileRepo.Get(writeCtx, fileID)
+		if err != nil {
+			return nil, err
+		}
 		if filex.Data.IsDirectory {
 			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 		}

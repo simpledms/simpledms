@@ -1,6 +1,7 @@
 volumes:
   simpledms_data:
   versitygw_data:
+  # xberg_cache:
 
 services:
   simpledms:
@@ -13,6 +14,8 @@ services:
         condition: service_started
       gotenberg:
         condition: service_started
+      # xberg:
+      #   condition: service_started
     restart: unless-stopped
     # if you run SimpleDMS locally, you probably want to use other ports
     ports:
@@ -22,10 +25,22 @@ services:
       - simpledms_data:/srv
     environment:
       SIMPLEDMS_GOTENBERG_URL: http://gotenberg:3000
+      # SIMPLEDMS_OCR_XBERG_URL: http://xberg:8000
 
   tika:
     image: apache/tika:latest-full
     restart: unless-stopped
+
+  # optional; markdown with tables for LLMs (MCP). Tika stays the source for full-text search
+  # if both are configured.
+  # xberg:
+  #   # pinned because the options SimpleDMS sends are validated strictly and were verified
+  #   # with this version; core includes PaddleOCR and the layout models SimpleDMS uses
+  #   image: ghcr.io/xberg-io/xberg:1.3.6-core
+  #   volumes:
+  #     # models are downloaded on first use; persisted so that they are not downloaded again
+  #     - xberg_cache:/app/.xberg
+  #   restart: unless-stopped
 
   gotenberg:
     image: gotenberg/gotenberg:8

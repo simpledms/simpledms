@@ -63,7 +63,10 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid version number.")
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	versionx, err := filex.Data.QueryFileVersions().
 		Where(fileversion.VersionNumber(versionInt)).
 		WithStoredFile().

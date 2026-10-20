@@ -98,11 +98,10 @@ func (qq *NavigationRail) clearActiveItems() {
 	}
 }
 
-func (qq *NavigationRail) setActiveValueOnItems(value string, items []*NavigationRailItem) bool {
+func (qq *NavigationRail) setActiveValueOnItems(value string, items []*NavigationRailItem) {
 	for _, item := range items {
 		if item.SetActiveValue(value) {
-			return true
+			return
 		}
 	}
-	return false
 }

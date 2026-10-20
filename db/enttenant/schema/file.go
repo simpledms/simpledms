@@ -15,11 +15,18 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
-// FileOCRPendingCondition is the condition of the file_ocr_pending partial index. Queries must
-// contain it verbatim: SQLite only uses a partial index if it can prove that the query implies
-// the index condition, which fails for bound parameters like `ocr_retry_count` < ?.
-const FileOCRPendingCondition = "`ocr_success_at` is null and `ocr_retry_count` < 3 and " +
-	"`is_directory` = false"
+// FileOCRPendingCondition is the condition of the file_ocr_pending_with_markdown_content partial
+// index. Queries must contain it verbatim: SQLite only uses a partial index if it can prove that
+// the query implies the index condition, which fails for bound parameters like
+// `ocr_retry_count` < ?. Content derived from Xberg markdown is still pending for Tika.
+const FileOCRPendingCondition = "(`ocr_success_at` is null or " +
+	"`is_ocr_content_from_markdown` = true) and `ocr_retry_count` < 3 and `is_directory` = false"
+
+// FileOCRMarkdownPendingCondition is the condition of the file_ocr_markdown_pending partial
+// index, see FileOCRPendingCondition. The retry count is NULL for files created before the
+// column was added.
+const FileOCRMarkdownPendingCondition = "`ocr_markdown_success_at` is null and " +
+	"coalesce(`ocr_markdown_retry_count`, 0) < 3 and `is_directory` = false"
 
 // File holds the schema definition for the File entity.
 type File struct {
@@ -59,6 +66,17 @@ func (File) Fields() []ent.Field {
 		field.Int("ocr_retry_count").Default(0),
 		field.Time("ocr_last_tried_at").Default(time.Time{}), // zero value instead of nil makes logic easier
 		// TODO ocr error message?
+
+		// Xberg markdown with tables for LLMs, tracked separately from the Tika OCR above. Optional
+		// without defaults so that SQLite can add the columns without rebuilding the table; NULL
+		// reads as empty string and 0.
+		field.Text("ocr_markdown").Optional(),
+		field.Time("ocr_markdown_success_at").Optional().Nillable(),
+		field.Int("ocr_markdown_retry_count").Optional(),
+		field.Time("ocr_markdown_last_tried_at").Optional().Nillable(),
+		// true if ocr_content was derived from ocr_markdown because Tika was not configured; Tika
+		// replaces it once configured
+		field.Bool("is_ocr_content_from_markdown").Optional(),
 
 		// field.String("crc32"), // maybe for quick checks
 	}
@@ -218,8 +236,14 @@ func (File) Indexes() []ent.Index {
 			StorageKey("file_inbox_source_name_fast"),
 		index.
 			Fields("ocr_last_tried_at", "id").
-			StorageKey("file_ocr_pending").
+			// renamed when the condition changed; Atlas rebuilds the table to modify an index in
+			// place on SQLite, but only drops and creates an index with a new name
+			StorageKey("file_ocr_pending_with_markdown_content").
 			Annotations(entsql.IndexWhere(FileOCRPendingCondition)),
+		index.
+			Fields("ocr_markdown_last_tried_at", "id").
+			StorageKey("file_ocr_markdown_pending").
+			Annotations(entsql.IndexWhere(FileOCRMarkdownPendingCondition)),
 	}
 }
 

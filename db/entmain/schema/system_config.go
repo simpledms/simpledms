@@ -46,6 +46,9 @@ func (SystemConfig) Fields() []ent.Field {
 		field.Bool("mailer_use_implicit_ssl_tls").Default(false),
 
 		field.String("ocr_tika_url").Default(""),
+		// optional without default so that SQLite can add the column without rebuilding the
+		// table; NULL is read as empty string
+		field.String("ocr_xberg_url").Optional(),
 		field.String("gotenberg_url").Default(""),
 		field.Int64("ocr_max_file_size_mib").Default(25),
 

@@ -27,7 +27,8 @@ func NewPasskeySignInFinishCmd(
 	actions *Actions,
 	passkeyService *account2.PasskeyService,
 ) *PasskeySignInFinishCmd {
-	config := actionx.NewConfig(actions.Route("passkey-sign-in-finish-cmd"), false)
+	config := actionx.NewConfig(actions.Route("passkey-sign-in-finish-cmd"), false).
+		EnablePublicAccess()
 	return &PasskeySignInFinishCmd{
 		infra:          infra,
 		actions:        actions,
@@ -75,7 +76,7 @@ func (qq *PasskeySignInFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.Re
 		return err
 	}
 
-	return writeJSONResponse(rw, http.StatusOK, struct {
+	return writeJSONResponse(rw, struct {
 		Redirect string `json:"redirect"`
 	}{
 		Redirect: route.Dashboard(),

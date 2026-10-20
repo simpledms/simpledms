@@ -80,7 +80,7 @@ func (qq *PasskeyRegisterFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 
 	// WebAuthn transport exception: passkey.js emits AccountUpdated after this
 	// commit-buffered JSON response; recovery codes are a one-time result.
-	return writeJSONResponse(rw, http.StatusOK, struct {
+	return writeJSONResponse(rw, struct {
 		RecoveryCodesToken string `json:"recoveryCodesToken,omitempty"`
 	}{
 		RecoveryCodesToken: recoveryCodesToken,

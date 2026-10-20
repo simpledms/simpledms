@@ -26,7 +26,7 @@ func NewRemoveFilePropertyCmd(infra *common.Infra, actions *Actions) *RemoveFile
 	config := actionx.NewConfig(
 		actions.Route("remove-file-property-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &RemoveFilePropertyCmd{
 		infra:   infra,
 		actions: actions,
@@ -51,7 +51,10 @@ func (qq *RemoveFilePropertyCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	propertyx, _, err := propertymodel.NewFilePropertyAssignmentService().Remove(
 		ctx, filex.Data.ID, data.PropertyID,
 	)

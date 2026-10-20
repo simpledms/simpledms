@@ -125,12 +125,12 @@ func (qq *UploadFromURLService) UploadFromURL(ctx ctxx.Context, rawURL string, s
 	filename, body, err := qq.downloadFileFromURL(ctx, rawURL, source)
 	if err != nil {
 		if source != OpenCloudURLSource {
-			log.Println(err)
+			log.Printf("URL download failed: %T", err)
 		}
 
 		var httpErr *e.HTTPError
 		if errors.As(err, &httpErr) {
-			return "", err
+			return "", httpErr
 		}
 
 		return "", e.NewHTTPErrorf(http.StatusBadRequest, "Could not download file from URL.")
@@ -143,11 +143,11 @@ func (qq *UploadFromURLService) UploadFromURL(ctx ctxx.Context, rawURL string, s
 
 	uploadToken, err := qq.processDownloadedFile(ctx, filename, body)
 	if err != nil {
-		log.Println(err)
+		log.Printf("URL import storage failed: %T", err)
 
 		var httpErr *e.HTTPError
 		if errors.As(err, &httpErr) {
-			return "", err
+			return "", httpErr
 		}
 
 		if source == OpenCloudURLSource {
@@ -218,7 +218,7 @@ func (qq *UploadFromURLService) downloadFile(
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, normalizedURL, nil)
 	if err != nil {
-		log.Println(err)
+		log.Printf("URL request construction failed: %T", err)
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid URL.")
 	}
 
@@ -234,11 +234,11 @@ func (qq *UploadFromURLService) downloadFile(
 		if source == OpenCloudURLSource {
 			return "", nil, openCloudRequestError(err)
 		}
-		log.Println(err)
+		log.Printf("URL request failed: %T", err)
 
 		var httpErr *e.HTTPError
 		if errors.As(err, &httpErr) {
-			return "", nil, err
+			return "", nil, httpErr
 		}
 
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Could not download file from URL.")
@@ -256,7 +256,7 @@ func (qq *UploadFromURLService) downloadFile(
 	filename := qq.extractFilename(request.URL, response)
 	if !filenamex.IsAllowed(filename) {
 		_ = response.Body.Close()
-		log.Println("invalid filename from url", filename)
+		log.Println("invalid filename from URL")
 		if source == OpenCloudURLSource {
 			return "", nil, e.NewHTTPErrorf(
 				http.StatusBadRequest,
@@ -373,7 +373,7 @@ func (qq *UploadFromURLService) parseURL(rawURL string) (*url.URL, error) {
 
 	urlx, err := url.Parse(rawURL)
 	if err != nil {
-		log.Println(err)
+		log.Printf("URL parsing failed: %T", err)
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid URL.")
 	}
 
@@ -436,6 +436,13 @@ func (qq *UploadFromURLService) validateOpenCloudURL(target *url.URL) error {
 	if err != nil || !openCloudShareTokenPattern.MatchString(token) {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid OpenCloud public link.")
 	}
+	for _, segment := range strings.Split(parts[1], "/") {
+		decoded, err := url.PathUnescape(segment)
+		if err != nil || decoded == "" || decoded == "." || decoded == ".." ||
+			strings.ContainsAny(decoded, "/\\\x00") {
+			return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid OpenCloud public link.")
+		}
+	}
 
 	return nil
 }
@@ -462,11 +469,10 @@ func (qq *UploadFromURLService) newHTTPClient(source string) *http.Client {
 		KeepAlive: 30 * time.Second,
 	}
 
-	useProxy := source != OpenCloudURLSource
-	secureTransport := qq.newHTTPTransport(dialer, false, useProxy)
+	secureTransport := qq.newHTTPTransport(dialer, false)
 	var transport http.RoundTripper = secureTransport
 	if qq.allowLocalURLs {
-		localTransport := qq.newHTTPTransport(dialer, true, useProxy)
+		localTransport := qq.newHTTPTransport(dialer, true)
 		transport = roundTripperFunc(func(request *http.Request) (*http.Response, error) {
 			if isLocalHost(request.URL.Hostname()) {
 				return localTransport.RoundTrip(request)
@@ -500,9 +506,10 @@ func (qq *UploadFromURLService) newHTTPClient(source string) *http.Client {
 func (qq *UploadFromURLService) newHTTPTransport(
 	dialer *net.Dialer,
 	insecureSkipVerify bool,
-	useProxy bool,
 ) *http.Transport {
 	transport := &http.Transport{
+		// A proxy would resolve the target itself and bypass safeDialContext's SSRF checks.
+		Proxy:                 nil,
 		DialContext:           qq.safeDialContext(dialer),
 		ForceAttemptHTTP2:     true,
 		MaxIdleConns:          10,
@@ -511,10 +518,6 @@ func (qq *UploadFromURLService) newHTTPTransport(
 		ResponseHeaderTimeout: 15 * time.Second,
 		ExpectContinueTimeout: time.Second,
 	}
-	if useProxy {
-		transport.Proxy = http.ProxyFromEnvironment
-	}
-
 	if insecureSkipVerify {
 		transport.TLSClientConfig = &tls.Config{ // #nosec G402 -- restricted to loopback in dev mode.
 			InsecureSkipVerify: true,

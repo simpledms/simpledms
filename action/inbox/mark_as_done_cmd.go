@@ -32,7 +32,7 @@ func NewMarkAsDoneCmd(infra *common.Infra, actions *Actions) *MarkAsDoneCmd {
 	config := actionx.NewConfig(
 		actions.Route("mark-as-done-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &MarkAsDoneCmd{
 		infra:   infra,
 		actions: actions,
@@ -61,7 +61,10 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		log.Println(err)
 		return err
 	}
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
+	filex, err := qq.infra.FileRepo.GetWithParent(ctx, fileData.PublicID.String())
+	if err != nil {
+		return err
+	}
 	// assignment = assignment.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// FIXME not correct, should not be opened in parent dir, but flat

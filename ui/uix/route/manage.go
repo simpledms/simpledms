@@ -26,10 +26,6 @@ func ManageDocumentTypesWithSelection(tenantID, spaceID string, id int64) string
 func ManageTagsRoute() string {
 	return "GET /org/{tenant_id}/space/{space_id}/tags/"
 }
-func ManageTagsRouteWithSelection() string {
-	return "GET /org/{tenant_id}/space/{space_id}/tags/{tag_id}"
-}
-
 func ManageTags(tenantID, spaceID string) string {
 	return fmt.Sprintf("/org/%s/space/%s/tags/", tenantID, spaceID)
 }

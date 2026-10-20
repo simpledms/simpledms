@@ -31,12 +31,7 @@ func (qq *Mailer) TenantRegistered(
 		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
 	}
 
-	ctx.VisitorCtx().MainTx.Mail.Create().
-		SetSubject(subject).
-		SetBody(template.RenderPlainText(ctx)).
-		SetHTMLBody(template.RenderHTML(ctx)).
-		SetReceiver(adminx).
-		SaveX(ctx)
+	qq.queueMail(ctx, adminx, subject, template)
 }
 
 func (qq *Mailer) SignUp(
@@ -48,23 +43,13 @@ func (qq *Mailer) SignUp(
 ) {
 	// wx.T for translations
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
-
-	// Format the expiration date
-	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
-
-	// Create email template
-	template := CreateSignUpTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
-
-	// Generate HTML and plain text versions
-	htmlBody := template.RenderHTML(ctx)
-	plainBody := template.RenderPlainText(ctx)
-
-	ctx.VisitorCtx().MainTx.Mail.Create().
-		SetSubject(subject).
-		SetBody(plainBody).
-		SetHTMLBody(htmlBody).
-		SetReceiver(accountx).
-		SaveX(ctx)
+	template := CreateSignUpTemplate(
+		ctx,
+		tmpPassword,
+		qq.formatExpiresAt(ctx, expiresAt),
+		signInURL,
+	)
+	qq.queueMail(ctx, accountx, subject, template)
 }
 
 func (qq *Mailer) ResetPassword(
@@ -76,23 +61,13 @@ func (qq *Mailer) ResetPassword(
 ) {
 	// wx.T for translations
 	subject := wx.T("SimpleDMS password reset").String(ctx)
-
-	// Format the expiration date
-	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
-
-	// Create email template
-	template := CreateResetPasswordTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
-
-	// Generate HTML and plain text versions
-	htmlBody := template.RenderHTML(ctx)
-	plainBody := template.RenderPlainText(ctx)
-
-	ctx.VisitorCtx().MainTx.Mail.Create().
-		SetSubject(subject).
-		SetBody(plainBody).
-		SetHTMLBody(htmlBody).
-		SetReceiver(accountx).
-		SaveX(ctx)
+	template := CreateResetPasswordTemplate(
+		ctx,
+		tmpPassword,
+		qq.formatExpiresAt(ctx, expiresAt),
+		signInURL,
+	)
+	qq.queueMail(ctx, accountx, subject, template)
 }
 
 func (qq *Mailer) CreateUser(
@@ -103,19 +78,26 @@ func (qq *Mailer) CreateUser(
 	signInURL string,
 ) {
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
-	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
+	template := CreateUserTemplate(ctx, tmpPassword, qq.formatExpiresAt(ctx, expiresAt), signInURL)
+	qq.queueMail(ctx, accountx, subject, template)
+}
 
-	// Create email template
-	template := CreateUserTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
+func (qq *Mailer) formatExpiresAt(ctx ctxx.Context, expiresAt time.Time) string {
+	layout := wx.T("02-01-2006 at 15:04 o'clock").String(ctx)
+	return expiresAt.In(ctx.VisitorCtx().Location).Format(layout)
+}
 
-	// Generate HTML and plain text versions
-	htmlBody := template.RenderHTML(ctx)
-	plainBody := template.RenderPlainText(ctx)
-
+// queueMail stores the mail with HTML and plain text versions of template for sending.
+func (qq *Mailer) queueMail(
+	ctx ctxx.Context,
+	receiver *entmain.Account,
+	subject string,
+	template EmailTemplate,
+) {
 	ctx.VisitorCtx().MainTx.Mail.Create().
 		SetSubject(subject).
-		SetBody(plainBody).
-		SetHTMLBody(htmlBody).
-		SetReceiver(accountx).
+		SetBody(template.RenderPlainText(ctx)).
+		SetHTMLBody(template.RenderHTML(ctx)).
+		SetReceiver(receiver).
 		SaveX(ctx)
 }

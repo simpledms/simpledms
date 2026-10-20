@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "SimpleDMS Web Request Lifecycle",
+    "output": ".archify/sequence-web-request-20261018-211941/web-request.html",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "git@github.com:simpledms/simpledms.git",
+      "link_mode": "local-only",
+      "revision": "87bc53a7dec1251fed0685b295811d2a74df7920"
+    }
+  },
+  "participants": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Browser",
+      "sublabel": "HTMX client",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 279,
+          "end_line": 292,
+          "label": "request headers read"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "security",
+      "label": "Public handler",
+      "sublabel": "middleware chain",
+      "sources": [
+        {
+          "path": "server/server.go",
+          "line": 445,
+          "end_line": 446,
+          "label": "CrossOriginProtection"
+        },
+        {
+          "path": "server/http_server.go",
+          "line": 28,
+          "end_line": 50,
+          "label": "gzip, recovery, headers"
+        }
+      ]
+    },
+    {
+      "id": "router",
+      "type": "backend",
+      "label": "Router",
+      "sublabel": "wrapTxResponse",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 237,
+          "end_line": 381,
+          "label": "transaction wrapper"
+        },
+        {
+          "path": "server/router.go",
+          "line": 180,
+          "end_line": 210,
+          "label": "action registration"
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "Auth & scope",
+      "sublabel": "context()",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 717,
+          "end_line": 861,
+          "label": "context()"
+        },
+        {
+          "path": "server/router.go",
+          "line": 891,
+          "end_line": 993,
+          "label": "authenticateAccount"
+        },
+        {
+          "path": "common/execution/scope_resolver.go",
+          "line": 24,
+          "end_line": 65,
+          "label": "ScopeResolver"
+        }
+      ]
+    },
+    {
+      "id": "maindb",
+      "type": "database",
+      "label": "Main DB",
+      "sublabel": "SQLite, sessions",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 251,
+          "end_line": 256,
+          "label": "begin main tx"
+        },
+        {
+          "path": "server/router.go",
+          "line": 918,
+          "end_line": 946,
+          "label": "session lookup"
+        },
+        {
+          "path": "server/router.go",
+          "line": 363,
+          "end_line": 368,
+          "label": "commit main tx"
+        }
+      ]
+    },
+    {
+      "id": "tenantdb",
+      "type": "database",
+      "label": "Tenant DB",
+      "sublabel": "SQLite per org",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 836,
+          "end_line": 855,
+          "label": "open + begin tenant tx"
+        },
+        {
+          "path": "server/router.go",
+          "line": 369,
+          "end_line": 376,
+          "label": "commit tenant tx"
+        }
+      ]
+    },
+    {
+      "id": "handler",
+      "type": "backend",
+      "label": "Action handler",
+      "sublabel": "Page / Partial / Cmd",
+      "sources": [
+        {
+          "path": "server/router.go",
+          "line": 212,
+          "end_line": 230,
+          "label": "wrapCommand"
+        },
+        {
+          "path": "server/router.go",
+          "line": 44,
+          "end_line": 54,
+          "label": "Actionable"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 313,
+      "label": "Edge"
+    },
+    {
+      "from": 325,
+      "to": 646,
+      "label": "Auth & scope"
+    },
+    {
+      "from": 664,
+      "to": 875,
+      "label": "Handle"
+    },
+    {
+      "from": 887,
+      "to": 1027,
+      "label": "Commit & respond"
+    }
+  ],
+  "messages": [
+    {
+      "id": "http-request",
+      "from": "browser",
+      "to": "edge",
+      "y": 172,
+      "label": "HTTP request + session cookie",
+      "variant": "emphasis",
+      "note": "HTMX adds HX-Request, HX-Current-URL and X-Client-Timezone"
+    },
+    {
+      "id": "edge-pass",
+      "from": "edge",
+      "to": "router",
+      "y": 254,
+      "label": "cross-origin check passed",
+      "variant": "security",
+      "note": "gzip, panic recovery, X-Frame-Options and nosniff"
+    },
+    {
+      "id": "begin-main",
+      "from": "router",
+      "to": "maindb",
+      "y": 339,
+      "label": "begin main tx",
+      "note": "read-only for queries, read-write for commands"
+    },
+    {
+      "id": "resolve-ctx",
+      "from": "router",
+      "to": "auth",
+      "y": 410,
+      "label": "context()"
+    },
+    {
+      "id": "session-lookup",
+      "from": "auth",
+      "to": "maindb",
+      "y": 438,
+      "label": "find valid session",
+      "variant": "security",
+      "note": "none or expired: 303 to /; renews cookie when due"
+    },
+    {
+      "id": "session-rows",
+      "from": "maindb",
+      "to": "auth",
+      "y": 509,
+      "label": "session + account",
+      "variant": "return"
+    },
+    {
+      "id": "scope-lookup",
+      "from": "auth",
+      "to": "tenantdb",
+      "y": 537,
+      "label": "begin tenant tx, load user + Space",
+      "variant": "security",
+      "note": "Space.Policy filters membership; no access: 403"
+    },
+    {
+      "id": "scope-rows",
+      "from": "tenantdb",
+      "to": "auth",
+      "y": 608,
+      "label": "user, Space",
+      "variant": "return"
+    },
+    {
+      "id": "scoped-ctx",
+      "from": "auth",
+      "to": "router",
+      "y": 636,
+      "label": "Space context",
+      "variant": "return"
+    },
+    {
+      "id": "invoke-handler",
+      "from": "router",
+      "to": "handler",
+      "y": 678,
+      "label": "Handler(rw, req, ctx)",
+      "variant": "emphasis",
+      "note": "commands write into a buffer held until commit"
+    },
+    {
+      "id": "ent-query",
+      "from": "handler",
+      "to": "tenantdb",
+      "y": 749,
+      "label": "ent query / mutation"
+    },
+    {
+      "id": "ent-rows",
+      "from": "tenantdb",
+      "to": "handler",
+      "y": 777,
+      "label": "rows",
+      "variant": "return"
+    },
+    {
+      "id": "handler-output",
+      "from": "handler",
+      "to": "router",
+      "y": 805,
+      "label": "partial HTML or events",
+      "variant": "return",
+      "note": "wrapCommand renders queued snackbars; errors roll back"
+    },
+    {
+      "id": "commit-main",
+      "from": "router",
+      "to": "maindb",
+      "y": 901,
+      "label": "commit main tx"
+    },
+    {
+      "id": "commit-tenant",
+      "from": "router",
+      "to": "tenantdb",
+      "y": 929,
+      "label": "commit tenant tx"
+    },
+    {
+      "id": "flush-response",
+      "from": "router",
+      "to": "browser",
+      "y": 957,
+      "label": "flush response",
+      "variant": "return",
+      "note": "commit failure returns 500; buffered success is never released"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "edge",
+      "from": 166,
+      "to": 260,
+      "type": "security"
+    },
+    {
+      "participant": "router",
+      "from": 248,
+      "to": 963,
+      "type": "backend"
+    },
+    {
+      "participant": "maindb",
+      "from": 333,
+      "to": 345,
+      "type": "database"
+    },
+    {
+      "participant": "auth",
+      "from": 404,
+      "to": 642,
+      "type": "security"
+    },
+    {
+      "participant": "maindb",
+      "from": 432,
+      "to": 515,
+      "type": "database"
+    },
+    {
+      "participant": "tenantdb",
+      "from": 531,
+      "to": 614,
+      "type": "database"
+    },
+    {
+      "participant": "handler",
+      "from": 672,
+      "to": 811,
+      "type": "backend"
+    },
+    {
+      "participant": "tenantdb",
+      "from": 743,
+      "to": 783,
+      "type": "database"
+    },
+    {
+      "participant": "maindb",
+      "from": 895,
+      "to": 907,
+      "type": "database"
+    },
+    {
+      "participant": "tenantdb",
+      "from": 923,
+      "to": 935,
+      "type": "database"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Shown path",
+      "items": [
+        "An authenticated request to an org/Space route through wrapTxResponse",
+        "Routes without an org skip the tenant DB and run with a main-only context",
+        "Commands may take the org and Space from HX-Current-URL"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Exits before the handler",
+      "items": [
+        "No session on a protected path: snackbar and 303 to /",
+        "Signed-in user opening / or /register/: 303 to the dashboard",
+        "Setup sessions without a required passkey are sent to the dashboard"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Variants not drawn",
+      "items": [
+        "Manual-tx actions commit the auth transactions before the handler runs",
+        "/mcp and WebDAV have their own handlers mounted on the same mux",
+        "Panics are recovered in wrapTxResponse and become error snackbars"
+      ]
+    }
+  ]
+}

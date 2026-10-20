@@ -71,8 +71,10 @@ common pagination fields where the architecture already defines them. Optional f
 
 ### `read_file_text` — read; extract
 
-- Current basis: [`OCRContentDialog`][ocr] and the file's stored `OcrContent`/OCR status.
-- Input: `file_id`, `offset?`, `length?`. Result: bounded plain text, current-version reference,
+- Current basis: [`OCRContentDialog`][ocr], the file's stored `OcrContent`/OCR status, and the
+  Xberg `OcrMarkdown`, see `File.LLMText`.
+- Input: `file_id`, `offset?`, `length?`. Result: bounded text with its `format` (`markdown`
+  with tables when available, otherwise `text`), current-version reference,
   availability/status, and continuation information.
 - Purpose: summarize, classify, or extract information from already processed documents.
   This reads existing file-level OCR; it does not run new OCR or provide historical-version text.

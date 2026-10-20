@@ -50,7 +50,6 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 		actions:    actions,
 		Config:     config,
 		FormHelper: formHelper,
-		// inboxDirInfo: infra.Factory().InboxDirInfo(),
 	}
 }
 

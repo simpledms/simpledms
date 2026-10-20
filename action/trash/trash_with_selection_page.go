@@ -1,7 +1,6 @@
 package trash
 
 import (
-	"log"
 	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -41,7 +40,10 @@ func (qq *TrashWithSelectionPage) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
+	filex, err := qq.infra.FileRepo.GetWithDeleted(ctx, fileIDStr)
+	if err != nil {
+		return err
+	}
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File preview is not available for folders.")
 	}
@@ -50,13 +52,7 @@ func (qq *TrashWithSelectionPage) Handler(
 	// commented on 28.01.2026
 	// rw.Header().Set("HX-Push-Url", route.TrashFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()))
 
-	viewx, err := qq.widget(rw, req, ctx, state, filex)
-	if err != nil {
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
-	}
-
-	qq.render(rw, req, ctx, viewx)
+	qq.render(rw, req, ctx, qq.widget(req, ctx, state, filex))
 	return nil
 }
 
@@ -74,19 +70,14 @@ func (qq *TrashWithSelectionPage) render(
 }
 
 func (qq *TrashWithSelectionPage) widget(
-	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
 	filex *filemodel.File,
-) (renderable.Renderable, error) {
-	filePreview, err := qq.filePreview(ctx, state, filex)
-	if err != nil {
-		return nil, err
-	}
-
+) renderable.Renderable {
+	filePreview := qq.filePreview(ctx, state, filex)
 	if req.Header.Get("HX-Target") == "details" {
-		return filePreview, nil
+		return filePreview
 	}
 
 	listDetailLayout := &widget.ListDetailLayout{
@@ -100,7 +91,7 @@ func (qq *TrashWithSelectionPage) widget(
 		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content:    listDetailLayout,
 	}
-	return mainLayout, nil
+	return mainLayout
 }
 
 func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *widget.AppBar {
@@ -115,7 +106,7 @@ func (qq *TrashWithSelectionPage) filePreview(
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
 	filex *filemodel.File,
-) (*widget.DetailsWithSheet, error) {
+) *widget.DetailsWithSheet {
 	title := widget.T("Preview")
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		title = widget.Tu(filex.Data.Name)
@@ -140,7 +131,7 @@ func (qq *TrashWithSelectionPage) filePreview(
 			},
 		},
 		SideSheet: fileDetailsSideSheet,
-	}, nil
+	}
 }
 
 func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *widget.Text, filex *filemodel.File) *widget.AppBar {

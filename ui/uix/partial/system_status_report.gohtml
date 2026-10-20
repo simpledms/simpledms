@@ -1,0 +1,63 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/uix/partial.SystemStatusReport */ -}}
+{{- define "SystemStatusReport" }}
+	{{ $ctx := .GetContext }}
+	<div {{ with .ID }}id="{{ . }}"{{ end }} class="flex flex-col gap-y-6 pb-4">
+		<section class="rounded-xl p-6 flex flex-col gap-y-4 {{ .SummaryClass }}" aria-live="polite">
+			<div class="flex items-start gap-x-4">
+				<div class="shrink-0 flex">{{ render $ctx .SummaryIcon }}</div>
+				<div class="min-w-0 flex flex-col gap-y-1">
+					<h2 class="headline-sm">{{ render $ctx .Headline }}</h2>
+					<p class="body-md opacity-80">{{ render $ctx .SupportingText }}</p>
+				</div>
+			</div>
+			{{ if .Status.ProblemCount }}
+				<ul class="flex flex-col gap-y-3 md:pl-12">
+					{{ range $level := .ProblemLevels }}
+					{{ range $.Status.Components }}
+						{{ $component := . }}
+						{{ range .Findings }}
+							{{ if eq .Level $level }}
+								<li class="flex items-start gap-x-3">
+									<span class="shrink-0 flex pt-0.5">{{ render $ctx ($.LevelIcon .Level) }}</span>
+									<span class="min-w-0 flex flex-col" style="overflow-wrap: anywhere">
+										<span class="body-lg">{{ render $ctx .Message }}</span>
+										<span class="label-md opacity-80">{{ render $ctx $component.Title }}</span>
+									</span>
+								</li>
+							{{ end }}
+						{{ end }}
+					{{ end }}
+					{{ end }}
+				</ul>
+			{{ end }}
+		</section>
+
+		{{/* CSS columns instead of a grid so that cards of different heights do not leave gaps */}}
+		<div class="columns-1 lg:columns-2 2xl:columns-3 gap-x-4">
+			{{ range .Status.Components }}
+				<section class="break-inside-avoid mb-4 rounded-lg bg-surface-container text-on-surface p-4 flex flex-col gap-y-3">
+					<div class="flex items-center justify-between gap-x-3">
+						<h3 class="title-lg min-w-0">{{ render $ctx .Title }}</h3>
+						<span class="shrink-0 inline-flex items-center gap-x-1 rounded-full pl-2 pr-3 py-1 label-lg {{ $.LevelClass .Level }}">
+							{{ render $ctx ($.LevelIcon .Level) }}
+							{{ render $ctx ($.LevelLabel .Level) }}
+						</span>
+					</div>
+					{{ range .Findings }}
+						{{ if not .Level.IsProblem }}
+							<p class="body-md text-on-surface-variant">{{ render $ctx .Message }}</p>
+						{{ end }}
+					{{ end }}
+					<dl class="flex flex-col divide-y divide-outline-variant">
+						{{ range .Settings }}
+							<div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-x-4 py-2">
+								<dt class="body-md text-on-surface-variant">{{ render $ctx .Label }}</dt>
+								<dd class="body-md" style="overflow-wrap: anywhere">{{ render $ctx .Value }}</dd>
+							</div>
+						{{ end }}
+					</dl>
+				</section>
+			{{ end }}
+		</div>
+	</div>
+{{ end }}

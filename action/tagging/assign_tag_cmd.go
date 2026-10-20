@@ -29,7 +29,7 @@ func NewAssignTagCmd(
 	config := actionx.NewConfig(
 		actions.Route("assign-tag-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &AssignTagCmd{
 		infra,
 		actions,
@@ -50,7 +50,10 @@ func (qq *AssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 
 	tag, err := taggingmodel.NewTagService().AssignToFile(
 		ctx,

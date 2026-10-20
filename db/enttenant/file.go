@@ -68,6 +68,16 @@ type File struct {
 	OcrRetryCount int `json:"ocr_retry_count,omitempty"`
 	// OcrLastTriedAt holds the value of the "ocr_last_tried_at" field.
 	OcrLastTriedAt time.Time `json:"ocr_last_tried_at,omitempty"`
+	// OcrMarkdown holds the value of the "ocr_markdown" field.
+	OcrMarkdown string `json:"ocr_markdown,omitempty"`
+	// OcrMarkdownSuccessAt holds the value of the "ocr_markdown_success_at" field.
+	OcrMarkdownSuccessAt *time.Time `json:"ocr_markdown_success_at,omitempty"`
+	// OcrMarkdownRetryCount holds the value of the "ocr_markdown_retry_count" field.
+	OcrMarkdownRetryCount int `json:"ocr_markdown_retry_count,omitempty"`
+	// OcrMarkdownLastTriedAt holds the value of the "ocr_markdown_last_tried_at" field.
+	OcrMarkdownLastTriedAt *time.Time `json:"ocr_markdown_last_tried_at,omitempty"`
+	// IsOcrContentFromMarkdown holds the value of the "is_ocr_content_from_markdown" field.
+	IsOcrContentFromMarkdown bool `json:"is_ocr_content_from_markdown,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges        FileEdges `json:"edges"`
@@ -245,13 +255,13 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(entx.CIText)
 		case file.FieldSource:
 			values[i] = new(filesource.FileSource)
-		case file.FieldIsDirectory, file.FieldIsInInbox, file.FieldIsRootDir:
+		case file.FieldIsDirectory, file.FieldIsInInbox, file.FieldIsRootDir, file.FieldIsOcrContentFromMarkdown:
 			values[i] = new(sql.NullBool)
-		case file.FieldID, file.FieldDeletedBy, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldSpaceID, file.FieldParentID, file.FieldDocumentTypeID, file.FieldOcrRetryCount:
+		case file.FieldID, file.FieldDeletedBy, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldSpaceID, file.FieldParentID, file.FieldDocumentTypeID, file.FieldOcrRetryCount, file.FieldOcrMarkdownRetryCount:
 			values[i] = new(sql.NullInt64)
-		case file.FieldName, file.FieldNotes, file.FieldOcrContent:
+		case file.FieldName, file.FieldNotes, file.FieldOcrContent, file.FieldOcrMarkdown:
 			values[i] = new(sql.NullString)
-		case file.FieldDeletedAt, file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldModifiedAt, file.FieldIndexedAt, file.FieldIndexingCompletedAt, file.FieldOcrSuccessAt, file.FieldOcrLastTriedAt:
+		case file.FieldDeletedAt, file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldModifiedAt, file.FieldIndexedAt, file.FieldIndexingCompletedAt, file.FieldOcrSuccessAt, file.FieldOcrLastTriedAt, file.FieldOcrMarkdownSuccessAt, file.FieldOcrMarkdownLastTriedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -414,6 +424,38 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field ocr_last_tried_at", values[i])
 			} else if value.Valid {
 				_m.OcrLastTriedAt = value.Time
+			}
+		case file.FieldOcrMarkdown:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_markdown", values[i])
+			} else if value.Valid {
+				_m.OcrMarkdown = value.String
+			}
+		case file.FieldOcrMarkdownSuccessAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_markdown_success_at", values[i])
+			} else if value.Valid {
+				_m.OcrMarkdownSuccessAt = new(time.Time)
+				*_m.OcrMarkdownSuccessAt = value.Time
+			}
+		case file.FieldOcrMarkdownRetryCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_markdown_retry_count", values[i])
+			} else if value.Valid {
+				_m.OcrMarkdownRetryCount = int(value.Int64)
+			}
+		case file.FieldOcrMarkdownLastTriedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_markdown_last_tried_at", values[i])
+			} else if value.Valid {
+				_m.OcrMarkdownLastTriedAt = new(time.Time)
+				*_m.OcrMarkdownLastTriedAt = value.Time
+			}
+		case file.FieldIsOcrContentFromMarkdown:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_ocr_content_from_markdown", values[i])
+			} else if value.Valid {
+				_m.IsOcrContentFromMarkdown = value.Bool
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -590,6 +632,25 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ocr_last_tried_at=")
 	builder.WriteString(_m.OcrLastTriedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("ocr_markdown=")
+	builder.WriteString(_m.OcrMarkdown)
+	builder.WriteString(", ")
+	if v := _m.OcrMarkdownSuccessAt; v != nil {
+		builder.WriteString("ocr_markdown_success_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("ocr_markdown_retry_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OcrMarkdownRetryCount))
+	builder.WriteString(", ")
+	if v := _m.OcrMarkdownLastTriedAt; v != nil {
+		builder.WriteString("ocr_markdown_last_tried_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("is_ocr_content_from_markdown=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsOcrContentFromMarkdown))
 	builder.WriteByte(')')
 	return builder.String()
 }

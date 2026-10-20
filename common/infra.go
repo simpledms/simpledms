@@ -12,13 +12,11 @@ type Infra struct {
 	renderer                             *ui.Renderer
 	metaPath                             string
 	fileSystem                           *filesystem.S3FileSystem // TODO is this a good location?
-	factory                              *Factory
 	FileRepo                             *FileRepository
 	pluginRegistry                       *pluginx.Registry
 	manageTenantsDeleteTenantCmdEndpoint string
 	manageTenantsDownloadBackupEndpoint  string
-	// nilableMainIdentity *age.X25519Identity
-	systemConfig *systemconfigmodel.SystemConfig
+	systemConfig                         *systemconfigmodel.SystemConfig
 	// no minio.Client, seems to risky for misuse; inject on demand
 	// same is true for db clients
 }
@@ -27,32 +25,22 @@ func NewInfra(
 	renderer *ui.Renderer,
 	metaPath string,
 	fileSystem *filesystem.S3FileSystem,
-	factory *Factory,
+	_ *Factory, // deprecated, see Factory
 	fileRepo *FileRepository,
 	pluginRegistry *pluginx.Registry,
-	// nilableMainIdentity *age.X25519Identity,
 	systemConfig *systemconfigmodel.SystemConfig,
 ) *Infra {
 	return &Infra{
 		renderer:                             renderer,
 		metaPath:                             metaPath,
 		fileSystem:                           fileSystem,
-		factory:                              factory,
 		FileRepo:                             fileRepo,
 		pluginRegistry:                       pluginRegistry,
 		manageTenantsDeleteTenantCmdEndpoint: "",
 		manageTenantsDownloadBackupEndpoint:  "",
 		systemConfig:                         systemConfig,
-		// nilableMainIdentity: nilableMainIdentity,
 	}
 }
-
-/*
-// unsafe because usually you want to use TTx
-func (qq *Infra) UnsafeDB() *enttenant.Client {
-	return qq.db
-}
-*/
 
 func (qq *Infra) Renderer() *ui.Renderer {
 	return qq.renderer
@@ -64,10 +52,6 @@ func (qq *Infra) MetaPath() string {
 
 func (qq *Infra) FileSystem() *filesystem.S3FileSystem {
 	return qq.fileSystem
-}
-
-func (qq *Infra) Factory() *Factory {
-	return qq.factory
 }
 
 func (qq *Infra) SystemConfig() *systemconfigmodel.SystemConfig {
@@ -93,7 +77,3 @@ func (qq *Infra) ManageTenantsDownloadBackupEndpoint() string {
 func (qq *Infra) SetManageTenantsDownloadBackupEndpoint(endpoint string) {
 	qq.manageTenantsDownloadBackupEndpoint = endpoint
 }
-
-/*func (qq *Infra) NilableMainIdentity() *age.X25519Identity {
-	return qq.nilableMainIdentity
-}*/

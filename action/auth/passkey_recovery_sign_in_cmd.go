@@ -30,7 +30,8 @@ func NewPasskeyRecoverySignInCmd(
 	actions *Actions,
 	passkeyService *account2.PasskeyService,
 ) *PasskeyRecoverySignInCmd {
-	config := actionx.NewConfig(actions.Route("passkey-recovery-sign-in-cmd"), false)
+	config := actionx.NewConfig(actions.Route("passkey-recovery-sign-in-cmd"), false).
+		EnablePublicAccess()
 	return &PasskeyRecoverySignInCmd{
 		infra:          infra,
 		actions:        actions,

@@ -15,20 +15,19 @@ import (
 	"golang.org/x/net/webdav"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/common/execution"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
 	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	entmainwebdavcredential "github.com/simpledms/simpledms/db/entmain/webdavcredential"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/enttenant/user"
 	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
@@ -210,12 +209,12 @@ func (qq *Handler) authenticatedWebDAVCredential(
 	credentialx, ok, err := qq.authenticateWebDAVCredential(req.Context(), username, secret)
 	if err != nil {
 		log.Println(err)
-		qq.limiter.allow(rateLimitAddr, username)
+		qq.limiter.recordFailedAttempt(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
 	if !ok || credentialx.RevokedAt != nil {
-		qq.limiter.allow(rateLimitAddr, username)
+		qq.limiter.recordFailedAttempt(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
@@ -301,24 +300,6 @@ func (qq *Handler) webDAVSpaceContext(
 	if err != nil {
 		return nil, nil, err
 	}
-	now := time.Now()
-	hasAssignment, err := mainTx.TenantAccountAssignment.Query().
-		Where(
-			tenantaccountassignment.AccountID(accountx.ID),
-			tenantaccountassignment.TenantID(tenantx.ID),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-		).
-		Exist(bootstrapCtx)
-	if err != nil {
-		return nil, nil, err
-	}
-	if !hasAssignment {
-		return nil, nil, webDAVStatusError{status: http.StatusForbidden, msg: "tenant assignment not active"}
-	}
-
 	tenantDB, err := qq.webDAVTenantDB(bootstrapCtx, tenantx)
 	if err != nil {
 		return nil, nil, err
@@ -345,37 +326,27 @@ func (qq *Handler) webDAVSpaceContext(
 		qq.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, qq.i18n, qq.mainDB, qq.tenantDBs, isReadOnly)
-	userx, err := tenantTx.User.Query().
-		Where(user.AccountID(accountx.ID), user.DeletedAtIsNil()).
-		Only(mainCtx)
-	if err != nil {
-		_ = tenantTx.Rollback()
-		return nil, nil, err
-	}
-	tenantCtx := ctxx.NewTenantContextWithUser(mainCtx, tenantTx, tenantx, userx, isReadOnly)
-	spacex, err := tenantTx.Space.Query().
-		Where(space.PublicID(entx.NewCIText(spacePublicID))).
-		Only(tenantCtx)
+	// Same tenant assignment, user, and Space checks as browser and MCP requests. beforeTenantAuth
+	// still runs first; a failed check rolls back the tenant transaction including its writes.
+	resolvedCtx, err := execution.NewScopeResolver().Resolve(
+		mainCtx,
+		tenantTx,
+		tenantx,
+		spacePublicID,
+		isReadOnly,
+	)
 	if err != nil {
 		_ = tenantTx.Rollback()
 		return nil, nil, err
 	}
 
-	return ctxx.NewSpaceContext(tenantCtx, spacex), tenantTx, nil
+	return resolvedCtx.SpaceCtx(), tenantTx, nil
 }
 
 func (qq *Handler) webDAVTenantDB(ctx context.Context, tenantx *entmain.Tenant) (*sqlx.TenantDB, error) {
-	tenantDB, ok := qq.tenantDBs.Load(tenantx.ID)
-	if ok {
-		return tenantDB, nil
-	}
-	tenantm := tenant2.NewTenant(tenantx)
-	tenantDB, err := tenantm.OpenDB(qq.devMode, qq.metaPath)
-	if err != nil {
-		return nil, err
-	}
-	qq.tenantDBs.Store(tenantx.ID, tenantDB)
-	return tenantDB, nil
+	return qq.tenantDBs.LoadOrOpen(tenantx.ID, func() (*sqlx.TenantDB, error) {
+		return tenant2.NewTenant(tenantx).OpenDB(qq.devMode, qq.metaPath)
+	})
 }
 
 func (qq *Handler) withFinalizationContexts(

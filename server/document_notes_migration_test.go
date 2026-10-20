@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"io/fs"
 	"path/filepath"
 	"strings"
@@ -83,7 +84,7 @@ func TestDocumentNotesProductionMigrationFreshAndPopulated(t *testing.T) {
 				file = client.File.Create().SetSpaceID(spaceID).SetName("existing.pdf").
 					SetIsDirectory(false).SetIsInInbox(true).SetIndexedAt(time.Now()).
 					SetNotes("legacy\n  <plain text> & preserved").SetOcrContent("existing OCR").SaveX(ctx)
-				before = client.File.GetX(ctx, file.ID).String()
+				before = historicalFileRow(t, path, file.ID)
 			}
 			if err := migration.Migrate(version); err != nil {
 				t.Fatalf("apply production notes migration: %v", err)
@@ -95,7 +96,7 @@ func TestDocumentNotesProductionMigrationFreshAndPopulated(t *testing.T) {
 			if count := client.DocumentNote.Query().CountX(ctx); count != 0 {
 				t.Fatalf("migration fabricated %d note rows", count)
 			}
-			if populated && client.File.GetX(ctx, file.ID).String() != before {
+			if populated && historicalFileRow(t, path, file.ID) != before {
 				t.Fatal("migration changed existing file/legacy fields")
 			}
 		})
@@ -183,6 +184,46 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 		old.AuthorID != 0 || old.AuthoredAt != nil || client.DocumentNote.Query().CountX(ctx) != 2 {
 		t.Fatalf("title migration changed legacy content/history: %v / %v", old, next)
 	}
+}
+
+// historicalFileRow reads all columns of the file row as they exist at the migrated version;
+// the current Ent client would also select columns added by later migrations.
+func historicalFileRow(t *testing.T, path string, id int64) string {
+	t.Helper()
+	db, err := sql.Open("sqlite3", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+	rows, err := db.Query("SELECT * FROM files WHERE id = ?", id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := rows.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+	columns, err := rows.Columns()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !rows.Next() {
+		t.Fatalf("file %d not found", id)
+	}
+	values := make([]any, len(columns))
+	pointers := make([]any, len(columns))
+	for index := range values {
+		pointers[index] = &values[index]
+	}
+	if err := rows.Scan(pointers...); err != nil {
+		t.Fatal(err)
+	}
+	return fmt.Sprint(columns, values)
 }
 
 func insertHistoricalNotesSpace(t *testing.T, path, name string) int64 {

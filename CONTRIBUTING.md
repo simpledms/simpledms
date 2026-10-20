@@ -36,6 +36,6 @@ cp .env.sample .env # edit .env
 direnv allow
 npm install
 docker compose up -d # docker-compose up -d for older Docker versions
-# spins up minio, tika and mailpit
+# spins up minio, tika, xberg and mailpit
 go tool air
 ```

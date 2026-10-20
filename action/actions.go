@@ -19,6 +19,7 @@ import (
 	"github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/model/main/systemstatus"
 )
 
 // value of actions tag seems not important, just that not empty...
@@ -44,7 +45,12 @@ type Actions struct {
 	Trash             *trash.Actions             `actions:"trash"`
 }
 
-func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs, isDevMode bool) *Actions {
+func NewActions(
+	infra *common.Infra,
+	tenantDBs *tenantdbs.TenantDBs,
+	isDevMode bool,
+	systemStatusChecker *systemstatus.SystemStatusChecker,
+) *Actions {
 	commonActions := acommon.NewActions(infra)
 	taggingActions := tagging.NewActions(infra, commonActions)
 	browseActions := browse.NewActions(infra, commonActions, taggingActions)
@@ -55,7 +61,14 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs, isDevMode b
 	trashActions := trash.NewActions(infra, browseActions)
 
 	return &Actions{
-		Dashboard:         dashboard.NewActions(infra, tenantDBs, commonActions, authActions, adminActions),
+		Dashboard: dashboard.NewActions(
+			infra,
+			tenantDBs,
+			commonActions,
+			authActions,
+			adminActions,
+			systemStatusChecker,
+		),
 		Browse:            browseActions,
 		Tagging:           taggingActions,
 		Inbox:             inbox.NewActions(infra, commonActions, browseActions),

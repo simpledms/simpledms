@@ -4,7 +4,6 @@ import (
 	"context"
 	"io/fs"
 	"log"
-	"runtime/debug"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -16,19 +15,6 @@ import (
 )
 
 func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrationsTenantFS fs.FS) {
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(1 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.initializeTenants(devMode, metaPath, migrationsTenantFS)
-		}
-	}()
 	for {
 		// TODO in transaction or not? if so, don't forget rollback in recovery logic
 
@@ -61,7 +47,8 @@ func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrations
 				continue
 			}
 
-			qq.tenantDBs.Store(tenantm.Data.ID, tenantDB)
+			// A request may have opened the freshly initialized DB in the meantime.
+			tenantDB = qq.tenantDBs.StoreOrClose(tenantm.Data.ID, tenantDB)
 			qq.runTenantDataMigrations(ctx, tenantdatamigration.NewRunner(), tenantDB, tenantm.Data)
 		}
 

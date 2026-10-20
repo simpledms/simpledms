@@ -43,34 +43,13 @@ func (qq *MCPCredentialFilterDialog) Handler(
 func (qq *MCPCredentialFilterDialog) Widget(
 	state *MCPCredentialListPartialData,
 ) *widget.Dialog {
-	showActive, showRevoked, _ := state.statusFilter()
-	return &widget.Dialog{
-		Widget: widget.Widget[widget.Dialog]{
-			ID: qq.ID(),
-		},
-		Headline:     widget.T("Filter MCP credentials"),
-		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutSideSheet,
-		Child: &widget.Container{
-			Widget: widget.Widget[widget.Container]{
-				ID: "mcpCredentialStatusFilter",
-			},
-			Child: []*widget.FilterChip{
-				newCredentialStatusFilterChip(
-					widget.T("Active"),
-					credentialStatusActive,
-					showActive,
-					event.MCPCredentialFilterChanged,
-				),
-				newCredentialStatusFilterChip(
-					widget.T("Revoked"),
-					credentialStatusRevoked,
-					showRevoked,
-					event.MCPCredentialFilterChanged,
-				),
-			},
-		},
-	}
+	return newCredentialStatusFilterDialog(
+		qq.ID(),
+		widget.T("Filter MCP credentials"),
+		"mcpCredentialStatusFilter",
+		state.CredentialStatusValues,
+		event.MCPCredentialFilterChanged,
+	)
 }
 
 func (qq *MCPCredentialFilterDialog) ID() string {

@@ -34,7 +34,7 @@ func NewCreateAndAssignTagCmd(
 	config := actionx.NewConfig(
 		actions.Route("create-and-assign-tag-cmd"),
 		false,
-	).EnableCommittedResponse()
+	)
 	return &CreateAndAssignTagCmd{
 		infra:   infra,
 		actions: actions,
@@ -63,7 +63,10 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	filex, err := qq.infra.FileRepo.Get(ctx, data.FileID)
+	if err != nil {
+		return err
+	}
 	var tagx *enttenant.Tag
 	if data.Type == tagtype.Group {
 		tagx, err = qq.actions.CreateTagCmd.execute(ctx, &data.CreateTagCmdData)

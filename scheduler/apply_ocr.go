@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"regexp"
-	"runtime/debug"
 	"strings"
 	"time"
 
@@ -31,20 +30,6 @@ func (qq *Scheduler) applyOCR() {
 		log.Println("tika client not initialized")
 		return
 	}
-
-	defer func() {
-		// tested and works
-		if r := recover(); r != nil {
-			log.Printf("%v: %s", r, debug.Stack())
-			log.Println("trying to recover")
-
-			// TODO what is a good interval
-			time.Sleep(1 * time.Minute)
-
-			// tested and works, automatically restarts loop
-			qq.applyOCR()
-		}
-	}()
 
 	for {
 		ctx := context.Background()
@@ -73,18 +58,10 @@ func (qq *Scheduler) applyOCRForTenant(
 	tenantDB *sqlx.TenantDB,
 	dateThreshold time.Time,
 ) {
-	// TODO is tx necessary on mainDB?
-	tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
-	if err != nil {
-		if entmain.IsNotFound(err) {
-			// can happen if tenant was deleted and not removed from tenantDBs yet
-			log.Println("tenant not found", tenantID)
-			return
-		}
-		log.Println(err)
+	tenantIdentity, found := qq.ocrTenantIdentity(ctx, tenantID)
+	if !found {
 		return
 	}
-	tenantIdentity := tenantx.X25519IdentityEncrypted.Identity()
 
 	// TODO transaction? if so, make sure OCRRetryCount gets increased
 	// TODO ensure that only files at final destination get processed;
@@ -113,6 +90,25 @@ func (qq *Scheduler) applyOCRForTenant(
 			return
 		}
 	}
+}
+
+// The bool is false if the tenant cannot be loaded; the reason is logged.
+func (qq *Scheduler) ocrTenantIdentity(
+	ctx context.Context,
+	tenantID int64,
+) (*age.X25519Identity, bool) {
+	// TODO is tx necessary on mainDB?
+	tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
+	if err != nil {
+		if entmain.IsNotFound(err) {
+			// can happen if tenant was deleted and not removed from tenantDBs yet
+			log.Println("tenant not found", tenantID)
+			return nil, false
+		}
+		log.Println(err)
+		return nil, false
+	}
+	return tenantx.X25519IdentityEncrypted.Identity(), true
 }
 
 // The result indicates whether processing can continue with the next pending file.
@@ -159,6 +155,7 @@ func (qq *Scheduler) applyOCRPendingFile(
 		SetOcrLastTriedAt(time.Time{}).
 		SetOcrSuccessAt(time.Now()).
 		SetOcrContent(content).
+		SetIsOcrContentFromMarkdown(false).
 		Exec(ctx)
 	if err != nil {
 		log.Println(err)

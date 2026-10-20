@@ -43,34 +43,13 @@ func (qq *WebDAVCredentialFilterDialog) Handler(
 func (qq *WebDAVCredentialFilterDialog) Widget(
 	state *WebDAVCredentialListPartialData,
 ) *widget.Dialog {
-	showActive, showRevoked, _ := state.statusFilter()
-	return &widget.Dialog{
-		Widget: widget.Widget[widget.Dialog]{
-			ID: qq.ID(),
-		},
-		Headline:     widget.T("Filter WebDAV credentials"),
-		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutSideSheet,
-		Child: &widget.Container{
-			Widget: widget.Widget[widget.Container]{
-				ID: "webDAVCredentialStatusFilter",
-			},
-			Child: []*widget.FilterChip{
-				newCredentialStatusFilterChip(
-					widget.T("Active"),
-					credentialStatusActive,
-					showActive,
-					event.WebDAVCredentialFilterChanged,
-				),
-				newCredentialStatusFilterChip(
-					widget.T("Revoked"),
-					credentialStatusRevoked,
-					showRevoked,
-					event.WebDAVCredentialFilterChanged,
-				),
-			},
-		},
-	}
+	return newCredentialStatusFilterDialog(
+		qq.ID(),
+		widget.T("Filter WebDAV credentials"),
+		"webDAVCredentialStatusFilter",
+		state.CredentialStatusValues,
+		event.WebDAVCredentialFilterChanged,
+	)
 }
 
 func (qq *WebDAVCredentialFilterDialog) ID() string {

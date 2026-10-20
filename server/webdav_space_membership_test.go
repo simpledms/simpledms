@@ -1,12 +1,16 @@
 package server
 
 import (
+	"context"
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
@@ -96,6 +100,84 @@ func TestWebDAVCredentialStopsWorkingAfterUserIsRemovedFromSpace(t *testing.T) {
 
 	if got := propfind(); got != http.StatusForbidden {
 		t.Fatalf("expected removed member to be forbidden, got %d", got)
+	}
+}
+
+func TestWebDAVCredentialStopsWorkingAfterTenantAssignmentExpires(t *testing.T) {
+	harness := newActionTestHarnessWithSaaS(t, true)
+	ownerAccount, tenantx := signUpAccount(t, harness, "webdav-expiry-owner@example.com")
+	memberAccount := createTenantUser(
+		t,
+		harness,
+		tenantx,
+		"webdav-expiry-member@example.com",
+		tenantrole.User,
+	)
+	tenantDB := initTenantDB(t, harness, tenantx)
+
+	ownerMainTx, ownerTenantTx, ownerCtx := newTenantContext(
+		t,
+		harness,
+		ownerAccount,
+		tenantx,
+		tenantDB,
+	)
+	createSpaceViaCmd(t, harness.actions, ownerCtx, "Expiry Space")
+	spacex := ownerTenantTx.Space.Query().Where(space.Name("Expiry Space")).OnlyX(ownerCtx)
+	memberUser := ownerTenantTx.User.Query().Where(user.AccountID(memberAccount.ID)).OnlyX(ownerCtx)
+	ownerTenantTx.SpaceUserAssignment.Create().
+		SetSpaceID(spacex.ID).
+		SetUserID(memberUser.ID).
+		SetRole(spacerole.User).
+		SaveX(ctxx.NewSpaceContext(ownerCtx, spacex))
+	commitTestTxs(t, ownerMainTx, ownerTenantTx)
+
+	memberMainTx, memberTenantTx, memberCtx := newTenantContext(
+		t,
+		harness,
+		memberAccount,
+		tenantx,
+		tenantDB,
+	)
+	memberSpace := memberTenantTx.Space.Query().Where(space.ID(spacex.ID)).OnlyX(memberCtx)
+	result, err := credentialmodel.NewCredentialService().CreateOwnerCredential(
+		ctxx.NewSpaceContext(memberCtx, memberSpace),
+		"Scanner",
+		webDAVTestURL(tenantx, spacex, "/"),
+		0,
+		false,
+	)
+	if err != nil {
+		t.Fatalf("create credential: %v", err)
+	}
+	commitTestTxs(t, memberMainTx, memberTenantTx)
+
+	propfind := func() int {
+		return webDAVRequest(
+			t,
+			harness,
+			result.Username,
+			result.Secret,
+			"PROPFIND",
+			webDAVTestURL(tenantx, spacex, "/"),
+			strings.NewReader(webDAVPropfindBody),
+			func(req *http.Request) { req.Header.Set("Depth", "0") },
+		).Code
+	}
+	if got := propfind(); got != http.StatusMultiStatus {
+		t.Fatalf("expected assigned member to use WebDAV, got %d", got)
+	}
+
+	harness.mainDB.ReadWriteConn.TenantAccountAssignment.Update().
+		Where(
+			tenantaccountassignment.AccountID(memberAccount.ID),
+			tenantaccountassignment.TenantID(tenantx.ID),
+		).
+		SetExpiresAt(time.Now().Add(-time.Minute)).
+		ExecX(mainprivacy.DecisionContext(context.Background(), mainprivacy.Allow))
+
+	if got := propfind(); got != http.StatusForbidden {
+		t.Fatalf("expected member with expired tenant assignment to be forbidden, got %d", got)
 	}
 }
 

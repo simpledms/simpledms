@@ -48,7 +48,8 @@ type TLSConfig struct {
 }
 
 type OCRConfig struct {
-	TikaURL        string // optional, can also be used without OCR
+	TikaURL        string // optional, fallback for formats Xberg does not support
+	XbergURL       string // optional, preferred over Tika if both are configured
 	GotenbergURL   string // optional, disables PDF preview conversion when empty
 	MaxFileSizeMiB int64
 }
@@ -173,6 +174,7 @@ func InitAppWithoutCustomContext(
 		SetMailerUseImplicitSslTLS(mailerConfig.MailerUseImplicitSSLTLS).
 		// ocr
 		SetOcrTikaURL(ocrConfig.TikaURL).
+		SetOcrXbergURL(ocrConfig.XbergURL).
 		SetGotenbergURL(ocrConfig.GotenbergURL).
 		SetOcrMaxFileSizeMib(maxFileSizeMiB).
 		// other

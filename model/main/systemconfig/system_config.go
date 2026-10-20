@@ -358,3 +358,24 @@ func (qq *SystemConfig) TLS() *appmodel.TLSConfig {
 		TLSAutocertHosts:      qq.data.TLSAutocertHosts,
 	}
 }
+
+func (qq *SystemConfig) Mailer() *appmodel.MailerConfig {
+	return &appmodel.MailerConfig{
+		MailerHost:               qq.data.MailerHost,
+		MailerPort:               qq.data.MailerPort,
+		MailerUsername:           qq.data.MailerUsername,
+		MailerPassword:           qq.data.MailerPassword.String(),
+		MailerFrom:               qq.data.MailerFrom,
+		MailerInsecureSkipVerify: qq.data.MailerInsecureSkipVerify,
+		MailerUseImplicitSSLTLS:  qq.data.MailerUseImplicitSslTLS,
+	}
+}
+
+func (qq *SystemConfig) OCR() *appmodel.OCRConfig {
+	return &appmodel.OCRConfig{
+		TikaURL:        qq.data.OcrTikaURL,
+		XbergURL:       qq.data.OcrXbergURL,
+		GotenbergURL:   qq.data.GotenbergURL,
+		MaxFileSizeMiB: qq.data.OcrMaxFileSizeMib,
+	}
+}

@@ -21,8 +21,7 @@ type TransferFileCmd struct {
 
 func NewTransferFileCmd(actions *Actions) *TransferFileCmd {
 	return &TransferFileCmd{
-		Config: actionx.NewConfig(actions.Route("transfer-file-cmd"), false).
-			EnableCommittedResponse(),
+		Config:    actionx.NewConfig(actions.Route("transfer-file-cmd"), false),
 		transfers: filemodel.NewInboxTransferService(),
 	}
 }

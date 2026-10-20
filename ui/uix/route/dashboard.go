@@ -43,3 +43,11 @@ func System() string {
 func DashboardActionsRoute() string {
 	return "/dashboard/"
 }
+
+func SystemStatusRoute() string {
+	return "GET /dashboard/system-status/"
+}
+
+func SystemStatus() string {
+	return "/dashboard/system-status/"
+}

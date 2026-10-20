@@ -8,10 +8,6 @@ type SpaceFileListColumns struct {
 	ShowTags    bool    `json:"show_tags,omitempty"`
 }
 
-func NewSpaceFileListColumns() *SpaceFileListColumns {
-	return &SpaceFileListColumns{}
-}
-
 func (qq *SpaceFileListColumns) HasPropertyID(propertyID int64) bool {
 	return slices.Contains(qq.PropertyIDs, propertyID)
 }
