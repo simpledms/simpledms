@@ -212,7 +212,7 @@ func (qq *FileListItemPartial) DirectoryListItemWithCounts(
 		ContextMenu:    qq.actions.FileContextMenuPartial.LazyMenu(filex),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
-			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
+			HxHeaders: autil.PreserveStateHeader(),
 			HxSwap: fmt.Sprintf(
 				// duplicate in ListDirPartial
 				// bottom instead of top prevents small jump on nav

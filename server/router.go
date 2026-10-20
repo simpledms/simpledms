@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/netip"
 	"net/url"
+	"os"
 	"regexp"
 	"runtime/debug"
 	"strings"
@@ -108,6 +109,10 @@ func NewRouter(
 		metaPath:                 metaPath,
 		i18n:                     i18n,
 		trustedProxies:           trustedProxies,
+	}
+
+	if os.Getenv("SIMPLEDMS_PPROF_ENABLED") == "true" {
+		router.Handle("/debug/pprof/", NewPprofHandler(router))
 	}
 
 	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{

@@ -2,6 +2,8 @@ package browse
 
 import (
 	"net/http"
+	"net/url"
+	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -12,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -48,6 +51,17 @@ func (qq *BrowsePage) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not a folder.")
 	}
 
+	// Semantic folder links and breadcrumbs are boosted anchors, so they do not inherit
+	// the row's Preserve-State header when HTMX inheritance is disabled.
+	isFolderNavigation := false
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		isFolderNavigation = strings.HasPrefix(current.Path,
+			route.BrowseRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)) &&
+			req.Header.Get("Reset-State") == ""
+	}
+	if isFolderNavigation {
+		req.Header.Set("Preserve-State", "true")
+	}
 	state := autil.StateX[ListDirPartialState](rw, req)
 
 	// commented on 28.01.2026; if reactivated, should be Replace
@@ -61,7 +75,18 @@ func (qq *BrowsePage) Handler(
 		return qq.infra.Renderer().Render(rw, ctx, &widget.DetailsWithSheet{})
 	}
 
-	qq.render(rw, req, ctx, qq.widget(ctx, state, dirx))
+	if isFolderNavigation && state.ActiveSideSheet == qq.actions.FiltersDialog.ID() {
+		sheet, err := qq.actions.FiltersDialog.Widget(
+			ctx, qq.actions.FiltersDialog.Data(dirx.PublicID.String()), state,
+		)
+		if err != nil {
+			return err
+		}
+		// Refresh the existing sheet in place so its commands use the destination folder.
+		sheet.HxSwapOOB = "outerHTML"
+		rw.AddRenderables(sheet)
+	}
+	qq.render(rw, req, ctx, qq.widget(ctx, state, dirx, isFolderNavigation))
 	return nil
 }
 
@@ -84,6 +109,7 @@ func (qq *BrowsePage) widget(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *enttenant.File,
+	isFolderNavigation bool,
 ) renderable.Renderable {
 	listDetailLayout := qq.actions.ListDirPartial.Widget(
 		ctx,
@@ -131,7 +157,7 @@ func (qq *BrowsePage) widget(
 
 	var content widget.IWidget = listDetailLayout
 	// an active filters side sheet is restored by the filters button in the app bar
-	if state.ActiveSideSheet == "" {
+	if state.ActiveSideSheet == "" && !isFolderNavigation {
 		content = &widget.View{
 			Children: []widget.IWidget{
 				listDetailLayout,

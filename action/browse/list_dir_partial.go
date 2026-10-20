@@ -666,7 +666,7 @@ func (qq *ListDirPartial) appBar(
 			Tooltip: widget.T("Back to parent folder"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String()),
-				HxHeaders: autil.ResetStateHeader(),
+				HxHeaders: autil.PreserveStateHeader(),
 				HxSwap: fmt.Sprintf(
 					// duplicate in FileListItemPartial
 					// bottom instead of top prevents small jump on nav

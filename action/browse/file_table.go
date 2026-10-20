@@ -255,7 +255,7 @@ func (qq *ListDirPartial) fileTableRowHTMXAttrs(
 	if filex.IsDirectory {
 		return widget.HTMXAttrs{
 			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
-			HxHeaders: autil.ResetStateHeader(),
+			HxHeaders: autil.PreserveStateHeader(),
 			HxSwap: fmt.Sprintf(
 				"innerHTML show:#%s>div>.js-list>.js-list-item:first-child:bottom",
 				qq.FileListID(),
