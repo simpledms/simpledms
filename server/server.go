@@ -277,6 +277,10 @@ func newMaintenancePageHandler(
 		viewx.ShouldRefreshEvery60Seconds = !isUnlockFormVisible
 
 		rwx := httpx.NewResponseWriter(rw)
+		// set explicitly because the compress handler detects the type only on the first
+		// write, which is too late after WriteHeader; with nosniff, browsers would show the
+		// HTML as plain text
+		rwx.Header().Set("Content-Type", "text/html; charset=utf-8")
 		rwx.WriteHeader(http.StatusServiceUnavailable) // must be before render
 
 		err = renderer.Render(rwx, visitorCtx, viewx)
