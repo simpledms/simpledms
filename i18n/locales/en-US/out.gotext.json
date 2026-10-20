@@ -1469,6 +1469,20 @@
             "fuzzy": true
         },
         {
+            "id": "No extension",
+            "message": "No extension",
+            "translation": "No extension",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No file types available yet.",
+            "message": "No file types available yet.",
+            "translation": "No file types available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": "File upload",
@@ -1591,6 +1605,13 @@
             "id": "Add new version",
             "message": "Add new version",
             "translation": "Add new version",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File types",
+            "message": "File types",
+            "translation": "File types",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5288,6 +5309,13 @@
             "fuzzy": true
         },
         {
+            "id": "File type",
+            "message": "File type",
+            "translation": "File type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Filename",
             "message": "Filename",
             "translation": "Filename",
@@ -7780,6 +7808,13 @@
             "id": "Could not open file.",
             "message": "Could not open file.",
             "translation": "Could not open file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid file recovery location.",
+            "message": "Invalid file recovery location.",
+            "translation": "Invalid file recovery location.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

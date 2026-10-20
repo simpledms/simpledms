@@ -59,7 +59,8 @@ func (qq *ListDirFileQueryService) Query(
 	state.normalizeSortBy()
 
 	// TODO find a better solution; not really robust
-	if ctx.SpaceCtx().Space.IsFolderMode && state.DocumentTypeID == 0 && len(state.CheckedTagIDs) == 0 && state.SearchQuery == "" {
+	if ctx.SpaceCtx().Space.IsFolderMode && state.DocumentTypeID == 0 &&
+		len(state.CheckedTagIDs) == 0 && len(state.FileTypes) == 0 && state.SearchQuery == "" {
 		state.IsRecursive = false
 		state.HideDirectories = false
 	} else {
@@ -114,6 +115,7 @@ func (qq *ListDirFileQueryService) Query(
 		searchResultQuery = searchResultQuery.Where(file.IsDirectory(true))
 	}
 
+	searchResultQuery = filemodel.NewFileTypeFilter().Apply(searchResultQuery, state.FileTypes)
 	searchResultQuery = applyPropertyFilter(ctx, searchResultQuery, state)
 
 	children := searchResultQuery.Offset(offset).Limit(pageSize + 1).AllX(ctx)

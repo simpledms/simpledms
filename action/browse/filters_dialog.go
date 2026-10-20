@@ -44,11 +44,15 @@ func (qq *FiltersDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 	state := autil.StateX[ListDirPartialState](rw, req)
+	content, err := qq.Widget(ctx, data, state)
+	if err != nil {
+		return err
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Widget(ctx, data, state),
+		content,
 	)
 }
 
@@ -56,7 +60,11 @@ func (qq *FiltersDialog) Widget(
 	ctx ctxx.Context,
 	data *FiltersDialogData,
 	listDirState *ListDirPartialState,
-) *widget.Dialog {
+) (*widget.Dialog, error) {
+	tabs, err := qq.actions.FilterTabsPartial.Widget(ctx, listDirState, data.CurrentDirID)
+	if err != nil {
+		return nil, err
+	}
 	return &widget.Dialog{
 		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
@@ -77,12 +85,8 @@ func (qq *FiltersDialog) Widget(
 				},
 			},
 		},
-		Child: qq.actions.FilterTabsPartial.Widget(
-			ctx,
-			listDirState,
-			data.CurrentDirID,
-		),
-	}
+		Child: tabs,
+	}, nil
 }
 
 func (qq *FiltersDialog) ID() string {

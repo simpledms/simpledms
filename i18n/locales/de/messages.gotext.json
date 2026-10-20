@@ -2,6 +2,27 @@
     "language": "de",
     "messages": [
         {
+            "id": "File types",
+            "message": "File types",
+            "translation": "Dateitypen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No extension",
+            "message": "No extension",
+            "translation": "Ohne Dateiendung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No file types available yet.",
+            "message": "No file types available yet.",
+            "translation": "Noch keine Dateitypen verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Legal",
             "message": "Legal",
             "translation": "Rechtliches",

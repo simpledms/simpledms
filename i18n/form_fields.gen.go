@@ -55,6 +55,7 @@ func formFieldsGotextHelper() {
 	pp.Sprintf("Failed")
 	pp.Sprintf("Field")
 	pp.Sprintf("File")
+	pp.Sprintf("File type")
 	pp.Sprintf("Filename")
 	pp.Sprintf("Finland")
 	pp.Sprintf("First name")

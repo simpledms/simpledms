@@ -1453,6 +1453,20 @@
             "fuzzy": true
         },
         {
+            "id": "No extension",
+            "message": "No extension",
+            "translation": "Ohne Dateiendung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No file types available yet.",
+            "message": "No file types available yet.",
+            "translation": "Noch keine Dateitypen verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": "Datei-Upload",
@@ -1575,6 +1589,13 @@
             "id": "Add new version",
             "message": "Add new version",
             "translation": "Neue Version hinzufügen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File types",
+            "message": "File types",
+            "translation": "Dateitypen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5244,6 +5265,11 @@
             "fuzzy": true
         },
         {
+            "id": "File type",
+            "message": "File type",
+            "translation": ""
+        },
+        {
             "id": "Filename",
             "message": "Filename",
             "translation": "Dateiname",
@@ -7690,6 +7716,11 @@
             "translation": "Datei konnte nicht geöffnet werden.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Invalid file recovery location.",
+            "message": "Invalid file recovery location.",
+            "translation": ""
         },
         {
             "id": "Invalid storage filename.",

@@ -22,6 +22,7 @@ const (
 
 	FilterTagsChanged            Event = "filterTagsChanged"
 	DocumentTypeFilterChanged    Event = "documentTypeFilterChanged"
+	FileTypeFilterChanged        Event = "fileTypeFilterChanged"
 	DetailsClosed                Event = "detailsClosed"
 	DocumentTypeCreated          Event = "documentTypeCreated"
 	DocumentTypeDeleted          Event = "documentTypeDeleted"

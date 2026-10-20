@@ -1095,6 +1095,20 @@
             "translation": ""
         },
         {
+            "id": "No extension",
+            "message": "No extension",
+            "translation": "No extension",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No file types available yet.",
+            "message": "No file types available yet.",
+            "translation": "No file types available yet.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": ""
@@ -1183,6 +1197,13 @@
             "id": "Add new version",
             "message": "Add new version",
             "translation": ""
+        },
+        {
+            "id": "File types",
+            "message": "File types",
+            "translation": "File types",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Filters",
@@ -3986,6 +4007,11 @@
             "translation": ""
         },
         {
+            "id": "File type",
+            "message": "File type",
+            "translation": ""
+        },
+        {
             "id": "Filename",
             "message": "Filename",
             "translation": ""
@@ -5809,6 +5835,11 @@
         {
             "id": "Could not open file.",
             "message": "Could not open file.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid file recovery location.",
+            "message": "Invalid file recovery location.",
             "translation": ""
         },
         {

@@ -2,6 +2,27 @@
     "language": "it",
     "messages": [
         {
+            "id": "File types",
+            "message": "File types",
+            "translation": "Tipi di file",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No extension",
+            "message": "No extension",
+            "translation": "Senza estensione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No file types available yet.",
+            "message": "No file types available yet.",
+            "translation": "Nessun tipo di file ancora disponibile.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Legal",
             "message": "Legal",
             "translation": "Informazioni legali",

@@ -58,6 +58,7 @@ func (qq *ResetFiltersCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		event.FilterTagsChanged.String(),
 		event.DocumentTypeFilterChanged.String(),
 		event.PropertyFilterChanged.String(),
+		event.FileTypeFilterChanged.String(),
 	}, ", "))
 	rw.AddRenderables(widget.NewSnackbarf("Filters reset."))
 

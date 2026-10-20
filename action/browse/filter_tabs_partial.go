@@ -20,6 +20,7 @@ const (
 	filterTabDocumentType = "document-type"
 	filterTabFields       = "fields"
 	filterTabTags         = "tags"
+	filterTabFileTypes    = "file-types"
 )
 
 type FilterTabsPartialData struct {
@@ -63,11 +64,15 @@ func (qq *FilterTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	state.FilterTab = data.ActiveTab
+	content, err := qq.Widget(ctx, state, data.CurrentDirID)
+	if err != nil {
+		return err
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Widget(ctx, state, data.CurrentDirID),
+		content,
 	)
 }
 
@@ -75,11 +80,17 @@ func (qq *FilterTabsPartial) Widget(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	currentDirID string,
-) *widget.TabBar {
+) (*widget.TabBar, error) {
 	activeTab := state.FilterTab
 	var activeTabContent renderable.Renderable
 
 	switch activeTab {
+	case filterTabFileTypes:
+		content, err := qq.actions.FileTypeFilterPartial.Widget(ctx, currentDirID, state)
+		if err != nil {
+			return nil, err
+		}
+		activeTabContent = content
 	case filterTabFields:
 		activeTabContent = qq.actions.ListFilterPropertiesPartial.Widget(
 			ctx,
@@ -110,12 +121,13 @@ func (qq *FilterTabsPartial) Widget(
 			qq.tab(widget.T("Document type"), state, currentDirID, filterTabDocumentType),
 			qq.tab(widget.T("Fields"), state, currentDirID, filterTabFields),
 			qq.tab(widget.T("Tags"), state, currentDirID, filterTabTags),
+			qq.tab(widget.T("File types"), state, currentDirID, filterTabFileTypes),
 		},
 		ActiveTabContent: &widget.ScrollableContent{
 			MarginY:  true,
 			Children: activeTabContent,
 		},
-	}
+	}, nil
 }
 
 func (qq *FilterTabsPartial) tab(
@@ -154,6 +166,9 @@ func (qq *FilterTabsPartial) badge(
 	var isSmall bool
 	var changedEvent event.Event
 	switch tabID {
+	case filterTabFileTypes:
+		count = len(state.FileTypes)
+		changedEvent = event.FileTypeFilterChanged
 	case filterTabFields:
 		count = len(state.PropertyValues)
 		changedEvent = event.PropertyFilterChanged

@@ -57,6 +57,8 @@ type Actions struct {
 	ListFilterTagsPartial       *ListFilterTagsPartial
 	ListFilterPropertiesPartial *ListFilterPropertiesPartial
 	DocumentTypeFilterPartial   *DocumentTypeFilterPartial
+	FileTypeFilterPartial       *FileTypeFilterPartial
+	ToggleFileTypeFilterCmd     *ToggleFileTypeFilterCmd
 	ToggleTagFilterCmd          *ToggleTagFilterCmd
 	ToggleDocumentTypeFilterCmd *ToggleDocumentTypeFilterCmd
 	TogglePropertyFilterCmd     *TogglePropertyFilterCmd
@@ -127,6 +129,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		ListFilterTagsPartial:       NewListFilterTagsPartial(infra, actions),
 		ListFilterPropertiesPartial: NewListFilterPropertiesPartial(infra, actions),
 		DocumentTypeFilterPartial:   NewDocumentTypeFilterPartial(infra, actions),
+		FileTypeFilterPartial:       NewFileTypeFilterPartial(infra, actions),
+		ToggleFileTypeFilterCmd:     NewToggleFileTypeFilterCmd(actions),
 		ToggleTagFilterCmd:          NewToggleTagFilterCmd(infra, actions),
 		ToggleDocumentTypeFilterCmd: NewToggleDocumentTypeFilterCmd(infra, actions),
 		TogglePropertyFilterCmd:     NewTogglePropertyFilterCmd(infra, actions),

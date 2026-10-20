@@ -48,6 +48,7 @@ type ListDirPartialState struct {
 	ListFilterTagsPartialState
 	DocumentTypeFilterPartialState
 	PropertiesFilterState
+	FileTypes []string `url:"file_types,omitempty"`
 
 	// TODO move to dedicated struct?
 	// SpaceIDs []int64 `url:"space_ids,omitempty"` // shared with DocumentTypeFilterPartialState
@@ -87,13 +88,15 @@ func (qq *ListDirPartialState) hasActiveSearch() bool {
 
 // search is not part of the filters because it has its own field in the app bar
 func (qq *ListDirPartialState) hasActiveFilter() bool {
-	return qq.DocumentTypeID != 0 || len(qq.CheckedTagIDs) > 0 || len(qq.PropertyValues) > 0
+	return qq.DocumentTypeID != 0 || len(qq.CheckedTagIDs) > 0 ||
+		len(qq.PropertyValues) > 0 || len(qq.FileTypes) > 0
 }
 
 func (qq *ListDirPartialState) resetFilters() {
 	qq.DocumentTypeID = 0
 	qq.CheckedTagIDs = nil
 	qq.PropertyValues = nil
+	qq.FileTypes = nil
 }
 
 func (qq *ListDirPartialState) normalizeSortBy() {
@@ -526,6 +529,7 @@ func (qq *ListDirPartial) filesList(
 				event.FilterTagsChanged.Handler(),
 				event.DocumentTypeFilterChanged.Handler(),
 				event.PropertyFilterChanged.Handler(),
+				event.FileTypeFilterChanged.Handler(),
 				event.FolderModeToggled.Handler(),
 				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
 				event.FileUploaded.Handler(),
@@ -965,6 +969,7 @@ func (qq *ListDirPartial) filtersButton(
 				event.FilterTagsChanged,
 				event.DocumentTypeFilterChanged,
 				event.PropertyFilterChanged,
+				event.FileTypeFilterChanged,
 				event.SideSheetToggled,
 			),
 		},

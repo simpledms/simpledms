@@ -2,6 +2,27 @@
 	"language": "en",
 	"messages": [
 		{
+			"id": "File types",
+			"message": "File types",
+			"translation": "File types",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "No extension",
+			"message": "No extension",
+			"translation": "No extension",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "No file types available yet.",
+			"message": "No file types available yet.",
+			"translation": "No file types available yet.",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
 			"id": "Maintenance mode",
 			"message": "Maintenance mode",
 			"translation": "Maintenance mode",
