@@ -13,6 +13,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -99,6 +100,11 @@ func (qq *S3FileSystem) StorageQuota() *StorageQuota {
 
 func (qq *S3FileSystem) IsFileEncryptionDisabled() bool {
 	return qq.disableFileEncryption
+}
+
+// BucketName returns the bucket used for file storage.
+func (qq *S3FileSystem) BucketName() string {
+	return qq.bucketName
 }
 
 // caller has to close io.ReadCloser
@@ -241,6 +247,126 @@ func (qq *S3FileSystem) UnsafeObjectSizes(ctx context.Context, prefix string) (m
 	}
 
 	return sizesByObjectName, nil
+}
+
+// UnsafeVerifyStoredObject reads one object into a local snapshot while verifying its entire
+// decoded content. The caller must compare its hashes with the trusted record and close it.
+// Unsafe because the caller supplies the object name and identity without a TenantContext.
+func (qq *S3FileSystem) UnsafeVerifyStoredObject(
+	ctx context.Context,
+	identity *age.X25519Identity,
+	objectName string,
+) (*VerifiedStoredObject, error) {
+	localFile, err := os.CreateTemp("", "simpledms-verified-object-*")
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	verified := newVerifiedStoredObject(localFile)
+	isVerified := false
+	defer func() {
+		if !isVerified {
+			if err := verified.Close(); err != nil {
+				log.Println(err)
+			}
+		}
+	}()
+
+	object, err := qq.client.GetObject(ctx, qq.bucketName, objectName, minio.GetObjectOptions{})
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	storage := &hashingWriter{
+		w:      localFile,
+		sha256: sha256.New(),
+		crc32c: crc32.New(crc32.MakeTable(crc32.Castagnoli)),
+	}
+	contentSize, contentSHA256, readErr := qq.verifyStoredContent(
+		io.TeeReader(object, storage), identity,
+	)
+	err = errors.Join(readErr, object.Close())
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	verified.result = savedFileResult{
+		fileSize:      contentSize,
+		contentSHA256: contentSHA256,
+		storageSize:   storage.count,
+		storageSHA256: hex.EncodeToString(storage.sha256.Sum(nil)),
+		storageCRC32C: base64.StdEncoding.EncodeToString(storage.crc32c.Sum(nil)),
+	}
+	isVerified = true
+	return verified, nil
+}
+
+func (qq *S3FileSystem) verifyStoredContent(
+	stored io.Reader,
+	identity *age.X25519Identity,
+) (int64, string, error) {
+	compressed := stored
+	if !qq.disableFileEncryption {
+		if identity == nil {
+			return 0, "", errors.New("file encryption identity is not available")
+		}
+		var err error
+		compressed, err = age.Decrypt(stored, identity)
+		if err != nil {
+			return 0, "", err
+		}
+	}
+	content, err := gzip.NewReader(compressed)
+	if err != nil {
+		return 0, "", err
+	}
+	hasher := sha256.New()
+	size, readErr := io.Copy(hasher, content)
+	if err := errors.Join(readErr, content.Close()); err != nil {
+		return 0, "", err
+	}
+	return size, hex.EncodeToString(hasher.Sum(nil)), nil
+}
+
+// UnsafeRecoverVerifiedTenantObject uploads a verified snapshot to a fresh tenant object and
+// returns its storage filename. It does not update the database or remove any storage objects.
+// Unsafe because the caller must authorize the tenant and verify the snapshot against its record.
+func (qq *S3FileSystem) UnsafeRecoverVerifiedTenantObject(
+	ctx context.Context,
+	tenantID string,
+	originalFilename string,
+	verified *VerifiedStoredObject,
+) (string, error) {
+	if !filenamex.IsAllowed(tenantID) || tenantID == "." ||
+		!filenamex.IsAllowed(originalFilename) || originalFilename == "." ||
+		verified == nil || verified.file == nil {
+		return "", e.NewHTTPErrorf(http.StatusConflict, "Invalid file recovery location.")
+	}
+	if _, err := verified.file.Seek(0, io.SeekStart); err != nil {
+		log.Println(err)
+		return "", err
+	}
+	storageFilename := qq.storageFilename(originalFilename, util.NewPublicID())
+	objectName := filepath.Join(pathx.S3StoragePrefix(tenantID), storageFilename)
+	options := minio.PutObjectOptions{
+		NumThreads: 2,
+		PartSize:   8 * 1024 * 1024,
+	}
+	options.SetMatchETagExcept("*")
+	_, err := qq.client.PutObject(
+		ctx, qq.bucketName, objectName, verified.file, verified.StorageSize(), options,
+	)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+	if err := qq.verifyObject(
+		ctx, objectName, verified.StorageSize(), verified.StorageSHA256(),
+	); err != nil {
+		log.Println(err)
+		return "", err
+	}
+	return storageFilename, nil
 }
 
 // used for restore of backup
