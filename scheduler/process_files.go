@@ -30,6 +30,10 @@ const (
 	orphanTemporaryObjectGrace        = 24 * time.Hour
 	orphanTemporaryObjectScanInterval = time.Hour
 	temporaryAccountFileExpiry        = 15 * time.Minute
+	// Each copy attempt can download and hash the whole object, so a failing file must not be
+	// retried on every run. The delay stays well below the hour after which the file check
+	// reports a file as not finalized.
+	failedCopyRetryDelay = 5 * time.Minute
 )
 
 func (qq *Scheduler) processFiles() {
@@ -71,10 +75,14 @@ func (qq *Scheduler) recoverStaleTenantUploads(ctx context.Context) {
 			qq.cleanupStaleWebDAVResource(ctx, tenantDB, resource)
 		}
 
+		// Unfinished uploads are never copied, but the redundant condition lets SQLite use the
+		// partial index storedfile_copy_pending instead of scanning all stored files.
 		files := tenantDB.ReadOnlyConn.StoredFile.Query().
 			Where(
 				storedfile.UploadSucceededAtIsNil(),
 				storedfile.UploadLastProgressAtLT(threshold),
+				storedfile.CopiedToFinalDestinationAtIsNil(),
+				storedfile.DeletedTemporaryFileAtIsNil(),
 			).
 			Order(storedfile.ByUploadLastProgressAt(sql.OrderAsc()), storedfile.ByID()).
 			Limit(defaultSchedulerBatchSize).
@@ -164,6 +172,13 @@ func (qq *Scheduler) cleanupStaleStoredFile(
 	if qq.s3Client != nil && objectName != "" {
 		if !qq.deleteTemporaryObject(ctx, objectName) {
 			return false
+		}
+		err = tenantDB.ReadWriteConn.StoredFile.UpdateOneID(filex.ID).
+			SetDeletedTemporaryFileAt(time.Now()).
+			Exec(ctx)
+		if err != nil {
+			// the object is gone, so the cleanup succeeded; a later run just deletes it again
+			log.Println(err)
 		}
 	}
 	return true
@@ -535,16 +550,7 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 		// these columns... a transaction (especially if all are read at once) could block the
 		// database to long and the user might not be able to write to the db...
 
-		// Prioritize recent uploads so stale or orphaned rows cannot delay current work.
-		filesToCopy := tenantDB.ReadOnlyConn.StoredFile.Query().
-			Where(
-				storedfile.UploadSucceededAtNotNil(),
-				storedfile.CopiedToFinalDestinationAtIsNil(),
-				storedfile.DeletedTemporaryFileAtIsNil(), // not necessary, just for safety
-			).
-			Order(storedfile.ByID(sql.OrderAsc())).
-			Limit(defaultSchedulerBatchSize).
-			AllX(ctx)
+		filesToCopy := qq.tempFilesToCopy(ctx, tenantID, tenantDB, time.Now())
 
 		tenantx := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
 
@@ -565,12 +571,60 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 			)
 			if err != nil {
 				log.Println(err)
+				qq.delayCopyRetry(tenantID, fileToCopy.ID, time.Now())
 				continue
 			}
 		}
 
 		return true
 	})
+}
+
+func (qq *Scheduler) tempFilesToCopy(
+	ctx context.Context,
+	tenantID int64,
+	tenantDB *sqlx.TenantDB,
+	now time.Time,
+) []*enttenant.StoredFile {
+	// Prioritize recent uploads so stale or orphaned rows cannot delay current work.
+	return tenantDB.ReadOnlyConn.StoredFile.Query().
+		Where(
+			storedfile.UploadSucceededAtNotNil(),
+			storedfile.CopiedToFinalDestinationAtIsNil(),
+			storedfile.DeletedTemporaryFileAtIsNil(), // not necessary, just for safety
+			// excluded in the query, so that failing files cannot fill the batch
+			storedfile.IDNotIn(qq.copyRetryDelayedIDs(tenantID, now)...),
+		).
+		Order(storedfile.ByID(sql.OrderAsc())).
+		Limit(defaultSchedulerBatchSize).
+		AllX(ctx)
+}
+
+func (qq *Scheduler) delayCopyRetry(tenantID int64, storedFileID int64, now time.Time) {
+	if qq.copyRetryNotBefore == nil {
+		qq.copyRetryNotBefore = make(map[int64]map[int64]time.Time)
+	}
+	if qq.copyRetryNotBefore[tenantID] == nil {
+		qq.copyRetryNotBefore[tenantID] = make(map[int64]time.Time)
+	}
+	qq.copyRetryNotBefore[tenantID][storedFileID] = now.Add(failedCopyRetryDelay)
+}
+
+// copyRetryDelayedIDs returns the stored files of the tenant whose copy must not be retried yet
+// and forgets the others.
+func (qq *Scheduler) copyRetryDelayedIDs(tenantID int64, now time.Time) []int64 {
+	delayedIDs := make([]int64, 0, len(qq.copyRetryNotBefore[tenantID]))
+	for storedFileID, notBefore := range qq.copyRetryNotBefore[tenantID] {
+		if now.Before(notBefore) {
+			delayedIDs = append(delayedIDs, storedFileID)
+			continue
+		}
+		delete(qq.copyRetryNotBefore[tenantID], storedFileID)
+	}
+	if len(delayedIDs) == 0 {
+		delete(qq.copyRetryNotBefore, tenantID)
+	}
+	return delayedIDs
 }
 
 func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {

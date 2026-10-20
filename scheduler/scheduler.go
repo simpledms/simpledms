@@ -33,6 +33,9 @@ type Scheduler struct {
 	gotenbergClientNilable *gotenberg.GotenbergClient
 	previewDiscoveryCursor map[*sqlx.TenantDB]int64
 	lastOrphanObjectScan   time.Time
+	// tenant ID -> stored file ID -> earliest retry of a failed copy to the final destination;
+	// kept in memory, so a restart retries all files once
+	copyRetryNotBefore map[int64]map[int64]time.Time
 }
 
 func NewScheduler(

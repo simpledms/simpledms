@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -739,6 +740,75 @@ func TestRecoverStaleTenantUploadsFindsUnfinishedStoredFile(t *testing.T) {
 	}
 }
 
+func TestRecoverStaleTenantUploadsDeletesTemporaryObjectOnce(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
+	tenantDB := newTestTenantDB(t)
+	tenantDBs := tenantdbs.NewTenantDBs()
+	tenantDBs.Store(1, tenantDB)
+	old := time.Now().Add(-2 * time.Hour)
+	storedFilex := createStoredFileWithTempObject(t, ctx, tenantDB, "tenant/tmp", "failed.pdf")
+	storedFilex.Update().
+		SetUploadFailedAt(old).
+		SetUploadLastProgressAt(old).
+		ExecX(ctxWithIncomplete)
+
+	var deleteRequests atomic.Int64
+	scheduler := &Scheduler{
+		tenantDBs: tenantDBs,
+		s3Client: newTestS3Client(t, func(rw http.ResponseWriter, req *http.Request) {
+			if req.Method == http.MethodDelete {
+				deleteRequests.Add(1)
+			}
+			rw.WriteHeader(http.StatusNoContent)
+		}),
+		bucketName: "bucket",
+	}
+	scheduler.recoverStaleTenantUploads(ctx)
+	scheduler.recoverStaleTenantUploads(ctx)
+
+	if got := deleteRequests.Load(); got != 1 {
+		t.Fatalf("temporary object delete requests = %d, want 1", got)
+	}
+	storedFilex = tenantDB.ReadOnlyConn.StoredFile.GetX(ctxWithIncomplete, storedFilex.ID)
+	if storedFilex.DeletedTemporaryFileAt == nil {
+		t.Fatal("deleted temporary object of failed upload was not marked as deleted")
+	}
+}
+
+func TestTempFilesToCopySkipsFailedCopyUntilRetryDelayPassed(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantDB := newTestTenantDB(t)
+	now := time.Now()
+	failed := createStoredFileWithTempObject(t, ctx, tenantDB, "tenant/tmp", "failed.pdf")
+	failed = failed.Update().SetUploadSucceededAt(now).SaveX(ctx)
+	pending := createStoredFileWithTempObject(t, ctx, tenantDB, "tenant/tmp", "pending.pdf")
+	pending = pending.Update().SetUploadSucceededAt(now).SaveX(ctx)
+	scheduler := &Scheduler{}
+
+	scheduler.delayCopyRetry(1, failed.ID, now)
+
+	duringDelay := now.Add(failedCopyRetryDelay - time.Second)
+	filesToCopy := scheduler.tempFilesToCopy(ctx, 1, tenantDB, duringDelay)
+	if len(filesToCopy) != 1 || filesToCopy[0].ID != pending.ID {
+		t.Fatalf("files to copy during retry delay = %v, want only %d",
+			storedFileIDs(filesToCopy), pending.ID)
+	}
+	filesToCopy = scheduler.tempFilesToCopy(ctx, 1, tenantDB, now.Add(failedCopyRetryDelay))
+	if len(filesToCopy) != 2 {
+		t.Fatalf("files to copy after retry delay = %v, want %d and %d",
+			storedFileIDs(filesToCopy), failed.ID, pending.ID)
+	}
+}
+
+func storedFileIDs(files []*enttenant.StoredFile) []int64 {
+	ids := make([]int64, 0, len(files))
+	for _, filex := range files {
+		ids = append(ids, filex.ID)
+	}
+	return ids
+}
+
 func TestClearAccountConversionClaimUsesTokenAndRestoresExpiry(t *testing.T) {
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	mainDB := newTestMainDB(t)
@@ -954,9 +1024,15 @@ func newTestTenantDB(t *testing.T) *sqlx.TenantDB {
 func newMissingObjectS3Client(t *testing.T) *minio.Client {
 	t.Helper()
 
-	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, _ *http.Request) {
+	return newTestS3Client(t, func(rw http.ResponseWriter, _ *http.Request) {
 		rw.WriteHeader(http.StatusNotFound)
-	}))
+	})
+}
+
+func newTestS3Client(t *testing.T, handler http.HandlerFunc) *minio.Client {
+	t.Helper()
+
+	server := httptest.NewServer(handler)
 	t.Cleanup(server.Close)
 
 	client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
