@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -242,6 +243,48 @@ func TestS3FileSystemRemoveObjectCompletelyDeletesRetainedVersions(t *testing.T)
 	defer mu.Unlock()
 	if fmt.Sprint(deletedVersions) != "[v1 marker1]" {
 		t.Fatalf("expected retained versions to be deleted, got %v", deletedVersions)
+	}
+}
+
+func TestS3FileSystemUnsafeObjectSizesListsAllPagesBelowPrefix(t *testing.T) {
+	pages := map[string]string{
+		"":     `<Contents><Key>tenants/a/files/first.gz.age</Key><Size>3</Size></Contents><IsTruncated>true</IsTruncated><NextContinuationToken>next</NextContinuationToken>`,
+		"next": `<Contents><Key>tenants/a/files/second.gz.age</Key><Size>5</Size></Contents><IsTruncated>false</IsTruncated>`,
+	}
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		query := req.URL.Query()
+		if req.Method != http.MethodGet || query.Get("list-type") != "2" || query.Get("prefix") != "tenants/a/files/" {
+			t.Errorf("unexpected S3 request: %s %s", req.Method, req.URL.String())
+			rw.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		_, _ = fmt.Fprintf(rw, `<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Name>bucket</Name><Prefix>tenants/a/files/</Prefix><MaxKeys>1</MaxKeys>%s
+</ListBucketResult>`, pages[query.Get("continuation-token")])
+	}))
+	defer server.Close()
+
+	client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
+		Creds:  credentials.NewStaticV4("access-key", "secret-key", ""),
+		Region: "us-east-1",
+	})
+	if err != nil {
+		t.Fatalf("create S3 client: %v", err)
+	}
+	fileSystemx := &S3FileSystem{client: client, bucketName: "bucket"}
+
+	sizesByObjectName, err := fileSystemx.UnsafeObjectSizes(context.Background(), "tenants/a/files/")
+	if err != nil {
+		t.Fatalf("object sizes: %v", err)
+	}
+
+	expected := map[string]int64{
+		"tenants/a/files/first.gz.age":  3,
+		"tenants/a/files/second.gz.age": 5,
+	}
+	if !maps.Equal(sizesByObjectName, expected) {
+		t.Fatalf("expected %v, got %v", expected, sizesByObjectName)
 	}
 }
 

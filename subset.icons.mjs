@@ -6,6 +6,9 @@
 // kept if the font has an icon for it. Stored icons (Spaces, document types, Tags) come from
 // the built-in library's Go literals, so they are covered as well.
 //
+// Pass additional source directories after `--` for applications embedding SimpleDMS,
+// e.g. `npm run subset-icons -- ../action`. Paths are relative to this working directory.
+//
 // The font maps names to icons with ligatures. Subsetting by text would keep every ligature
 // whose letters remain, so the icons' ligature glyphs are selected explicitly and layout
 // closure is disabled.
@@ -16,7 +19,9 @@ import fontverter from 'fontverter';
 
 const sourceFontPath = 'ui/uix/web/fonts/material-symbols-outlined.woff2';
 const targetFontPath = 'ui/uix/web/assets/fonts/material-symbols-outlined.woff2';
-const sourceRoots = ['action', 'common', 'core', 'model', 'pluginx', 'server', 'ui'];
+const sourceRoots = [
+	'action', 'common', 'core', 'model', 'pluginx', 'server', 'ui', ...process.argv.slice(2),
+];
 const skippedDirs = new Set(['node_modules', 'vendor', '.git']);
 const iconNameChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';
 const isIconNameCandidate = value => /^[a-z0-9][a-z0-9_]{1,62}$/.test(value);

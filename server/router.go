@@ -305,6 +305,12 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		defer func() {
 			// tested and works
 			if r := recover(); r != nil {
+				if r == http.ErrAbortHandler {
+					// Streaming handlers abort after the response has started, so that clients
+					// discard it instead of receiving an appended error page; see recoveryHandler.
+					rollbackRequestTransactions(mainTx, nilableTenantTx)
+					panic(r)
+				}
 				qq.logRecoveredPanic(reqx.Request, r)
 
 				// cannot use errors.As because r is `any` not `error`

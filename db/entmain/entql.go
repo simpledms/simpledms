@@ -59,6 +59,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			account.FieldTwoFactorAuthRecoveryCodeSalt:      {Type: field.TypeString, Column: account.FieldTwoFactorAuthRecoveryCodeSalt},
 			account.FieldTwoFactorAuthRecoveryCodeHashes:    {Type: field.TypeJSON, Column: account.FieldTwoFactorAuthRecoveryCodeHashes},
 			account.FieldLastLoginAttemptAt:                 {Type: field.TypeTime, Column: account.FieldLastLoginAttemptAt},
+			account.FieldLastLoginAt:                        {Type: field.TypeTime, Column: account.FieldLastLoginAt},
 			account.FieldPasskeyLoginEnabled:                {Type: field.TypeBool, Column: account.FieldPasskeyLoginEnabled},
 			account.FieldPasskeyRecoveryCodeSalt:            {Type: field.TypeString, Column: account.FieldPasskeyRecoveryCodeSalt},
 			account.FieldPasskeyRecoveryCodeHashes:          {Type: field.TypeJSON, Column: account.FieldPasskeyRecoveryCodeHashes},
@@ -945,6 +946,11 @@ func (f *AccountFilter) WhereTwoFactorAuthRecoveryCodeHashes(p entql.BytesP) {
 // WhereLastLoginAttemptAt applies the entql time.Time predicate on the last_login_attempt_at field.
 func (f *AccountFilter) WhereLastLoginAttemptAt(p entql.TimeP) {
 	f.Where(p.Field(account.FieldLastLoginAttemptAt))
+}
+
+// WhereLastLoginAt applies the entql time.Time predicate on the last_login_at field.
+func (f *AccountFilter) WhereLastLoginAt(p entql.TimeP) {
+	f.Where(p.Field(account.FieldLastLoginAt))
 }
 
 // WherePasskeyLoginEnabled applies the entql bool predicate on the passkey_login_enabled field.

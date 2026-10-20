@@ -316,6 +316,13 @@
             "fuzzy": true
         },
         {
+            "id": "Request payload is too large.",
+            "message": "Request payload is too large.",
+            "translation": "Request payload is too large.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Invalid request payload.",
             "message": "Invalid request payload.",
             "translation": "Invalid request payload.",
@@ -630,13 +637,6 @@
             "fuzzy": true
         },
         {
-            "id": "Could not render widget.",
-            "message": "Could not render widget.",
-            "translation": "Could not render widget.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Files",
             "message": "Files",
             "translation": "Files",
@@ -668,6 +668,13 @@
             "id": "No file ID provided.",
             "message": "No file ID provided.",
             "translation": "No file ID provided.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not render widget.",
+            "message": "Could not render widget.",
+            "translation": "Could not render widget.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2390,6 +2397,20 @@
             "fuzzy": true
         },
         {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Revoked",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": "Open tasks",
@@ -2760,20 +2781,6 @@
             "id": "Filter MCP credentials",
             "message": "Filter MCP credentials",
             "translation": "Filter MCP credentials",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Active",
-            "message": "Active",
-            "translation": "Active",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": "Revoked",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4713,6 +4720,13 @@
             "fuzzy": true
         },
         {
+            "id": "Form is too large.",
+            "message": "Form is too large.",
+            "translation": "Form is too large.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Cannot parse form.",
             "message": "Cannot parse form.",
             "translation": "Cannot parse form.",
@@ -5995,6 +6009,13 @@
             "fuzzy": true
         },
         {
+            "id": "Legal",
+            "message": "Legal",
+            "translation": "Legal",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Imprint",
             "message": "Imprint",
             "translation": "Imprint",
@@ -6247,16 +6268,16 @@
             "fuzzy": true
         },
         {
-            "id": "02-01-2006 at 15:04 o'clock",
-            "message": "02-01-2006 at 15:04 o'clock",
-            "translation": "02-01-2006 at 15:04 o'clock",
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": "SimpleDMS password reset",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "SimpleDMS password reset",
-            "message": "SimpleDMS password reset",
-            "translation": "SimpleDMS password reset",
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": "02-01-2006 at 15:04 o'clock",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7554,6 +7575,65 @@
             "fuzzy": true
         },
         {
+            "id": "Could not claim uploaded file.",
+            "message": "Could not claim uploaded file.",
+            "translation": "Could not claim uploaded file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify staged file.",
+            "message": "Could not verify staged file.",
+            "translation": "Could not verify staged file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App not unlocked yet.",
+            "message": "App not unlocked yet.",
+            "translation": "App not unlocked yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
+            "translation": "Storage filename mismatch.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Staged file integrity mismatch.",
+            "message": "Staged file integrity mismatch.",
+            "translation": "Staged file integrity mismatch.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file is already being processed.",
+            "message": "Uploaded file is already being processed.",
+            "translation": "Uploaded file is already being processed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": [
+                "tenantDatabaseNotFoundMessage",
+                "Organization database not found."
+            ],
+            "message": "Organization database not found.",
+            "translation": "Organization database not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file processing was taken over.",
+            "message": "Uploaded file processing was taken over.",
+            "translation": "Uploaded file processing was taken over.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Invalid download range.",
             "message": "Invalid download range.",
             "translation": "Invalid download range.",
@@ -7704,6 +7784,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid storage filename.",
+            "message": "Invalid storage filename.",
+            "translation": "Invalid storage filename.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Storage path is empty.",
             "message": "Storage path is empty.",
             "translation": "Storage path is empty.",
@@ -7776,65 +7863,6 @@
             "id": "Could not get x25519 identity.",
             "message": "Could not get x25519 identity.",
             "translation": "Could not get x25519 identity.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Storage filename mismatch.",
-            "message": "Storage filename mismatch.",
-            "translation": "Storage filename mismatch.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not claim uploaded file.",
-            "message": "Could not claim uploaded file.",
-            "translation": "Could not claim uploaded file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not verify staged file.",
-            "message": "Could not verify staged file.",
-            "translation": "Could not verify staged file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "App not unlocked yet.",
-            "message": "App not unlocked yet.",
-            "translation": "App not unlocked yet.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Staged file integrity mismatch.",
-            "message": "Staged file integrity mismatch.",
-            "translation": "Staged file integrity mismatch.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Uploaded file is already being processed.",
-            "message": "Uploaded file is already being processed.",
-            "translation": "Uploaded file is already being processed.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": [
-                "tenantDatabaseNotFoundMessage",
-                "Organization database not found."
-            ],
-            "message": "Organization database not found.",
-            "translation": "Organization database not found.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Uploaded file processing was taken over.",
-            "message": "Uploaded file processing was taken over.",
-            "translation": "Uploaded file processing was taken over.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8637,16 +8665,44 @@
             "fuzzy": true
         },
         {
-            "id": "Metadata already exists or is still in use.",
-            "message": "Metadata already exists or is still in use.",
-            "translation": "Metadata already exists or is still in use.",
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
+            "translation": "File ID and Tag ID are required.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Invalid page or search range.",
-            "message": "Invalid page or search range.",
-            "translation": "Invalid page or search range.",
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": "Tag not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": "File ID and field ID are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": "Field not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": "Exactly one typed value is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
+            "translation": "Date must use YYYY-MM-DD.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8654,6 +8710,27 @@
             "id": "File ID is required.",
             "message": "File ID is required.",
             "translation": "File ID is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
+            "translation": "File ID and document type ID are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
+            "translation": "Document type not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": "Invalid page or search range.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8707,23 +8784,23 @@
             "fuzzy": true
         },
         {
-            "id": "Tag not found.",
-            "message": "Tag not found.",
-            "translation": "Tag not found.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Document type not found.",
-            "message": "Document type not found.",
-            "translation": "Document type not found.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Invalid base64 content.",
             "message": "Invalid base64 content.",
             "translation": "Invalid base64 content.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A file with this name already exists.",
+            "message": "A file with this name already exists.",
+            "translation": "A file with this name already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
+            "translation": "Metadata already exists or is still in use.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8766,13 +8843,6 @@
             "id": "A public metadata ID is required.",
             "message": "A public metadata ID is required.",
             "translation": "A public metadata ID is required.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Field not found.",
-            "message": "Field not found.",
-            "translation": "Field not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8836,48 +8906,6 @@
             "id": "Note title or body is too long.",
             "message": "Note title or body is too long.",
             "translation": "Note title or body is too long.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "A file with this name already exists.",
-            "message": "A file with this name already exists.",
-            "translation": "A file with this name already exists.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File ID and Tag ID are required.",
-            "message": "File ID and Tag ID are required.",
-            "translation": "File ID and Tag ID are required.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File ID and field ID are required.",
-            "message": "File ID and field ID are required.",
-            "translation": "File ID and field ID are required.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Exactly one typed value is required.",
-            "message": "Exactly one typed value is required.",
-            "translation": "Exactly one typed value is required.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Date must use YYYY-MM-DD.",
-            "message": "Date must use YYYY-MM-DD.",
-            "translation": "Date must use YYYY-MM-DD.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File ID and document type ID are required.",
-            "message": "File ID and document type ID are required.",
-            "translation": "File ID and document type ID are required.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

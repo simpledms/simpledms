@@ -66,6 +66,8 @@ const (
 	FieldTwoFactorAuthRecoveryCodeHashes = "two_factor_auth_recovery_code_hashes"
 	// FieldLastLoginAttemptAt holds the string denoting the last_login_attempt_at field in the database.
 	FieldLastLoginAttemptAt = "last_login_attempt_at"
+	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
+	FieldLastLoginAt = "last_login_at"
 	// FieldPasskeyLoginEnabled holds the string denoting the passkey_login_enabled field in the database.
 	FieldPasskeyLoginEnabled = "passkey_login_enabled"
 	// FieldPasskeyRecoveryCodeSalt holds the string denoting the passkey_recovery_code_salt field in the database.
@@ -156,6 +158,7 @@ var Columns = []string{
 	FieldTwoFactorAuthRecoveryCodeSalt,
 	FieldTwoFactorAuthRecoveryCodeHashes,
 	FieldLastLoginAttemptAt,
+	FieldLastLoginAt,
 	FieldPasskeyLoginEnabled,
 	FieldPasskeyRecoveryCodeSalt,
 	FieldPasskeyRecoveryCodeHashes,
@@ -356,6 +359,11 @@ func ByTwoFactorAuthRecoveryCodeSalt(opts ...sql.OrderTermOption) OrderOption {
 // ByLastLoginAttemptAt orders the results by the last_login_attempt_at field.
 func ByLastLoginAttemptAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginAttemptAt, opts...).ToFunc()
+}
+
+// ByLastLoginAt orders the results by the last_login_at field.
+func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
 }
 
 // ByPasskeyLoginEnabled orders the results by the passkey_login_enabled field.

@@ -11,6 +11,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/privacy"
 	"github.com/simpledms/simpledms/db/entx"
@@ -75,7 +76,9 @@ func TestMCPConnectionMigrationFreshAndPopulated(t *testing.T) {
 			if client.MCPCredential.Query().CountX(ctx) != 0 {
 				t.Fatal("migration fabricated credentials")
 			}
-			if actor != nil && client.Account.GetX(ctx, actor.ID).Email != actor.Email {
+			// Project only fields present at this historical migration version.
+			if actor != nil && client.Account.Query().Where(account.ID(actor.ID)).
+				Select(account.FieldEmail).StringX(ctx) != actor.Email.String() {
 				t.Fatal("migration changed existing account")
 			}
 		})

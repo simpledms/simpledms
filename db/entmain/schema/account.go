@@ -62,6 +62,7 @@ func (Account) Fields() []ent.Field {
 		field.Strings("two_factor_auth_recovery_code_hashes").Default([]string{}).Sensitive(),
 
 		field.Time("last_login_attempt_at").Default(time.Time{}).Optional(),
+		field.Time("last_login_at").Optional().Nillable(),
 
 		field.Bool("passkey_login_enabled").Default(false),
 		field.String("passkey_recovery_code_salt").Default("").Sensitive(),

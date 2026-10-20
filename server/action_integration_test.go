@@ -498,6 +498,11 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	email := "user@example.com"
 	password := "supersecret"
 	createAccount(t, harness.mainDB, email, password)
+	previousLogin := time.Now().Add(-time.Hour).Truncate(time.Second)
+	harness.mainDB.ReadWriteConn.Account.Update().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		SetLastLoginAt(previousLogin).
+		ExecX(context.Background())
 	harness.mainDB.ReadWriteConn.Account.Update().
 		Where(account.EmailEQ(entx.NewCIText(email))).
 		SetRole(mainrole.Admin).
@@ -521,7 +526,6 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	if redirect := rr.Header().Get("HX-Redirect"); redirect != route.Dashboard() {
 		t.Fatalf("expected redirect %q, got %q", route.Dashboard(), redirect)
 	}
-
 	resp := rr.Result()
 	cookies := resp.Cookies()
 	if len(cookies) == 0 {
@@ -543,6 +547,16 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 1 {
 		t.Fatalf("expected 1 session, got %d", sessionCount)
+	}
+
+	accountx := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).
+		OnlyX(context.Background())
+	if accountx.LastLoginAt == nil {
+		t.Fatal("expected successful sign-in to record the last login")
+	}
+	if !accountx.LastLoginAt.After(previousLogin) {
+		t.Fatalf("expected successful sign-in to advance last login past %s, got %s", previousLogin, accountx.LastLoginAt)
 	}
 }
 
@@ -637,6 +651,11 @@ func TestSignInCmdRejectsWrongPassword(t *testing.T) {
 	email := "wrong-password@example.com"
 	password := "supersecret"
 	createAccount(t, harness.mainDB, email, password)
+	previousLogin := time.Now().Add(-time.Hour).Truncate(time.Second)
+	harness.mainDB.ReadWriteConn.Account.Update().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		SetLastLoginAt(previousLogin).
+		ExecX(context.Background())
 
 	form := url.Values{}
 	form.Set("Email", email)
@@ -664,6 +683,13 @@ func TestSignInCmdRejectsWrongPassword(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 0 {
 		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+
+	accountx := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).
+		OnlyX(context.Background())
+	if accountx.LastLoginAt == nil || !accountx.LastLoginAt.Equal(previousLogin) {
+		t.Fatalf("expected failed sign-in to preserve last login %s, got %v", previousLogin, accountx.LastLoginAt)
 	}
 }
 
@@ -802,6 +828,11 @@ func TestSignInCmdRejectsPasswordWhenPasskeyEnabled(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 0 {
 		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+	updatedAccountx := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
+	if updatedAccountx.LastLoginAt != nil {
+		t.Fatalf("expected rejected passkey-required sign-in to leave last login unset, got %s", updatedAccountx.LastLoginAt)
 	}
 }
 
@@ -1312,6 +1343,11 @@ func TestPasskeyRecoverySignInCmdConsumesRecoveryCode(t *testing.T) {
 
 	if redirect := rr.Header().Get("HX-Redirect"); redirect != route.Dashboard() {
 		t.Fatalf("expected redirect %q, got %q", route.Dashboard(), redirect)
+	}
+	updatedLogin := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background()).LastLoginAt
+	if updatedLogin == nil {
+		t.Fatal("expected successful recovery sign-in to record last login")
 	}
 
 	updatedAccountx := harness.mainDB.ReadWriteConn.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())

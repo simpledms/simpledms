@@ -135,7 +135,7 @@ func (qq *BrowsePage) widget(
 		content = &widget.View{
 			Children: []widget.IWidget{
 				listDetailLayout,
-				autil.DefaultSideSheetTrigger("browseDefaultSideSheetTrigger", widget.HTMXAttrs{
+				autil.DefaultSideSheetTrigger("browse", widget.HTMXAttrs{
 					HxPost: qq.actions.FiltersDialog.Endpoint(),
 					HxVals: util.JSON(
 						qq.actions.FiltersDialog.Data(dir.PublicID.String()),

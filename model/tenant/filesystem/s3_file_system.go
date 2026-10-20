@@ -217,6 +217,32 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 	return pipeReader, nil
 }
 
+// UnsafeObjectSizes returns the size of each object below prefix, keyed by object name. Lists up to
+// 1000 objects per request instead of a request per object, so that large tenants can be checked
+// quickly.
+//
+// Unsafe because it is not bound to a ctxx.TenantContext, see UnsafeOpenFile.
+func (qq *S3FileSystem) UnsafeObjectSizes(ctx context.Context, prefix string) (map[string]int64, error) {
+	// stops the listing goroutine of minio when returning before the listing is drained
+	listCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	sizesByObjectName := map[string]int64{}
+	listOptions := minio.ListObjectsOptions{
+		Prefix:    prefix,
+		Recursive: true,
+	}
+	for object := range qq.client.ListObjects(listCtx, qq.bucketName, listOptions) {
+		if object.Err != nil {
+			log.Println(object.Err)
+			return nil, object.Err
+		}
+		sizesByObjectName[object.Key] = object.Size
+	}
+
+	return sizesByObjectName, nil
+}
+
 // used for restore of backup
 func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
 	ctx context.Context,

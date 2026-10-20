@@ -48,12 +48,13 @@ func isDefaultCredentialStatusFilter(statusValues []string) bool {
 	return err != nil || (showActive && !showRevoked)
 }
 
-// newCredentialFilterButton marks the button as selected while a non-default filter is
-// active. It is wrapped in a container so list refreshes can swap it out-of-band.
+// newCredentialFilterButton toggles the page's filter side sheet and marks the button as
+// selected while a non-default filter is active. It is wrapped in a container so list
+// refreshes can swap it out-of-band.
 func newCredentialFilterButton(
 	id string,
 	tooltip *widget.Text,
-	dialogEndpoint string,
+	dialogID string,
 	statusValues []string,
 	isOOB bool,
 ) *widget.Container {
@@ -74,16 +75,17 @@ func newCredentialFilterButton(
 			Label:      tooltip,
 			IsSelected: !isDefaultCredentialStatusFilter(statusValues),
 			HTMXAttrs: widget.HTMXAttrs{
-				Role:          "button",
-				HxPost:        dialogEndpoint,
-				LoadInPopover: true,
+				Role:     "button",
+				DialogID: dialogID,
 			},
 		},
 	}
 }
 
 // newCredentialStatusFilterDialog renders the status filter side sheet of a credential
-// page; changedEvent refreshes that page's credential list.
+// page; changedEvent refreshes that page's credential list. The sheet is part of the page
+// instead of being loaded afterwards, so it is already open when the page is swapped in
+// during navigation between credential pages and doesn't flicker.
 func newCredentialStatusFilterDialog(
 	id string,
 	headline *widget.Text,
@@ -96,9 +98,11 @@ func newCredentialStatusFilterDialog(
 		Widget: widget.Widget[widget.Dialog]{
 			ID: id,
 		},
-		Headline:     headline,
-		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutSideSheet,
+		Headline:                   headline,
+		IsOpenOnLoadOnLargeScreens: true,
+		// the filter button reopens it after it was closed
+		KeepInDOMOnClose: true,
+		Layout:           widget.DialogLayoutSideSheet,
 		Child: &widget.Container{
 			Widget: widget.Widget[widget.Container]{
 				ID: chipsContainerID,

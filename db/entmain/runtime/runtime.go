@@ -109,15 +109,15 @@ func init() {
 	// account.DefaultLastLoginAttemptAt holds the default value on creation for the last_login_attempt_at field.
 	account.DefaultLastLoginAttemptAt = accountDescLastLoginAttemptAt.Default.(time.Time)
 	// accountDescPasskeyLoginEnabled is the schema descriptor for passkey_login_enabled field.
-	accountDescPasskeyLoginEnabled := accountFields[17].Descriptor()
+	accountDescPasskeyLoginEnabled := accountFields[18].Descriptor()
 	// account.DefaultPasskeyLoginEnabled holds the default value on creation for the passkey_login_enabled field.
 	account.DefaultPasskeyLoginEnabled = accountDescPasskeyLoginEnabled.Default.(bool)
 	// accountDescPasskeyRecoveryCodeSalt is the schema descriptor for passkey_recovery_code_salt field.
-	accountDescPasskeyRecoveryCodeSalt := accountFields[18].Descriptor()
+	accountDescPasskeyRecoveryCodeSalt := accountFields[19].Descriptor()
 	// account.DefaultPasskeyRecoveryCodeSalt holds the default value on creation for the passkey_recovery_code_salt field.
 	account.DefaultPasskeyRecoveryCodeSalt = accountDescPasskeyRecoveryCodeSalt.Default.(string)
 	// accountDescPasskeyRecoveryCodeHashes is the schema descriptor for passkey_recovery_code_hashes field.
-	accountDescPasskeyRecoveryCodeHashes := accountFields[19].Descriptor()
+	accountDescPasskeyRecoveryCodeHashes := accountFields[20].Descriptor()
 	// account.DefaultPasskeyRecoveryCodeHashes holds the default value on creation for the passkey_recovery_code_hashes field.
 	account.DefaultPasskeyRecoveryCodeHashes = accountDescPasskeyRecoveryCodeHashes.Default.([]string)
 	mcpcredentialMixin := schema.MCPCredential{}.Mixin()

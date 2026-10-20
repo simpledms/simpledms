@@ -89,6 +89,7 @@ type AccountMutation struct {
 	two_factor_auth_recovery_code_hashes       *[]string
 	appendtwo_factor_auth_recovery_code_hashes []string
 	last_login_attempt_at                      *time.Time
+	last_login_at                              *time.Time
 	passkey_login_enabled                      *bool
 	passkey_recovery_code_salt                 *string
 	passkey_recovery_code_hashes               *[]string
@@ -1219,6 +1220,55 @@ func (m *AccountMutation) ResetLastLoginAttemptAt() {
 	delete(m.clearedFields, account.FieldLastLoginAttemptAt)
 }
 
+// SetLastLoginAt sets the "last_login_at" field.
+func (m *AccountMutation) SetLastLoginAt(t time.Time) {
+	m.last_login_at = &t
+}
+
+// LastLoginAt returns the value of the "last_login_at" field in the mutation.
+func (m *AccountMutation) LastLoginAt() (r time.Time, exists bool) {
+	v := m.last_login_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastLoginAt returns the old "last_login_at" field's value of the Account entity.
+// If the Account object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AccountMutation) OldLastLoginAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastLoginAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastLoginAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastLoginAt: %w", err)
+	}
+	return oldValue.LastLoginAt, nil
+}
+
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (m *AccountMutation) ClearLastLoginAt() {
+	m.last_login_at = nil
+	m.clearedFields[account.FieldLastLoginAt] = struct{}{}
+}
+
+// LastLoginAtCleared returns if the "last_login_at" field was cleared in this mutation.
+func (m *AccountMutation) LastLoginAtCleared() bool {
+	_, ok := m.clearedFields[account.FieldLastLoginAt]
+	return ok
+}
+
+// ResetLastLoginAt resets all changes to the "last_login_at" field.
+func (m *AccountMutation) ResetLastLoginAt() {
+	m.last_login_at = nil
+	delete(m.clearedFields, account.FieldLastLoginAt)
+}
+
 // SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
 func (m *AccountMutation) SetPasskeyLoginEnabled(b bool) {
 	m.passkey_login_enabled = &b
@@ -1736,7 +1786,7 @@ func (m *AccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AccountMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 28)
 	if m.created_at != nil {
 		fields = append(fields, account.FieldCreatedAt)
 	}
@@ -1806,6 +1856,9 @@ func (m *AccountMutation) Fields() []string {
 	if m.last_login_attempt_at != nil {
 		fields = append(fields, account.FieldLastLoginAttemptAt)
 	}
+	if m.last_login_at != nil {
+		fields = append(fields, account.FieldLastLoginAt)
+	}
 	if m.passkey_login_enabled != nil {
 		fields = append(fields, account.FieldPasskeyLoginEnabled)
 	}
@@ -1872,6 +1925,8 @@ func (m *AccountMutation) Field(name string) (ent.Value, bool) {
 		return m.TwoFactorAuthRecoveryCodeHashes()
 	case account.FieldLastLoginAttemptAt:
 		return m.LastLoginAttemptAt()
+	case account.FieldLastLoginAt:
+		return m.LastLoginAt()
 	case account.FieldPasskeyLoginEnabled:
 		return m.PasskeyLoginEnabled()
 	case account.FieldPasskeyRecoveryCodeSalt:
@@ -1935,6 +1990,8 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldTwoFactorAuthRecoveryCodeHashes(ctx)
 	case account.FieldLastLoginAttemptAt:
 		return m.OldLastLoginAttemptAt(ctx)
+	case account.FieldLastLoginAt:
+		return m.OldLastLoginAt(ctx)
 	case account.FieldPasskeyLoginEnabled:
 		return m.OldPasskeyLoginEnabled(ctx)
 	case account.FieldPasskeyRecoveryCodeSalt:
@@ -2113,6 +2170,13 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLastLoginAttemptAt(v)
 		return nil
+	case account.FieldLastLoginAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastLoginAt(v)
+		return nil
 	case account.FieldPasskeyLoginEnabled:
 		v, ok := value.(bool)
 		if !ok {
@@ -2231,6 +2295,9 @@ func (m *AccountMutation) ClearedFields() []string {
 	if m.FieldCleared(account.FieldLastLoginAttemptAt) {
 		fields = append(fields, account.FieldLastLoginAttemptAt)
 	}
+	if m.FieldCleared(account.FieldLastLoginAt) {
+		fields = append(fields, account.FieldLastLoginAt)
+	}
 	return fields
 }
 
@@ -2265,6 +2332,9 @@ func (m *AccountMutation) ClearField(name string) error {
 		return nil
 	case account.FieldLastLoginAttemptAt:
 		m.ClearLastLoginAttemptAt()
+		return nil
+	case account.FieldLastLoginAt:
+		m.ClearLastLoginAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Account nullable field %s", name)
@@ -2342,6 +2412,9 @@ func (m *AccountMutation) ResetField(name string) error {
 		return nil
 	case account.FieldLastLoginAttemptAt:
 		m.ResetLastLoginAttemptAt()
+		return nil
+	case account.FieldLastLoginAt:
+		m.ResetLastLoginAt()
 		return nil
 	case account.FieldPasskeyLoginEnabled:
 		m.ResetPasskeyLoginEnabled()

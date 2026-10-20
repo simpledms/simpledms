@@ -68,6 +68,8 @@ type Account struct {
 	TwoFactorAuthRecoveryCodeHashes []string `json:"-"`
 	// LastLoginAttemptAt holds the value of the "last_login_attempt_at" field.
 	LastLoginAttemptAt time.Time `json:"last_login_attempt_at,omitempty"`
+	// LastLoginAt holds the value of the "last_login_at" field.
+	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
 	// PasskeyLoginEnabled holds the value of the "passkey_login_enabled" field.
 	PasskeyLoginEnabled bool `json:"passkey_login_enabled,omitempty"`
 	// PasskeyRecoveryCodeSalt holds the value of the "passkey_recovery_code_salt" field.
@@ -174,7 +176,7 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case account.FieldFirstName, account.FieldLastName, account.FieldPasswordSalt, account.FieldPasswordHash, account.FieldTemporaryPasswordSalt, account.FieldTemporaryPasswordHash, account.FieldTemporaryTwoFactorAuthKeyEncrypted, account.FieldTwoFactoryAuthKeyEncrypted, account.FieldTwoFactorAuthRecoveryCodeSalt, account.FieldPasskeyRecoveryCodeSalt:
 			values[i] = new(sql.NullString)
-		case account.FieldCreatedAt, account.FieldUpdatedAt, account.FieldDeletedAt, account.FieldSubscribedToNewsletterAt, account.FieldTemporaryPasswordExpiresAt, account.FieldLastLoginAttemptAt:
+		case account.FieldCreatedAt, account.FieldUpdatedAt, account.FieldDeletedAt, account.FieldSubscribedToNewsletterAt, account.FieldTemporaryPasswordExpiresAt, account.FieldLastLoginAttemptAt, account.FieldLastLoginAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -340,6 +342,13 @@ func (_m *Account) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LastLoginAttemptAt = value.Time
 			}
+		case account.FieldLastLoginAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
+			} else if value.Valid {
+				_m.LastLoginAt = new(time.Time)
+				*_m.LastLoginAt = value.Time
+			}
 		case account.FieldPasskeyLoginEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field passkey_login_enabled", values[i])
@@ -494,6 +503,11 @@ func (_m *Account) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_login_attempt_at=")
 	builder.WriteString(_m.LastLoginAttemptAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := _m.LastLoginAt; v != nil {
+		builder.WriteString("last_login_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("passkey_login_enabled=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PasskeyLoginEnabled))

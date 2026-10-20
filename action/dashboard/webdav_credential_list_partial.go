@@ -105,17 +105,21 @@ func (qq *WebDAVCredentialListPartial) Widget(
 		return nil, err
 	}
 
-	var content widget.IWidget = &widget.EmptyState{
-		Icon:        widget.NewIcon("vpn_key"),
-		Headline:    widget.T("No WebDAV credentials yet."),
-		Description: widget.T("Create a device credential to upload files to an Inbox over WebDAV."),
-		Actions: []widget.IWidget{
-			&widget.Button{
-				Icon:  widget.NewIcon("add"),
-				Label: widget.T("Create WebDAV credential"),
-				HTMXAttrs: qq.actions.CreateWebDAVCredentialCmd.ModalLinkAttrs(
-					qq.actions.CreateWebDAVCredentialCmd.Data("", ""),
-				),
+	// ScrollableContent contains the empty state margin; directly inside the full-height
+	// container, the margin would collapse through it and cause overflow.
+	var content widget.IWidget = &widget.ScrollableContent{
+		Children: &widget.EmptyState{
+			Icon:        widget.NewIcon("vpn_key"),
+			Headline:    widget.T("No WebDAV credentials yet."),
+			Description: widget.T("Create a device credential to upload files to an Inbox over WebDAV."),
+			Actions: []widget.IWidget{
+				&widget.Button{
+					Icon:  widget.NewIcon("add"),
+					Label: widget.T("Create WebDAV credential"),
+					HTMXAttrs: qq.actions.CreateWebDAVCredentialCmd.ModalLinkAttrs(
+						qq.actions.CreateWebDAVCredentialCmd.Data("", ""),
+					),
+				},
 			},
 		},
 	}
