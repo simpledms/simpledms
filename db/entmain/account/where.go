@@ -158,6 +158,11 @@ func LastLoginAttemptAt(v time.Time) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldLastLoginAttemptAt, v))
 }
 
+// LastLoginAt applies equality check predicate on the "last_login_at" field. It's identical to LastLoginAtEQ.
+func LastLoginAt(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldLastLoginAt, v))
+}
+
 // PasskeyLoginEnabled applies equality check predicate on the "passkey_login_enabled" field. It's identical to PasskeyLoginEnabledEQ.
 func PasskeyLoginEnabled(v bool) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldPasskeyLoginEnabled, v))
@@ -1341,6 +1346,56 @@ func LastLoginAttemptAtIsNil() predicate.Account {
 // LastLoginAttemptAtNotNil applies the NotNil predicate on the "last_login_attempt_at" field.
 func LastLoginAttemptAtNotNil() predicate.Account {
 	return predicate.Account(sql.FieldNotNull(FieldLastLoginAttemptAt))
+}
+
+// LastLoginAtEQ applies the EQ predicate on the "last_login_at" field.
+func LastLoginAtEQ(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldLastLoginAt, v))
+}
+
+// LastLoginAtNEQ applies the NEQ predicate on the "last_login_at" field.
+func LastLoginAtNEQ(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldLastLoginAt, v))
+}
+
+// LastLoginAtIn applies the In predicate on the "last_login_at" field.
+func LastLoginAtIn(vs ...time.Time) predicate.Account {
+	return predicate.Account(sql.FieldIn(FieldLastLoginAt, vs...))
+}
+
+// LastLoginAtNotIn applies the NotIn predicate on the "last_login_at" field.
+func LastLoginAtNotIn(vs ...time.Time) predicate.Account {
+	return predicate.Account(sql.FieldNotIn(FieldLastLoginAt, vs...))
+}
+
+// LastLoginAtGT applies the GT predicate on the "last_login_at" field.
+func LastLoginAtGT(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldGT(FieldLastLoginAt, v))
+}
+
+// LastLoginAtGTE applies the GTE predicate on the "last_login_at" field.
+func LastLoginAtGTE(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldGTE(FieldLastLoginAt, v))
+}
+
+// LastLoginAtLT applies the LT predicate on the "last_login_at" field.
+func LastLoginAtLT(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldLT(FieldLastLoginAt, v))
+}
+
+// LastLoginAtLTE applies the LTE predicate on the "last_login_at" field.
+func LastLoginAtLTE(v time.Time) predicate.Account {
+	return predicate.Account(sql.FieldLTE(FieldLastLoginAt, v))
+}
+
+// LastLoginAtIsNil applies the IsNil predicate on the "last_login_at" field.
+func LastLoginAtIsNil() predicate.Account {
+	return predicate.Account(sql.FieldIsNull(FieldLastLoginAt))
+}
+
+// LastLoginAtNotNil applies the NotNil predicate on the "last_login_at" field.
+func LastLoginAtNotNil() predicate.Account {
+	return predicate.Account(sql.FieldNotNull(FieldLastLoginAt))
 }
 
 // PasskeyLoginEnabledEQ applies the EQ predicate on the "passkey_login_enabled" field.

@@ -316,6 +316,11 @@
             "fuzzy": true
         },
         {
+            "id": "Request payload is too large.",
+            "message": "Request payload is too large.",
+            "translation": ""
+        },
+        {
             "id": "Invalid request payload.",
             "message": "Invalid request payload.",
             "translation": "Ungültige Anfrage-Nutzdaten.",
@@ -630,13 +635,6 @@
             "fuzzy": true
         },
         {
-            "id": "Could not render widget.",
-            "message": "Could not render widget.",
-            "translation": "Widget konnte nicht gerendert werden.",
-            "translatorComment": "Translated from English by Claude",
-            "fuzzy": true
-        },
-        {
             "id": "Files",
             "message": "Files",
             "translation": "Dateien"
@@ -666,6 +664,13 @@
             "id": "No file ID provided.",
             "message": "No file ID provided.",
             "translation": "Keine Datei-ID angegeben.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not render widget.",
+            "message": "Could not render widget.",
+            "translation": "Widget konnte nicht gerendert werden.",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },
@@ -2368,6 +2373,20 @@
             "fuzzy": true
         },
         {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Aktiv",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Widerrufen",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": "Offene Aufgaben",
@@ -2739,20 +2758,6 @@
             "message": "Filter MCP credentials",
             "translation": "MCP-Zugangsdaten filtern",
             "translatorComment": "Translated from English by Claude.",
-            "fuzzy": true
-        },
-        {
-            "id": "Active",
-            "message": "Active",
-            "translation": "Aktiv",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": "Widerrufen",
-            "translatorComment": "Translated from English by Codex.",
             "fuzzy": true
         },
         {
@@ -4684,6 +4689,11 @@
             "fuzzy": true
         },
         {
+            "id": "Form is too large.",
+            "message": "Form is too large.",
+            "translation": ""
+        },
+        {
             "id": "Cannot parse form.",
             "message": "Cannot parse form.",
             "translation": "Formular kann nicht geparst werden.",
@@ -5933,6 +5943,13 @@
             "fuzzy": true
         },
         {
+            "id": "Legal",
+            "message": "Legal",
+            "translation": "Rechtliches",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Imprint",
             "message": "Imprint",
             "translation": "Impressum",
@@ -6181,16 +6198,16 @@
             "fuzzy": true
         },
         {
-            "id": "02-01-2006 at 15:04 o'clock",
-            "message": "02-01-2006 at 15:04 o'clock",
-            "translation": "02.01.2006 um 15:04 Uhr",
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": "SimpleDMS Passwort zurücksetzen",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
-            "id": "SimpleDMS password reset",
-            "message": "SimpleDMS password reset",
-            "translation": "SimpleDMS Passwort zurücksetzen",
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": "02.01.2006 um 15:04 Uhr",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -7474,6 +7491,65 @@
             "fuzzy": true
         },
         {
+            "id": "Could not claim uploaded file.",
+            "message": "Could not claim uploaded file.",
+            "translation": "Die hochgeladene Datei konnte nicht übernommen werden.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify staged file.",
+            "message": "Could not verify staged file.",
+            "translation": "Die bereitgestellte Datei konnte nicht überprüft werden.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "App not unlocked yet.",
+            "message": "App not unlocked yet.",
+            "translation": "App ist noch nicht entsperrt.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
+            "translation": "Speicherdateiname stimmt nicht überein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Staged file integrity mismatch.",
+            "message": "Staged file integrity mismatch.",
+            "translation": "Die Integrität der bereitgestellten Datei stimmt nicht überein.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file is already being processed.",
+            "message": "Uploaded file is already being processed.",
+            "translation": "Die hochgeladene Datei wird bereits verarbeitet.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": [
+                "tenantDatabaseNotFoundMessage",
+                "Organization database not found."
+            ],
+            "message": "Organization database not found.",
+            "translation": "Organisationsdatenbank nicht gefunden.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file processing was taken over.",
+            "message": "Uploaded file processing was taken over.",
+            "translation": "Die Verarbeitung der hochgeladenen Datei wurde übernommen.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
             "id": "Invalid download range.",
             "message": "Invalid download range.",
             "translation": ""
@@ -7616,6 +7692,11 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid storage filename.",
+            "message": "Invalid storage filename.",
+            "translation": ""
+        },
+        {
             "id": "Storage path is empty.",
             "message": "Storage path is empty.",
             "translation": "Speicherpfad ist leer.",
@@ -7687,65 +7768,6 @@
             "message": "Could not get x25519 identity.",
             "translation": "X25519-Identität konnte nicht abgerufen werden.",
             "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Storage filename mismatch.",
-            "message": "Storage filename mismatch.",
-            "translation": "Speicherdateiname stimmt nicht überein.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not claim uploaded file.",
-            "message": "Could not claim uploaded file.",
-            "translation": "Die hochgeladene Datei konnte nicht übernommen werden.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not verify staged file.",
-            "message": "Could not verify staged file.",
-            "translation": "Die bereitgestellte Datei konnte nicht überprüft werden.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "App not unlocked yet.",
-            "message": "App not unlocked yet.",
-            "translation": "App ist noch nicht entsperrt.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Staged file integrity mismatch.",
-            "message": "Staged file integrity mismatch.",
-            "translation": "Die Integrität der bereitgestellten Datei stimmt nicht überein.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "Uploaded file is already being processed.",
-            "message": "Uploaded file is already being processed.",
-            "translation": "Die hochgeladene Datei wird bereits verarbeitet.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": [
-                "tenantDatabaseNotFoundMessage",
-                "Organization database not found."
-            ],
-            "message": "Organization database not found.",
-            "translation": "Organisationsdatenbank nicht gefunden.",
-            "translatorComment": "Translated from English by Claude",
-            "fuzzy": true
-        },
-        {
-            "id": "Uploaded file processing was taken over.",
-            "message": "Uploaded file processing was taken over.",
-            "translation": "Die Verarbeitung der hochgeladenen Datei wurde übernommen.",
-            "translatorComment": "Translated from English by Codex.",
             "fuzzy": true
         },
         {
@@ -8527,21 +8549,56 @@
             "fuzzy": true
         },
         {
-            "id": "Metadata already exists or is still in use.",
-            "message": "Metadata already exists or is still in use.",
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
+            "translation": ""
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": "Die Datei-ID ist erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
             "translation": ""
         },
         {
             "id": "Invalid page or search range.",
             "message": "Invalid page or search range.",
             "translation": "Ungültiger Seiten- oder Suchbereich.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "File ID is required.",
-            "message": "File ID is required.",
-            "translation": "Die Datei-ID ist erforderlich.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -8583,18 +8640,18 @@
             "translation": ""
         },
         {
-            "id": "Tag not found.",
-            "message": "Tag not found.",
-            "translation": ""
-        },
-        {
-            "id": "Document type not found.",
-            "message": "Document type not found.",
-            "translation": ""
-        },
-        {
             "id": "Invalid base64 content.",
             "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
+            "id": "A file with this name already exists.",
+            "message": "A file with this name already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
             "translation": ""
         },
         {
@@ -8625,11 +8682,6 @@
         {
             "id": "A public metadata ID is required.",
             "message": "A public metadata ID is required.",
-            "translation": ""
-        },
-        {
-            "id": "Field not found.",
-            "message": "Field not found.",
             "translation": ""
         },
         {
@@ -8675,36 +8727,6 @@
         {
             "id": "Note title or body is too long.",
             "message": "Note title or body is too long.",
-            "translation": ""
-        },
-        {
-            "id": "A file with this name already exists.",
-            "message": "A file with this name already exists.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and Tag ID are required.",
-            "message": "File ID and Tag ID are required.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and field ID are required.",
-            "message": "File ID and field ID are required.",
-            "translation": ""
-        },
-        {
-            "id": "Exactly one typed value is required.",
-            "message": "Exactly one typed value is required.",
-            "translation": ""
-        },
-        {
-            "id": "Date must use YYYY-MM-DD.",
-            "message": "Date must use YYYY-MM-DD.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and document type ID are required.",
-            "message": "File ID and document type ID are required.",
             "translation": ""
         },
         {

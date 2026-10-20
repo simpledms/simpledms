@@ -72,17 +72,11 @@ func (qq *MCPCredentialsPage) Widget(
 			"mcp-credentials",
 			fabs,
 		),
-		Content: &widget.View{
-			Children: []widget.IWidget{
-				&widget.ListDetailLayout{
-					AppBar: qq.appBar(data),
-					List:   overview,
-				},
-				autil.DefaultSideSheetTrigger("mcpCredentialsDefaultSideSheetTrigger", widget.HTMXAttrs{
-					HxPost: qq.actions.MCPCredentialFilterDialog.Endpoint(),
-				}),
-			},
+		Content: &widget.ListDetailLayout{
+			AppBar: qq.appBar(data),
+			List:   overview,
 		},
+		SideSheet: qq.actions.MCPCredentialFilterDialog.Widget(data),
 	}, nil
 }
 
@@ -104,7 +98,7 @@ func (qq *MCPCredentialsPage) filterButton(
 	return newCredentialFilterButton(
 		"mcpCredentialFilterButton",
 		widget.T("Filter MCP credentials"),
-		qq.actions.MCPCredentialFilterDialog.Endpoint(),
+		qq.actions.MCPCredentialFilterDialog.ID(),
 		data.CredentialStatusValues,
 		isOOB,
 	)

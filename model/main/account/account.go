@@ -152,6 +152,17 @@ func (qq *Account) RecordLoginAttempt(ctx ctxx.Context) {
 	qq.Data = qq.Data.Update().SetLastLoginAttemptAt(time.Now()).SaveX(ctx)
 }
 
+// NilableRecordSuccessfulLogin records the time of a successfully created login session.
+func (qq *Account) NilableRecordSuccessfulLogin(ctx ctxx.Context) error {
+	updatedAccount, err := qq.Data.Update().SetLastLoginAt(time.Now()).Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	qq.Data = updatedAccount
+	return nil
+}
+
 func (qq *Account) IsPasskeyLoginRequired(ctx ctxx.Context) (bool, error) {
 	passkeyPolicy, err := qq.PasskeyPolicy(ctx)
 	if err != nil {

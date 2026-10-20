@@ -1,7 +1,9 @@
 package server
 
 import (
+	"log"
 	"net/http"
+	"runtime/debug"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -29,13 +31,32 @@ func newHTTPServer(addr string, handler http.Handler) *http.Server {
 // recovery, and security headers.
 func newPublicHandler(next http.Handler) http.Handler {
 	return handlers.CompressHandler(
-		handlers.RecoveryHandler(
-			handlers.PrintRecoveryStack(true),
-		)(
+		recoveryHandler(
 			securityHeadersHandler(next),
 			// handlers.LoggingHandler(),
 		),
 	)
+}
+
+// recoveryHandler replaces handlers.RecoveryHandler, which also recovers http.ErrAbortHandler.
+// net/http must receive it to abort a response that has already started, for example a
+// streamed download, instead of completing it as if it were successful.
+func recoveryHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		defer func() {
+			recovered := recover()
+			if recovered == nil {
+				return
+			}
+			if recovered == http.ErrAbortHandler {
+				panic(recovered)
+			}
+			log.Printf("recovered panic: %v\n%s", recovered, debug.Stack())
+			rw.WriteHeader(http.StatusInternalServerError)
+		}()
+
+		next.ServeHTTP(rw, req)
+	})
 }
 
 // securityHeadersHandler sets defaults for every response. Handlers serving uploaded

@@ -69,7 +69,7 @@ func (qq *InboxRootPage) render(
 	}
 
 	defaultSideSheetTrigger := autil.DefaultSideSheetTrigger(
-		"inboxDefaultSideSheetTrigger",
+		"inbox",
 		widget.HTMXAttrs{
 			HxPost: qq.actions.SourceFilterDialog.Endpoint(),
 		},

@@ -201,9 +201,13 @@ func assertWebDAVCredentialForm(
 	if err != nil {
 		return err
 	}
-	emptyState, ok := emptyOverview.Child.(*widget.EmptyState)
+	emptyContent, ok := emptyOverview.Child.(*widget.ScrollableContent)
+	if !ok {
+		t.Fatalf("expected scrollable empty content, got %#v", emptyOverview.Child)
+	}
+	emptyState, ok := emptyContent.Children.(*widget.EmptyState)
 	if !ok || len(emptyState.Actions) != 1 {
-		t.Fatalf("expected empty state with one create action, got %#v", emptyOverview.Child)
+		t.Fatalf("expected empty state with one create action, got %#v", emptyContent.Children)
 	}
 	createButton, ok := emptyState.Actions[0].(*widget.Button)
 	if !ok || createButton.HxPost == "" || !createButton.LoadInPopover {
@@ -489,17 +493,9 @@ func assertWebDAVPageLayout(t *testing.T, page widget.IWidget) *widget.Container
 	if len(layout.Navigation.FABs) != 1 {
 		t.Fatalf("expected one WebDAV credential FAB, got %d", len(layout.Navigation.FABs))
 	}
-	view, ok := layout.Content.(*widget.View)
+	listDetail, ok := layout.Content.(*widget.ListDetailLayout)
 	if !ok {
-		t.Fatalf("expected view with list-detail layout, got %#v", layout.Content)
-	}
-	viewChildren, ok := view.Children.([]widget.IWidget)
-	if !ok || len(viewChildren) == 0 {
-		t.Fatalf("expected view children, got %#v", view.Children)
-	}
-	listDetail, ok := viewChildren[0].(*widget.ListDetailLayout)
-	if !ok {
-		t.Fatalf("expected list-detail layout as first view child, got %#v", viewChildren[0])
+		t.Fatalf("expected list-detail layout, got %#v", layout.Content)
 	}
 	if len(listDetail.AppBar.Actions) != 1 {
 		t.Fatalf("expected filter icon in main app bar, got %#v", listDetail.AppBar.Actions)
@@ -507,6 +503,10 @@ func assertWebDAVPageLayout(t *testing.T, page widget.IWidget) *widget.Container
 	filterButton := listDetail.AppBar.Actions[0].(*widget.Container).Child.(*widget.IconButton)
 	if filterButton.Icon != "filter_alt" || filterButton.IsSelected {
 		t.Fatalf("expected unselected filter icon for default filter, got %#v", filterButton)
+	}
+	if layout.SideSheet == nil || !layout.SideSheet.IsOpenOnLoadOnLargeScreens ||
+		filterButton.DialogID != layout.SideSheet.GetID() {
+		t.Fatalf("expected filter button to toggle the page's filter side sheet, got %#v", layout.SideSheet)
 	}
 	return listDetail.List.(*widget.Container)
 }

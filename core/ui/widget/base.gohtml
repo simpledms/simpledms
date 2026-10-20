@@ -260,7 +260,8 @@
 			// TODO media query condition?
 			document.addEventListener('closeSideSheet', (e) => {
 				document.querySelectorAll('.js-side-sheet-dialog').forEach((sideSheet) => {
-					sideSheet.closeSideSheet();
+					// placeholders shown during navigation have no closeSideSheet
+					sideSheet.closeSideSheet?.();
 					sideSheet.close();
 				})
 			});
@@ -329,15 +330,84 @@
 
 			updateTWAState();
 
-			document.addEventListener('htmx:beforeRequest', function(e) {
+			// open side sheets that the new page renders again, see htmx:beforeSwap below
+			let sideSheetIDsKeptOnNavigation = [];
+
+			// removes the side sheet copies shown while the new page loads its side sheet
+			const removeSideSheetPlaceholders = () => {
+				document.querySelectorAll('.js-side-sheet-placeholder').forEach((placeholder) => {
+					placeholder.remove();
+				})
+			}
+
+			document.addEventListener('htmx:beforeSwap', function(e) {
 				// does close side sheet on navigation to another page;
 				// page nav is usually boosted, but explicit hx-get navigation rail links are not;
 				// must be verified if this has any side effects and if boosted is used for non-page navigation
 				// somewhere
-				if (e.detail.requestConfig.boosted ||
-					(e.detail.elt.closest('.js-navigation-rail') &&
-					!e.detail.elt.matches('.js-navigation-rail'))) {
-					this.dispatchEvent(new CustomEvent('closeSideSheet', { bubbles: true }))
+				//
+				// closed right before the swap instead of on request, so that a side sheet rendered
+				// as part of the new page replaces the old one without the content jumping in between
+				let elt = e.detail.requestConfig.elt;
+				if (!e.detail.shouldSwap || !(e.detail.requestConfig.boosted ||
+					(elt.closest('.js-navigation-rail') &&
+					!elt.matches('.js-navigation-rail')))) {
+					return;
+				}
+				removeSideSheetPlaceholders();
+
+				let newPage = new DOMParser().parseFromString(e.detail.serverResponse, 'text/html');
+				let triggers = Array.from(newPage.querySelectorAll('[id$="DefaultSideSheetTrigger"]'));
+				let isSamePage = new URL(e.detail.requestConfig.path, window.location.href).pathname ===
+					window.location.pathname;
+				if (isSamePage && document.querySelector('dialog[open].js-side-sheet-dialog')) {
+					// a new trigger reloads the open default side sheet, so it stays open like side
+					// sheets rendered with the page instead of being closed below
+					triggers.forEach((trigger) => document.getElementById(trigger.id)?.remove());
+				}
+				// a default side sheet trigger that morph doesn't retain loads the side sheet of the
+				// new page after the swap (see DefaultSideSheetTrigger in action/util)
+				let loadsSideSheet = window.matchMedia('(min-width: 1200px)').matches &&
+					triggers.some((trigger) => !document.getElementById(trigger.id));
+
+				document.querySelectorAll('.js-side-sheet-dialog').forEach((sideSheet) => {
+					// an open side sheet the new page renders again stays open, for example when
+					// navigating to the current page; morph retains it but removes `open`
+					if (sideSheet.open && newPage.getElementById(sideSheet.id)) {
+						sideSheetIDsKeptOnNavigation.push(sideSheet.id);
+						return;
+					}
+					// an inert copy without IDs keeps the side sheet area until the side sheet of the
+					// new page is loaded, otherwise the content would jump twice
+					if (sideSheet.open && loadsSideSheet) {
+						let placeholder = sideSheet.cloneNode(true);
+						placeholder.removeAttribute('id');
+						placeholder.querySelectorAll('[id]').forEach((child) => child.removeAttribute('id'));
+						placeholder.inert = true;
+						placeholder.classList.add('js-side-sheet-placeholder');
+						document.getElementById('popovers').append(placeholder);
+					}
+					sideSheet.closeSideSheet();
+					sideSheet.close();
+				})
+			})
+
+			document.addEventListener('htmx:afterSwap', function(e) {
+				// runs in the same task as the swap, thus the side sheet doesn't flicker
+				sideSheetIDsKeptOnNavigation.forEach((id) => {
+					let sideSheet = document.getElementById(id);
+					if (sideSheet && !sideSheet.open) {
+						sideSheet.showCustom();
+					}
+				})
+				sideSheetIDsKeptOnNavigation = [];
+			})
+
+			document.addEventListener('htmx:afterRequest', function(e) {
+				// the loaded side sheet is already open and closed the placeholder; also covers
+				// failed requests
+				if (e.detail.elt.id && e.detail.elt.id.endsWith('DefaultSideSheetTrigger')) {
+					removeSideSheetPlaceholders();
 				}
 			})
 

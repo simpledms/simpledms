@@ -35,6 +35,7 @@ var (
 		{Name: "two_factor_auth_recovery_code_salt", Type: field.TypeString, Default: ""},
 		{Name: "two_factor_auth_recovery_code_hashes", Type: field.TypeJSON},
 		{Name: "last_login_attempt_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
 		{Name: "passkey_login_enabled", Type: field.TypeBool, Default: false},
 		{Name: "passkey_recovery_code_salt", Type: field.TypeString, Default: ""},
 		{Name: "passkey_recovery_code_hashes", Type: field.TypeJSON, Default: "[]"},

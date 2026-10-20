@@ -312,6 +312,20 @@ func (_c *AccountCreate) SetNillableLastLoginAttemptAt(v *time.Time) *AccountCre
 	return _c
 }
 
+// SetLastLoginAt sets the "last_login_at" field.
+func (_c *AccountCreate) SetLastLoginAt(v time.Time) *AccountCreate {
+	_c.mutation.SetLastLoginAt(v)
+	return _c
+}
+
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_c *AccountCreate) SetNillableLastLoginAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetLastLoginAt(*v)
+	}
+	return _c
+}
+
 // SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
 func (_c *AccountCreate) SetPasskeyLoginEnabled(v bool) *AccountCreate {
 	_c.mutation.SetPasskeyLoginEnabled(v)
@@ -760,6 +774,10 @@ func (_c *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LastLoginAttemptAt(); ok {
 		_spec.SetField(account.FieldLastLoginAttemptAt, field.TypeTime, value)
 		_node.LastLoginAttemptAt = value
+	}
+	if value, ok := _c.mutation.LastLoginAt(); ok {
+		_spec.SetField(account.FieldLastLoginAt, field.TypeTime, value)
+		_node.LastLoginAt = &value
 	}
 	if value, ok := _c.mutation.PasskeyLoginEnabled(); ok {
 		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)

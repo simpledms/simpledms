@@ -11,6 +11,7 @@ import (
 //nolint:unused // gotext discovers these translation labels without a runtime call.
 func staticPagesGotextHelper() {
 	pp := message.NewPrinter(language.English)
+	pp.Sprintf("Legal")
 	pp.Sprintf("Imprint")
 	pp.Sprintf("Privacy policy")
 	pp.Sprintf("Terms of service")

@@ -232,6 +232,11 @@
             "translation": ""
         },
         {
+            "id": "Request payload is too large.",
+            "message": "Request payload is too large.",
+            "translation": ""
+        },
+        {
             "id": "Invalid request payload.",
             "message": "Invalid request payload.",
             "translation": ""
@@ -462,11 +467,6 @@
             "translation": ""
         },
         {
-            "id": "Could not render widget.",
-            "message": "Could not render widget.",
-            "translation": ""
-        },
-        {
             "id": "Files",
             "message": "Files",
             "translation": ""
@@ -489,6 +489,11 @@
         {
             "id": "No file ID provided.",
             "message": "No file ID provided.",
+            "translation": ""
+        },
+        {
+            "id": "Could not render widget.",
+            "message": "Could not render widget.",
             "translation": ""
         },
         {
@@ -1790,6 +1795,16 @@
             "translation": ""
         },
         {
+            "id": "Active",
+            "message": "Active",
+            "translation": ""
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": ""
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": ""
@@ -2071,16 +2086,6 @@
         {
             "id": "Filter MCP credentials",
             "message": "Filter MCP credentials",
-            "translation": ""
-        },
-        {
-            "id": "Active",
-            "message": "Active",
-            "translation": ""
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
             "translation": ""
         },
         {
@@ -3575,6 +3580,11 @@
             "translation": ""
         },
         {
+            "id": "Form is too large.",
+            "message": "Form is too large.",
+            "translation": ""
+        },
+        {
             "id": "Cannot parse form.",
             "message": "Cannot parse form.",
             "translation": ""
@@ -4491,6 +4501,11 @@
             "translation": "Registration successful, please check your emails for your password."
         },
         {
+            "id": "Legal",
+            "message": "Legal",
+            "translation": ""
+        },
+        {
             "id": "Imprint",
             "message": "Imprint",
             "translation": ""
@@ -4671,13 +4686,13 @@
             "translation": ""
         },
         {
-            "id": "02-01-2006 at 15:04 o'clock",
-            "message": "02-01-2006 at 15:04 o'clock",
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
             "translation": ""
         },
         {
-            "id": "SimpleDMS password reset",
-            "message": "SimpleDMS password reset",
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
             "translation": ""
         },
         {
@@ -5646,6 +5661,49 @@
             "translation": ""
         },
         {
+            "id": "Could not claim uploaded file.",
+            "message": "Could not claim uploaded file.",
+            "translation": ""
+        },
+        {
+            "id": "Could not verify staged file.",
+            "message": "Could not verify staged file.",
+            "translation": ""
+        },
+        {
+            "id": "App not unlocked yet.",
+            "message": "App not unlocked yet.",
+            "translation": ""
+        },
+        {
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
+            "translation": ""
+        },
+        {
+            "id": "Staged file integrity mismatch.",
+            "message": "Staged file integrity mismatch.",
+            "translation": ""
+        },
+        {
+            "id": "Uploaded file is already being processed.",
+            "message": "Uploaded file is already being processed.",
+            "translation": ""
+        },
+        {
+            "id": [
+                "tenantDatabaseNotFoundMessage",
+                "Organization database not found."
+            ],
+            "message": "Organization database not found.",
+            "translation": ""
+        },
+        {
+            "id": "Uploaded file processing was taken over.",
+            "message": "Uploaded file processing was taken over.",
+            "translation": ""
+        },
+        {
             "id": "Invalid download range.",
             "message": "Invalid download range.",
             "translation": ""
@@ -5754,6 +5812,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid storage filename.",
+            "message": "Invalid storage filename.",
+            "translation": ""
+        },
+        {
             "id": "Storage path is empty.",
             "message": "Storage path is empty.",
             "translation": ""
@@ -5807,49 +5870,6 @@
         {
             "id": "Could not get x25519 identity.",
             "message": "Could not get x25519 identity.",
-            "translation": ""
-        },
-        {
-            "id": "Storage filename mismatch.",
-            "message": "Storage filename mismatch.",
-            "translation": ""
-        },
-        {
-            "id": "Could not claim uploaded file.",
-            "message": "Could not claim uploaded file.",
-            "translation": ""
-        },
-        {
-            "id": "Could not verify staged file.",
-            "message": "Could not verify staged file.",
-            "translation": ""
-        },
-        {
-            "id": "App not unlocked yet.",
-            "message": "App not unlocked yet.",
-            "translation": ""
-        },
-        {
-            "id": "Staged file integrity mismatch.",
-            "message": "Staged file integrity mismatch.",
-            "translation": ""
-        },
-        {
-            "id": "Uploaded file is already being processed.",
-            "message": "Uploaded file is already being processed.",
-            "translation": ""
-        },
-        {
-            "id": [
-                "tenantDatabaseNotFoundMessage",
-                "Organization database not found."
-            ],
-            "message": "Organization database not found.",
-            "translation": ""
-        },
-        {
-            "id": "Uploaded file processing was taken over.",
-            "message": "Uploaded file processing was taken over.",
             "translation": ""
         },
         {
@@ -6431,18 +6451,53 @@
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
         },
         {
-            "id": "Metadata already exists or is still in use.",
-            "message": "Metadata already exists or is still in use.",
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
             "translation": ""
         },
         {
-            "id": "Invalid page or search range.",
-            "message": "Invalid page or search range.",
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
             "translation": ""
         },
         {
             "id": "File ID is required.",
             "message": "File ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
             "translation": ""
         },
         {
@@ -6481,18 +6536,18 @@
             "translation": ""
         },
         {
-            "id": "Tag not found.",
-            "message": "Tag not found.",
-            "translation": ""
-        },
-        {
-            "id": "Document type not found.",
-            "message": "Document type not found.",
-            "translation": ""
-        },
-        {
             "id": "Invalid base64 content.",
             "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
+            "id": "A file with this name already exists.",
+            "message": "A file with this name already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
             "translation": ""
         },
         {
@@ -6523,11 +6578,6 @@
         {
             "id": "A public metadata ID is required.",
             "message": "A public metadata ID is required.",
-            "translation": ""
-        },
-        {
-            "id": "Field not found.",
-            "message": "Field not found.",
             "translation": ""
         },
         {
@@ -6573,36 +6623,6 @@
         {
             "id": "Note title or body is too long.",
             "message": "Note title or body is too long.",
-            "translation": ""
-        },
-        {
-            "id": "A file with this name already exists.",
-            "message": "A file with this name already exists.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and Tag ID are required.",
-            "message": "File ID and Tag ID are required.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and field ID are required.",
-            "message": "File ID and field ID are required.",
-            "translation": ""
-        },
-        {
-            "id": "Exactly one typed value is required.",
-            "message": "Exactly one typed value is required.",
-            "translation": ""
-        },
-        {
-            "id": "Date must use YYYY-MM-DD.",
-            "message": "Date must use YYYY-MM-DD.",
-            "translation": ""
-        },
-        {
-            "id": "File ID and document type ID are required.",
-            "message": "File ID and document type ID are required.",
             "translation": ""
         },
         {

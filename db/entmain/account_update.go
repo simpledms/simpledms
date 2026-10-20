@@ -374,6 +374,26 @@ func (_u *AccountUpdate) ClearLastLoginAttemptAt() *AccountUpdate {
 	return _u
 }
 
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *AccountUpdate) SetLastLoginAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetLastLoginAt(v)
+	return _u
+}
+
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *AccountUpdate) SetNillableLastLoginAt(v *time.Time) *AccountUpdate {
+	if v != nil {
+		_u.SetLastLoginAt(*v)
+	}
+	return _u
+}
+
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *AccountUpdate) ClearLastLoginAt() *AccountUpdate {
+	_u.mutation.ClearLastLoginAt()
+	return _u
+}
+
 // SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
 func (_u *AccountUpdate) SetPasskeyLoginEnabled(v bool) *AccountUpdate {
 	_u.mutation.SetPasskeyLoginEnabled(v)
@@ -818,6 +838,12 @@ func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(account.FieldLastLoginAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(account.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.PasskeyLoginEnabled(); ok {
 		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)
@@ -1474,6 +1500,26 @@ func (_u *AccountUpdateOne) ClearLastLoginAttemptAt() *AccountUpdateOne {
 	return _u
 }
 
+// SetLastLoginAt sets the "last_login_at" field.
+func (_u *AccountUpdateOne) SetLastLoginAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetLastLoginAt(v)
+	return _u
+}
+
+// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
+func (_u *AccountUpdateOne) SetNillableLastLoginAt(v *time.Time) *AccountUpdateOne {
+	if v != nil {
+		_u.SetLastLoginAt(*v)
+	}
+	return _u
+}
+
+// ClearLastLoginAt clears the value of the "last_login_at" field.
+func (_u *AccountUpdateOne) ClearLastLoginAt() *AccountUpdateOne {
+	_u.mutation.ClearLastLoginAt()
+	return _u
+}
+
 // SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
 func (_u *AccountUpdateOne) SetPasskeyLoginEnabled(v bool) *AccountUpdateOne {
 	_u.mutation.SetPasskeyLoginEnabled(v)
@@ -1948,6 +1994,12 @@ func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err er
 	}
 	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.LastLoginAt(); ok {
+		_spec.SetField(account.FieldLastLoginAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastLoginAtCleared() {
+		_spec.ClearField(account.FieldLastLoginAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.PasskeyLoginEnabled(); ok {
 		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)

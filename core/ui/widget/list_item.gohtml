@@ -51,6 +51,7 @@
 			{{ if .ContextMenu }}
 				{{/* The menu button follows the row's live radio state, not its own toggle state. */}}
 				<div class="shrink-0 pr-7
+					group-has-[.js-detail-content>div]/list-detail:hidden
 					group-has-[:checked]/list-item:[&_button>div]:text-on-secondary-container
 					group-has-[:checked]/list-item:[&_button>div]:state-layer-on-secondary-container"
 				>{{ render .GetContext .ContextMenu.ContextMenuButton }}</div>

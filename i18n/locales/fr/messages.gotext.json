@@ -2,6 +2,13 @@
     "language": "fr",
     "messages": [
         {
+            "id": "Legal",
+            "message": "Legal",
+            "translation": "Informations juridiques",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
             "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
             "translation": "Tu peux choisir d’autres Spaces de cette organisation auxquels tu as accès en écriture ou dont les Inboxes acceptent les transferts.",

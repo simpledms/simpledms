@@ -5,6 +5,7 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -25,14 +26,18 @@ func createAccountSession(
 
 	deletableAt := cookiex.DeletableAt(cookie)
 
-	ctx.VisitorCtx().MainTx.Session.
+	_, err = ctx.VisitorCtx().MainTx.Session.
 		Create().
 		SetAccountID(accountx.ID).
 		SetValue(cookie.Value).
 		SetIsTemporarySession(isTemporarySession).
 		SetDeletableAt(deletableAt).
 		SetExpiresAt(cookie.Expires).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
-	return nil
+	return account.NewAccount(accountx).NilableRecordSuccessfulLogin(ctx)
 }

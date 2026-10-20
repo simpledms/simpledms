@@ -95,17 +95,21 @@ func (qq *MCPCredentialListPartial) Widget(
 		return nil, err
 	}
 
-	var content widget.IWidget = &widget.EmptyState{
-		Icon:        widget.NewIcon("smart_toy"),
-		Headline:    widget.T("No MCP credentials yet."),
-		Description: widget.T("Create a credential to connect an MCP client to a Space."),
-		Actions: []widget.IWidget{
-			&widget.Button{
-				Icon:  widget.NewIcon("add"),
-				Label: widget.T("Create MCP credential"),
-				HTMXAttrs: qq.actions.CreateMCPCredentialCmd.ModalLinkAttrs(
-					qq.actions.CreateMCPCredentialCmd.Data(""),
-				),
+	// ScrollableContent contains the empty state margin; directly inside the full-height
+	// container, the margin would collapse through it and cause overflow.
+	var content widget.IWidget = &widget.ScrollableContent{
+		Children: &widget.EmptyState{
+			Icon:        widget.NewIcon("smart_toy"),
+			Headline:    widget.T("No MCP credentials yet."),
+			Description: widget.T("Create a credential to connect an MCP client to a Space."),
+			Actions: []widget.IWidget{
+				&widget.Button{
+					Icon:  widget.NewIcon("add"),
+					Label: widget.T("Create MCP credential"),
+					HTMXAttrs: qq.actions.CreateMCPCredentialCmd.ModalLinkAttrs(
+						qq.actions.CreateMCPCredentialCmd.Data(""),
+					),
+				},
 			},
 		},
 	}
