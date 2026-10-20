@@ -13,7 +13,8 @@ package sqlx
 //
 // _foreign_keys=1 gets replaced dynamically in server.dbMigrationsMainDB and
 // model.Tenant.ExecuteDBMigrations
-var sqliteQueryParams = "cache=private&_foreign_keys=1&_journal_mode=wal&_synchronous=normal&_busy_timeout=5000"
+var sqliteQueryParams = "cache=private&_foreign_keys=1&_journal_mode=wal" +
+	"&_synchronous=normal&_busy_timeout=5000&_stmt_cache_size=32"
 
 var SQLiteQueryParamsReadOnly = "mode=ro&" + sqliteQueryParams
 

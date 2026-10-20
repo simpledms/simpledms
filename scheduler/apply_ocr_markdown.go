@@ -48,11 +48,6 @@ func (qq *Scheduler) applyOCRMarkdownForTenant(
 	tenantDB *sqlx.TenantDB,
 	dateThreshold time.Time,
 ) {
-	tenantIdentity, found := qq.ocrTenantIdentity(ctx, tenantID)
-	if !found {
-		return
-	}
-
 	// see applyOCRForTenant for why the pending condition is written verbatim
 	filesToProcess := tenantDB.ReadOnlyConn.File.
 		Query().
@@ -69,6 +64,14 @@ func (qq *Scheduler) applyOCRMarkdownForTenant(
 		Order(file.ByID(entsql.OrderAsc())).
 		Limit(defaultSchedulerBatchSize).
 		AllX(ctx)
+
+	if len(filesToProcess) == 0 {
+		return
+	}
+	tenantIdentity, found := qq.ocrTenantIdentity(ctx, tenantID)
+	if !found {
+		return
+	}
 
 	for _, fileToProcess := range filesToProcess {
 		if !qq.applyOCRMarkdownPendingFile(ctx, tenantDB, tenantIdentity, fileToProcess) {

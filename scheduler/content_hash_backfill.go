@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
+	"filippo.io/age"
 
-	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -54,21 +54,20 @@ func (qq *Scheduler) backfillContentHashesOnce(
 	service := filesystem.NewContentHashBackfillService(qq.infra.FileSystem())
 
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
-		tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
-		if err != nil {
-			if entmain.IsNotFound(err) {
-				log.Println("tenant not found", tenantID)
-				return true
+		loadIdentity := func() (*age.X25519Identity, error) {
+			tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
+			if err != nil {
+				log.Println(err)
+				return nil, err
 			}
-			log.Println(err)
-			return true
+			return tenantx.X25519IdentityEncrypted.Identity(), nil
 		}
 
 		result, err := service.RunTenant(
 			ctx,
 			tenantDB.ReadOnlyConn,
 			tenantDB.ReadWriteConn,
-			tenantx.X25519IdentityEncrypted.Identity(),
+			loadIdentity,
 			config,
 		)
 		if err != nil {

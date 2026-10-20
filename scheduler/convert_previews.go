@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"log"
+	"sync"
 	"time"
 
 	entsql "entgo.io/ent/dialect/sql"
@@ -42,22 +43,20 @@ func (qq *Scheduler) convertPreviews() {
 
 func (qq *Scheduler) convertPreviewsOnce(ctx context.Context) {
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
-		tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
-		if err != nil {
-			if enttenant.IsNotFound(err) {
-				log.Println("tenant not found", tenantID)
-				return true
+		loadTenant := sync.OnceValues(func() (*entmain.Tenant, error) {
+			tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
+			if err != nil {
+				log.Println(err)
 			}
-			log.Println(err)
-			return true
-		}
+			return tenantx, err
+		})
 
 		qq.discoverPreviewConversions(ctx, tenantDB)
-		qq.reconcilePreviewConversions(ctx, tenantDB, tenantx.X25519IdentityEncrypted.Identity())
+		qq.reconcilePreviewConversions(ctx, tenantDB, loadTenant)
 		qq.recoverInvalidReadyPreviewConversions(ctx, tenantDB)
 		qq.recoverStalePreviewClaims(ctx, tenantDB)
 		qq.cleanupOrphanedPreviewConversions(ctx, tenantDB)
-		qq.processDuePreviewConversions(ctx, tenantDB, tenantx)
+		qq.processDuePreviewConversions(ctx, tenantDB, loadTenant)
 		return true
 	})
 }
@@ -120,7 +119,7 @@ func (qq *Scheduler) discoverPreviewConversions(ctx context.Context, tenantDB *s
 func (qq *Scheduler) reconcilePreviewConversions(
 	ctx context.Context,
 	tenantDB *sqlx.TenantDB,
-	tenantX25519Identity *age.X25519Identity,
+	loadTenant func() (*entmain.Tenant, error),
 ) {
 	conversions := tenantDB.ReadOnlyConn.PreviewConversion.Query().
 		Where(
@@ -135,13 +134,17 @@ func (qq *Scheduler) reconcilePreviewConversions(
 		if preview == nil || preview.CopiedToFinalDestinationAt == nil {
 			continue
 		}
-		if err := qq.verifyPreviewReadable(ctx, tenantX25519Identity, preview); err != nil {
+		tenantx, err := loadTenant()
+		if err != nil {
+			return
+		}
+		if err := qq.verifyPreviewReadable(ctx, tenantx.X25519IdentityEncrypted.Identity(), preview); err != nil {
 			log.Println(err)
 			qq.failPreviewConversion(ctx, tenantDB, conversion, gotenberg.FailureCategoryInvalidResponse)
 			continue
 		}
 
-		err := tenantDB.ReadWriteConn.PreviewConversion.UpdateOneID(conversion.ID).
+		err = tenantDB.ReadWriteConn.PreviewConversion.UpdateOneID(conversion.ID).
 			SetStatus(previewmodel.Ready).
 			ClearProcessingStartedAt().
 			ClearNextAttemptAt().
@@ -253,7 +256,7 @@ func (qq *Scheduler) cleanupOrphanedPreviewConversions(ctx context.Context, tena
 func (qq *Scheduler) processDuePreviewConversions(
 	ctx context.Context,
 	tenantDB *sqlx.TenantDB,
-	tenantx *entmain.Tenant,
+	loadTenant func() (*entmain.Tenant, error),
 ) {
 	conversions := tenantDB.ReadOnlyConn.PreviewConversion.Query().
 		Where(
@@ -269,6 +272,10 @@ func (qq *Scheduler) processDuePreviewConversions(
 		AllX(ctx)
 
 	for _, conversion := range conversions {
+		tenantx, err := loadTenant()
+		if err != nil {
+			return
+		}
 		claimed := tenantDB.ReadWriteConn.PreviewConversion.UpdateOneID(conversion.ID).
 			Where(
 				previewconversion.StatusEQ(previewmodel.Pending),
@@ -280,7 +287,7 @@ func (qq *Scheduler) processDuePreviewConversions(
 			SetStatus(previewmodel.Processing).
 			SetLastAttemptedAt(time.Now()).
 			SetProcessingStartedAt(time.Now())
-		_, err := claimed.Save(ctx)
+		_, err = claimed.Save(ctx)
 		if err != nil {
 			if !enttenant.IsNotFound(err) {
 				log.Println(err)

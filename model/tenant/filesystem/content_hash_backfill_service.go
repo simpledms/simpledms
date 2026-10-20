@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"io"
 	"log"
+	"sync"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -31,7 +32,7 @@ func (qq *ContentHashBackfillService) RunTenant(
 	ctx context.Context,
 	readOnlyTenantClient *enttenant.Client,
 	readWriteTenantClient *enttenant.Client,
-	tenantIdentity *age.X25519Identity,
+	loadIdentity func() (*age.X25519Identity, error),
 	config ContentHashBackfillConfig,
 ) (*ContentHashBackfillResult, error) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -55,6 +56,7 @@ func (qq *ContentHashBackfillService) RunTenant(
 	}
 
 	result := &ContentHashBackfillResult{}
+	identity := sync.OnceValues(loadIdentity)
 	startedAt := time.Now()
 	for _, filex := range files {
 		if config.MaxDuration > 0 && time.Since(startedAt) >= config.MaxDuration {
@@ -64,6 +66,11 @@ func (qq *ContentHashBackfillService) RunTenant(
 			break
 		}
 
+		tenantIdentity, err := identity()
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
 		contentSHA256, processedBytes, err := qq.calculateContentSHA256(ctx, tenantIdentity, filex)
 		if err != nil {
 			log.Println(err)

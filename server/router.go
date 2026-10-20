@@ -111,8 +111,13 @@ func NewRouter(
 		trustedProxies:           trustedProxies,
 	}
 
-	if os.Getenv("SIMPLEDMS_PPROF_ENABLED") == "true" {
-		router.Handle("/debug/pprof/", NewPprofHandler(router))
+	if path := os.Getenv("SIMPLEDMS_PPROF_PATH"); path != "" {
+		handler, err := NewPprofHandler(router, path)
+		if err != nil {
+			log.Println(err)
+		} else {
+			router.Handle("/"+path+"/debug/pprof/", handler)
+		}
 	}
 
 	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{

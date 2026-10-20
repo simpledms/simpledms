@@ -6,6 +6,9 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"regexp"
+	"strings"
 	"testing"
 	"time"
 
@@ -13,10 +16,11 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 )
 
-const pprofIndexPath = "/debug/pprof/"
+const pprofPath = "adminreal1-sec"
+const pprofIndexPath = "/" + pprofPath + "/debug/pprof/"
 
 func TestPprofHandlerIsDisabledByDefault(t *testing.T) {
-	t.Setenv("SIMPLEDMS_PPROF_ENABLED", "")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", "")
 	harness := newActionTestHarness(t)
 	email, password := "pprof-disabled@example.com", "supersecret"
 	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
@@ -29,7 +33,7 @@ func TestPprofHandlerIsDisabledByDefault(t *testing.T) {
 }
 
 func TestPprofHandlerAuthorizesAdminAndServesProfiles(t *testing.T) {
-	t.Setenv("SIMPLEDMS_PPROF_ENABLED", "true")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", pprofPath)
 	harness := newActionTestHarness(t)
 	email, password := "pprof-admin@example.com", "supersecret"
 	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
@@ -42,6 +46,36 @@ func TestPprofHandlerAuthorizesAdminAndServesProfiles(t *testing.T) {
 		}
 		if got := rr.Header().Get("Cache-Control"); got != "no-store" {
 			t.Errorf("GET %s Cache-Control = %q, want no-store", path, got)
+		}
+		if got := rr.Header().Get("Referrer-Policy"); got != "no-referrer" {
+			t.Errorf("GET %s Referrer-Policy = %q, want no-referrer", path, got)
+		}
+	}
+
+	index := servePprofRequest(harness.router, cookie)
+	href := regexp.MustCompile(`href=['\"]([^'\"]*goroutine\?debug=1)['\"]`).FindSubmatch(index.Body.Bytes())
+	if href == nil {
+		t.Fatal("pprof index does not contain a goroutine?debug=1 link")
+	}
+	indexURL, err := url.Parse(pprofIndexPath)
+	if err != nil {
+		t.Fatalf("parse pprof index path: %v", err)
+	}
+	linkURL, err := url.Parse(string(href[1]))
+	if err != nil {
+		t.Fatalf("parse pprof goroutine link: %v", err)
+	}
+	resolvedURL := indexURL.ResolveReference(linkURL)
+	if !strings.HasPrefix(resolvedURL.Path, pprofIndexPath) {
+		t.Fatalf("resolved goroutine link path = %q, want prefix %q", resolvedURL.Path, pprofIndexPath)
+	}
+	goroutine := servePprofRequest(harness.router, cookie, resolvedURL.String())
+	if goroutine.Code != http.StatusOK {
+		t.Errorf("GET resolved goroutine link status = %d, want %d", goroutine.Code, http.StatusOK)
+	}
+	for _, path := range []string{"/debug/pprof/", "/wrong/debug/pprof/"} {
+		if rr := servePprofRequest(harness.router, cookie, path); rr.Code != http.StatusNotFound {
+			t.Errorf("GET %s status = %d, want %d", path, rr.Code, http.StatusNotFound)
 		}
 	}
 
@@ -75,7 +109,7 @@ func TestPprofHandlerAuthorizesAdminAndServesProfiles(t *testing.T) {
 }
 
 func TestPprofHandlerRejectsUnauthorizedSessions(t *testing.T) {
-	t.Setenv("SIMPLEDMS_PPROF_ENABLED", "true")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", pprofPath)
 	harness := newActionTestHarness(t)
 	for _, path := range []string{pprofIndexPath, pprofIndexPath + "profile?seconds=1"} {
 		rr := servePprofRequest(harness.router, nil, path)
@@ -109,7 +143,7 @@ func TestPprofHandlerRejectsUnauthorizedSessions(t *testing.T) {
 }
 
 func TestPprofHandlerRejectsTemporaryAdminSession(t *testing.T) {
-	t.Setenv("SIMPLEDMS_PPROF_ENABLED", "true")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", pprofPath)
 	harness := newActionTestHarness(t)
 	email, password := "pprof-temporary@example.com", "supersecret"
 	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
@@ -123,6 +157,23 @@ func TestPprofHandlerRejectsTemporaryAdminSession(t *testing.T) {
 	rr := servePprofRequest(harness.router, cookie)
 	if rr.Code != http.StatusForbidden {
 		t.Fatalf("temporary admin status = %d, want %d", rr.Code, http.StatusForbidden)
+	}
+}
+
+func TestPprofHandlerRejectsInvalidConfiguredPaths(t *testing.T) {
+	for _, path := range []string{"bad/path", "bad*path", "bad.path", "bad path"} {
+		t.Run(path, func(t *testing.T) {
+			t.Setenv("SIMPLEDMS_PPROF_PATH", path)
+			harness := newActionTestHarness(t)
+			email, password := "pprof-invalid@example.com", "supersecret"
+			createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+			cookie := signInAndGetSessionCookie(t, harness, email, password)
+			for _, requestPath := range []string{pprofIndexPath, "/" + url.PathEscape(path) + "/debug/pprof/"} {
+				if rr := servePprofRequest(harness.router, cookie, requestPath); rr.Code != http.StatusNotFound {
+					t.Errorf("GET %s status = %d, want %d", requestPath, rr.Code, http.StatusNotFound)
+				}
+			}
+		})
 	}
 }
 

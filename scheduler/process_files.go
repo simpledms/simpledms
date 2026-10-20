@@ -551,6 +551,9 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 		// database to long and the user might not be able to write to the db...
 
 		filesToCopy := qq.tempFilesToCopy(ctx, tenantID, tenantDB, time.Now())
+		if len(filesToCopy) == 0 {
+			return true
+		}
 
 		tenantx := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
 

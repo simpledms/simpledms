@@ -28,7 +28,7 @@ require (
 	github.com/marcobeierer/go-tika v1.0.1
 	github.com/marcobeierer/structs v1.0.0
 	github.com/matoous/go-nanoid v1.5.1
-	github.com/mattn/go-sqlite3 v1.14.50
+	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/minio/minio-go/v7 v7.3.0
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/puzpuzpuz/xsync/v4 v4.5.0
