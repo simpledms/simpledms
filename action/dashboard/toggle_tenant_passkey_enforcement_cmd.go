@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"log"
 	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -11,8 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
-	account2 "github.com/simpledms/simpledms/model/main/account"
-	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -83,9 +83,16 @@ func (qq *ToggleTenantPasskeyEnforcementCmd) Handler(
 		return e.NewHTTPErrorf(http.StatusNotFound, "Organization not found.")
 	}
 
-	accountm := account2.NewAccount(mainCtx.Account)
-	tenantm := tenant2.NewTenant(tenantx)
-	if !tenantm.IsOwner(accountm) {
+	isActiveOwner, err := tenantaccess.NewTenantAccessService().IsActiveTenantOwner(
+		mainCtx,
+		mainCtx.Account.ID,
+		tenantx.ID,
+	)
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
+	}
+	if !isActiveOwner {
 		return e.NewHTTPErrorf(http.StatusForbidden, "Only owners can change passkey enforcement.")
 	}
 

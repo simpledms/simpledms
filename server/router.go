@@ -286,6 +286,12 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			}
 		*/
 
+		if qq.publicPaths[req.URL.Path] || qq.visitorOnlyPaths[req.URL.Path] {
+			if !bufferPublicRequestBody(rw, req) {
+				return
+			}
+		}
+
 		mainTx, err := qq.mainDB.Tx(req.Context(), isReadOnly)
 		if err != nil {
 			log.Println(err)
