@@ -490,8 +490,12 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 	if filex.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 	}
-	if err := qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, filex.ParentID, filex.IsInInbox); err != nil {
-		return nil, err
+	// a new version may keep the name of the file it replaces
+	if meta.originalFilename != filex.Name {
+		err = qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, filex.ParentID, filex.IsInInbox)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	prepared, err := qq.createStoredFileForPreparedUpload(ctx, meta)

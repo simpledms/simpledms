@@ -63,6 +63,42 @@ func TestSignInCmdRejectsUserWithoutActiveTenantAssignment(t *testing.T) {
 	}
 }
 
+func TestReadOnlyRequestSignsOutUserWithoutActiveTenantAssignment(t *testing.T) {
+	harness := newActionTestHarness(t)
+	harness.router.RegisterPage(route.DashboardRoute(), harness.actions.Dashboard.DashboardPage.Handler)
+
+	accountx, tenantx := signUpAccount(t, harness, "stale-session-owner@example.com")
+	sessionValue := createSessionForAccountForRulesTest(t, harness, accountx.ID)
+	harness.mainDB.ReadWriteConn.Tenant.UpdateOneID(tenantx.ID).
+		SetDeletedAt(time.Now()).
+		SetDeletedBy(accountx.ID).
+		ExecX(context.Background())
+
+	req := httptest.NewRequest(http.MethodGet, route.Dashboard(), nil)
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: sessionValue,
+		Path:  "/",
+	})
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther || rr.Header().Get("Location") != "/" {
+		t.Fatalf(
+			"expected redirect to sign in, got status %d and location %q",
+			rr.Code,
+			rr.Header().Get("Location"),
+		)
+	}
+
+	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().
+		Where(session.AccountID(accountx.ID)).
+		CountX(context.Background())
+	if sessionCount != 0 {
+		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+}
+
 func TestRouterRejectsExpiredTargetTenantAssignmentWhenAnotherAssignmentIsActive(t *testing.T) {
 	harness := newActionTestHarness(t)
 
@@ -436,6 +472,55 @@ func TestDeleteUserCmdBlocksTenantOwnerDeletingSelf(t *testing.T) {
 		OnlyX(context.Background())
 	if !ownerAccountAfter.DeletedAt.IsZero() {
 		t.Fatal("expected owner account not to be deleted")
+	}
+}
+
+func TestCreateUserCmdForbidsMembersWhoAreNotOwner(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	_, tenantx := signUpAccount(t, harness, "tenant-owner-create-user-setup@example.com")
+
+	memberEmail := "member-create-user@example.com"
+	createAccount(t, harness.mainDB, memberEmail, "supersecret")
+	memberAccount := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText(memberEmail))).
+		OnlyX(context.Background())
+	harness.mainDB.ReadWriteConn.TenantAccountAssignment.Create().
+		SetTenantID(tenantx.ID).
+		SetAccountID(memberAccount.ID).
+		SetRole(tenantrole.User).
+		SetIsOwningTenant(true).
+		SetIsDefault(true).
+		SaveX(context.Background())
+	initTenantDB(t, harness, tenantx)
+
+	form := url.Values{}
+	form.Set("Role", tenantrole.User.String())
+	form.Set("Email", "invited-by-member@example.com")
+	form.Set("FirstName", "Invited")
+	form.Set("LastName", "User")
+	form.Set("Language", language.English.String())
+
+	req := httptest.NewRequest(http.MethodPost, "/-/manage-org-users/create-user-cmd", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", route.ManageUsersOfTenant(tenantx.PublicID.String()))
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: createSessionForAccountForRulesTest(t, harness, memberAccount.ID),
+		Path:  "/",
+	})
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, rr.Code)
+	}
+	invitedExists := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText("invited-by-member@example.com"))).
+		ExistX(context.Background())
+	if invitedExists {
+		t.Fatal("expected no account to be created")
 	}
 }
 

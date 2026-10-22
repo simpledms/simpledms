@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
@@ -366,18 +367,17 @@ func (qq *Tenant) initDB(
 		return nil, err
 	}
 
-	qq.Data.Update().
-		SetInitializedAt(time.Now()).
-		SetX25519IdentityEncrypted(entx.NewEncryptedX25519Identity(tenantIdentity)).
-		ClearMaintenanceModeEnabledAt().
-		SaveX(ctx)
-
-	// create users in tenant db
+	// create users in tenant db before the tenant is marked as initialized, because users of an
+	// initialized tenant are allowed to access it; users created by an interrupted earlier
+	// attempt are kept
 	accounts := qq.Data.QueryAccounts().WithTenantAssignment().AllX(ctx)
 	for _, accountx := range accounts {
 		if len(accountx.Edges.TenantAssignment) == 0 || len(accountx.Edges.TenantAssignment) > 1 {
 			// should never happen, should always be one
 			log.Printf("account %d has %d tenant assignments", accountx.ID, len(accountx.Edges.TenantAssignment))
+			continue
+		}
+		if tenantClient.ReadWriteConn.User.Query().Where(user.AccountID(accountx.ID)).ExistX(ctx) {
 			continue
 		}
 
@@ -389,6 +389,12 @@ func (qq *Tenant) initDB(
 			SetLastName(accountx.LastName).
 			SaveX(ctx)
 	}
+
+	qq.Data.Update().
+		SetInitializedAt(time.Now()).
+		SetX25519IdentityEncrypted(entx.NewEncryptedX25519Identity(tenantIdentity)).
+		ClearMaintenanceModeEnabledAt().
+		SaveX(ctx)
 
 	return tenantClient, nil
 }

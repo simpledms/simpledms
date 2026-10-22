@@ -902,7 +902,9 @@ func (qq *Router) authenticateAccount(
 	// doesn't do much because we only read the value...
 	if err = cookie.Valid(); err != nil {
 		cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
-		mainTx.Session.Delete().Where(session.Value(cookie.Value)).ExecX(req.Context())
+		qq.writableSessionClient(mainTx, isReadOnly).Delete().
+			Where(session.Value(cookie.Value)).
+			ExecX(req.Context())
 		return nil, false, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but not valid.")
 	}
 	if cookie.Value == "" {
@@ -959,7 +961,9 @@ func (qq *Router) authenticateAccount(
 				rw,
 				qq.infra.SystemConfig().AllowInsecureCookies(),
 			)
-			mainTx.Session.Delete().Where(session.AccountID(accountx.ID)).ExecX(req.Context())
+			qq.writableSessionClient(mainTx, isReadOnly).Delete().
+				Where(session.AccountID(accountx.ID)).
+				ExecX(req.Context())
 			return nil, false, false, ErrSessionNotFound
 		}
 	}
@@ -971,13 +975,7 @@ func (qq *Router) authenticateAccount(
 		qq.infra.SystemConfig().AllowInsecureCookies(),
 	)
 	if isRenewed {
-		// A write request's mainTx holds the only read-write connection, so renew within it;
-		// ReadWriteConn would wait for that connection forever. A read-only mainTx cannot write.
-		sessionClient := qq.mainDB.ReadWriteConn.Session
-		if !isReadOnly {
-			sessionClient = mainTx.Session
-		}
-		sessionClient.Update().
+		qq.writableSessionClient(mainTx, isReadOnly).Update().
 			SetDeletableAt(cookiex.DeletableAt(cookie)).
 			SetExpiresAt(cookie.Expires).
 			Where(session.Value(cookie.Value)).
@@ -985,4 +983,14 @@ func (qq *Router) authenticateAccount(
 	}
 
 	return accountm, true, sessionx.IsTemporarySession, nil
+}
+
+// writableSessionClient returns a session client that can write while authenticating a request.
+// A write request's mainTx holds the only read-write connection, so writes must use it;
+// ReadWriteConn would wait for that connection forever. A read-only mainTx cannot write.
+func (qq *Router) writableSessionClient(mainTx *entmain.Tx, isReadOnly bool) *entmain.SessionClient {
+	if isReadOnly {
+		return qq.mainDB.ReadWriteConn.Session
+	}
+	return mainTx.Session
 }

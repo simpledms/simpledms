@@ -14,7 +14,6 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
@@ -117,14 +116,6 @@ func (qq *UploadFileVersionCmd) prepareUpload(
 		}
 		if filex.Data.IsDirectory {
 			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
-		}
-		if err := fileutil.EnsureFileDoesNotExist(
-			writeCtx,
-			filename,
-			filex.Data.ParentID,
-			filex.Data.IsInInbox,
-		); err != nil {
-			return nil, err
 		}
 		prepared, err := qq.infra.FileSystem().PrepareFileVersionUpload(
 			writeCtx,

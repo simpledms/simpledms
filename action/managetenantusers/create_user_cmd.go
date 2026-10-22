@@ -71,7 +71,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users. No organization selected.")
 	}
 	if ctx.TenantCtx().User.Role != tenantrole.Owner {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
+		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to create users because you are not the owner.")
 	}
 
 	err = tenantusermodel.Create(
