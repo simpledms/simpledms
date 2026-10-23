@@ -96,7 +96,7 @@ func exerciseWebDAVCredentialActions(
 		mainTx *entmain.Tx,
 		mainCtx *ctxx.MainContext,
 	) error {
-		if err := assertWebDAVCredentialForm(t, harness, mainCtx); err != nil {
+		if err := assertWebDAVCredentialForm(t, harness, mainCtx, tenantx.Name); err != nil {
 			return err
 		}
 
@@ -153,6 +153,7 @@ func assertWebDAVCredentialForm(
 	t *testing.T,
 	harness *actionTestHarness,
 	mainCtx *ctxx.MainContext,
+	initialSpaceName string,
 ) error {
 	t.Helper()
 	createAttrs := harness.actions.Dashboard.CreateWebDAVCredentialCmd.ModalLinkAttrs(
@@ -175,10 +176,15 @@ func assertWebDAVCredentialForm(
 	); err != nil {
 		return err
 	}
-	if count := strings.Count(formRR.Body.String(), `name="Destination"`); count != 2 {
-		t.Fatalf("expected two Space selector options, got %d", count)
+	body := formRR.Body.String()
+	if count := strings.Count(body, `name="Destination"`); count != 3 {
+		t.Fatalf("expected three Space selector options including initialized Space, got %d", count)
 	}
-	if body := formRR.Body.String(); !strings.Contains(body, `name="SecretLength"`) ||
+	if !strings.Contains(body, initialSpaceName) || !strings.Contains(body, "Scanner Inbox") ||
+		!strings.Contains(body, "Archive") {
+		t.Fatalf("expected initialized Space, Scanner Inbox, and Archive options: %s", body)
+	}
+	if !strings.Contains(body, `name="SecretLength"`) ||
 		!strings.Contains(body, `min="12"`) ||
 		!strings.Contains(body, `max="43"`) ||
 		!strings.Contains(body, `value="43"`) ||

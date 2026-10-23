@@ -176,6 +176,10 @@ func prepareInboxTransferDialogEmptyState(
 	if err := run(func(ctx *ctxx.SpaceContext) error {
 		ctx.TTx.File.UpdateOneID(fileID).SetIsInInbox(true).SaveX(ctx)
 		ctx.TTx.Space.UpdateOneID(ctx.Space.ID).SetAcceptsInboxTransfers(true).SaveX(ctx)
+		// The tenant owner can write to the initialized default Space, so remove
+		// other Spaces here to preserve the dialog's genuine empty state.
+		ctx.TTx.Space.Update().Where(space.IDNEQ(ctx.Space.ID)).
+			SetDeletedAt(time.Now()).SaveX(ctx)
 		return nil
 	}); err != nil {
 		t.Fatal(err)

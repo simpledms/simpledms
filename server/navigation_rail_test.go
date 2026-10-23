@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
 func TestNavigationRailShowsMainDestinations(t *testing.T) {
@@ -236,6 +237,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 	assertNavigationRailItemActiveRecursive(t, tenantRail.TopItems, "Spaces")
 
 	spacex := tenantCtx.TTx.Space.Query().Where(space.Name("Docs")).OnlyX(tenantCtx)
+	initialSpacex := tenantCtx.TTx.Space.Query().Where(space.Name(tenantx.Name)).OnlyX(tenantCtx)
 	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 	rail := partial2.NewNavigationRail(spaceCtx, harness.infra, "tags", nil)
 
@@ -256,8 +258,36 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Home", "Dashboard")
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Spaces by Organization", tenantx.Name)
 	selector, ok := rail.ExpandedSelector.(*widget.Combobox)
-	if !ok || selector.Input.Placeholder != "Docs" || len(selector.Menu.Items) != 4 {
-		t.Fatalf("expected expanded selector for Docs with two spaces, got %#v", rail.ExpandedSelector)
+	if !ok || selector.Input.Placeholder != "Docs" || len(selector.Menu.Items) != 5 {
+		t.Fatalf("expected expanded selector for Docs with three spaces, got %#v", rail.ExpandedSelector)
+	}
+	selectorLabels := make([]string, 0, len(selector.Menu.Items))
+	hasInitialSpace, hasDocsSpace, hasProjectsSpace := false, false, false
+	projects := tenantCtx.TTx.Space.Query().Where(space.Name("Projects")).OnlyX(tenantCtx)
+	for _, item := range selector.Menu.Items {
+		label := item.Label.String(spaceCtx)
+		selectorLabels = append(selectorLabels, label)
+		if item.IsSubheader {
+			continue
+		}
+		switch label {
+		case tenantx.Name:
+			hasInitialSpace = hasInitialSpace || item.HxGet ==
+				route2.BrowseRoot(tenantx.PublicID.String(), initialSpacex.PublicID.String())
+		case "Docs":
+			hasDocsSpace = hasDocsSpace || item.HxGet ==
+				route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String())
+		case "Projects":
+			hasProjectsSpace = hasProjectsSpace || item.HxGet ==
+				route2.BrowseRoot(tenantx.PublicID.String(), projects.PublicID.String())
+		}
+	}
+	if !hasInitialSpace || !hasDocsSpace || !hasProjectsSpace {
+		t.Fatalf(
+			"expected selector links for %q, Docs, and Projects, got %v",
+			tenantx.Name,
+			selectorLabels,
+		)
 	}
 	assertNavigationRailLabelsExcludeRecursive(t, rail.TopItems, "Users", "Settings")
 

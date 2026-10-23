@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
 	migratex "github.com/golang-migrate/migrate/v4"
@@ -19,13 +20,18 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	accountm "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util/e"
@@ -390,6 +396,14 @@ func (qq *Tenant) initDB(
 			SaveX(ctx)
 	}
 
+	if err := qq.initializeSpace(ctx, tenantClient); err != nil {
+		log.Println(err)
+		if closeErr := tenantClient.Close(); closeErr != nil {
+			log.Println(closeErr)
+		}
+		return nil, err
+	}
+
 	qq.Data.Update().
 		SetInitializedAt(time.Now()).
 		SetX25519IdentityEncrypted(entx.NewEncryptedX25519Identity(tenantIdentity)).
@@ -397,6 +411,94 @@ func (qq *Tenant) initDB(
 		SaveX(ctx)
 
 	return tenantClient, nil
+}
+
+func (qq *Tenant) initializeSpace(ctx context.Context, tenantDB *sqlx.TenantDB) error {
+	// Background initialization has no request scope; provision the space before granting access.
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	tx, err := tenantDB.ReadWriteConn.Tx(ctx)
+	if err != nil {
+		return err
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			if err := tx.Rollback(); err != nil {
+				log.Println(err)
+			}
+		}
+	}()
+
+	owners, err := tx.User.Query().
+		Where(user.RoleEQ(tenantrole.Owner), user.DeletedAtIsNil()).
+		Order(user.ByID()).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+	// Backup restores initialize an empty database before replacing it with the snapshot.
+	if len(owners) == 0 {
+		return nil
+	}
+
+	name := qq.Data.Name
+	if strings.TrimSpace(name) == "" {
+		name = strings.TrimSpace(owners[0].FirstName + " " + owners[0].LastName)
+	}
+	spacex, err := tx.Space.Query().
+		Where(space.NameEQ(name), space.DeletedAtIsNil()).
+		Only(ctx)
+	if enttenant.IsNotFound(err) {
+		spacex, err = tx.Space.Create().SetName(name).SetIsFolderMode(true).Save(ctx)
+	}
+	if err != nil {
+		return err
+	}
+
+	hasRootDir, err := tx.File.Query().
+		Where(file.SpaceID(spacex.ID), file.IsRootDir(true)).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+	if !hasRootDir {
+		_, err = tx.File.Create().
+			SetName(name).
+			SetIsDirectory(true).
+			SetIndexedAt(time.Now()).
+			SetModifiedAt(time.Now()).
+			SetSpaceID(spacex.ID).
+			SetIsRootDir(true).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, owner := range owners {
+		assignment, err := tx.SpaceUserAssignment.Query().Where(
+			spaceuserassignment.SpaceID(spacex.ID),
+			spaceuserassignment.UserID(owner.ID),
+		).Only(ctx)
+		if enttenant.IsNotFound(err) {
+			_, err = tx.SpaceUserAssignment.Create().
+				SetSpaceID(spacex.ID).
+				SetUserID(owner.ID).
+				SetRole(spacerole.Owner).
+				Save(ctx)
+		} else if err == nil && assignment.Role != spacerole.Owner {
+			_, err = tx.SpaceUserAssignment.UpdateOne(assignment).SetRole(spacerole.Owner).Save(ctx)
+		}
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+	committed = true
+	return nil
 }
 
 func (qq *Tenant) Name() string {
