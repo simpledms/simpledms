@@ -9,16 +9,24 @@ type FileSearch struct {
 	ent.View
 }
 
-func (FileSearch) SQL() string {
-	// language=sqlite
-	return `
--- FIXME should only be done once... no recreation on every start
-DROP TABLE IF EXISTS file_searches;
-DROP TRIGGER IF EXISTS files_ai;
+// SQL rebuilds the search index, including rows written while triggers were missing.
+func (qq FileSearch) SQL() string {
+	query := `DROP TRIGGER IF EXISTS files_ai;
 DROP TRIGGER IF EXISTS files_ad;
 DROP TRIGGER IF EXISTS files_au;
---CREATE VIRTUAL TABLE file_searches USING fts5(file_id UNINDEXED, filename, is_directory UNINDEXED);
---INSERT INTO file_searches SELECT id,name, is_directory FROM files;
+DROP TABLE IF EXISTS file_searches;
+` + qq.TableSQL() + "\nINSERT INTO file_searches(file_searches) VALUES ('rebuild');\n"
+	triggers := qq.TriggersSQL()
+	for _, name := range []string{"files_ai", "files_ad", "files_au"} {
+		query += triggers[name] + "\n"
+	}
+	return query
+}
+
+// TableSQL defines the external-content FTS table without rebuilding its index.
+func (FileSearch) TableSQL() string {
+	// language=sqlite
+	return `
 CREATE VIRTUAL TABLE file_searches USING fts5(
   space_id UNINDEXED,
   is_directory UNINDEXED,
@@ -29,25 +37,31 @@ CREATE VIRTUAL TABLE file_searches USING fts5(
   content_rowid='id',
   prefix='2 3 4',
   tokenize='porter unicode61'
-);
-INSERT INTO file_searches(file_searches) VALUES ('rebuild'); -- sync index
+);`
+}
 
--- Triggers to keep the FTS index up to date.
-CREATE TRIGGER files_ai AFTER INSERT ON files BEGIN
+// TriggersSQL defines the triggers that keep indexed text synchronized with files.
+func (FileSearch) TriggersSQL() map[string]string {
+	return map[string]string{
+		"files_ai": `CREATE TRIGGER files_ai AFTER INSERT ON files BEGIN
   INSERT INTO file_searches(rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
   VALUES (new.id, new.space_id, new.is_directory, new.is_in_inbox, new.name, new.ocr_content);
-END;
-CREATE TRIGGER files_ad AFTER DELETE ON files BEGIN
+END;`,
+		"files_ad": `CREATE TRIGGER files_ad AFTER DELETE ON files BEGIN
   INSERT INTO file_searches(file_searches, rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
   VALUES('delete', old.id, old.space_id, old.is_directory, old.is_in_inbox, old.name, old.ocr_content);
-END;
-CREATE TRIGGER files_au AFTER UPDATE ON files BEGIN
+END;`,
+		// Unindexed values are read from the external content table. Only changes to
+		// indexed text or its rowid require retokenizing potentially large OCR content.
+		"files_au": `CREATE TRIGGER files_au AFTER UPDATE OF id, name, ocr_content ON files
+WHEN old.id IS NOT new.id OR old.name IS NOT new.name OR old.ocr_content IS NOT new.ocr_content
+BEGIN
   INSERT INTO file_searches(file_searches, rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
   VALUES('delete', old.id, old.space_id, old.is_directory, old.is_in_inbox, old.name, old.ocr_content);
   INSERT INTO file_searches(rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
   VALUES (new.id, new.space_id, new.is_directory, new.is_in_inbox, new.name, new.ocr_content);
-END;
-`
+END;`,
+	}
 }
 
 func (FileSearch) Fields() []ent.Field {

@@ -2,8 +2,11 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
+
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
@@ -26,7 +29,6 @@ func (User) Fields() []ent.Field {
 			GoType(tenantrole.User),
 
 		field.String("email").
-			Unique().
 			GoType(entx.CIText("")),
 		field.String("first_name"),
 		field.String("last_name").Optional(),
@@ -43,6 +45,14 @@ func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("spaces", Space.Type).
 			Through("space_assignment", SpaceUserAssignment.Type), // TODO unique?
+	}
+}
+
+func (User) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("email").
+			Annotations(entsql.IndexWhere("`deleted_at` is null")).
+			Unique(),
 	}
 }
 

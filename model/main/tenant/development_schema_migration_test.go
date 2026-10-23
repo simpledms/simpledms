@@ -59,8 +59,13 @@ func TestDevelopmentSchemaCreateAddsIndexedColumnsWithoutRebuildingTables(t *tes
 		t.Fatal(err)
 	}
 	if _, err := db.Exec(
-		`INSERT INTO attributes (name, type, space_id, document_type_id) ` +
-			`VALUES ('Tag', 'Tag', 1, 1)`,
+		`INSERT INTO tags (id, name, type, space_id) VALUES (1, 'Existing Group', 'Group', 1)`,
+	); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(
+		`INSERT INTO attributes (name, type, tag_id, space_id, document_type_id) ` +
+			`VALUES ('Tag', 'Tag', 1, 1, 1)`,
 	); err != nil {
 		t.Fatal(err)
 	}

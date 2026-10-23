@@ -23,7 +23,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
-	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
@@ -166,29 +165,12 @@ func (qq *Tenant) ExecuteDBMigrations(
 ) error {
 	ctx := context.Background()
 
-	// necessary because they depend on other tables and are not managed by ent;
-	// for example on updates to files table, migration failes if file_infos still exists because
-	// data gets transferred in temporary table and files table then gets deleted by ent...
-	//
-	// FIXME find a more efficient way, could be very expensive doing this on every startup; only
-	// 		necessary if migration is necessary
-	for _, query := range []string{
-		"drop view if exists file_infos;",
-		"drop view if exists resolved_tag_assignments;",
-		"DROP TABLE IF EXISTS file_searches;",
-		"drop trigger if exists files_ai;",
-		"drop trigger if exists files_ad;",
-		"drop trigger if exists files_au;",
-	} {
-		_, err := tenantDB.ReadWriteConn.ExecContext(ctx, query)
-		if err != nil {
+	if devMode {
+		log.Println("Running in development mode")
+		if err := dropTenantViews(ctx, tenantDB); err != nil {
 			log.Println(err)
 			return err
 		}
-	}
-
-	if devMode {
-		log.Println("Running in development mode")
 
 		// TODO
 		// fails for tables that reference themselves (O2M with same type), for example files
@@ -220,22 +202,15 @@ func (qq *Tenant) ExecuteDBMigrations(
 			return err
 		}
 	} else {
-		err := qq.migrateTenant(migrationsTenantFS, metaPath)
+		err := qq.migrateTenant(migrationsTenantFS, metaPath, tenantDB)
 		if err != nil {
 			log.Println(err)
 			return err
 		}
 	}
-	// TODO find a better way
-	for _, query := range []string{
-		schema.ResolvedTagAssignment{}.SQL(),
-		schema.FileSearch{}.SQL(),
-	} {
-		_, err := tenantDB.ReadWriteConn.ExecContext(ctx, query)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
+	if err := ensureTenantViews(ctx, tenantDB); err != nil {
+		log.Println(err)
+		return err
 	}
 
 	return nil
@@ -296,23 +271,22 @@ func sqliteCount(ctx context.Context, tenantDB *sqlx.TenantDB, query string) (in
 	return count, rows.Err()
 }
 
-func (qq *Tenant) migrateTenant(migrationsTenantFS fs.FS, metaPath string) error {
+func (qq *Tenant) migrateTenant(
+	migrationsTenantFS fs.FS,
+	metaPath string,
+	tenantDB *sqlx.TenantDB,
+) (returnErr error) {
 	drv, err := iofs.New(migrationsTenantFS, ".")
 	if err != nil {
 		log.Printf("failed reading migration filesystem: %v", err)
 		return err
 	}
-	defer func() {
-		if err = drv.Close(); err != nil {
-			log.Println(err)
-		}
-	}()
 
 	// TODO shouldCreateDirs okay? should already exists...
 	_, readWriteTenantDataSourceURL, err := qq.tenantDataSourceURL(metaPath, false)
 	if err != nil {
 		log.Println(err)
-		return err
+		return errors.Join(err, drv.Close())
 	}
 	// necessary because `PRAGMA foreign_keys = off` doesn't work in many
 	// circumstances
@@ -333,18 +307,39 @@ func (qq *Tenant) migrateTenant(migrationsTenantFS fs.FS, metaPath string) error
 	)
 	if err != nil {
 		log.Printf("failed loading migration instance: %v", err)
+		return errors.Join(err, drv.Close())
+	}
+	defer func() {
+		srcErr, dbErr := migx.Close()
+		if srcErr != nil || dbErr != nil {
+			log.Println(srcErr, dbErr)
+			returnErr = errors.Join(returnErr, srcErr, dbErr)
+		}
+	}()
+	version, dirty, err := migx.Version()
+	if err != nil && !errors.Is(err, migratex.ErrNilVersion) {
 		return err
+	}
+	if dirty {
+		return migratex.ErrDirty{Version: int(version)}
+	}
+	hasPending := errors.Is(err, migratex.ErrNilVersion)
+	if !hasPending {
+		_, err = drv.Next(version)
+		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+			return err
+		}
+		hasPending = err == nil
+	}
+	if hasPending {
+		if err := dropTenantViews(context.Background(), tenantDB); err != nil {
+			return err
+		}
 	}
 	err = migx.Up()
 	if err != nil && !errors.Is(err, migratex.ErrNoChange) {
 		log.Printf("failed running migrations up: %v", err)
 		return err
-	}
-
-	srcErr, dbErr := migx.Close()
-	if srcErr != nil || dbErr != nil {
-		log.Println(srcErr, dbErr)
-		return fmt.Errorf("failed closing migration instance: %v, %v", srcErr, dbErr)
 	}
 
 	return nil

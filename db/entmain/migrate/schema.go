@@ -219,6 +219,18 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "session_account_id",
+				Unique:  false,
+				Columns: []*schema.Column{SessionsColumns[7]},
+			},
+			{
+				Name:    "session_deletable_at",
+				Unique:  false,
+				Columns: []*schema.Column{SessionsColumns[4]},
+			},
+		},
 	}
 	// SystemConfigsColumns holds the columns for the "system_configs" table.
 	SystemConfigsColumns = []*schema.Column{
@@ -457,6 +469,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "tenantaccountassignment_account_id",
+				Unique:  false,
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11]},
+			},
 			{
 				Name:    "tenantaccountassignment_tenant_id_account_id",
 				Unique:  true,

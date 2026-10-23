@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/hook"
 	"github.com/simpledms/simpledms/db/entmain/intercept"
 	"github.com/simpledms/simpledms/db/entx"
@@ -56,8 +57,8 @@ func (qq SoftDeleteMixin) Hooks() []ent.Hook {
 					}
 					mx, ok := m.(interface {
 						SetOp(ent.Op)
-						// Client() *gen.Client
-						SetDeleteTime(time.Time)
+						Client() *entmain.Client
+						SetDeletedAt(time.Time)
 						WhereP(...func(*sql.Selector))
 					})
 					if !ok {
@@ -65,8 +66,9 @@ func (qq SoftDeleteMixin) Hooks() []ent.Hook {
 					}
 					qq.P(mx)
 					mx.SetOp(ent.OpUpdate)
-					mx.SetDeleteTime(time.Now())
-					return next.Mutate(ctx, m)
+					mx.SetDeletedAt(time.Now())
+					// Redispatch to the update builder; next still executes the original DELETE.
+					return mx.Client().Mutate(ctx, m)
 				})
 			},
 			ent.OpDeleteOne|ent.OpDelete,

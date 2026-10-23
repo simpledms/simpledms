@@ -48,6 +48,8 @@ func (TenantAccountAssignment) Edges() []ent.Edge {
 
 func (TenantAccountAssignment) Indexes() []ent.Index {
 	return []ent.Index{
+		// The partial indexes below do not cover all memberships of an account.
+		index.Fields("account_id"),
 		index.
 			Fields("tenant_id", "account_id").
 			Unique(),

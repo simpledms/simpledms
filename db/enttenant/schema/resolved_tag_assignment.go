@@ -12,11 +12,14 @@ type ResolvedTagAssignment struct {
 	ent.View
 }
 
-// manually executed in main.go
-func (ResolvedTagAssignment) SQL() string {
+func (qq ResolvedTagAssignment) SQL() string {
+	return "DROP VIEW IF EXISTS resolved_tag_assignments;\n" + qq.CreateSQL()
+}
+
+// CreateSQL defines the view without dropping an existing instance.
+func (ResolvedTagAssignment) CreateSQL() string {
 	// language=sqlite
 	return `
-		DROP VIEW IF EXISTS resolved_tag_assignments; 
 		CREATE VIEW resolved_tag_assignments (tag_id, file_id, space_id) AS 
 			-- select all directly assigned tags
 			SELECT tag_id, file_id, space_id FROM tag_assignments

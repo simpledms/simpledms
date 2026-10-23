@@ -1,4 +1,4 @@
-h1:v/Ca2DZ9AIQG6zbSBwkpasRhx+j8bRBxnWqSx/BgI7g=
+h1:R6wcBpFIVnPloRIcN+nb2ZTzl1JAGHumR+nmfnNYmqk=
 20250506173739_v1.0.0-beta.1.up.sql h1:0jwTs/r/g1CX6rrTUSkTwJF1rfnC08+eSK5Odd764ao=
 20250801110934_v1.1.0-rc.1.up.sql h1:FN9O9ql+I5TD+wc3/u0RWVu81bo09rQK1mtKB0DInf4=
 20260115140029_v1.2.0-rc.2.up.sql h1:XF9vhPOahB/nsVQGqGK22G5Y7id+BPGq8d5OmXUqkns=
@@ -15,3 +15,4 @@ h1:v/Ca2DZ9AIQG6zbSBwkpasRhx+j8bRBxnWqSx/BgI7g=
 20260918225936_mcp_credentials.up.sql h1:lmwhnyVaEeA3ucLgPS1O/1KYZjrYHuDPV35xyomMmKk=
 20261010224808_ocr_xberg_url.up.sql h1:iY+vVWxXb+wsmEcz5SHhwwd2AbuJ5UUqOHVmpU1K9Z8=
 20261019094037_account_last_login.up.sql h1:oJ18S/FH5mEDmW/685+agY3A46MQGe7QT5TlcqQguIc=
+20261023103655_schema_integrity_and_lookup_indexes.up.sql h1:e8TB/TNmInsX1XEYFApB0qFwnSRqw/M+dHdl12cb4wQ=

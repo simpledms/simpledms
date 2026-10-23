@@ -294,60 +294,6 @@ var (
 				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27]},
 			},
 			{
-				Name:    "file_browse_name",
-				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[5]},
-				Annotation: &entsql.IndexAnnotation{
-					DescColumns: map[string]bool{
-						FilesColumns[7].Name: true,
-					},
-					Where: "`deleted_at` is null and `is_in_inbox` = false",
-				},
-			},
-			{
-				Name:    "file_browse_created",
-				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
-				Annotation: &entsql.IndexAnnotation{
-					DescColumns: map[string]bool{
-						FilesColumns[3].Name: true,
-
-						FilesColumns[7].Name: true,
-					},
-					Where: "`deleted_at` is null and `is_in_inbox` = false",
-				},
-			},
-			{
-				Name:    "file_browse_created_oldest",
-				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
-				Annotation: &entsql.IndexAnnotation{
-					DescColumns: map[string]bool{
-						FilesColumns[7].Name: true,
-					},
-					Where: "`deleted_at` is null and `is_in_inbox` = false",
-				},
-			},
-			{
-				Name:    "file_inbox_created",
-				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[26], FilesColumns[7], FilesColumns[3]},
-				Annotation: &entsql.IndexAnnotation{
-					DescColumns: map[string]bool{
-						FilesColumns[3].Name: true,
-					},
-					Where: "`deleted_at` is null and `is_in_inbox` = true",
-				},
-			},
-			{
-				Name:    "file_inbox_name",
-				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[26], FilesColumns[7], FilesColumns[5]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "`deleted_at` is null and `is_in_inbox` = true",
-				},
-			},
-			{
 				Name:    "file_browse_name_fast",
 				Unique:  false,
 				Columns: []*schema.Column{FilesColumns[26], FilesColumns[27], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[5]},
@@ -949,7 +895,7 @@ var (
 		{Name: "public_id", Type: field.TypeString, Unique: true},
 		{Name: "account_id", Type: field.TypeInt64, Unique: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"User", "Owner"}},
-		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "email", Type: field.TypeString},
 		{Name: "first_name", Type: field.TypeString},
 		{Name: "last_name", Type: field.TypeString, Nullable: true},
 		{Name: "avatar", Type: field.TypeString, Nullable: true},
@@ -960,6 +906,16 @@ var (
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "user_email",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`deleted_at` is null",
+				},
+			},
+		},
 	}
 	// WebDavResourcesColumns holds the columns for the "web_dav_resources" table.
 	WebDavResourcesColumns = []*schema.Column{
@@ -1097,6 +1053,10 @@ func init() {
 	AttributesTable.ForeignKeys[1].RefTable = TagsTable
 	AttributesTable.ForeignKeys[2].RefTable = PropertiesTable
 	AttributesTable.ForeignKeys[3].RefTable = DocumentTypesTable
+	AttributesTable.Annotation = &entsql.Annotation{}
+	AttributesTable.Annotation.Checks = map[string]string{
+		"attribute_type_target": "((`type` = 'Tag' and `tag_id` is not null and `property_id` is null) or (`type` = 'Field' and `property_id` is not null and `tag_id` is null))",
+	}
 	DocumentNotesTable.ForeignKeys[0].RefTable = SpacesTable
 	DocumentNotesTable.ForeignKeys[1].RefTable = FilesTable
 	DocumentNotesTable.ForeignKeys[2].RefTable = UsersTable
@@ -1112,6 +1072,10 @@ func init() {
 	FilePropertyAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable
 	FilePropertyAssignmentsTable.ForeignKeys[1].RefTable = FilesTable
 	FilePropertyAssignmentsTable.ForeignKeys[2].RefTable = PropertiesTable
+	FilePropertyAssignmentsTable.Annotation = &entsql.Annotation{}
+	FilePropertyAssignmentsTable.Annotation.Checks = map[string]string{
+		"file_property_assignment_single_value": "((`text_value` is not null) + (`number_value` is not null) + (`date_value` is not null) + (`bool_value` is not null)) <= 1",
+	}
 	FileVersionsTable.ForeignKeys[0].RefTable = FilesTable
 	FileVersionsTable.ForeignKeys[1].RefTable = StoredFilesTable
 	PreviewConversionsTable.ForeignKeys[0].RefTable = UsersTable

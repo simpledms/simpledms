@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 )
 
@@ -32,9 +34,18 @@ func (Attribute) Fields() []ent.Field {
 		field.Enum("type").
 			GoType(attributetype.AttributeType(0)),
 
-		// TODO enforce that one is not null?
 		field.Int64("tag_id").Optional(),
 		field.Int64("property_id").Optional(),
+	}
+}
+
+func (Attribute) Annotations() []schema.Annotation {
+	validTarget := "((`type` = 'Tag' and `tag_id` is not null and `property_id` is null) or " +
+		"(`type` = 'Field' and `property_id` is not null and `tag_id` is null))"
+	return []schema.Annotation{
+		entsql.Checks(map[string]string{
+			"attribute_type_target": validTarget,
+		}),
 	}
 }
 

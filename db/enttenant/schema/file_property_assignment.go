@@ -2,6 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
@@ -24,6 +26,17 @@ func (FilePropertyAssignment) Fields() []ent.Field {
 		field.Int("number_value").Optional(),
 		field.Time("date_value").GoType(timex.Date{}).Optional(),
 		field.Bool("bool_value").Optional(),
+	}
+}
+
+func (FilePropertyAssignment) Annotations() []schema.Annotation {
+	// Keep legacy unset values valid, but never store conflicting typed values.
+	singleValue := "((`text_value` is not null) + (`number_value` is not null) + " +
+		"(`date_value` is not null) + (`bool_value` is not null)) <= 1"
+	return []schema.Annotation{
+		entsql.Checks(map[string]string{
+			"file_property_assignment_single_value": singleValue,
+		}),
 	}
 }
 
