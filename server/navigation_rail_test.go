@@ -109,7 +109,7 @@ func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
 	assertNavigationRailLabelsContainRecursive(t, ownerRail.TopItems, "Spaces", "Users", "Settings")
 	assertNavigationRailLabelsExclude(t, ownerRail.TopItems, "Spaces")
 
-	wantFooter := []string{"Sign out", "About SimpleDMS"}
+	wantFooter := []string{"About SimpleDMS", "Sign out"}
 	if got := navigationRailLabels(ownerRail.FooterItems); !reflect.DeepEqual(got, wantFooter) {
 		t.Fatalf("expected footer labels %v, got %v", wantFooter, got)
 	}
@@ -378,7 +378,10 @@ func TestNavigationRailPluginHooksAndLegacyDestinations(t *testing.T) {
 		t.Fatalf("expected top item labels %v, got %v", topItemsWant, got)
 	}
 	assertNavigationRailItemActive(t, rail.TopItems, "Menu Plugin")
-	assertNavigationRailLabelsContain(t, rail.FooterItems, "Footer Plugin")
+	wantFooter := []string{"About SimpleDMS", "Footer Plugin", "Sign out"}
+	if got := navigationRailLabels(rail.FooterItems); !reflect.DeepEqual(got, wantFooter) {
+		t.Fatalf("expected footer labels %v, got %v", wantFooter, got)
+	}
 }
 
 type navigationRailTestPlugin struct{}

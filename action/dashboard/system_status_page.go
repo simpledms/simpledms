@@ -40,17 +40,21 @@ func (qq *SystemStatusPage) Handler(
 		)
 	}
 
-	widget, err := qq.Widget(ctx)
+	widget, err := qq.Widget(ctx, req)
 	if err != nil {
 		return err
 	}
 
+	rw.Header().Set("Cache-Control", "no-store")
 	return qq.Render(rw, req, ctx, qq.infra, "System status", widget)
 }
 
-func (qq *SystemStatusPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
+func (qq *SystemStatusPage) Widget(
+	ctx ctxx.Context,
+	req *httpx.Request,
+) (renderable.Renderable, error) {
 	fabs := []*widget.FloatingActionButton{}
-	systemStatusWidget, err := qq.actions.SystemStatusPartial.Widget(ctx)
+	systemStatusWidget, err := qq.actions.SystemStatusPartial.Widget(ctx, req)
 	if err != nil {
 		log.Println(err)
 		return nil, err

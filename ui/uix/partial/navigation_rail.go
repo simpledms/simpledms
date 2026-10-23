@@ -138,18 +138,19 @@ func footerNavigationRailItems(
 ) []*widget.NavigationRailItem {
 	var items []*widget.NavigationRailItem
 
-	if ctx.IsMainCtx() {
-		items = append(items, signOutNavigationRailItem(ctx))
-	}
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		items = append(items, aboutNavigationRailItem(ctx))
 	}
 
-	return infra.PluginRegistry().ExtendNavigationRailFooterItems(
+	items = infra.PluginRegistry().ExtendNavigationRailFooterItems(
 		ctx,
 		items,
 		active,
 	)
+	if ctx.IsMainCtx() {
+		items = append(items, signOutNavigationRailItem(ctx))
+	}
+	return items
 }
 
 func mainNavigationRailItems(ctx ctxx.Context, active string) []*widget.NavigationRailItem {

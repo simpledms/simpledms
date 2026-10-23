@@ -218,12 +218,15 @@ test.describe("maintenance screen unlock", () => {
 		const cleanedURL = new URL("/?keep=1#details", page.url());
 		let networkFailurePolls = 0;
 		let markedPolls = 0;
-		let markerFree503Polls = 0;
+		let transientPolls = 0;
+		let navigationBeforeReady = false;
+		let appRequestSeen = false;
 		await page.route((url) => {
 			return url.pathname === cleanedURL.pathname && url.search === cleanedURL.search;
 		}, async (route) => {
 			const request = route.request();
 			if (request.resourceType() !== "fetch") {
+				if (!appRequestSeen) navigationBeforeReady = true;
 				await route.continue();
 				return;
 			}
@@ -242,6 +245,11 @@ test.describe("maintenance screen unlock", () => {
 				return;
 			}
 
+			if (transientPolls < 3) {
+				transientPolls++;
+				await route.fulfill({ status: [502, 503, 504][transientPolls - 1], body: "starting" });
+				return;
+			}
 			try {
 				const response = await route.fetch();
 				if (response.headers()[maintenanceMarker] === "true") {
@@ -249,8 +257,8 @@ test.describe("maintenance screen unlock", () => {
 					await route.fulfill({ response });
 					return;
 				}
-				markerFree503Polls++;
-				await route.fulfill({ status: 503, body: "normal route response" });
+				appRequestSeen = response.status() < 500;
+				await route.fulfill({ response });
 			} catch (_) {
 				await route.abort("connectionfailed");
 			}
@@ -265,7 +273,9 @@ test.describe("maintenance screen unlock", () => {
 		await expect(page).toHaveURL(cleanedURL.href, { timeout: 30_000 });
 		expect(networkFailurePolls).toBe(1);
 		expect(markedPolls).toBeGreaterThan(0);
-		expect(markerFree503Polls).toBe(1);
+		expect(transientPolls).toBe(3);
+		expect(navigationBeforeReady).toBe(false);
+		expect(appRequestSeen).toBe(true);
 
 		const finalContent = await page.content();
 		for (const sentinel of sentinels) {

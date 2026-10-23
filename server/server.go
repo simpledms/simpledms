@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -111,7 +110,7 @@ func newMaintenanceModeHandler(
 	encryptedIdentity []byte,
 	trustedProxies []netip.Prefix,
 	commercialLicenseEnabled bool,
-	stopFn func(),
+	onUnlock func(),
 ) http.Handler {
 	mux := http.NewServeMux()
 	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
@@ -184,15 +183,15 @@ func newMaintenanceModeHandler(
 			return
 		}
 
-		shouldStop := false
+		shouldNotify := false
 		unlockOnce.Do(func() {
 			encryptor.NilableX25519MainIdentity = identity
-			shouldStop = true
+			shouldNotify = true
 		})
 
 		rw.WriteHeader(http.StatusOK)
-		if shouldStop && stopFn != nil {
-			go stopFn()
+		if shouldNotify && onUnlock != nil {
+			go onUnlock()
 		}
 	})
 
@@ -362,7 +361,8 @@ func (qq *Server) Start() error {
 	return preparedServer.Start()
 }
 
-// Prepare initializes all runtime dependencies and routes without listening yet.
+// Prepare initializes runtime dependencies and routes. When locked, it serves
+// maintenance responses until Start activates the application handler.
 // Wrapping applications can use the returned PreparedServer to register additional
 // handlers on Router before calling PreparedServer.Start.
 // TODO way to long, needs refactoring
@@ -381,6 +381,17 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		return nil, err
 	}
 	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
+	var startup *startupServer
+	var tenantDBs *tenantdbs.TenantDBs
+	isPrepared := false
+	defer func() {
+		if !isPrepared {
+			if startup != nil {
+				stopMaintenanceModeServer(startup.server)
+			}
+			closePreparedResources(mainDB, tenantDBs)
+		}
+	}()
 	ctx := context.Background()
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
 
@@ -389,7 +400,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	renderer, i18nx := qq.newRendererAndI18n()
 	bootstrapConfig := qq.loadBootstrapSystemConfig(ctx, mainDB)
 	manager, useAutocert := qq.startAutocertIfRequired(bootstrapConfig)
-	qq.ensureMainIdentity(
+	startup, err = qq.ensureMainIdentity(
 		mainDB,
 		i18nx,
 		renderer,
@@ -398,18 +409,33 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		useAutocert,
 		manager,
 	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 	qq.applyOverrideDBConfigAfterIdentity(ctx, mainDB, overrideDBConfig)
 
 	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
-	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
+	tenantDBs = dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
+	tlsConfig := systemConfig.TLS()
+	runtimeStatus := systemstatus.NewRuntimeStatus(
+		qq.port(
+			tlsConfig.TLSEnableAutocert && !qq.devMode,
+			tlsConfig.TLSCertFilepath,
+			tlsConfig.TLSPrivateKeyFilepath,
+		),
+		qq.metaPath,
+		trustedProxies,
+	)
 	systemStatusChecker := systemstatus.NewSystemStatusChecker(
 		systemConfig,
 		minioClient,
 		qq.devMode,
 		infra.FileSystem().IsFileEncryptionDisabled(),
 		overrideDBConfig,
+		runtimeStatus,
 	)
 	router := NewRouter(
 		mainDB,
@@ -430,7 +456,6 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
 		log.Println(err)
-		closePreparedResources(mainDB, tenantDBs)
 		return nil, err
 	}
 
@@ -449,14 +474,16 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	// see https://words.filippo.io/csrf/ for implementation details
 	handlerChain := newPublicHandler(http.NewCrossOriginProtection().Handler(router))
 
+	isPrepared = true
 	return &PreparedServer{
-		server:          qq,
-		mainDB:          mainDB,
-		tenantDBs:       tenantDBs,
-		router:          router,
-		handler:         handlerChain,
-		systemConfig:    systemConfig,
-		autocertManager: manager,
+		server:               qq,
+		mainDB:               mainDB,
+		tenantDBs:            tenantDBs,
+		router:               router,
+		handler:              handlerChain,
+		systemConfig:         systemConfig,
+		autocertManager:      manager,
+		nilableStartupServer: startup,
 	}, nil
 }
 
@@ -676,15 +703,9 @@ func (qq *Server) ensureMainIdentity(
 	trustedProxies []netip.Prefix,
 	useAutocert bool,
 	manager *autocert.Manager,
-) {
+) (*startupServer, error) {
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
-		// The handler is assigned below because the stop callback references this server.
-		maintenanceModeServer := newHTTPServer(fmt.Sprintf(":%d", qq.port(
-			useAutocert,
-			systemConfigx.TLSCertFilepath,
-			systemConfigx.TLSPrivateKeyFilepath,
-		)), nil)
-
+		unlocked := make(chan struct{})
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
 			qq.assetsFS,
@@ -695,41 +716,33 @@ func (qq *Server) ensureMainIdentity(
 			trustedProxies,
 			qq.commercialLicenseEnabled,
 			func() {
-				stopMaintenanceModeServer(maintenanceModeServer)
+				close(unlocked)
 			},
 		)
 
-		maintenanceModeServer.Handler = newPublicHandler(maintenanceMux)
-		maintenanceListenMode := resolveListenMode(
+		startup := newStartupServer(fmt.Sprintf(":%d", qq.port(
 			useAutocert,
 			systemConfigx.TLSCertFilepath,
 			systemConfigx.TLSPrivateKeyFilepath,
-		)
-
-		var err error
-		switch maintenanceListenMode {
-		case listenModeTLSAutocert:
-			maintenanceModeServer.TLSConfig = &tls.Config{GetCertificate: manager.GetCertificate}
-			err = maintenanceModeServer.ListenAndServeTLS("", "")
-		case listenModeHTTP:
-			err = maintenanceModeServer.ListenAndServe()
-		case listenModeTLSFiles:
-			err = maintenanceModeServer.ListenAndServeTLS(
+		)), newPublicHandler(maintenanceMux))
+		startup.start(
+			resolveListenMode(
+				useAutocert,
 				systemConfigx.TLSCertFilepath,
 				systemConfigx.TLSPrivateKeyFilepath,
-			)
-		default:
-			log.Fatalln("unknown maintenance listen mode")
-		}
-		if err != nil {
-			// err is set if the server gets shutdown on unlock, thus no aborting
-			log.Println(err)
-		}
+			),
+			systemConfigx.TLSCertFilepath,
+			systemConfigx.TLSPrivateKeyFilepath,
+			manager,
+		)
 
-		// TODO maintenance mode and wait for unlock
-		// log.Fatalln("identity encrypted with passphrase")
-
-		return
+		select {
+		case <-unlocked:
+			// Keep serving maintenance during initialization and wrapper route registration.
+			return startup, nil
+		case err := <-startup.done:
+			return startup, fmt.Errorf("maintenance server stopped before unlock: %w", err)
+		}
 	}
 
 	identityBytes := systemConfigx.X25519Identity
@@ -744,6 +757,7 @@ func (qq *Server) ensureMainIdentity(
 	}
 
 	encryptor.NilableX25519MainIdentity = x25519Identity
+	return nil, nil
 }
 
 func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB *sqlx.MainDB, overrideDBConfig bool) {

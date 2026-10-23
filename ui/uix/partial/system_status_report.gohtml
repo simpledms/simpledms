@@ -51,7 +51,7 @@
 					<dl class="flex flex-col divide-y divide-outline-variant">
 						{{ range .Settings }}
 							<div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-x-4 py-2">
-								<dt class="body-md text-on-surface-variant">{{ render $ctx .Label }}</dt>
+								<dt class="body-md text-on-surface-variant" style="overflow-wrap: anywhere">{{ render $ctx .Label }}</dt>
 								<dd class="body-md" style="overflow-wrap: anywhere">{{ render $ctx .Value }}</dd>
 							</div>
 						{{ end }}

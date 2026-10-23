@@ -53,6 +53,8 @@ END;`,
 END;`,
 		// Unindexed values are read from the external content table. Only changes to
 		// indexed text or its rowid require retokenizing potentially large OCR content.
+		// When changing the indexed columns in TableSQL, keep UPDATE OF, WHEN, and
+		// the insert/delete payloads in all three triggers synchronized with them.
 		"files_au": `CREATE TRIGGER files_au AFTER UPDATE OF id, name, ocr_content ON files
 WHEN old.id IS NOT new.id OR old.name IS NOT new.name OR old.ocr_content IS NOT new.ocr_content
 BEGIN

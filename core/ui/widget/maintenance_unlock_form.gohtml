@@ -91,12 +91,13 @@
 						credentials: "same-origin",
 						mode: "same-origin",
 					});
-					if (response.headers.get("X-SimpleDMS-Maintenance") !== "true") {
+					if (response.status < 500 &&
+						response.headers.get("X-SimpleDMS-Maintenance") !== "true") {
 						window.location.replace(target.href);
 						return;
 					}
 				} catch (_) {
-					// Listener replacement can briefly make the application unavailable.
+					// Retry transient network failures while the application starts.
 				}
 				setTimeout(() => poll(target), retryDelay);
 			};

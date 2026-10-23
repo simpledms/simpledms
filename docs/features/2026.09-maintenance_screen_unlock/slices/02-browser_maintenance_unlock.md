@@ -1,5 +1,8 @@
 # Slice 02 — Browser Maintenance Unlock
 
+The listener lifecycle and marker-free 5xx readiness rules below are superseded by
+[Keep the HTTP listener open during unlock](../../../adrs/2026.10-unlock_listener_handoff.md).
+
 ## Outcome
 
 An operator can reveal a localized maintenance unlock form, submit the application passphrase with

@@ -51,7 +51,7 @@ func (qq *Scheduler) runTenantDataMigrations(
 			continue
 		}
 		if completed {
-			log.Printf("tenant %d data migration %q completed", tenantx.ID, migration.Key())
+			log.Printf("tenant %d data migration %q status: complete", tenantx.ID, migration.Key())
 		}
 	}
 }

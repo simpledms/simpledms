@@ -1,26 +1,27 @@
 package server
 
 import (
-	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
+
+	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 type PreparedServer struct {
-	server          *Server
-	mainDB          *sqlx.MainDB
-	tenantDBs       *tenantdbs.TenantDBs
-	router          *Router
-	handler         http.Handler
-	systemConfig    *systemconfigmodel.SystemConfig
-	autocertManager *autocert.Manager
+	server               *Server
+	mainDB               *sqlx.MainDB
+	tenantDBs            *tenantdbs.TenantDBs
+	router               *Router
+	handler              http.Handler
+	systemConfig         *systemconfigmodel.SystemConfig
+	autocertManager      *autocert.Manager
+	nilableStartupServer *startupServer
 }
 
 func closePreparedResources(mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
@@ -45,7 +46,7 @@ func closePreparedResources(mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs)
 }
 
 // Router returns the prepared router so callers can register custom handlers
-// before the server starts listening.
+// before the server starts serving application requests.
 func (qq *PreparedServer) Router() *Router {
 	return qq.router
 }
@@ -56,9 +57,18 @@ func (qq *PreparedServer) Infra() *common.Infra {
 	return qq.router.infra
 }
 
-// Start starts background services and begins listening for HTTP requests.
+// Start activates application requests, reusing the maintenance listener when locked.
 func (qq *PreparedServer) Start() error {
 	defer closePreparedResources(qq.mainDB, qq.tenantDBs)
+
+	if qq.nilableStartupServer != nil {
+		qq.nilableStartupServer.setHandler(qq.handler)
+		err := <-qq.nilableStartupServer.done
+		if err != nil {
+			log.Println(err)
+		}
+		return err
+	}
 
 	tlsConfig := qq.systemConfig.TLS()
 	useAutocert := tlsConfig.TLSEnableAutocert && !qq.server.devMode
@@ -69,31 +79,22 @@ func (qq *PreparedServer) Start() error {
 		tlsConfig.TLSPrivateKeyFilepath,
 	)
 
-	server := newHTTPServer(fmt.Sprintf(":%d", qq.server.port(
+	server := newStartupServer(fmt.Sprintf(":%d", qq.server.port(
 		useAutocert,
 		tlsConfig.TLSCertFilepath,
 		tlsConfig.TLSPrivateKeyFilepath,
 	)), qq.handler)
 
-	var err error
-
-	switch mainListenMode {
-	case listenModeTLSAutocert:
-		server.TLSConfig = &tls.Config{GetCertificate: qq.autocertManager.GetCertificate}
-		err = server.ListenAndServeTLS("", "")
-	case listenModeHTTP:
-		err = server.ListenAndServe()
-	case listenModeTLSFiles:
-		err = server.ListenAndServeTLS(
-			tlsConfig.TLSCertFilepath,
-			tlsConfig.TLSPrivateKeyFilepath,
-		)
-	default:
-		log.Fatalln("unknown main listen mode")
-	}
+	server.start(
+		mainListenMode,
+		tlsConfig.TLSCertFilepath,
+		tlsConfig.TLSPrivateKeyFilepath,
+		qq.autocertManager,
+	)
+	err := <-server.done
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
-	return nil
+	return err
 }

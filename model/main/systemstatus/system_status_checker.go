@@ -22,6 +22,7 @@ import (
 	"github.com/simpledms/simpledms/internal/xberg"
 	mailermodel "github.com/simpledms/simpledms/model/main/mailer"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
@@ -33,11 +34,11 @@ const (
 	certificateExpiryWarningPeriod = 14 * 24 * time.Hour
 )
 
-// SystemStatusChecker reports the effective configuration of the running instance and checks
-// whether the configured services are reachable. Configuration changes take effect only after
-// a restart, thus the values loaded on startup are reported.
+// SystemStatusChecker reports effective configuration, separately labeled startup overrides,
+// and the current request's proxy diagnostics, and checks configured service connections.
 type SystemStatusChecker struct {
 	systemConfig              *systemconfigmodel.SystemConfig
+	runtimeStatus             *RuntimeStatus
 	s3ClientNilable           *minio.Client
 	isDevMode                 bool
 	isFileEncryptionDisabled  bool
@@ -50,9 +51,11 @@ func NewSystemStatusChecker(
 	isDevMode bool,
 	isFileEncryptionDisabled bool,
 	isDBConfigOverrideEnabled bool,
+	runtimeStatus *RuntimeStatus,
 ) *SystemStatusChecker {
 	return &SystemStatusChecker{
 		systemConfig:              systemConfig,
+		runtimeStatus:             runtimeStatus,
 		s3ClientNilable:           s3ClientNilable,
 		isDevMode:                 isDevMode,
 		isFileEncryptionDisabled:  isFileEncryptionDisabled,
@@ -60,7 +63,12 @@ func NewSystemStatusChecker(
 	}
 }
 
-func (qq *SystemStatusChecker) Check(ctx ctxx.Context) (*SystemStatus, error) {
+// Check uses the request after router middleware so diagnostics show the client IP
+// and protocol actually used by the application, rather than trusting raw headers.
+func (qq *SystemStatusChecker) Check(
+	ctx ctxx.Context,
+	req *httpx.Request,
+) (*SystemStatus, error) {
 	probeCtx, cancel := context.WithTimeout(ctx, probeTimeout)
 	defer cancel()
 
@@ -79,11 +87,14 @@ func (qq *SystemStatusChecker) Check(ctx ctxx.Context) (*SystemStatus, error) {
 
 	components := []*ComponentStatus{
 		qq.generalStatus(),
+		qq.runtimeStatus.componentStatus(),
+		qq.requestStatus(req),
 		qq.storageStatus(storageProbe),
 		qq.ocrStatus(tikaProbe, xbergProbe),
 		qq.previewStatus(gotenbergProbe),
 		mailStatus,
 		qq.tlsStatus(ctx),
+		qq.runtimeStatus.environmentStatus(),
 	}
 
 	return NewSystemStatus(components, time.Now()), nil
@@ -95,6 +106,7 @@ func (qq *SystemStatusChecker) generalStatus() *ComponentStatus {
 
 	status.AddSetting(widget.T("Public origin"), valueOrNotSet(config.PublicOrigin()))
 	status.AddSetting(widget.T("WebAuthn relying party ID"), valueOrNotSet(config.WebAuthnRPID()))
+	status.AddSetting(widget.T("WebAuthn relying party name"), valueOrNotSet(config.WebAuthnRPName()))
 	status.AddSetting(
 		widget.T("Passphrase protection"),
 		enabledOrDisabled(config.IsIdentityEncryptedWithPassphrase()),
@@ -153,6 +165,33 @@ func (qq *SystemStatusChecker) generalStatus() *ComponentStatus {
 		)
 	}
 
+	return status
+}
+
+func (qq *SystemStatusChecker) requestStatus(req *httpx.Request) *ComponentStatus {
+	status := NewComponentStatus(widget.T("Current request"))
+	status.AddFinding(StatusLevelOK, widget.T(
+		"Open this page through your reverse proxy. The direct peer should be your proxy, "+
+			"the resolved client IP should be your client address, and the detected protocol "+
+			"should be HTTPS when you access the site over HTTPS. "+
+			"Received forwarded headers alone do not prove that the proxy is trusted.",
+	))
+	status.AddSetting(widget.T("Direct peer"), valueOrNotSet(req.RemoteAddr))
+	status.AddSetting(widget.T("Resolved client IP"), widget.Tu(req.ClientIP()))
+	protocol := "HTTP"
+	if req.TLS != nil || req.URL.Scheme == "https" {
+		protocol = "HTTPS"
+	}
+	status.AddSetting(widget.T("Detected protocol"), widget.Tu(protocol))
+	status.AddSetting(widget.T("Direct TLS connection"), enabledOrDisabled(req.TLS != nil))
+	status.AddSetting(
+		widget.T("Received X-Forwarded-For"),
+		valueOrNotSet(strings.Join(req.Header.Values("X-Forwarded-For"), ", ")),
+	)
+	status.AddSetting(
+		widget.T("Received X-Forwarded-Proto"),
+		valueOrNotSet(req.Header.Get("X-Forwarded-Proto")),
+	)
 	return status
 }
 

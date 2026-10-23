@@ -190,6 +190,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		true,
 		s3FileSystem.IsFileEncryptionDisabled(),
 		false,
+		systemstatus.NewRuntimeStatus(80, metaPath, nil),
 	)
 	actions := action.NewActions(infra, tenantDBs, true, systemStatusChecker)
 	router.RegisterActions(actions)

@@ -2,11 +2,15 @@ package server
 
 import (
 	"context"
+	"html"
 	"net/http"
 	"net/http/httptest"
+	"net/netip"
+	"regexp"
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -15,6 +19,7 @@ import (
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/main/systemstatus"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
@@ -42,6 +47,14 @@ func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
 		"System status",
 		"No storage is configured. Files cannot be uploaded.",
 		"No mail server is configured.",
+		"Listen port",
+		"Data directory",
+		"Direct peer",
+		"Resolved client IP",
+		"Detected protocol",
+		"Direct TLS connection",
+		"Received X-Forwarded-For",
+		"Received X-Forwarded-Proto",
 	} {
 		if !strings.Contains(pageRR.Body.String(), want) {
 			t.Fatalf("expected page to contain %q, body was: %s", want, pageRR.Body.String())
@@ -63,6 +76,208 @@ func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
 	}
 	if !strings.Contains(partialRR.Body.String(), `id="systemStatus"`) {
 		t.Fatalf("expected refreshed status island, body was: %s", partialRR.Body.String())
+	}
+}
+
+func TestSystemStatusReportsProxyResolutionForEachRequest(t *testing.T) {
+	harness := newActionTestHarness(t)
+	trustedProxies := []netip.Prefix{netip.MustParsePrefix("10.0.0.0/8")}
+	runtimeStatus := systemstatus.NewRuntimeStatus(8080, harness.metaPath, trustedProxies)
+	checker := systemstatus.NewSystemStatusChecker(
+		harness.infra.SystemConfig(), nil, false, false, false, runtimeStatus,
+	)
+	harness.actions = action.NewActions(harness.infra, harness.tenantDBs, true, checker)
+	harness.router = NewRouter(
+		harness.mainDB,
+		harness.tenantDBs,
+		harness.infra,
+		true,
+		harness.metaPath,
+		harness.i18n,
+		trustedProxies,
+	)
+	harness.router.RegisterActions(harness.actions)
+	harness.router.registerSignInPage(harness.actions.Auth.SignInPage.Handler)
+	harness.router.RegisterPage(
+		route.SystemStatusRoute(),
+		harness.actions.Dashboard.SystemStatusPage.Handler,
+	)
+
+	email := "system-status-proxy-admin@example.com"
+	password := "supersecret"
+	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+	refreshURL := harness.actions.Dashboard.SystemStatusPartial.Endpoint()
+
+	tests := []struct {
+		name          string
+		remoteAddr    string
+		xff           []string
+		xfp           string
+		refresh       bool
+		directTLS     bool
+		wantClientIP  string
+		wantProtocol  string
+		wantDirectTLS string
+	}{
+		{
+			name:          "trusted proxy resolves rightmost untrusted forwarded address",
+			remoteAddr:    "10.0.0.2:9000",
+			xff:           []string{"198.51.100.99, 203.0.113.7", "10.0.0.9"},
+			xfp:           "https",
+			wantClientIP:  "203.0.113.7",
+			wantProtocol:  "HTTPS",
+			wantDirectTLS: "Disabled",
+		},
+		{
+			name:          "untrusted peer ignores spoofed forwarding headers",
+			remoteAddr:    "192.0.2.44:9000",
+			xff:           []string{"198.51.100.99"},
+			xfp:           "https",
+			wantClientIP:  "192.0.2.44",
+			wantProtocol:  "HTTP",
+			wantDirectTLS: "Disabled",
+		},
+		{
+			name:          "trusted peer missing forwarded for falls back to peer",
+			remoteAddr:    "10.0.0.3:9000",
+			xfp:           "https",
+			wantClientIP:  "10.0.0.3",
+			wantProtocol:  "HTTPS",
+			wantDirectTLS: "Disabled",
+		},
+		{
+			name:          "trusted peer malformed forwarded for falls back to peer",
+			remoteAddr:    "10.0.0.4:9000",
+			xff:           []string{"not-an-ip"},
+			xfp:           "https",
+			wantClientIP:  "10.0.0.4",
+			wantProtocol:  "HTTPS",
+			wantDirectTLS: "Disabled",
+		},
+		{
+			name:          "refresh uses its own current request",
+			remoteAddr:    "10.0.0.5:9000",
+			xff:           []string{"192.0.2.55"},
+			xfp:           "http",
+			refresh:       true,
+			wantClientIP:  "192.0.2.55",
+			wantProtocol:  "HTTP",
+			wantDirectTLS: "Disabled",
+		},
+		{
+			name:          "direct TLS connection",
+			remoteAddr:    "192.0.2.80:9000",
+			directTLS:     true,
+			wantClientIP:  "192.0.2.80",
+			wantProtocol:  "HTTPS",
+			wantDirectTLS: "Enabled",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			method, target := http.MethodGet, route.SystemStatus()
+			if tc.directTLS {
+				target = "https://example.test" + route.SystemStatus()
+			}
+			if tc.refresh {
+				method, target = http.MethodPost, refreshURL
+			}
+			req := httptest.NewRequest(method, target, nil)
+			req.RemoteAddr = tc.remoteAddr
+			req.AddCookie(sessionCookie)
+			if tc.refresh {
+				req.Header.Set("HX-Request", "true")
+			}
+			for _, forwardedFor := range tc.xff {
+				req.Header.Add("X-Forwarded-For", forwardedFor)
+			}
+			if tc.xfp != "" {
+				req.Header.Set("X-Forwarded-Proto", tc.xfp)
+			}
+			rr := httptest.NewRecorder()
+			harness.router.ServeHTTP(rr, req)
+			if rr.Code != http.StatusOK {
+				t.Fatalf("expected status %d, got %d: %s", http.StatusOK, rr.Code, rr.Body.String())
+			}
+			if got := rr.Header().Get("Cache-Control"); got != "no-store" {
+				t.Fatalf("expected Cache-Control no-store, got %q", got)
+			}
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Listen port", "8080")
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Data directory", harness.metaPath)
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Trusted proxy CIDRs", "10.0.0.0/8")
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Direct peer", tc.remoteAddr)
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Resolved client IP", tc.wantClientIP)
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Detected protocol", tc.wantProtocol)
+			assertSystemStatusRenderedSetting(t, rr.Body.String(), "Direct TLS connection", tc.wantDirectTLS)
+			if tc.name == "trusted proxy resolves rightmost untrusted forwarded address" {
+				assertSystemStatusRenderedSetting(
+					t,
+					rr.Body.String(),
+					"Received X-Forwarded-For",
+					"198.51.100.99, 203.0.113.7, 10.0.0.9",
+				)
+			}
+		})
+	}
+}
+
+func assertSystemStatusRenderedSetting(t *testing.T, body, label, want string) {
+	t.Helper()
+	pattern := regexp.MustCompile(
+		`(?s)<dt[^>]*>\s*` + regexp.QuoteMeta(label) + `\s*</dt>\s*<dd[^>]*>(.*?)</dd>`,
+	)
+	matches := pattern.FindStringSubmatch(body)
+	if len(matches) != 2 {
+		t.Fatalf("rendered definition-list value for %q not found in response", label)
+	}
+	if got := strings.TrimSpace(html.UnescapeString(matches[1])); got != want {
+		t.Fatalf("rendered %q value: want %q, got %q", label, want, got)
+	}
+}
+
+func TestSystemStatusSnapshotsAllowlistedEnvironment(t *testing.T) {
+	t.Setenv("SIMPLEDMS_OPENCLOUD_ORIGIN", "https://cloud.example.test")
+	t.Setenv("SIMPLEDMS_OPENCLOUD_PUBLIC_LINK_PASSWORD", "cloud-password-secret")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", "/private/pprof-path")
+	t.Setenv("SIMPLEDMS_INITIAL_TEMPORARY_PASSWORD", "bootstrap-password-secret")
+	t.Setenv("UNRELATED_SECRET", "unrelated-secret")
+
+	harness := newActionTestHarness(t)
+	runtimeStatus := systemstatus.NewRuntimeStatus(8080, "/srv/simpledms", []netip.Prefix{
+		netip.MustParsePrefix("10.0.0.0/8"),
+	})
+	checker := systemstatus.NewSystemStatusChecker(
+		harness.infra.SystemConfig(), nil, false, false, false, runtimeStatus,
+	)
+	t.Setenv("SIMPLEDMS_OPENCLOUD_ORIGIN", "https://changed.example.test")
+	t.Setenv("SIMPLEDMS_OPENCLOUD_PUBLIC_LINK_PASSWORD", "changed-password-secret")
+	t.Setenv("SIMPLEDMS_PPROF_PATH", "")
+
+	status := checkSystemStatus(t, harness, checker)
+	runtime := findSystemStatusComponent(t, status, "Runtime")
+	assertSystemStatusSetting(t, status, runtime, "Listen port", "8080")
+	assertSystemStatusSetting(t, status, runtime, "Data directory", "/srv/simpledms")
+	assertSystemStatusSetting(t, status, runtime, "Trusted proxy CIDRs", "10.0.0.0/8")
+	environment := findSystemStatusComponent(t, status, "Startup environment overrides")
+	assertSystemStatusSetting(t, status, environment, "SIMPLEDMS_OPENCLOUD_ORIGIN", "https://cloud.example.test")
+	assertSystemStatusSetting(t, status, environment, "SIMPLEDMS_OPENCLOUD_PUBLIC_LINK_PASSWORD", "Set")
+	assertSystemStatusSetting(t, status, environment, "SIMPLEDMS_PPROF_PATH", "Set")
+	for _, component := range status.Components() {
+		for _, setting := range component.Settings() {
+			value := setting.Value().String(status.ctx)
+			for _, secret := range []string{
+				"cloud-password-secret",
+				"changed-password-secret",
+				"bootstrap-password-secret",
+				"unrelated-secret",
+				"/private/pprof-path",
+			} {
+				if strings.Contains(value, secret) {
+					t.Fatalf("sensitive value %q exposed in setting %q", secret, setting.Label().String(status.ctx))
+				}
+			}
+		}
 	}
 }
 
@@ -149,6 +364,7 @@ func TestSystemStatusReportsServiceConnectionsAndHidesSecrets(t *testing.T) {
 		false,
 		false,
 		false,
+		systemstatus.NewRuntimeStatus(80, harness.metaPath, nil),
 	)
 
 	status := checkSystemStatus(t, harness, checker)
@@ -202,6 +418,7 @@ func TestSystemStatusReportsMailsThatCouldNotBeSent(t *testing.T) {
 		false,
 		false,
 		false,
+		systemstatus.NewRuntimeStatus(80, harness.metaPath, nil),
 	)
 	status := checkSystemStatus(t, harness, checker)
 
@@ -233,6 +450,7 @@ func TestSystemStatusWarnsBeforeCertificateExpires(t *testing.T) {
 		false,
 		false,
 		false,
+		systemstatus.NewRuntimeStatus(80, harness.metaPath, nil),
 	)
 
 	status := checkSystemStatus(t, harness, checker)
@@ -277,7 +495,7 @@ func checkSystemStatus(
 		harness,
 		adminx,
 		func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
-			status, err := checker.Check(mainCtx)
+			status, err := checker.Check(mainCtx, httpx.NewRequest(httptest.NewRequest(http.MethodGet, "/", nil)))
 			if err != nil {
 				return err
 			}

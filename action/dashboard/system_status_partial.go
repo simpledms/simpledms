@@ -53,18 +53,22 @@ func (qq *SystemStatusPartial) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	widget, err := qq.Widget(ctx)
+	widget, err := qq.Widget(ctx, req)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
+	rw.Header().Set("Cache-Control", "no-store")
 	return qq.infra.Renderer().Render(rw, ctx, widget)
 }
 
 // Widget checks the connections to all services on each request, thus it is not subscribed to
 // any events; it is reloaded by the refresh button in the app bar.
-func (qq *SystemStatusPartial) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
+func (qq *SystemStatusPartial) Widget(
+	ctx ctxx.Context,
+	req *httpx.Request,
+) (renderable.Renderable, error) {
 	if ctx.MainCtx().Account.Role != mainrole.Admin {
 		return nil, e.NewHTTPErrorf(
 			http.StatusForbidden,
@@ -72,7 +76,7 @@ func (qq *SystemStatusPartial) Widget(ctx ctxx.Context) (renderable.Renderable, 
 		)
 	}
 
-	status, err := qq.checker.Check(ctx)
+	status, err := qq.checker.Check(ctx, req)
 	if err != nil {
 		log.Println(err)
 		return nil, err
