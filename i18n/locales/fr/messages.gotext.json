@@ -8040,6 +8040,13 @@
             "fuzzy": true
         },
         {
+            "id": "Unlocking application. Please wait.",
+            "message": "Unlocking application. Please wait.",
+            "translation": "Déverrouillage de l’application en cours. Veuillez patienter.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
             "translation": "Application déverrouillée. Démarrage en cours.",

@@ -1,6 +1,8 @@
 package common
 
 import (
+	"sync/atomic"
+
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
@@ -17,6 +19,7 @@ type Infra struct {
 	manageTenantsDeleteTenantCmdEndpoint string
 	manageTenantsDownloadBackupEndpoint  string
 	systemConfig                         *systemconfigmodel.SystemConfig
+	systemStatusHasError                 atomic.Bool
 	// no minio.Client, seems to risky for misuse; inject on demand
 	// same is true for db clients
 }
@@ -56,6 +59,15 @@ func (qq *Infra) FileSystem() *filesystem.S3FileSystem {
 
 func (qq *Infra) SystemConfig() *systemconfigmodel.SystemConfig {
 	return qq.systemConfig
+}
+
+// SystemStatusHasError reports whether the latest system status check found an error.
+func (qq *Infra) SystemStatusHasError() bool {
+	return qq.systemStatusHasError.Load()
+}
+
+func (qq *Infra) SetSystemStatusHasError(hasError bool) {
+	qq.systemStatusHasError.Store(hasError)
 }
 
 func (qq *Infra) PluginRegistry() *pluginx.Registry {

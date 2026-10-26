@@ -59,10 +59,7 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 		MaxAge:   0,
 		Secure:   secure,
 		HttpOnly: true,
-		// shouldn't be necessary with http.CrossOriginProtection middleware
-		// but works as a fallback for older browsers because SameSite is longer
-		// in baseline than Sec-Fetch-Site; only works for same site, not same origin
-		SameSite: http.SameSiteLaxMode, // TODO is Lax enough or do we need Strict?
+		SameSite: sessionCookieSameSiteMode(allowInsecureCookies),
 	}
 	http.SetCookie(rw, cookie)
 
@@ -82,10 +79,7 @@ func InvalidateSessionCookie(rw httpx.ResponseWriter, allowInsecureCookie bool) 
 		MaxAge:   -1, // deletes cookie
 		HttpOnly: true,
 		Secure:   secure,
-		// shouldn't be necessary with http.CrossOriginProtection middleware
-		// but works as a fallback for older browsers because SameSite is longer
-		// in baseline than Sec-Fetch-Site; only works for same site, not same origin
-		SameSite: http.SameSiteLaxMode, // TODO is Lax enough or do we need Strict?
+		SameSite: sessionCookieSameSiteMode(allowInsecureCookie),
 	})
 }
 
@@ -95,21 +89,19 @@ func InvalidateSessionCookie(rw httpx.ResponseWriter, allowInsecureCookie bool) 
 // only value is available when reading a cookie from a request;
 // thus renewal cookie must be reconstructed;
 // expiresAt must be read from database
+// Cookie attributes are always refreshed; the bool reports whether expiry changed
+// and the caller must update the session record.
 func RenewSessionCookie(
 	rw httpx.ResponseWriter,
 	value string,
 	expiresAt time.Time,
 	allowInsecureCookies bool,
 ) (*http.Cookie, bool) {
-	if expiresAt.IsZero() {
-		// temporary session cookie
-		return nil, false
-	}
-
 	// renew cookie if it expires in less than 13 days
-	if expiresAt.After(time.Now().Add(time.Hour * 24 * 13)) {
-		// valid more than 13 days
-		return nil, false
+	now := time.Now()
+	isRenewed := !expiresAt.IsZero() && !expiresAt.After(now.Add(time.Hour*24*13))
+	if isRenewed {
+		expiresAt = now.Add(time.Hour * 24 * 14)
 	}
 
 	secure := !allowInsecureCookies
@@ -122,19 +114,29 @@ func RenewSessionCookie(
 
 		Path:    "/",
 		Domain:  "",
-		Expires: time.Now().Add(time.Hour * 24 * 14),
+		Expires: expiresAt,
 
 		MaxAge:   0,
 		Secure:   secure,
 		HttpOnly: true,
-		// shouldn't be necessary with http.CrossOriginProtection middleware
-		// but works as a fallback for older browsers because SameSite is longer
-		// in baseline than Sec-Fetch-Site; only works for same site, not same origin
-		SameSite: http.SameSiteLaxMode, // TODO is Lax enough or do we need Strict?
+		SameSite: sessionCookieSameSiteMode(allowInsecureCookies),
 	}
 
+	// Requests do not carry SameSite metadata. Refresh attributes even when expiry
+	// renewal is not due, so existing Lax cookies migrate when the app opens.
 	http.SetCookie(rw, cookie)
-	return cookie, true
+	return cookie, isRenewed
+}
+
+func sessionCookieSameSiteMode(allowInsecureCookies bool) http.SameSite {
+	if allowInsecureCookies {
+		// Browsers reject SameSite=None cookies without Secure.
+		return http.SameSiteLaxMode
+	}
+	// Native share-target POSTs need the cookie on the initial navigation. Lax can
+	// omit it and send the user to the dashboard instead. CrossOriginProtection on
+	// the server handler chain rejects unsafe cross-origin browser requests.
+	return http.SameSiteNoneMode
 }
 
 func DeletableAt(cookie *http.Cookie) time.Time {

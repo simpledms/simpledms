@@ -119,7 +119,7 @@ func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widge
 			items = append(items, pluginMenuNavigationRailItems(ctx, infra)...)
 		} else {
 			if ctx.MainCtx().Account.Role == mainrole.Admin {
-				items = append(items, systemNavigationRailGroup(ctx))
+				items = append(items, systemNavigationRailGroup(ctx, infra))
 			}
 			items = append(
 				items,
@@ -552,7 +552,7 @@ func systemNavigationRailItem(ctx ctxx.Context, active string) *widget.Navigatio
 	return item
 }
 
-func systemNavigationRailGroup(ctx ctxx.Context) *widget.NavigationRailItem {
+func systemNavigationRailGroup(ctx ctxx.Context, infra *common.Infra) *widget.NavigationRailItem {
 	return &widget.NavigationRailItem{
 		Key:   "system-group",
 		Label: widget.T("System").String(ctx),
@@ -566,14 +566,24 @@ func systemNavigationRailGroup(ctx ctxx.Context) *widget.NavigationRailItem {
 				"tune",
 				route2.System(),
 			),
-			pageNavigationRailItem(
-				"system-status",
-				widget.T("Status").String(ctx),
-				"monitor_heart",
-				route2.SystemStatus(),
-			),
+			NewSystemStatusNavigationRailItem(ctx, infra.SystemStatusHasError()),
 		},
 	}
+}
+
+// NewSystemStatusNavigationRailItem also supplies the status check's out-of-band update.
+func NewSystemStatusNavigationRailItem(ctx ctxx.Context, hasError bool) *widget.NavigationRailItem {
+	item := pageNavigationRailItem(
+		"system-status",
+		widget.T("Status").String(ctx),
+		"monitor_heart",
+		route2.SystemStatus(),
+	)
+	item.HasSmallBadge = hasError
+	if hasError {
+		item.BadgeLabel = widget.T("Error").String(ctx)
+	}
+	return item
 }
 
 func isSystemNavigationRailActive(active string) bool {

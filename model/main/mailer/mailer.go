@@ -6,6 +6,7 @@ import (
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/i18n"
 )
 
 // TODO good location?
@@ -41,6 +42,12 @@ func (qq *Mailer) SignUp(
 	expiresAt time.Time,
 	signInURL string,
 ) {
+	// Use the recipient's selected language without changing the request's language.
+	mailCtx := *ctx.VisitorCtx()
+	mailCtx.Printer = i18n.NewI18n().Printer(accountx.Language.Tag())
+	mailCtx.LanguageBCP47 = accountx.Language.Tag().String()
+	ctx = &mailCtx
+
 	// wx.T for translations
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
 	template := CreateSignUpTemplate(

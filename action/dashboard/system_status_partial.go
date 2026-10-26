@@ -60,7 +60,10 @@ func (qq *SystemStatusPartial) Handler(
 	}
 
 	rw.Header().Set("Cache-Control", "no-store")
-	return qq.infra.Renderer().Render(rw, ctx, widget)
+	statusItem := partial.NewSystemStatusNavigationRailItem(ctx, qq.infra.SystemStatusHasError())
+	statusItem.IsActive = true
+	statusItem.HxSwapOOB = "true"
+	return qq.infra.Renderer().Render(rw, ctx, widget, statusItem)
 }
 
 // Widget checks the connections to all services on each request, thus it is not subscribed to
@@ -81,6 +84,8 @@ func (qq *SystemStatusPartial) Widget(
 		log.Println(err)
 		return nil, err
 	}
+	// Remember the latest result so navigation does not run service probes on every page.
+	qq.infra.SetSystemStatusHasError(status.Level() == systemstatus.StatusLevelError)
 
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{

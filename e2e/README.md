@@ -42,6 +42,26 @@ Example:
 E2E_ALLOW_STATE_MUTATION=1 npm run test:e2e
 ```
 
+## Native file sharing
+
+```bash
+npx playwright test e2e/native_share.spec.ts --project=chromium
+```
+
+This suite submits real multipart browser navigations using the served manifest,
+selects a newly created Space, and verifies the shared file appears in its Inbox.
+It also tests a cross-site submission using the app-issued session cookie and a
+deliberately Lax-cookie control that reproduces the redirect to the dashboard.
+
+Run against a production-mode HTTPS instance with working S3 storage and the usual
+E2E account. The two cross-site cases explicitly skip insecure development cookies;
+they do not skip secure cookies with an incorrect SameSite policy. The mobile
+same-origin upload journey runs in either mode.
+
+The cross-site cases let Chromium compute the Cookie header, then adapt only
+Origin and Fetch Metadata to model a native share navigation. They do not invoke
+the phone's OS share sheet; that integration still needs a real-device check.
+
 ## Maintenance unlock
 
 The maintenance suite uses its own Playwright configuration and does not run the normal sign-in

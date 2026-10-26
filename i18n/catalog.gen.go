@@ -44,7 +44,7 @@ func init() {
 var messageKeyToIndex = map[string]int{
 	"%d backup codes left":                           320,
 	"%d emails could not be sent after %d attempts.": 845,
-	"%d problems need attention":                     1081,
+	"%d problems need attention":                     1083,
 	"%s (%s)":                                        522,
 	"%s copied to clipboard.":                        300,
 	"%s is not reachable: %s":                        861,
@@ -52,20 +52,20 @@ var messageKeyToIndex = map[string]int{
 	"%s · Created: %s":                               357,
 	"%s · Revoked: %s":                               358,
 	"02-01-2006 at 15:04 o'clock":                    778,
-	"1 problem needs attention":                      1080,
+	"1 problem needs attention":                      1082,
 	"A database constraint violation happened. Please contact the support.":                                      1061,
-	"A file shared from OpenCloud is ready to import.":                                                           1096,
-	"A file with this name already exists in the destination.":                                                   1125,
-	"A file with this name already exists.":                                                                      1150,
+	"A file shared from OpenCloud is ready to import.":                                                           1097,
+	"A file with this name already exists in the destination.":                                                   1141,
+	"A file with this name already exists.":                                                                      1167,
 	"A folder with this name already exists.":                                                                    949,
 	"A full Session is required.":                                                                                274,
 	"A password is already set. Please use the change password form instead.":                                    752,
 	"A password reset has been requested for your account.":                                                      782,
-	"A public metadata ID is required.":                                                                          1157,
+	"A public metadata ID is required.":                                                                          1174,
 	"A similar entity already exists.":                                                                           904,
 	"A user with this email address already exists, please contact support if you want to add this user anyway.": 894,
-	"A version number is required for download continuation.":                                                    1120,
-	"About SimpleDMS":                1078,
+	"A version number is required for download continuation.":                                                    1136,
+	"About SimpleDMS":                1080,
 	"Accept privacy policy":          738,
 	"Accept terms of service":        737,
 	"Accepts inbox transfers":        614,
@@ -123,7 +123,7 @@ var messageKeyToIndex = map[string]int{
 	"Attribute «%s» created.":                       407,
 	"Attribute «%s» updated.":                       417,
 	"Austria":                                       619,
-	"Auth cookie already set.":                      1087,
+	"Auth cookie already set.":                      1088,
 	"Author: %s":                                    116,
 	"Author: Unknown":                               114,
 	"Automatic certificates from Let's Encrypt":     848,
@@ -163,7 +163,7 @@ var messageKeyToIndex = map[string]int{
 	"Checkbox":                                         625,
 	"Checkbox value":                                   626,
 	"Choose an Inbox":                                  451,
-	"Cleanup pending":                                  1098,
+	"Cleanup pending":                                  1099,
 	"Clear":                                            35,
 	"Clear temporary password":                         34,
 	"Client":                                           1043,
@@ -212,7 +212,7 @@ var messageKeyToIndex = map[string]int{
 	"Could not extract all files from archive.":                                                  255,
 	"Could not generate backup codes.":                                                           746,
 	"Could not generate salt.":                                                                   749,
-	"Could not generate session id.":                                                             1088,
+	"Could not generate session id.":                                                             1089,
 	"Could not generate temporary password.":                                                     748,
 	"Could not get object name.":                                                                 959,
 	"Could not get x25519 identity.":                                                             970,
@@ -226,7 +226,7 @@ var messageKeyToIndex = map[string]int{
 	"Could not parse url.":                                                                       1064,
 	"Could not read ZIP archive.":                                                                253,
 	"Could not read cookie.":                                                                     1066,
-	"Could not read data.":                                                                       1091,
+	"Could not read data.":                                                                       1092,
 	"Could not read file.":                                                                       429,
 	"Could not read source version.":                                                             921,
 	"Could not read target versions.":                                                            923,
@@ -234,10 +234,10 @@ var messageKeyToIndex = map[string]int{
 	"Could not remove source versions.":                                                          925,
 	"Could not render widget.":                                                                   89,
 	"Could not save file.":                                                                       967,
-	"Could not start transaction.":                                                               1090,
+	"Could not start transaction.":                                                               1091,
 	"Could not unzip the archive.":                                                               252,
 	"Could not update target file.":                                                              924,
-	"Could not verify access.":                                                                   1168,
+	"Could not verify access.":                                                                   1185,
 	"Could not verify archive size.":                                                             258,
 	"Could not verify organization access.":                                                      67,
 	"Could not verify staged file.":                                                              937,
@@ -261,7 +261,7 @@ var messageKeyToIndex = map[string]int{
 	"Create user":                                                                                484,
 	"Created %s":                                                                                 156,
 	"Created at":                                                                                 550,
-	"Created destination":                                                                        1099,
+	"Created destination":                                                                        1100,
 	"Created: %s":                                                                                117,
 	"Created: Unknown":                                                                           115,
 	"Credential label is required.":                                                              902,
@@ -271,16 +271,18 @@ var messageKeyToIndex = map[string]int{
 	"Current or temporary password":                                                              633,
 	"Current passphrase":                                                                         634,
 	"Current password is invalid.":                                                               750,
+	"Current request":                                                                            1121,
 	"Current version %d":                                                                         139,
 	"Current version uploaded at":                                                                154,
 	"Cyprus":                                                                                     635,
 	"Czech republic":                                                                             636,
 	"Dashboard":                                                                                  345,
+	"Data directory":                                                                             1116,
 	"Data validation failed.":                                                                    1062,
 	"Date":                                                                                       176,
-	"Date must use YYYY-MM-DD.":                                                                  1140,
+	"Date must use YYYY-MM-DD.":                                                                  1157,
 	"Date value":                                                                                 637,
-	"Date value is required.":                                                                    1129,
+	"Date value is required.":                                                                    1145,
 	"Delete":                                                                                     106,
 	"Delete from Inbox":                                                                          436,
 	"Delete note":                                                                                105,
@@ -313,21 +315,24 @@ var messageKeyToIndex = map[string]int{
 	"Destination unavailable.":          297,
 	"Details":                           146,
 	"Detected cycle in folder tree.":    957,
+	"Detected protocol":                 1125,
 	"Development mode":                  803,
 	"Development mode is enabled. Do not use it in production.": 804,
 	"Device label":                286,
+	"Direct TLS connection":       1126,
+	"Direct peer":                 1123,
 	"Disable passkey enforcement": 366,
 	"Disable passkey enforcement for this organization? Members can use passwords again if allowed.": 367,
 	"Disabled":                            822,
-	"Document and note IDs are required.": 1165,
+	"Document and note IDs are required.": 1182,
 	"Document not found.":                 915,
 	"Document type":                       131,
-	"Document type ID is required.":       1154,
-	"Document type attribute not found.":  1162,
+	"Document type ID is required.":       1171,
+	"Document type attribute not found.":  1179,
 	"Document type created.":              411,
 	"Document type deleted.":              413,
 	"Document type deselected.":           243,
-	"Document type not found.":            1142,
+	"Document type not found.":            1159,
 	"Document type renamed to «%s».":      426,
 	"Document type selected.":             244,
 	"Document type | Filter":              125,
@@ -368,30 +373,30 @@ var messageKeyToIndex = map[string]int{
 	"Endpoint":                           811,
 	"English":                            643,
 	"Equals":                             221,
-	"Error":                              1083,
+	"Error":                              1078,
 	"Error opening organization database. Please try again later.": 893,
 	"Estonia": 644,
-	"Exactly one Tag ID or field ID is required.": 1161,
-	"Exactly one typed value is required.":        1139,
+	"Exactly one Tag ID or field ID is required.": 1178,
+	"Exactly one typed value is required.":        1156,
 	"Expense department":                          1054,
 	"Expense report":                              1047,
 	"Expense status":                              1053,
 	"Expired":                                     1001,
-	"Failed":                                      1100,
+	"Failed":                                      1101,
 	"Field":                                       645,
 	"Field deleted.":                              513,
-	"Field filter text is too long.":              1146,
-	"Field not found.":                            1138,
-	"Field unit is too long.":                     1159,
+	"Field filter text is too long.":              1163,
+	"Field not found.":                            1155,
+	"Field unit is too long.":                     1176,
 	"Field updated.":                              515,
 	"Field «%s» created.":                         512,
 	"Field «%s» is already added to this document type.": 910,
 	"Fields":                           128,
 	"File":                             646,
-	"File ID and Tag ID are required.": 1135,
-	"File ID and document type ID are required.":  1141,
-	"File ID and field ID are required.":          1137,
-	"File ID is required.":                        1071,
+	"File ID and Tag ID are required.": 1152,
+	"File ID and document type ID are required.":  1158,
+	"File ID and field ID are required.":          1154,
+	"File ID is required.":                        1072,
 	"File already exists.":                        962,
 	"File deleted.":                               92,
 	"File does not belong to the current Space.":  927,
@@ -402,18 +407,18 @@ var messageKeyToIndex = map[string]int{
 	"File is not a folder.":                       83,
 	"File is not deleted.":                        554,
 	"File is not in the Inbox.":                   446,
-	"File must be filed before organization.":     1122,
+	"File must be filed before organization.":     1138,
 	"File must be in the Inbox.":                  197,
 	"File not found.":                             141,
-	"File or Tag not found.":                      1134,
+	"File or Tag not found.":                      1150,
 	"File preview is not available for folders.":  563,
 	"File restored.":                              556,
 	"File size":                                   148,
-	"File type":                                   1101,
+	"File type":                                   1102,
 	"File types":                                  206,
 	"File upload":                                 188,
 	"File uploaded, please select a Space.":       506,
-	"File version not found.":                     1121,
+	"File version not found.":                     1137,
 	"Filename":                                    647,
 	"Filename already exists.":                    968,
 	"Files":                                       84,
@@ -439,7 +444,7 @@ var messageKeyToIndex = map[string]int{
 	"Folders cannot be previewed.":                427,
 	"Folders cannot be restored.":                 553,
 	"Forgot password?":                            74,
-	"Form is too large.":                          1097,
+	"Form is too large.":                          1098,
 	"Form validation failed.":                     275,
 	"France":                                      651,
 	"Free 30-day trial, no credit card required.": 734,
@@ -492,39 +497,39 @@ var messageKeyToIndex = map[string]int{
 	"Insecure cookies":                           800,
 	"Internal":                                   1042,
 	"Invalid MCP credential.":                    787,
-	"Invalid OpenCloud callback origin.":         1118,
-	"Invalid OpenCloud permission ID.":           1094,
-	"Invalid OpenCloud public link.":             1095,
-	"Invalid Tag filter.":                        1148,
-	"Invalid Tag type.":                          1158,
+	"Invalid OpenCloud callback origin.":         1134,
+	"Invalid OpenCloud permission ID.":           1095,
+	"Invalid OpenCloud public link.":             1096,
+	"Invalid Tag filter.":                        1165,
+	"Invalid Tag type.":                          1175,
 	"Invalid URL.":                               872,
 	"Invalid backup sign-in credentials.":        760,
-	"Invalid base64 content.":                    1149,
+	"Invalid base64 content.":                    1166,
 	"Invalid credentials. Please try again.":     66,
-	"Invalid download range.":                    1119,
-	"Invalid field filter range.":                1128,
-	"Invalid field filter.":                      1127,
-	"Invalid field type.":                        1160,
-	"Invalid file recovery location.":            1123,
+	"Invalid download range.":                    1135,
+	"Invalid field filter range.":                1144,
+	"Invalid field filter.":                      1143,
+	"Invalid field type.":                        1177,
+	"Invalid file recovery location.":            1139,
 	"Invalid filename.":                          951,
-	"Invalid filing input.":                      1144,
-	"Invalid folder ID.":                         1073,
-	"Invalid note text range.":                   1164,
-	"Invalid page or search range.":              1072,
-	"Invalid page range.":                        1147,
+	"Invalid filing input.":                      1161,
+	"Invalid folder ID.":                         1074,
+	"Invalid note text range.":                   1181,
+	"Invalid page or search range.":              1073,
+	"Invalid page range.":                        1164,
 	"Invalid passkey origin configuration.":      765,
 	"Invalid passkey registration payload.":      51,
 	"Invalid passkey response payload.":          53,
 	"Invalid passkey sign-in.":                   755,
 	"Invalid passphrase.":                        590,
 	"Invalid request payload.":                   42,
-	"Invalid search input.":                      1145,
+	"Invalid search input.":                      1162,
 	"Invalid session cookie.":                    29,
 	"Invalid sort order.":                        931,
 	"Invalid source filter.":                     442,
-	"Invalid storage filename.":                  1124,
+	"Invalid storage filename.":                  1140,
 	"Invalid text range.":                        919,
-	"Invalid upload size.":                       1092,
+	"Invalid upload size.":                       1093,
 	"Invalid version number.":                    200,
 	"Invoice":                                    976,
 	"Invoice date":                               978,
@@ -539,7 +544,7 @@ var messageKeyToIndex = map[string]int{
 	"Keep these backup codes in a secure place.": 605,
 	"Label":    664,
 	"Language": 665,
-	"Last checked: %s. Configuration changes take effect after a restart.": 1082,
+	"Last checked: %s. Configuration changes take effect after a restart.": 1084,
 	"Last name":                    666,
 	"Last used: %s":                342,
 	"Latvia":                       667,
@@ -550,16 +555,17 @@ var messageKeyToIndex = map[string]int{
 	"Library template keys":        669,
 	"Liechtenstein":                670,
 	"List":                         215,
+	"Listen port":                  1115,
 	"Lithuania":                    671,
 	"Loading more…":                172,
 	"Loading…":                     600,
 	"Local":                        672,
 	"Local URLs are not allowed.":  888,
 	"Luxembourg":                   673,
-	"MCP":                          1076,
+	"MCP":                          1077,
 	"MCP URL":                      284,
 	"MCP URL copied to clipboard.": 353,
-	"MCP credential cannot write.": 1112,
+	"MCP credential cannot write.": 1113,
 	"MCP credential created":       282,
 	"MCP credential revoked.":      372,
 	"MCP credentials":              361,
@@ -568,7 +574,7 @@ var messageKeyToIndex = map[string]int{
 	"Maintenance mode is enabled. Please wait until the app is ready again.": 1070,
 	"Malformed upload body.":        504,
 	"Malta":                         674,
-	"Manage Space":                  1074,
+	"Manage Space":                  1075,
 	"Manage Spaces":                 336,
 	"Manage document types":         127,
 	"Manage fields":                 78,
@@ -584,7 +590,7 @@ var messageKeyToIndex = map[string]int{
 	"Max upload size must be greater than 0 MiB when unlimited is disabled.": 898,
 	"Max upload size must be greater than or equal to 0 MiB.":                896,
 	"Max upload size must be greater than or equal to 0.":                    794,
-	"Mcp":                1102,
+	"Mcp":                1103,
 	"Meals":              992,
 	"Meeting date":       1039,
 	"Meeting notes":      1038,
@@ -594,16 +600,16 @@ var messageKeyToIndex = map[string]int{
 	"Message":            676,
 	"Message (optional)": 454,
 	"Metadata":           175,
-	"Metadata already exists or is still in use.": 1151,
-	"Metadata identifiers are unavailable.":       1155,
-	"Metadata upgrade is still in progress.":      1152,
+	"Metadata already exists or is still in use.": 1168,
+	"Metadata identifiers are unavailable.":       1172,
+	"Metadata upgrade is still in progress.":      1169,
 	"Missing passkey rp id configuration.":        766,
 	"Missing version number.":                     199,
 	"Mode":                                        847,
 	"Modified at":                                 551,
 	"Money":                                       677,
 	"Money value":                                 678,
-	"Money value is out of range.":                1130,
+	"Money value is out of range.":                1146,
 	"Move":                                        142,
 	"Move file":                                   269,
 	"Move file to «%s»":                           270,
@@ -616,7 +622,7 @@ var messageKeyToIndex = map[string]int{
 	"Moving clears the document type, tags, and custom fields. Versions and notes are kept.": 456,
 	"NDA":                                    1007,
 	"Name":                                   173,
-	"Name must contain 1 to 300 characters.": 1156,
+	"Name must contain 1 to 300 characters.": 1173,
 	"Neither Xberg nor Tika is configured. Text in documents is not extracted and cannot be searched.": 823,
 	"Netherlands":                                 679,
 	"New filename":                                680,
@@ -663,7 +669,7 @@ var messageKeyToIndex = map[string]int{
 	"No passkeys registered":     307,
 	"No passphrase set.":         790,
 	"No password set":            328,
-	"No problems found":          1079,
+	"No problems found":          1081,
 	"No public origin is set. Emails cannot link to the app.": 805,
 	"No sender address is configured. Emails cannot be sent.": 843,
 	"No storage is configured. Files cannot be uploaded.":     816,
@@ -678,7 +684,7 @@ var messageKeyToIndex = map[string]int{
 	"Norway":                                                  685,
 	"Not a ZIP archive.":                                      250,
 	"Not allowed":                                             868,
-	"Not configured":                                          1085,
+	"Not configured":                                          1086,
 	"Not initialized":                                         322,
 	"Not reachable":                                           860,
 	"Not set":                                                 864,
@@ -690,16 +696,16 @@ var messageKeyToIndex = map[string]int{
 	"Note replaced.":                                          95,
 	"Note text must not be empty.":                            913,
 	"Note title must not be empty.":                           912,
-	"Note title or body is too long.":                         1166,
+	"Note title or body is too long.":                         1183,
 	"Note updated.":                                           94,
 	"Notes":                                                   112,
 	"Notes in Trash are read-only.":                           98,
 	"Number":                                                  686,
 	"Number value":                                            687,
-	"Number value is out of range.":                           1131,
+	"Number value is out of range.":                           1147,
 	"OCR":                                                     819,
 	"OCR succeeded at":                                        576,
-	"OK":                                                      1086,
+	"OK":                                                      1087,
 	"Office":                                                  993,
 	"Old passphrase is required.":                             793,
 	"Oldest first":                                            247,
@@ -712,19 +718,20 @@ var messageKeyToIndex = map[string]int{
 	"Only one of certificate file and private key file is set. TLS is disabled.": 852,
 	"Only organization owners can manage users and settings.":                    575,
 	"Only owners can change passkey enforcement.":                                385,
-	"Open":                                   982,
-	"Open file":                              234,
-	"Open folder":                            232,
-	"Open main menu":                         595,
-	"Open sign in page":                      781,
-	"Open tasks":                             305,
+	"Open":              982,
+	"Open file":         234,
+	"Open folder":       232,
+	"Open main menu":    595,
+	"Open sign in page": 781,
+	"Open tasks":        305,
+	"Open this page through your reverse proxy. The direct peer should be your proxy, the resolved client IP should be your client address, and the detected protocol should be HTTPS when you access the site over HTTPS. Received forwarded headers alone do not prove that the proxy is trusted.": 1122,
 	"Open with":                              565,
-	"OpenCloud callback origin is required.": 1117,
+	"OpenCloud callback origin is required.": 1133,
 	"OpenCloud could not provide the file right now. Try again later.":                                          883,
 	"OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.": 879,
-	"OpenCloud import is not configured correctly.":                                                             1115,
-	"OpenCloud import is not configured.":                                                                       1114,
-	"OpenCloud import requires HTTPS.":                                                                          1116,
+	"OpenCloud import is not configured correctly.":                                                             1131,
+	"OpenCloud import is not configured.":                                                                       1130,
+	"OpenCloud import requires HTTPS.":                                                                          1132,
 	"OpenCloud is receiving too many requests. Wait a moment and try again.":                                    881,
 	"OpenCloud rejected the integration password. Ask your administrator to check the integration settings.":    878,
 	"OpenCloud took too long to respond. Try again.":                                                            876,
@@ -740,7 +747,7 @@ var messageKeyToIndex = map[string]int{
 	"Organization not initialized yet. Please try again later.": 892,
 	"Organization upload limit updated to %s.":                  18,
 	"Organization «%s»":                                         306,
-	"Organizations":                                             1075,
+	"Organizations":                                             1076,
 	"Organizer":                                                 1040,
 	"Original":                                                  158,
 	"Original filename":                                         151,
@@ -760,7 +767,7 @@ var messageKeyToIndex = map[string]int{
 	"PDF previews": 831,
 	"PO number":    1009,
 	"Paid":         983,
-	"Parent directory ID and name are required.": 1143,
+	"Parent directory ID and name are required.": 1160,
 	"Parent folder":              271,
 	"Parent is not a folder.":    948,
 	"Participants":               1041,
@@ -826,7 +833,7 @@ var messageKeyToIndex = map[string]int{
 	"Privacy policy":                        742,
 	"Private key file":                      855,
 	"Pro":                                   699,
-	"Processing":                            1104,
+	"Processing":                            1105,
 	"Processing of downloaded file failed.": 871,
 	"Processing of shared files failed.":    502,
 	"Project document":                      1027,
@@ -838,15 +845,17 @@ var messageKeyToIndex = map[string]int{
 	"Purchase order":                        1008,
 	"Purchase order status":                 1015,
 	"Push url":                              700,
-	"Pwaos open":                            1103,
+	"Pwaos open":                            1104,
 	"Quota usage":                           326,
 	"Read-only":                             355,
 	"Read-only request context required.":   262,
 	"Read/write":                            356,
-	"Ready":                                 1105,
+	"Ready":                                 1106,
 	"Receipt":                               986,
 	"Receipt category":                      990,
 	"Receipt date":                          987,
+	"Received X-Forwarded-For":              1127,
+	"Received X-Forwarded-Proto":            1128,
 	"Reduce the secret length only if your device limits the maximum password length.": 288,
 	"Refresh":                 325,
 	"Regenerate backup codes": 313,
@@ -874,10 +883,11 @@ var messageKeyToIndex = map[string]int{
 	"Replaced by: %s":                123,
 	"Report":                         1036,
 	"Report period":                  1048,
-	"Request payload is too large.":  1093,
+	"Request payload is too large.":  1094,
 	"Requested by":                   1011,
 	"Reset":                          60,
 	"Reset password":                 59,
+	"Resolved client IP":             1124,
 	"Restore":                        557,
 	"Retry PDF generation":           161,
 	"Revoke":                         359,
@@ -886,6 +896,7 @@ var messageKeyToIndex = map[string]int{
 	"Revoked":                        304,
 	"Role":                           701,
 	"Romania":                        702,
+	"Runtime":                        1114,
 	"S 3":                            703,
 	"SHA-256 hash":                   150,
 	"SSL/TLS":                        815,
@@ -901,7 +912,7 @@ var messageKeyToIndex = map[string]int{
 	"Secret length":                  287,
 	"Secret length must be between %d and %d characters.": 905,
 	"Select Space": 501,
-	"Select between 1 and 64 document type templates.": 1163,
+	"Select between 1 and 64 document type templates.": 1180,
 	"Select destination manually":                      440,
 	"Select document types to add to this Space:":      519,
 	"Select document types to import:":                 423,
@@ -927,7 +938,7 @@ var messageKeyToIndex = map[string]int{
 	"Sign in only works over HTTPS or on localhost.": 71,
 	"Sign in with backup code":                       46,
 	"Sign in with passkey":                           73,
-	"Sign out":                                       1077,
+	"Sign out":                                       1079,
 	"Sign up":                                        732,
 	"Sign up [subject]":                              733,
 	"Signed in.":                                     70,
@@ -957,7 +968,7 @@ var messageKeyToIndex = map[string]int{
 	"Source file is required.":                   196,
 	"Source | Filter":                            448,
 	"Space":                                      280,
-	"Space context not found.":                   1167,
+	"Space context not found.":                   1184,
 	"Space deleted.":                             520,
 	"Space «%s» created.":                        517,
 	"Space: %s":                                  136,
@@ -967,6 +978,7 @@ var messageKeyToIndex = map[string]int{
 	"Staged file integrity mismatch.":            940,
 	"Start date":                                 998,
 	"Starts with":                                220,
+	"Startup environment overrides":              1118,
 	"Status":                                     981,
 	"Storage":                                    810,
 	"Storage filename mismatch.":                 939,
@@ -985,20 +997,21 @@ var messageKeyToIndex = map[string]int{
 	"Sweden":                        714,
 	"Switzerland":                   715,
 	"System":                        317,
-	"System extraction":             568,
-	"System settings":               379,
-	"System status":                 381,
-	"TLS":                           846,
-	"Table":                         216,
-	"Tag":                           716,
-	"Tag group ID is required.":     482,
-	"Tag group not found.":          1153,
+	"System administrator sign-in is required.": 1151,
+	"System extraction":                         568,
+	"System settings":                           379,
+	"System status":                             381,
+	"TLS":                                       846,
+	"Table":                                     216,
+	"Tag":                                       716,
+	"Tag group ID is required.":                 482,
+	"Tag group not found.":                      1170,
 	"Tag group «%s» is already added to this document type.": 909,
 	"Tag groups":                      129,
-	"Tag groups cannot be assigned.":  1132,
+	"Tag groups cannot be assigned.":  1148,
 	"Tag is not a group.":             483,
-	"Tag is still assigned to files.": 1133,
-	"Tag not found.":                  1136,
+	"Tag is still assigned to files.": 1149,
+	"Tag not found.":                  1153,
 	"Tag «%s» created.":               531,
 	"Tags":                            178,
 	"Tags of «%s»":                    538,
@@ -1023,27 +1036,28 @@ var messageKeyToIndex = map[string]int{
 	"The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.": 880,
 	"The Tika URL is not valid.": 829,
 	"The WebAuthn relying party ID does not match the public origin. Passkeys do not work.": 808,
-	"The Xberg URL is not valid.":                                                                              826,
-	"The app is locked.":                                                                                       338,
-	"The app is unlocked and not protected by a passphrase.":                                                   337,
-	"The app is unlocked and protected by a passphrase.":                                                       340,
-	"The backup codes are no longer available. Please generate a new set.":                                     44,
-	"The backup codes were copied to clipboard.":                                                               609,
-	"The backup codes were downloaded.":                                                                        611,
-	"The backup codes were regenerated.":                                                                       580,
-	"The certificate could not be loaded: %s":                                                                  856,
-	"The certificate expired on %s.":                                                                           858,
-	"The certificate expires on %s.":                                                                           859,
-	"The certificate of the mail server is not verified.":                                                      844,
-	"The connection to the storage is not encrypted.":                                                          818,
-	"The organization is not initialized yet, please wait until the initialization is complete.":               324,
-	"The original parent folder is missing. Restored to Inbox.":                                                555,
-	"The page will be refreshed automatically once the upload is finished.":                                    499,
-	"The provided filename is not allowed.":                                                                    947,
-	"The public origin does not use HTTPS.":                                                                    807,
-	"The public origin is not a valid URL.":                                                                    806,
-	"The requested page could not be loaded.":                                                                  527,
-	"The requested page was not found.":                                                                        526,
+	"The Xberg URL is not valid.":                                                                826,
+	"The app is locked.":                                                                         338,
+	"The app is unlocked and not protected by a passphrase.":                                     337,
+	"The app is unlocked and protected by a passphrase.":                                         340,
+	"The backup codes are no longer available. Please generate a new set.":                       44,
+	"The backup codes were copied to clipboard.":                                                 609,
+	"The backup codes were downloaded.":                                                          611,
+	"The backup codes were regenerated.":                                                         580,
+	"The certificate could not be loaded: %s":                                                    856,
+	"The certificate expired on %s.":                                                             858,
+	"The certificate expires on %s.":                                                             859,
+	"The certificate of the mail server is not verified.":                                        844,
+	"The connection to the storage is not encrypted.":                                            818,
+	"The organization is not initialized yet, please wait until the initialization is complete.": 324,
+	"The original parent folder is missing. Restored to Inbox.":                                  555,
+	"The page will be refreshed automatically once the upload is finished.":                      499,
+	"The provided filename is not allowed.":                                                      947,
+	"The public origin does not use HTTPS.":                                                      807,
+	"The public origin is not a valid URL.":                                                      806,
+	"The requested page could not be loaded.":                                                    527,
+	"The requested page was not found.":                                                          526,
+	"These additional environment values were captured at startup. Unset values use component defaults; invalid overrides may fall back to defaults. Development settings apply only in development mode. Passwords and the profiling path are shown only as set or not set.": 1119,
 	"These codes are shown only once.":                                                                         606,
 	"This file already exists in the following %d locations:":                                                  135,
 	"This is an automated message, please do not reply.":                                                       775,
@@ -1064,6 +1078,7 @@ var messageKeyToIndex = map[string]int{
 	"Trash is empty.":                      558,
 	"Travel":                               991,
 	"Trial":                                721,
+	"Trusted proxy CIDRs":                  1117,
 	"Type":                                 174,
 	"URL credentials are not allowed.":     887,
 	"URL import":                           566,
@@ -1076,12 +1091,13 @@ var messageKeyToIndex = map[string]int{
 	"Unit":                                 723,
 	"Unknown":                              118,
 	"Unknown document type template.":      1056,
-	"Unknown legacy":                       1107,
+	"Unknown legacy":                       1108,
 	"Unknown passkey credential.":          769,
 	"Unlimited":                            14,
 	"Unlock":                               22,
 	"Unlock app":                           21,
-	"Unsupported URL source.":              1113,
+	"Unlocking application. Please wait.":  1071,
+	"Unsupported URL source.":              1129,
 	"Unsupported field type.":              81,
 	"Unsupported note operation.":          97,
 	"Unzip":                                249,
@@ -1096,15 +1112,15 @@ var messageKeyToIndex = map[string]int{
 	"Upload metadata must be sent before the file.":    265,
 	"Upload new version":                               202,
 	"Upload size mismatch.":                            964,
-	"Upload token":                                     1108,
+	"Upload token":                                     1109,
 	"Uploaded %s":                                      138,
 	"Uploaded at":                                      152,
 	"Uploaded file is already being processed.":        941,
 	"Uploaded file processing was taken over.":         943,
-	"Uploading":                                        1109,
+	"Uploading":                                        1110,
 	"Uploading files, please wait a moment.":           498,
 	"Url":                                              722,
-	"Url import":                                       1106,
+	"Url import":                                       1107,
 	"Use backup code":                                  75,
 	"Use global default":                               19,
 	"User":                                             724,
@@ -1122,7 +1138,7 @@ var messageKeyToIndex = map[string]int{
 	"Users":                                                                                             377,
 	"Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.": 290,
 	"Value":                                725,
-	"Value does not match the field type.": 1126,
+	"Value does not match the field type.": 1142,
 	"Value end":                            726,
 	"Value is required.":                   80,
 	"Value start":                          727,
@@ -1135,11 +1151,12 @@ var messageKeyToIndex = map[string]int{
 	"Versions":                             183,
 	"View mode":                            729,
 	"View replacement note":                122,
-	"Warning":                              1084,
-	"Web dav":                              1110,
-	"Web interface":                        1111,
+	"Warning":                              1085,
+	"Web dav":                              1111,
+	"Web interface":                        1112,
 	"Web upload":                           564,
 	"WebAuthn relying party ID":            797,
+	"WebAuthn relying party name":          1120,
 	"WebDAV":                               567,
 	"WebDAV Inbox URL":                     294,
 	"WebDAV URL":                           293,
@@ -1152,7 +1169,7 @@ var messageKeyToIndex = map[string]int{
 	"Xberg URL":        825,
 	"Xberg connection": 827,
 	"Yes":              180,
-	"You are not allowed to access the requested resource.":                                                            1089,
+	"You are not allowed to access the requested resource.":                                                            1090,
 	"You are not allowed to access this Space.":                                                                        578,
 	"You are not allowed to access this organization.":                                                                 577,
 	"You are not allowed to assign users to Spaces because you aren't the owner.":                                      460,
@@ -1213,7 +1230,7 @@ var messageKeyToIndex = map[string]int{
 	"«%s» uploaded.":                                                              264,
 }
 
-var deIndex = []uint32{ // 1170 elements
+var deIndex = []uint32{ // 1187 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000013, 0x00000047, 0x0000007e,
 	0x00000094, 0x000000a7, 0x000000b6, 0x000000da,
@@ -1516,37 +1533,42 @@ var deIndex = []uint32{ // 1170 elements
 	0x000081ae, 0x000081f6, 0x0000823d, 0x0000825e,
 	0x0000829f, 0x000082c0, 0x000082f2, 0x00008316,
 	0x0000833a, 0x00008355, 0x00008363, 0x000083b0,
-	0x000083cf, 0x000083f5, 0x0000840b, 0x0000841b,
-	0x0000842a, 0x0000842e, 0x00008438, 0x00008448,
-	0x00008460, 0x00008483, 0x000084ab, 0x00008509,
-	0x00008510, 0x00008518, 0x0000852b, 0x0000852e,
+	0x000083d7, 0x000083f6, 0x0000841c, 0x00008432,
+	0x00008442, 0x00008451, 0x00008455, 0x0000845c,
+	0x00008466, 0x00008476, 0x0000848e, 0x000084b1,
+	0x000084d9, 0x00008537, 0x0000853f, 0x00008552,
 	// Entry 440 - 45F
-	0x0000854b, 0x00008575, 0x000085af, 0x000085da,
-	0x00008602, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
+	0x00008555, 0x00008572, 0x0000859c, 0x000085d6,
+	0x00008601, 0x00008629, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
 	// Entry 460 - 47F
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
 	// Entry 480 - 49F
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d, 0x0000861d, 0x0000861d,
-	0x0000861d, 0x0000861d,
-} // Size: 4704 bytes
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	0x00008644, 0x00008644, 0x00008644, 0x00008644,
+	// Entry 4A0 - 4BF
+	0x00008644, 0x00008644, 0x00008644,
+} // Size: 4772 bytes
 
-const deData string = "" + // Size: 34333 bytes
+const deData string = "" + // Size: 34372 bytes
 	"\x02Passphrase ändern\x02Du musst angemeldet sein, um die App zu entsper" +
 	"ren.\x02Du musst Administrator sein, um die App zu entsperren.\x02Passph" +
 	"rase geändert.\x02App initialisieren\x02Initialisieren\x02Passphrasen st" +
@@ -2054,19 +2076,19 @@ const deData string = "" + // Size: 34333 bytes
 	"\x02Bitte registriere einen Passkey, um fortzufahren.\x02Cookie konnte n" +
 	"icht gelesen werden.\x02Cookie gesetzt, aber nicht gültig.\x02Cookie ges" +
 	"etzt, aber leer.\x02Wartungsmodus\x02Der Wartungsmodus ist aktiviert. Bi" +
-	"tte warte, bis die App wieder bereit ist.\x02Die Datei-ID ist erforderli" +
-	"ch.\x02Ungültiger Seiten- oder Suchbereich.\x02Ungültige Ordner-ID.\x02S" +
-	"pace verwalten\x02Organisationen\x02MCP\x02Ausloggen\x02Über SimpleDMS" +
-	"\x02Keine Probleme gefunden\x021 Problem erfordert Aufmerksamkeit\x02%[1" +
-	"]d Probleme erfordern Aufmerksamkeit\x02Zuletzt geprüft: %[1]s. Änderung" +
-	"en an der Konfiguration werden nach einem Neustart wirksam.\x02Fehler" +
-	"\x02Warnung\x02Nicht konfiguriert\x02OK\x02Auth-Cookie bereits gesetzt." +
-	"\x02Session-ID konnte nicht generiert werden.\x02Du darfst nicht auf die" +
-	" angeforderte Ressource zugreifen.\x02Transaktion konnte nicht gestartet" +
-	" werden.\x02Die Daten konnten nicht gelesen werden.\x02Ungültige Upload-" +
-	"Grösse."
+	"tte warte, bis die App wieder bereit ist.\x02Anwendung wird entsperrt. B" +
+	"itte warte.\x02Die Datei-ID ist erforderlich.\x02Ungültiger Seiten- oder" +
+	" Suchbereich.\x02Ungültige Ordner-ID.\x02Space verwalten\x02Organisation" +
+	"en\x02MCP\x02Fehler\x02Ausloggen\x02Über SimpleDMS\x02Keine Probleme gef" +
+	"unden\x021 Problem erfordert Aufmerksamkeit\x02%[1]d Probleme erfordern " +
+	"Aufmerksamkeit\x02Zuletzt geprüft: %[1]s. Änderungen an der Konfiguratio" +
+	"n werden nach einem Neustart wirksam.\x02Warnung\x02Nicht konfiguriert" +
+	"\x02OK\x02Auth-Cookie bereits gesetzt.\x02Session-ID konnte nicht generi" +
+	"ert werden.\x02Du darfst nicht auf die angeforderte Ressource zugreifen." +
+	"\x02Transaktion konnte nicht gestartet werden.\x02Die Daten konnten nich" +
+	"t gelesen werden.\x02Ungültige Upload-Grösse."
 
-var enIndex = []uint32{ // 1170 elements
+var enIndex = []uint32{ // 1187 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000012, 0x0000003a,
 	0x0000004e, 0x0000004e, 0x0000004e, 0x00000068,
@@ -2396,8 +2418,13 @@ var enIndex = []uint32{ // 1170 elements
 	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
 	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
 	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
-	0x0000047f, 0x0000047f,
-} // Size: 4704 bytes
+	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
+	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
+	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
+	0x0000047f, 0x0000047f, 0x0000047f, 0x0000047f,
+	// Entry 4A0 - 4BF
+	0x0000047f, 0x0000047f, 0x0000047f,
+} // Size: 4772 bytes
 
 const enData string = "" + // Size: 1151 bytes
 	"\x02Change passphrase\x02You must be an admin to unlock the app.\x02Pass" +
@@ -2419,7 +2446,7 @@ const enData string = "" + // Size: 1151 bytes
 	"kie set but not valid.\x02Cookie set but empty.\x02Maintenance mode\x02M" +
 	"aintenance mode is enabled. Please wait until the app is ready again."
 
-var en_USIndex = []uint32{ // 1170 elements
+var en_USIndex = []uint32{ // 1187 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000086, 0x00000091, 0x000000ab,
@@ -2722,37 +2749,42 @@ var en_USIndex = []uint32{ // 1170 elements
 	0x00006942, 0x00006968, 0x000069ae, 0x000069c6,
 	0x000069f9, 0x00006a0e, 0x00006a35, 0x00006a4c,
 	0x00006a66, 0x00006a7c, 0x00006a8d, 0x00006ad4,
-	0x00006ae9, 0x00006b07, 0x00006b1a, 0x00006b27,
-	0x00006b35, 0x00006b39, 0x00006b42, 0x00006b52,
-	0x00006b64, 0x00006b7e, 0x00006b9c, 0x00006be4,
-	0x00006bea, 0x00006bf2, 0x00006c01, 0x00006c04,
+	0x00006af8, 0x00006b0d, 0x00006b2b, 0x00006b3e,
+	0x00006b4b, 0x00006b59, 0x00006b5d, 0x00006b63,
+	0x00006b6c, 0x00006b7c, 0x00006b8e, 0x00006ba8,
+	0x00006bc6, 0x00006c0e, 0x00006c16, 0x00006c25,
 	// Entry 440 - 45F
-	0x00006c1d, 0x00006c3c, 0x00006c72, 0x00006c8f,
-	0x00006ca4, 0x00006cb9, 0x00006cd7, 0x00006cf8,
-	0x00006d17, 0x00006d48, 0x00006d5b, 0x00006d6b,
-	0x00006d7f, 0x00006d86, 0x00006d90, 0x00006d94,
-	0x00006d9f, 0x00006daa, 0x00006db0, 0x00006dbb,
-	0x00006dca, 0x00006dd7, 0x00006de1, 0x00006de9,
-	0x00006df7, 0x00006e14, 0x00006e2c, 0x00006e50,
-	0x00006e7e, 0x00006e9f, 0x00006ec6, 0x00006ee9,
+	0x00006c28, 0x00006c41, 0x00006c60, 0x00006c96,
+	0x00006cb3, 0x00006cc8, 0x00006cdd, 0x00006cfb,
+	0x00006d1c, 0x00006d3b, 0x00006d6c, 0x00006d7f,
+	0x00006d8f, 0x00006da3, 0x00006daa, 0x00006db4,
+	0x00006db8, 0x00006dc3, 0x00006dce, 0x00006dd4,
+	0x00006ddf, 0x00006dee, 0x00006dfb, 0x00006e05,
+	0x00006e0d, 0x00006e1b, 0x00006e38, 0x00006e40,
+	0x00006e4c, 0x00006e5b, 0x00006e6f, 0x00006e8d,
 	// Entry 460 - 47F
-	0x00006f01, 0x00006f39, 0x00006f51, 0x00006f79,
-	0x00006f99, 0x00006fb3, 0x00006fec, 0x00007011,
-	0x00007027, 0x00007043, 0x0000705b, 0x00007078,
-	0x00007096, 0x000070b5, 0x000070d5, 0x000070ec,
-	0x0000710d, 0x0000711c, 0x0000713f, 0x00007150,
-	0x00007175, 0x0000718f, 0x000071ba, 0x000071d3,
-	0x000071fe, 0x00007214, 0x0000722a, 0x00007249,
-	0x0000725d, 0x00007271, 0x00007289, 0x000072af,
+	0x00006f95, 0x00006fb1, 0x00006fc1, 0x000070e0,
+	0x000070ec, 0x000070ff, 0x00007111, 0x00007127,
+	0x00007140, 0x0000715b, 0x00007173, 0x00007197,
+	0x000071c5, 0x000071e6, 0x0000720d, 0x00007230,
+	0x00007248, 0x00007280, 0x00007298, 0x000072c0,
+	0x000072e0, 0x000072fa, 0x00007333, 0x00007358,
+	0x0000736e, 0x0000738a, 0x000073a2, 0x000073bf,
+	0x000073dd, 0x000073fc, 0x0000741c, 0x00007433,
 	// Entry 480 - 49F
-	0x000072db, 0x00007302, 0x00007317, 0x00007335,
-	0x0000735b, 0x00007382, 0x000073a4, 0x000073b6,
-	0x000073ce, 0x000073e2, 0x0000740e, 0x00007431,
-	0x00007462, 0x0000747b, 0x0000749f, 0x000074bf,
-	0x000074d8, 0x000074f1,
-} // Size: 4704 bytes
+	0x0000745d, 0x0000747e, 0x0000748d, 0x000074b0,
+	0x000074c1, 0x000074e6, 0x00007500, 0x0000752b,
+	0x00007544, 0x0000756f, 0x00007585, 0x0000759b,
+	0x000075ba, 0x000075ce, 0x000075e2, 0x000075fa,
+	0x00007620, 0x0000764c, 0x00007673, 0x00007688,
+	0x000076a6, 0x000076cc, 0x000076f3, 0x00007715,
+	0x00007727, 0x0000773f, 0x00007753, 0x0000777f,
+	0x000077a2, 0x000077d3, 0x000077ec, 0x00007810,
+	// Entry 4A0 - 4BF
+	0x00007830, 0x00007849, 0x00007862,
+} // Size: 4772 bytes
 
-const en_USData string = "" + // Size: 29937 bytes
+const en_USData string = "" + // Size: 30818 bytes
 	"\x02Change passphrase\x02You must be signed in to unlock the app.\x02You" +
 	" must be an admin to unlock the app.\x02Passphrase changed.\x02Initializ" +
 	"e app\x02Initialize\x02Passphrases do not match.\x02App initialized.\x02" +
@@ -3177,49 +3209,62 @@ const en_USData string = "" + // Size: 29937 bytes
 	"uld not parse url.\x02Please register a passkey to continue.\x02Could no" +
 	"t read cookie.\x02Cookie set but not valid.\x02Cookie set but empty.\x02" +
 	"Maintenance mode\x02Maintenance mode is enabled. Please wait until the a" +
-	"pp is ready again.\x02File ID is required.\x02Invalid page or search ran" +
-	"ge.\x02Invalid folder ID.\x02Manage Space\x02Organizations\x02MCP\x02Sig" +
-	"n out\x02About SimpleDMS\x02No problems found\x021 problem needs attenti" +
-	"on\x02%[1]d problems need attention\x02Last checked: %[1]s. Configuratio" +
-	"n changes take effect after a restart.\x02Error\x02Warning\x02Not config" +
-	"ured\x02OK\x02Auth cookie already set.\x02Could not generate session id." +
-	"\x02You are not allowed to access the requested resource.\x02Could not s" +
-	"tart transaction.\x02Could not read data.\x02Invalid upload size.\x02Req" +
-	"uest payload is too large.\x02Invalid OpenCloud permission ID.\x02Invali" +
-	"d OpenCloud public link.\x02A file shared from OpenCloud is ready to imp" +
-	"ort.\x02Form is too large.\x02Cleanup pending\x02Created destination\x02" +
-	"Failed\x02File type\x02Mcp\x02Pwaos open\x02Processing\x02Ready\x02Url i" +
-	"mport\x02Unknown legacy\x02Upload token\x02Uploading\x02Web dav\x02Web i" +
-	"nterface\x02MCP credential cannot write.\x02Unsupported URL source.\x02O" +
-	"penCloud import is not configured.\x02OpenCloud import is not configured" +
-	" correctly.\x02OpenCloud import requires HTTPS.\x02OpenCloud callback or" +
-	"igin is required.\x02Invalid OpenCloud callback origin.\x02Invalid downl" +
-	"oad range.\x02A version number is required for download continuation." +
-	"\x02File version not found.\x02File must be filed before organization." +
-	"\x02Invalid file recovery location.\x02Invalid storage filename.\x02A fi" +
-	"le with this name already exists in the destination.\x02Value does not m" +
-	"atch the field type.\x02Invalid field filter.\x02Invalid field filter ra" +
-	"nge.\x02Date value is required.\x02Money value is out of range.\x02Numbe" +
-	"r value is out of range.\x02Tag groups cannot be assigned.\x02Tag is sti" +
-	"ll assigned to files.\x02File or Tag not found.\x02File ID and Tag ID ar" +
-	"e required.\x02Tag not found.\x02File ID and field ID are required.\x02F" +
-	"ield not found.\x02Exactly one typed value is required.\x02Date must use" +
-	" YYYY-MM-DD.\x02File ID and document type ID are required.\x02Document t" +
-	"ype not found.\x02Parent directory ID and name are required.\x02Invalid " +
-	"filing input.\x02Invalid search input.\x02Field filter text is too long." +
-	"\x02Invalid page range.\x02Invalid Tag filter.\x02Invalid base64 content" +
-	".\x02A file with this name already exists.\x02Metadata already exists or" +
-	" is still in use.\x02Metadata upgrade is still in progress.\x02Tag group" +
-	" not found.\x02Document type ID is required.\x02Metadata identifiers are" +
-	" unavailable.\x02Name must contain 1 to 300 characters.\x02A public meta" +
-	"data ID is required.\x02Invalid Tag type.\x02Field unit is too long.\x02" +
-	"Invalid field type.\x02Exactly one Tag ID or field ID is required.\x02Do" +
-	"cument type attribute not found.\x02Select between 1 and 64 document typ" +
-	"e templates.\x02Invalid note text range.\x02Document and note IDs are re" +
-	"quired.\x02Note title or body is too long.\x02Space context not found." +
-	"\x02Could not verify access."
+	"pp is ready again.\x02Unlocking application. Please wait.\x02File ID is " +
+	"required.\x02Invalid page or search range.\x02Invalid folder ID.\x02Mana" +
+	"ge Space\x02Organizations\x02MCP\x02Error\x02Sign out\x02About SimpleDMS" +
+	"\x02No problems found\x021 problem needs attention\x02%[1]d problems nee" +
+	"d attention\x02Last checked: %[1]s. Configuration changes take effect af" +
+	"ter a restart.\x02Warning\x02Not configured\x02OK\x02Auth cookie already" +
+	" set.\x02Could not generate session id.\x02You are not allowed to access" +
+	" the requested resource.\x02Could not start transaction.\x02Could not re" +
+	"ad data.\x02Invalid upload size.\x02Request payload is too large.\x02Inv" +
+	"alid OpenCloud permission ID.\x02Invalid OpenCloud public link.\x02A fil" +
+	"e shared from OpenCloud is ready to import.\x02Form is too large.\x02Cle" +
+	"anup pending\x02Created destination\x02Failed\x02File type\x02Mcp\x02Pwa" +
+	"os open\x02Processing\x02Ready\x02Url import\x02Unknown legacy\x02Upload" +
+	" token\x02Uploading\x02Web dav\x02Web interface\x02MCP credential cannot" +
+	" write.\x02Runtime\x02Listen port\x02Data directory\x02Trusted proxy CID" +
+	"Rs\x02Startup environment overrides\x02These additional environment valu" +
+	"es were captured at startup. Unset values use component defaults; invali" +
+	"d overrides may fall back to defaults. Development settings apply only i" +
+	"n development mode. Passwords and the profiling path are shown only as s" +
+	"et or not set.\x02WebAuthn relying party name\x02Current request\x02Open" +
+	" this page through your reverse proxy. The direct peer should be your pr" +
+	"oxy, the resolved client IP should be your client address, and the detec" +
+	"ted protocol should be HTTPS when you access the site over HTTPS. Receiv" +
+	"ed forwarded headers alone do not prove that the proxy is trusted.\x02Di" +
+	"rect peer\x02Resolved client IP\x02Detected protocol\x02Direct TLS conne" +
+	"ction\x02Received X-Forwarded-For\x02Received X-Forwarded-Proto\x02Unsup" +
+	"ported URL source.\x02OpenCloud import is not configured.\x02OpenCloud i" +
+	"mport is not configured correctly.\x02OpenCloud import requires HTTPS." +
+	"\x02OpenCloud callback origin is required.\x02Invalid OpenCloud callback" +
+	" origin.\x02Invalid download range.\x02A version number is required for " +
+	"download continuation.\x02File version not found.\x02File must be filed " +
+	"before organization.\x02Invalid file recovery location.\x02Invalid stora" +
+	"ge filename.\x02A file with this name already exists in the destination." +
+	"\x02Value does not match the field type.\x02Invalid field filter.\x02Inv" +
+	"alid field filter range.\x02Date value is required.\x02Money value is ou" +
+	"t of range.\x02Number value is out of range.\x02Tag groups cannot be ass" +
+	"igned.\x02Tag is still assigned to files.\x02File or Tag not found.\x02S" +
+	"ystem administrator sign-in is required.\x02File ID and Tag ID are requi" +
+	"red.\x02Tag not found.\x02File ID and field ID are required.\x02Field no" +
+	"t found.\x02Exactly one typed value is required.\x02Date must use YYYY-M" +
+	"M-DD.\x02File ID and document type ID are required.\x02Document type not" +
+	" found.\x02Parent directory ID and name are required.\x02Invalid filing " +
+	"input.\x02Invalid search input.\x02Field filter text is too long.\x02Inv" +
+	"alid page range.\x02Invalid Tag filter.\x02Invalid base64 content.\x02A " +
+	"file with this name already exists.\x02Metadata already exists or is sti" +
+	"ll in use.\x02Metadata upgrade is still in progress.\x02Tag group not fo" +
+	"und.\x02Document type ID is required.\x02Metadata identifiers are unavai" +
+	"lable.\x02Name must contain 1 to 300 characters.\x02A public metadata ID" +
+	" is required.\x02Invalid Tag type.\x02Field unit is too long.\x02Invalid" +
+	" field type.\x02Exactly one Tag ID or field ID is required.\x02Document " +
+	"type attribute not found.\x02Select between 1 and 64 document type templ" +
+	"ates.\x02Invalid note text range.\x02Document and note IDs are required." +
+	"\x02Note title or body is too long.\x02Space context not found.\x02Could" +
+	" not verify access."
 
-var frIndex = []uint32{ // 1170 elements
+var frIndex = []uint32{ // 1187 elements
 	// Entry 0 - 1F
 	0x00000000, 0x0000001b, 0x00000051, 0x00000094,
 	0x000000af, 0x000000c1, 0x000000cd, 0x000000f9,
@@ -3522,37 +3567,42 @@ var frIndex = []uint32{ // 1170 elements
 	0x00008c88, 0x00008cbe, 0x00008d1d, 0x00008d44,
 	0x00008d88, 0x00008da5, 0x00008dd5, 0x00008df3,
 	0x00008e13, 0x00008e2d, 0x00008e3e, 0x00008ea8,
-	0x00008ed4, 0x00008f02, 0x00008f23, 0x00008f33,
-	0x00008f41, 0x00008f45, 0x00008f52, 0x00008f69,
-	0x00008f81, 0x00008fa8, 0x00008fd6, 0x00009044,
-	0x0000904b, 0x00009059, 0x00009068, 0x0000906b,
+	0x00008ee9, 0x00008f15, 0x00008f43, 0x00008f64,
+	0x00008f74, 0x00008f82, 0x00008f86, 0x00008f8d,
+	0x00008f9a, 0x00008fb1, 0x00008fc9, 0x00008ff0,
+	0x0000901e, 0x0000908c, 0x0000909a, 0x000090a9,
 	// Entry 440 - 45F
-	0x00009095, 0x000090c3, 0x00009105, 0x0000912d,
-	0x0000914e, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
+	0x000090ac, 0x000090d6, 0x00009104, 0x00009146,
+	0x0000916e, 0x0000918f, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
 	// Entry 460 - 47F
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
 	// Entry 480 - 49F
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172, 0x00009172, 0x00009172,
-	0x00009172, 0x00009172,
-} // Size: 4704 bytes
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	0x000091b3, 0x000091b3, 0x000091b3, 0x000091b3,
+	// Entry 4A0 - 4BF
+	0x000091b3, 0x000091b3, 0x000091b3,
+} // Size: 4772 bytes
 
-const frData string = "" + // Size: 37234 bytes
+const frData string = "" + // Size: 37299 bytes
 	"\x02Changer la phrase secrète\x02Vous devez être connecté pour déverroui" +
 	"ller l'app.\x02Vous devez être administrateur pour déverrouiller l'appli" +
 	"cation.\x02Phrase secrète modifiée.\x02Initialiser l'app\x02Initialiser" +
@@ -4087,19 +4137,20 @@ const frData string = "" + // Size: 37234 bytes
 	"egistrer un Passkey pour continuer.\x02Impossible de lire le cookie.\x02" +
 	"Cookie défini mais non valide.\x02Cookie défini mais vide.\x02Mode maint" +
 	"enance\x02Le mode maintenance est activé. Veuillez patienter jusqu'à ce " +
-	"que l'application soit à nouveau prête.\x02L’identifiant du fichier est " +
-	"nécessaire.\x02Plage de pagination ou de recherche invalide.\x02Identifi" +
-	"ant de dossier invalide.\x02Gérer le Space\x02Organisations\x02MCP\x02Dé" +
-	"connexion\x02À propos de SimpleDMS\x02Aucun problème trouvé\x021 problèm" +
-	"e nécessite votre attention\x02%[1]d problèmes nécessitent votre attenti" +
-	"on\x02Dernière vérification : %[1]s. Les modifications de la configurati" +
-	"on prennent effet après un redémarrage.\x02Erreur\x02Avertissement\x02No" +
-	"n configuré\x02OK\x02Cookie d'authentification déjà défini.\x02Impossibl" +
-	"e de générer la valeur de session.\x02Vous n'êtes pas autorisé à accéder" +
-	" à la ressource demandée.\x02Impossible de démarrer la transaction.\x02I" +
-	"mpossible de lire les données.\x02Taille de téléversement invalide."
+	"que l'application soit à nouveau prête.\x02Déverrouillage de l’applicati" +
+	"on en cours. Veuillez patienter.\x02L’identifiant du fichier est nécessa" +
+	"ire.\x02Plage de pagination ou de recherche invalide.\x02Identifiant de " +
+	"dossier invalide.\x02Gérer le Space\x02Organisations\x02MCP\x02Erreur" +
+	"\x02Déconnexion\x02À propos de SimpleDMS\x02Aucun problème trouvé\x021 p" +
+	"roblème nécessite votre attention\x02%[1]d problèmes nécessitent votre a" +
+	"ttention\x02Dernière vérification : %[1]s. Les modifications de la confi" +
+	"guration prennent effet après un redémarrage.\x02Avertissement\x02Non co" +
+	"nfiguré\x02OK\x02Cookie d'authentification déjà défini.\x02Impossible de" +
+	" générer la valeur de session.\x02Vous n'êtes pas autorisé à accéder à l" +
+	"a ressource demandée.\x02Impossible de démarrer la transaction.\x02Impos" +
+	"sible de lire les données.\x02Taille de téléversement invalide."
 
-var itIndex = []uint32{ // 1170 elements
+var itIndex = []uint32{ // 1187 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000046, 0x00000082,
 	0x00000099, 0x000000a9, 0x000000b5, 0x000000d6,
@@ -4402,37 +4453,42 @@ var itIndex = []uint32{ // 1170 elements
 	0x00007fbc, 0x00007fec, 0x0000803b, 0x00008059,
 	0x0000808e, 0x000080ac, 0x000080d0, 0x000080ef,
 	0x0000810f, 0x0000812a, 0x00008141, 0x000081a8,
-	0x000081c7, 0x000081f7, 0x0000820f, 0x0000821e,
-	0x0000822d, 0x00008231, 0x0000823d, 0x00008257,
-	0x0000826f, 0x0000828e, 0x000082b3, 0x0000830c,
-	0x00008313, 0x0000831a, 0x0000832a, 0x0000832d,
+	0x000081d7, 0x000081f6, 0x00008226, 0x0000823e,
+	0x0000824d, 0x0000825c, 0x00008260, 0x00008267,
+	0x00008273, 0x0000828d, 0x000082a5, 0x000082c4,
+	0x000082e9, 0x00008342, 0x00008349, 0x00008359,
 	// Entry 440 - 45F
-	0x00008356, 0x00008385, 0x000083bd, 0x000083e1,
-	0x000083fd, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
+	0x0000835c, 0x00008385, 0x000083b4, 0x000083ec,
+	0x00008410, 0x0000842c, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
 	// Entry 460 - 47F
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
 	// Entry 480 - 49F
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424, 0x00008424, 0x00008424,
-	0x00008424, 0x00008424,
-} // Size: 4704 bytes
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	0x00008453, 0x00008453, 0x00008453, 0x00008453,
+	// Entry 4A0 - 4BF
+	0x00008453, 0x00008453, 0x00008453,
+} // Size: 4772 bytes
 
-const itData string = "" + // Size: 33828 bytes
+const itData string = "" + // Size: 33875 bytes
 	"\x02Cambia passphrase\x02Devi aver effettuato l'accesso per sbloccare l'" +
 	"app.\x02Devi essere un amministratore per sbloccare l'applicazione.\x02P" +
 	"assphrase modificata.\x02Inizializza app\x02Inizializza\x02Le passphrase" +
@@ -4935,15 +4991,16 @@ const itData string = "" + // Size: 33828 bytes
 	"e leggere il cookie.\x02Cookie impostato ma non valido.\x02Cookie impost" +
 	"ato ma vuoto.\x02Modalità manutenzione\x02La modalità manutenzione è att" +
 	"ivata. Attendere fino a quando l'applicazione sarà nuovamente pronta." +
-	"\x02L’ID del file è necessario.\x02Intervallo di paginazione o ricerca n" +
-	"on valido.\x02ID cartella non valido.\x02Gestisci Space\x02Organizzazion" +
-	"i\x02MCP\x02Disconnetti\x02Informazioni su SimpleDMS\x02Nessun problema " +
-	"trovato\x021 problema richiede attenzione\x02%[1]d problemi richiedono a" +
-	"ttenzione\x02Ultimo controllo: %[1]s. Le modifiche alla configurazione h" +
-	"anno effetto dopo un riavvio.\x02Errore\x02Avviso\x02Non configurato\x02" +
-	"OK\x02Cookie di autenticazione già impostato.\x02Impossibile generare il" +
-	" valore della sessione.\x02Non sei autorizzato ad accedere alla risorsa " +
-	"richiesta.\x02Impossibile avviare la transazione.\x02Impossibile leggere" +
-	" i dati.\x02Dimensione del caricamento non valida."
+	"\x02Sblocco dell’applicazione in corso. Attendi.\x02L’ID del file è nece" +
+	"ssario.\x02Intervallo di paginazione o ricerca non valido.\x02ID cartell" +
+	"a non valido.\x02Gestisci Space\x02Organizzazioni\x02MCP\x02Errore\x02Di" +
+	"sconnetti\x02Informazioni su SimpleDMS\x02Nessun problema trovato\x021 p" +
+	"roblema richiede attenzione\x02%[1]d problemi richiedono attenzione\x02U" +
+	"ltimo controllo: %[1]s. Le modifiche alla configurazione hanno effetto d" +
+	"opo un riavvio.\x02Avviso\x02Non configurato\x02OK\x02Cookie di autentic" +
+	"azione già impostato.\x02Impossibile generare il valore della sessione." +
+	"\x02Non sei autorizzato ad accedere alla risorsa richiesta.\x02Impossibi" +
+	"le avviare la transazione.\x02Impossibile leggere i dati.\x02Dimensione " +
+	"del caricamento non valida."
 
-	// Total table size 160003 bytes (156KiB); checksum: F49AC1F2
+	// Total table size 161375 bytes (157KiB); checksum: C52B4D1

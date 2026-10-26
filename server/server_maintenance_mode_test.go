@@ -135,6 +135,7 @@ func TestMaintenancePageUnlockFormRendering(t *testing.T) {
 			if value := rr.Header().Get("X-SimpleDMS-Maintenance"); value != "true" {
 				t.Fatalf("expected maintenance marker, got %q", value)
 			}
+			assertMaintenanceCommandCacheHeaders(t, rr)
 			body := rr.Body.String()
 			if !strings.Contains(body, "Maintenance mode") ||
 				!strings.Contains(body, "Maintenance mode is enabled.") {
@@ -244,6 +245,64 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestMaintenanceStartupStatusTranslations(t *testing.T) {
+	deps := newMaintenanceTestDependencies(t)
+	for _, locale := range []struct {
+		language  string
+		unlocking string
+		starting  string
+	}{
+		{
+			language:  "en",
+			unlocking: "Unlocking application. Please wait.",
+			starting:  "Application unlocked. Starting up.",
+		},
+		{
+			language:  "de",
+			unlocking: "Anwendung wird entsperrt. Bitte warte.",
+			starting:  "Anwendung entsperrt. Start wird fortgesetzt.",
+		},
+		{
+			language:  "fr",
+			unlocking: "Déverrouillage de l’application en cours. Veuillez patienter.",
+			starting:  "Application déverrouillée. Démarrage en cours.",
+		},
+		{
+			language:  "it",
+			unlocking: "Sblocco dell’applicazione in corso. Attendi.",
+			starting:  "Applicazione sbloccata. Avvio in corso.",
+		},
+	} {
+		for _, phase := range []struct {
+			name    string
+			state   int32
+			message string
+		}{
+			{name: "unlocking", state: maintenanceStateUnlocking, message: locale.unlocking},
+			{name: "starting", state: maintenanceStateStarting, message: locale.starting},
+		} {
+			t.Run(locale.language+"/"+phase.name, func(t *testing.T) {
+				handler := newMaintenancePageHandler(
+					deps.mainDB, deps.i18n, deps.renderer, false,
+					func() int32 { return phase.state },
+				)
+				req := httptest.NewRequest(http.MethodGet, "/?unlock", nil)
+				req.Header.Set("Accept-Language", locale.language)
+				rr := httptest.NewRecorder()
+				handler.ServeHTTP(rr, req)
+				if rr.Code != http.StatusServiceUnavailable {
+					t.Fatalf("expected maintenance status, got %d", rr.Code)
+				}
+				assertMaintenanceCommandCacheHeaders(t, rr)
+				assertMaintenanceFormVisibility(t, rr, false)
+				if !strings.Contains(html.UnescapeString(rr.Body.String()), phase.message) {
+					t.Errorf("expected visible status %q", phase.message)
+				}
+			})
+		}
 	}
 }
 
@@ -489,13 +548,26 @@ func TestMaintenanceUnlockCmdConcurrentValidRequestsTransitionOnce(t *testing.T)
 		}
 		close(start)
 		requests.Wait()
+		successes, conflicts := 0, 0
 		for _, response := range responses {
-			if response.Code != http.StatusOK {
-				t.Errorf("expected status %d, got %d", http.StatusOK, response.Code)
+			switch response.Code {
+			case http.StatusOK:
+				successes++
+			case http.StatusConflict:
+				conflicts++
+				assertMaintenanceCommandCacheHeaders(t, response)
+			default:
+				t.Errorf("expected status 200 or 409, got %d", response.Code)
 			}
 			if response.Body.Len() != 0 {
-				t.Errorf("expected empty success response, got %q", response.Body.String())
+				t.Errorf("expected empty response, got %q", response.Body.String())
 			}
+		}
+		if successes != 1 || conflicts != requestCount-1 {
+			t.Fatalf(
+				"expected one success and %d conflicts, got %d successes and %d conflicts",
+				requestCount-1, successes, conflicts,
+			)
 		}
 
 		time.Sleep(time.Hour)
@@ -510,6 +582,185 @@ func TestMaintenanceUnlockCmdConcurrentValidRequestsTransitionOnce(t *testing.T)
 	}
 	if got := encryptor.NilableX25519MainIdentity.String(); got != expectedIdentity.String() {
 		t.Fatalf("expected stable identity %q, got %q", expectedIdentity.String(), got)
+	}
+}
+
+func TestMaintenanceUnlockInFlightHidesFormAndRejectsDuplicateRequests(t *testing.T) {
+	const passphrase = "in-flight-unlock-passphrase"
+	deps := newMaintenanceTestDependencies(t)
+	clearMainIdentity(t)
+	var stopCalls atomic.Int32
+	callback := make(chan struct{}, 1)
+	handler := newMaintenanceModeHandler(
+		deps.mainDB,
+		os.DirFS(t.TempDir()),
+		false,
+		deps.i18n,
+		deps.renderer,
+		mustEncryptIdentityWithPassphrase(t, passphrase),
+		nil,
+		false,
+		func() {
+			stopCalls.Add(1)
+			callback <- struct{}{}
+		},
+	)
+	assertMaintenance := func(isFormVisible bool, statusMessage string) {
+		t.Helper()
+		for _, path := range []string{
+			"/",
+			"/?unlock=anything",
+			"/spaces/example?view=list",
+			"/spaces/example?view=list&unlock=false",
+		} {
+			req := httptest.NewRequest(http.MethodGet, path, nil)
+			rr := httptest.NewRecorder()
+			handler.ServeHTTP(rr, req)
+			if rr.Code != http.StatusServiceUnavailable ||
+				rr.Header().Get("X-SimpleDMS-Maintenance") != "true" {
+				t.Fatalf("GET %s: expected marked maintenance response, got %d", path, rr.Code)
+			}
+			assertMaintenanceCommandCacheHeaders(t, rr)
+			assertMaintenanceFormVisibility(t, rr, isFormVisible && req.URL.Query().Has("unlock"))
+			if !strings.Contains(rr.Body.String(), statusMessage) {
+				t.Errorf("GET %s: expected status message %q", path, statusMessage)
+			}
+		}
+	}
+	const lockedMessage = "Maintenance mode is enabled. Please wait until the app is ready again."
+
+	// An incomplete body has not reached the decryption guard, so it must not
+	// prevent another client from seeing the initial unlock form.
+	reader, writer := io.Pipe()
+	incompleteRequest := httptest.NewRequest(http.MethodPost, "/-/unlock-cmd", reader)
+	incompleteDone := make(chan struct{})
+	t.Cleanup(func() {
+		if err := writer.Close(); err != nil {
+			t.Errorf("close incomplete unlock body: %v", err)
+		}
+		<-incompleteDone
+	})
+	go func() {
+		handler.ServeHTTP(httptest.NewRecorder(), incompleteRequest)
+		close(incompleteDone)
+	}()
+	if _, err := writer.Write([]byte("{")); err != nil {
+		t.Fatalf("write partial unlock body: %v", err)
+	}
+	assertMaintenance(true, lockedMessage)
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close incomplete unlock body: %v", err)
+	}
+	select {
+	case <-incompleteDone:
+	case <-time.After(time.Second):
+		t.Fatal("incomplete unlock request did not finish")
+	}
+
+	failedWriter := newBlockingStatusWriter(http.StatusBadRequest)
+	failedRequest := httptest.NewRequest(
+		http.MethodPost,
+		"/-/unlock-cmd",
+		bytes.NewReader(marshalUnlockRequestBody(t, "wrong-passphrase")),
+	)
+	failedDone := make(chan struct{})
+	failedWriter.cleanup(t, failedDone)
+	go func() {
+		handler.ServeHTTP(failedWriter, failedRequest)
+		close(failedDone)
+	}()
+	failedWriter.wait(t)
+	assertMaintenance(false, "Unlocking application. Please wait.")
+	failedWriter.release()
+	select {
+	case <-failedDone:
+	case <-time.After(time.Second):
+		t.Fatal("failed unlock request did not finish")
+	}
+	assertMaintenance(true, lockedMessage)
+	if encryptor.NilableX25519MainIdentity != nil || stopCalls.Load() != 0 {
+		t.Fatal("failed unlock must not assign identity or invoke callback")
+	}
+
+	// Pause at the success response after decryption but before the callback and
+	// handoff, which is the public HTTP seam for the in-flight startup state.
+	successWriter := newBlockingStatusWriter(http.StatusOK)
+	successRequest := httptest.NewRequest(
+		http.MethodPost,
+		"/-/unlock-cmd",
+		bytes.NewReader(marshalUnlockRequestBody(t, passphrase)),
+	)
+	successDone := make(chan struct{})
+	successWriter.cleanup(t, successDone)
+	go func() {
+		handler.ServeHTTP(successWriter, successRequest)
+		close(successDone)
+	}()
+	successWriter.wait(t)
+	assertMaintenance(false, "Application unlocked. Starting up.")
+	identityAfterUnlock := encryptor.NilableX25519MainIdentity
+	if identityAfterUnlock == nil {
+		t.Fatal("expected decrypted identity")
+	}
+
+	for _, body := range [][]byte{
+		marshalUnlockRequestBody(t, passphrase),
+		marshalUnlockRequestBody(t, "wrong-passphrase"),
+		[]byte("{"),
+	} {
+		rr := httptest.NewRecorder()
+		handler.ServeHTTP(rr, httptest.NewRequest(
+			http.MethodPost, "/-/unlock-cmd", bytes.NewReader(body),
+		))
+		if rr.Code != http.StatusConflict {
+			t.Fatalf("duplicate unlock: expected status %d, got %d", http.StatusConflict, rr.Code)
+		}
+		assertMaintenanceCommandCacheHeaders(t, rr)
+	}
+	if stopCalls.Load() != 0 || encryptor.NilableX25519MainIdentity != identityAfterUnlock {
+		t.Fatal("duplicate attempts must not replace identity or invoke callback")
+	}
+	successWriter.release()
+	select {
+	case <-successDone:
+	case <-time.After(time.Second):
+		t.Fatal("unlock request did not finish")
+	}
+	if successWriter.ResponseRecorder.Code != http.StatusOK {
+		t.Fatalf(
+			"expected successful unlock, got %d: %s",
+			successWriter.ResponseRecorder.Code,
+			successWriter.ResponseRecorder.Body.String(),
+		)
+	}
+	select {
+	case <-callback:
+	case <-time.After(time.Second):
+		t.Fatal("unlock callback did not run")
+	}
+	if stopCalls.Load() != 1 {
+		t.Fatalf("expected one callback, got %d", stopCalls.Load())
+	}
+	if encryptor.NilableX25519MainIdentity != identityAfterUnlock {
+		t.Fatal("duplicate attempts replaced the unlocked identity")
+	}
+	assertMaintenance(false, "Application unlocked. Starting up.")
+	for _, body := range [][]byte{
+		marshalUnlockRequestBody(t, passphrase),
+		marshalUnlockRequestBody(t, "wrong-passphrase"),
+		[]byte("{"),
+	} {
+		rr := httptest.NewRecorder()
+		handler.ServeHTTP(rr, httptest.NewRequest(
+			http.MethodPost, "/-/unlock-cmd", bytes.NewReader(body),
+		))
+		if rr.Code != http.StatusConflict {
+			t.Fatalf("post-success duplicate: expected status %d, got %d", http.StatusConflict, rr.Code)
+		}
+		assertMaintenanceCommandCacheHeaders(t, rr)
+	}
+	if stopCalls.Load() != 1 || encryptor.NilableX25519MainIdentity != identityAfterUnlock {
+		t.Fatal("post-success duplicate attempts must not replace identity or repeat callback")
 	}
 }
 

@@ -127,6 +127,11 @@
 						cache: "no-store",
 						body: JSON.stringify({passphrase: input.value}),
 					});
+					if (response.status === 409) {
+						// Another request owns unlock; reload the server's current state.
+						window.location.reload();
+						return;
+					}
 					if (response.status === 200) {
 						form.setAttribute("aria-busy", "false");
 						status.textContent = form.dataset.startupMessage;

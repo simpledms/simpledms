@@ -16,7 +16,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"filippo.io/age"
@@ -86,6 +86,12 @@ const (
 	listenModeTLSAutocert
 )
 
+const (
+	maintenanceStateLocked = iota
+	maintenanceStateUnlocking
+	maintenanceStateStarting
+)
+
 func shouldUseAutocert(enableAutocert, devMode bool) bool {
 	return enableAutocert && !devMode
 }
@@ -115,7 +121,7 @@ func newMaintenanceModeHandler(
 	mux := http.NewServeMux()
 	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
 	unlockRateLimiter := newMaintenanceUnlockRateLimiter(trustedProxies)
-	var unlockOnce sync.Once
+	var maintenanceState atomic.Int32
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle(
@@ -131,6 +137,10 @@ func newMaintenanceModeHandler(
 		if req.Method != http.MethodPost {
 			rw.Header().Set("Allow", http.MethodPost)
 			rw.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		if maintenanceState.Load() != maintenanceStateLocked {
+			rw.WriteHeader(http.StatusConflict)
 			return
 		}
 		req.Body = http.MaxBytesReader(rw, req.Body, 64*1024)
@@ -175,6 +185,17 @@ func newMaintenanceModeHandler(
 			return
 		}
 
+		// Claim unlock only after reading the body so a slow upload cannot block it.
+		if !maintenanceState.CompareAndSwap(maintenanceStateLocked, maintenanceStateUnlocking) {
+			rw.WriteHeader(http.StatusConflict)
+			return
+		}
+		defer func() {
+			// Failed attempts can be retried; success keeps maintenance locked to
+			// further attempts until startup hands the listener over to the app.
+			maintenanceState.CompareAndSwap(maintenanceStateUnlocking, maintenanceStateLocked)
+		}()
+
 		identity, err := systemconfigmodel.DecryptMainIdentity(encryptedIdentity, passphrase)
 		if err != nil {
 			log.Println(err)
@@ -183,20 +204,17 @@ func newMaintenanceModeHandler(
 			return
 		}
 
-		shouldNotify := false
-		unlockOnce.Do(func() {
-			encryptor.NilableX25519MainIdentity = identity
-			shouldNotify = true
-		})
+		encryptor.NilableX25519MainIdentity = identity
+		maintenanceState.Store(maintenanceStateStarting)
 
 		rw.WriteHeader(http.StatusOK)
-		if shouldNotify && onUnlock != nil {
+		if onUnlock != nil {
 			go onUnlock()
 		}
 	})
 
 	mux.HandleFunc("/", newMaintenancePageHandler(
-		mainDB, i18nx, renderer, commercialLicenseEnabled,
+		mainDB, i18nx, renderer, commercialLicenseEnabled, maintenanceState.Load,
 	))
 	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
@@ -213,16 +231,16 @@ func newMaintenancePageHandler(
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	commercialLicenseEnabled bool,
+	maintenanceState func() int32,
 ) http.HandlerFunc {
 	// TODO recovery handler
 	// TODO status code?
 	return func(rw http.ResponseWriter, req *http.Request) {
-		isUnlockFormVisible := req.URL.Query().Has("unlock")
+		state := maintenanceState()
+		isUnlockFormVisible := req.URL.Query().Has("unlock") && state == maintenanceStateLocked
 		rw.Header().Set("X-SimpleDMS-Maintenance", "true")
-		if isUnlockFormVisible {
-			rw.Header().Set("Cache-Control", "no-store")
-			rw.Header().Set("Pragma", "no-cache")
-		}
+		rw.Header().Set("Cache-Control", "no-store")
+		rw.Header().Set("Pragma", "no-cache")
 
 		mainTx, err := mainDB.Tx(req.Context(), true)
 		if err != nil {
@@ -251,11 +269,18 @@ func newMaintenancePageHandler(
 		)
 
 		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
+		statusMessage := widget.T(
+			"Maintenance mode is enabled. Please wait until the app is ready again.",
+		)
+		switch state {
+		case maintenanceStateUnlocking:
+			statusMessage = widget.T("Unlocking application. Please wait.")
+		case maintenanceStateStarting:
+			statusMessage = widget.T("Application unlocked. Starting up.")
+		}
 		children := []widget.IWidget{
 			widget.H(widget.HeadingTypeHeadlineMd, titlex),
-			widget.T(
-				"Maintenance mode is enabled. Please wait until the app is ready again.",
-			).SetWrap(),
+			statusMessage.SetWrap(),
 			// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
 		}
 		if isUnlockFormVisible {

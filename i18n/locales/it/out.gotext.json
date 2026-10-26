@@ -6420,6 +6420,36 @@
             "fuzzy": true
         },
         {
+            "id": "Runtime",
+            "message": "Runtime",
+            "translation": ""
+        },
+        {
+            "id": "Listen port",
+            "message": "Listen port",
+            "translation": ""
+        },
+        {
+            "id": "Data directory",
+            "message": "Data directory",
+            "translation": ""
+        },
+        {
+            "id": "Trusted proxy CIDRs",
+            "message": "Trusted proxy CIDRs",
+            "translation": ""
+        },
+        {
+            "id": "Startup environment overrides",
+            "message": "Startup environment overrides",
+            "translation": ""
+        },
+        {
+            "id": "These additional environment values were captured at startup. Unset values use component defaults; invalid overrides may fall back to defaults. Development settings apply only in development mode. Passwords and the profiling path are shown only as set or not set.",
+            "message": "These additional environment values were captured at startup. Unset values use component defaults; invalid overrides may fall back to defaults. Development settings apply only in development mode. Passwords and the profiling path are shown only as set or not set.",
+            "translation": ""
+        },
+        {
             "id": "General",
             "message": "General",
             "translation": "Generale",
@@ -6439,6 +6469,11 @@
             "translation": "ID della relying party WebAuthn",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
+        },
+        {
+            "id": "WebAuthn relying party name",
+            "message": "WebAuthn relying party name",
+            "translation": ""
         },
         {
             "id": "Passphrase protection",
@@ -6523,6 +6558,46 @@
             "translation": "I cookie di Session vengono inviati anche tramite connessioni non crittografate.",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
+        },
+        {
+            "id": "Current request",
+            "message": "Current request",
+            "translation": ""
+        },
+        {
+            "id": "Open this page through your reverse proxy. The direct peer should be your proxy, the resolved client IP should be your client address, and the detected protocol should be HTTPS when you access the site over HTTPS. Received forwarded headers alone do not prove that the proxy is trusted.",
+            "message": "Open this page through your reverse proxy. The direct peer should be your proxy, the resolved client IP should be your client address, and the detected protocol should be HTTPS when you access the site over HTTPS. Received forwarded headers alone do not prove that the proxy is trusted.",
+            "translation": ""
+        },
+        {
+            "id": "Direct peer",
+            "message": "Direct peer",
+            "translation": ""
+        },
+        {
+            "id": "Resolved client IP",
+            "message": "Resolved client IP",
+            "translation": ""
+        },
+        {
+            "id": "Detected protocol",
+            "message": "Detected protocol",
+            "translation": ""
+        },
+        {
+            "id": "Direct TLS connection",
+            "message": "Direct TLS connection",
+            "translation": ""
+        },
+        {
+            "id": "Received X-Forwarded-For",
+            "message": "Received X-Forwarded-For",
+            "translation": ""
+        },
+        {
+            "id": "Received X-Forwarded-Proto",
+            "message": "Received X-Forwarded-Proto",
+            "translation": ""
         },
         {
             "id": "Storage",
@@ -8539,6 +8614,11 @@
             "fuzzy": true
         },
         {
+            "id": "System administrator sign-in is required.",
+            "message": "System administrator sign-in is required.",
+            "translation": ""
+        },
+        {
             "id": "Cannot delete an entity still in use.",
             "message": "Cannot delete an entity still in use.",
             "translation": "Impossibile eliminare un'entità ancora in uso.",
@@ -8613,6 +8693,13 @@
             "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "La modalità manutenzione è attivata. Attendere fino a quando l'applicazione sarà nuovamente pronta.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlocking application. Please wait.",
+            "message": "Unlocking application. Please wait.",
+            "translation": "Sblocco dell’applicazione in corso. Attendi.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -8818,6 +8905,13 @@
             "fuzzy": true
         },
         {
+            "id": "Error",
+            "message": "Error",
+            "translation": "Errore",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
             "id": "Sign out",
             "message": "Sign out",
             "translation": "Disconnetti",
@@ -8877,13 +8971,6 @@
                     "expr": "qq.CheckedAt"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Error",
-            "message": "Error",
-            "translation": "Errore",
-            "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },
         {

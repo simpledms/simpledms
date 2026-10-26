@@ -4838,6 +4838,36 @@
             "translation": ""
         },
         {
+            "id": "Runtime",
+            "message": "Runtime",
+            "translation": ""
+        },
+        {
+            "id": "Listen port",
+            "message": "Listen port",
+            "translation": ""
+        },
+        {
+            "id": "Data directory",
+            "message": "Data directory",
+            "translation": ""
+        },
+        {
+            "id": "Trusted proxy CIDRs",
+            "message": "Trusted proxy CIDRs",
+            "translation": ""
+        },
+        {
+            "id": "Startup environment overrides",
+            "message": "Startup environment overrides",
+            "translation": ""
+        },
+        {
+            "id": "These additional environment values were captured at startup. Unset values use component defaults; invalid overrides may fall back to defaults. Development settings apply only in development mode. Passwords and the profiling path are shown only as set or not set.",
+            "message": "These additional environment values were captured at startup. Unset values use component defaults; invalid overrides may fall back to defaults. Development settings apply only in development mode. Passwords and the profiling path are shown only as set or not set.",
+            "translation": ""
+        },
+        {
             "id": "General",
             "message": "General",
             "translation": ""
@@ -4850,6 +4880,11 @@
         {
             "id": "WebAuthn relying party ID",
             "message": "WebAuthn relying party ID",
+            "translation": ""
+        },
+        {
+            "id": "WebAuthn relying party name",
+            "message": "WebAuthn relying party name",
             "translation": ""
         },
         {
@@ -4910,6 +4945,46 @@
         {
             "id": "Session cookies are also sent over unencrypted connections.",
             "message": "Session cookies are also sent over unencrypted connections.",
+            "translation": ""
+        },
+        {
+            "id": "Current request",
+            "message": "Current request",
+            "translation": ""
+        },
+        {
+            "id": "Open this page through your reverse proxy. The direct peer should be your proxy, the resolved client IP should be your client address, and the detected protocol should be HTTPS when you access the site over HTTPS. Received forwarded headers alone do not prove that the proxy is trusted.",
+            "message": "Open this page through your reverse proxy. The direct peer should be your proxy, the resolved client IP should be your client address, and the detected protocol should be HTTPS when you access the site over HTTPS. Received forwarded headers alone do not prove that the proxy is trusted.",
+            "translation": ""
+        },
+        {
+            "id": "Direct peer",
+            "message": "Direct peer",
+            "translation": ""
+        },
+        {
+            "id": "Resolved client IP",
+            "message": "Resolved client IP",
+            "translation": ""
+        },
+        {
+            "id": "Detected protocol",
+            "message": "Detected protocol",
+            "translation": ""
+        },
+        {
+            "id": "Direct TLS connection",
+            "message": "Direct TLS connection",
+            "translation": ""
+        },
+        {
+            "id": "Received X-Forwarded-For",
+            "message": "Received X-Forwarded-For",
+            "translation": ""
+        },
+        {
+            "id": "Received X-Forwarded-Proto",
+            "message": "Received X-Forwarded-Proto",
             "translation": ""
         },
         {
@@ -6427,6 +6502,11 @@
             "translation": ""
         },
         {
+            "id": "System administrator sign-in is required.",
+            "message": "System administrator sign-in is required.",
+            "translation": ""
+        },
+        {
             "id": "Cannot delete an entity still in use.",
             "message": "Cannot delete an entity still in use.",
             "translation": ""
@@ -6480,6 +6560,11 @@
             "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
+        },
+        {
+            "id": "Unlocking application. Please wait.",
+            "message": "Unlocking application. Please wait.",
+            "translation": ""
         },
         {
             "id": "File ID and Tag ID are required.",
@@ -6672,6 +6757,11 @@
             "translation": ""
         },
         {
+            "id": "Error",
+            "message": "Error",
+            "translation": ""
+        },
+        {
             "id": "Sign out",
             "message": "Sign out",
             "translation": ""
@@ -6720,11 +6810,6 @@
                     "expr": "qq.CheckedAt"
                 }
             ]
-        },
-        {
-            "id": "Error",
-            "message": "Error",
-            "translation": ""
         },
         {
             "id": "Warning",
