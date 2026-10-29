@@ -189,6 +189,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerFrom:                        {Type: field.TypeString, Column: systemconfig.FieldMailerFrom},
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
 			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
+			systemconfig.FieldTurnstileSiteKey:                  {Type: field.TypeString, Column: systemconfig.FieldTurnstileSiteKey},
+			systemconfig.FieldTurnstileSecret:                   {Type: field.TypeBytes, Column: systemconfig.FieldTurnstileSecret},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
 			systemconfig.FieldOcrXbergURL:                       {Type: field.TypeString, Column: systemconfig.FieldOcrXbergURL},
 			systemconfig.FieldGotenbergURL:                      {Type: field.TypeString, Column: systemconfig.FieldGotenbergURL},
@@ -1681,6 +1683,16 @@ func (f *SystemConfigFilter) WhereMailerInsecureSkipVerify(p entql.BoolP) {
 // WhereMailerUseImplicitSslTLS applies the entql bool predicate on the mailer_use_implicit_ssl_tls field.
 func (f *SystemConfigFilter) WhereMailerUseImplicitSslTLS(p entql.BoolP) {
 	f.Where(p.Field(systemconfig.FieldMailerUseImplicitSslTLS))
+}
+
+// WhereTurnstileSiteKey applies the entql string predicate on the turnstile_site_key field.
+func (f *SystemConfigFilter) WhereTurnstileSiteKey(p entql.StringP) {
+	f.Where(p.Field(systemconfig.FieldTurnstileSiteKey))
+}
+
+// WhereTurnstileSecret applies the entql []byte predicate on the turnstile_secret field.
+func (f *SystemConfigFilter) WhereTurnstileSecret(p entql.BytesP) {
+	f.Where(p.Field(systemconfig.FieldTurnstileSecret))
 }
 
 // WhereOcrTikaURL applies the entql string predicate on the ocr_tika_url field.

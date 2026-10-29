@@ -5971,6 +5971,13 @@
             "fuzzy": true
         },
         {
+            "id": "Personal",
+            "message": "Personal",
+            "translation": "Personnel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Country",
             "message": "Country",
             "translation": "Pays",
@@ -5999,6 +6006,20 @@
             "fuzzy": true
         },
         {
+            "id": "Turnstile site key",
+            "message": "Turnstile site key",
+            "translation": "Clé de site Turnstile",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile secret",
+            "message": "Turnstile secret",
+            "translation": "Clé secrète Turnstile",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Legal",
             "message": "Legal",
             "translation": "Informations juridiques",
@@ -6023,6 +6044,55 @@
             "id": "Terms of service",
             "message": "Terms of service",
             "translation": "Conditions d'utilisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification failed. Please try again.",
+            "message": "Verification failed. Please try again.",
+            "translation": "La vérification a échoué. Réessaie.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please wait for verification to complete.",
+            "message": "Please wait for verification to complete.",
+            "translation": "Patiente jusqu’à la fin de la vérification.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification expired. Please try again.",
+            "message": "Verification expired. Please try again.",
+            "translation": "La vérification a expiré. Réessaie.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification is temporarily unavailable. Please try again.",
+            "message": "Verification is temporarily unavailable. Please try again.",
+            "translation": "La vérification est temporairement indisponible. Réessaie.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration is being submitted. Please wait.",
+            "message": "Registration is being submitted. Please wait.",
+            "translation": "Ton inscription est en cours d’envoi. Patiente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification timed out. Please try again.",
+            "message": "Verification timed out. Please try again.",
+            "translation": "Le délai de vérification a expiré. Réessaie.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "JavaScript is required for verification.",
+            "message": "JavaScript is required for verification.",
+            "translation": "JavaScript est nécessaire pour la vérification.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -6371,6 +6441,13 @@
             "fuzzy": true
         },
         {
+            "id": "An account with this email address already exists. Please sign in or reset your password.",
+            "message": "An account with this email address already exists. Please sign in or reset your password.",
+            "translation": "Un compte avec cette adresse e-mail existe déjà. Connecte-toi ou réinitialise ton mot de passe.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": "L'application est déjà déverrouillée.",
@@ -6598,6 +6675,104 @@
             "id": "Received X-Forwarded-Proto",
             "message": "Received X-Forwarded-Proto",
             "translation": ""
+        },
+        {
+            "id": "Turnstile",
+            "message": "Turnstile",
+            "translation": "Turnstile",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": "Mode",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Development test keys",
+            "message": "Development test keys",
+            "translation": "Clés de test de développement",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Stored configuration",
+            "message": "Stored configuration",
+            "translation": "Configuration enregistrée",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Signup bot protection",
+            "message": "Signup bot protection",
+            "translation": "Protection contre les robots à l'inscription",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Site key",
+            "message": "Site key",
+            "translation": "Clé de site",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret key",
+            "message": "Secret key",
+            "translation": "Clé secrète",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expected hostname",
+            "message": "Expected hostname",
+            "translation": "Nom d'hôte attendu",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Public signup is disabled.",
+            "message": "Public signup is disabled.",
+            "translation": "L'inscription publique est désactivée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires both keys. Signup is available without bot verification.",
+            "message": "Turnstile requires both keys. Signup is available without bot verification.",
+            "translation": "Turnstile nécessite les deux clés. L'inscription est disponible sans vérification anti-robots.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "message": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "translation": "En mode développement, Turnstile utilise des clés de test publiques, sans protection réelle contre les robots.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "message": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "translation": "Les clés de test Turnstile ne peuvent pas être utilisées en production. L'inscription publique est bloquée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "message": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "translation": "Turnstile nécessite une origine publique non locale. L'inscription publique est bloquée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "message": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "translation": "Turnstile est activé. Les jetons et les identifiants sont vérifiés lors de l'inscription.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Storage",
@@ -6873,13 +7048,6 @@
             "id": "TLS",
             "message": "TLS",
             "translation": "TLS",
-            "translatorComment": "Translated from English by Claude",
-            "fuzzy": true
-        },
-        {
-            "id": "Mode",
-            "message": "Mode",
-            "translation": "Mode",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },

@@ -379,3 +379,11 @@ func (qq *SystemConfig) OCR() *appmodel.OCRConfig {
 		MaxFileSizeMiB: qq.data.OcrMaxFileSizeMib,
 	}
 }
+
+// Turnstile returns the effective stored configuration, with its secret decrypted in memory.
+func (qq *SystemConfig) Turnstile() *appmodel.TurnstileConfig {
+	return &appmodel.TurnstileConfig{
+		TurnstileSiteKey: qq.data.TurnstileSiteKey,
+		TurnstileSecret:  qq.data.TurnstileSecret.String(),
+	}
+}

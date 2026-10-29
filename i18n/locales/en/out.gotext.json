@@ -4507,6 +4507,11 @@
             "translation": ""
         },
         {
+            "id": "Personal",
+            "message": "Personal",
+            "translation": ""
+        },
+        {
             "id": "Country",
             "message": "Country",
             "translation": ""
@@ -4527,6 +4532,16 @@
             "translation": "Registration successful, please check your emails for your password."
         },
         {
+            "id": "Turnstile site key",
+            "message": "Turnstile site key",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile secret",
+            "message": "Turnstile secret",
+            "translation": ""
+        },
+        {
             "id": "Legal",
             "message": "Legal",
             "translation": ""
@@ -4544,6 +4559,41 @@
         {
             "id": "Terms of service",
             "message": "Terms of service",
+            "translation": ""
+        },
+        {
+            "id": "Verification failed. Please try again.",
+            "message": "Verification failed. Please try again.",
+            "translation": ""
+        },
+        {
+            "id": "Please wait for verification to complete.",
+            "message": "Please wait for verification to complete.",
+            "translation": ""
+        },
+        {
+            "id": "Verification expired. Please try again.",
+            "message": "Verification expired. Please try again.",
+            "translation": ""
+        },
+        {
+            "id": "Verification is temporarily unavailable. Please try again.",
+            "message": "Verification is temporarily unavailable. Please try again.",
+            "translation": ""
+        },
+        {
+            "id": "Registration is being submitted. Please wait.",
+            "message": "Registration is being submitted. Please wait.",
+            "translation": ""
+        },
+        {
+            "id": "Verification timed out. Please try again.",
+            "message": "Verification timed out. Please try again.",
+            "translation": ""
+        },
+        {
+            "id": "JavaScript is required for verification.",
+            "message": "JavaScript is required for verification.",
             "translation": ""
         },
         {
@@ -4803,6 +4853,11 @@
             "translation": ""
         },
         {
+            "id": "An account with this email address already exists. Please sign in or reset your password.",
+            "message": "An account with this email address already exists. Please sign in or reset your password.",
+            "translation": ""
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": ""
@@ -4985,6 +5040,76 @@
         {
             "id": "Received X-Forwarded-Proto",
             "message": "Received X-Forwarded-Proto",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile",
+            "message": "Turnstile",
+            "translation": ""
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": ""
+        },
+        {
+            "id": "Development test keys",
+            "message": "Development test keys",
+            "translation": ""
+        },
+        {
+            "id": "Stored configuration",
+            "message": "Stored configuration",
+            "translation": ""
+        },
+        {
+            "id": "Signup bot protection",
+            "message": "Signup bot protection",
+            "translation": ""
+        },
+        {
+            "id": "Site key",
+            "message": "Site key",
+            "translation": ""
+        },
+        {
+            "id": "Secret key",
+            "message": "Secret key",
+            "translation": ""
+        },
+        {
+            "id": "Expected hostname",
+            "message": "Expected hostname",
+            "translation": ""
+        },
+        {
+            "id": "Public signup is disabled.",
+            "message": "Public signup is disabled.",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile requires both keys. Signup is available without bot verification.",
+            "message": "Turnstile requires both keys. Signup is available without bot verification.",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "message": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "message": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "message": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "translation": ""
+        },
+        {
+            "id": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "message": "Turnstile is enabled. Tokens and credentials are validated during signup.",
             "translation": ""
         },
         {
@@ -5188,11 +5313,6 @@
         {
             "id": "TLS",
             "message": "TLS",
-            "translation": ""
-        },
-        {
-            "id": "Mode",
-            "message": "Mode",
             "translation": ""
         },
         {

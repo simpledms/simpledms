@@ -66,6 +66,10 @@ type SystemConfig struct {
 	MailerInsecureSkipVerify bool `json:"mailer_insecure_skip_verify,omitempty"`
 	// MailerUseImplicitSslTLS holds the value of the "mailer_use_implicit_ssl_tls" field.
 	MailerUseImplicitSslTLS bool `json:"mailer_use_implicit_ssl_tls,omitempty"`
+	// TurnstileSiteKey holds the value of the "turnstile_site_key" field.
+	TurnstileSiteKey string `json:"turnstile_site_key,omitempty"`
+	// TurnstileSecret holds the value of the "turnstile_secret" field.
+	TurnstileSecret entx.EncryptedString `json:"-"`
 	// OcrTikaURL holds the value of the "ocr_tika_url" field.
 	OcrTikaURL string `json:"ocr_tika_url,omitempty"`
 	// OcrXbergURL holds the value of the "ocr_xberg_url" field.
@@ -124,13 +128,13 @@ func (*SystemConfig) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case systemconfig.FieldX25519Identity, systemconfig.FieldTLSAutocertHosts:
 			values[i] = new([]byte)
-		case systemconfig.FieldS3SecretAccessKey, systemconfig.FieldMailerPassword:
+		case systemconfig.FieldS3SecretAccessKey, systemconfig.FieldMailerPassword, systemconfig.FieldTurnstileSecret:
 			values[i] = new(entx.EncryptedString)
 		case systemconfig.FieldIsIdentityEncryptedWithPassphrase, systemconfig.FieldS3UseSsl, systemconfig.FieldTLSEnableAutocert, systemconfig.FieldMailerInsecureSkipVerify, systemconfig.FieldMailerUseImplicitSslTLS:
 			values[i] = new(sql.NullBool)
 		case systemconfig.FieldID, systemconfig.FieldCreatedBy, systemconfig.FieldUpdatedBy, systemconfig.FieldMailerPort, systemconfig.FieldOcrMaxFileSizeMib, systemconfig.FieldMaxUploadSizeMib:
 			values[i] = new(sql.NullInt64)
-		case systemconfig.FieldS3Endpoint, systemconfig.FieldS3AccessKeyID, systemconfig.FieldS3BucketName, systemconfig.FieldTLSCertFilepath, systemconfig.FieldTLSPrivateKeyFilepath, systemconfig.FieldTLSAutocertEmail, systemconfig.FieldMailerHost, systemconfig.FieldMailerUsername, systemconfig.FieldMailerFrom, systemconfig.FieldOcrTikaURL, systemconfig.FieldOcrXbergURL, systemconfig.FieldGotenbergURL:
+		case systemconfig.FieldS3Endpoint, systemconfig.FieldS3AccessKeyID, systemconfig.FieldS3BucketName, systemconfig.FieldTLSCertFilepath, systemconfig.FieldTLSPrivateKeyFilepath, systemconfig.FieldTLSAutocertEmail, systemconfig.FieldMailerHost, systemconfig.FieldMailerUsername, systemconfig.FieldMailerFrom, systemconfig.FieldTurnstileSiteKey, systemconfig.FieldOcrTikaURL, systemconfig.FieldOcrXbergURL, systemconfig.FieldGotenbergURL:
 			values[i] = new(sql.NullString)
 		case systemconfig.FieldCreatedAt, systemconfig.FieldUpdatedAt, systemconfig.FieldInitializedAt:
 			values[i] = new(sql.NullTime)
@@ -295,6 +299,18 @@ func (_m *SystemConfig) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.MailerUseImplicitSslTLS = value.Bool
 			}
+		case systemconfig.FieldTurnstileSiteKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field turnstile_site_key", values[i])
+			} else if value.Valid {
+				_m.TurnstileSiteKey = value.String
+			}
+		case systemconfig.FieldTurnstileSecret:
+			if value, ok := values[i].(*entx.EncryptedString); !ok {
+				return fmt.Errorf("unexpected type %T for field turnstile_secret", values[i])
+			} else if value != nil {
+				_m.TurnstileSecret = *value
+			}
 		case systemconfig.FieldOcrTikaURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_tika_url", values[i])
@@ -443,6 +459,11 @@ func (_m *SystemConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("mailer_use_implicit_ssl_tls=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MailerUseImplicitSslTLS))
+	builder.WriteString(", ")
+	builder.WriteString("turnstile_site_key=")
+	builder.WriteString(_m.TurnstileSiteKey)
+	builder.WriteString(", ")
+	builder.WriteString("turnstile_secret=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("ocr_tika_url=")
 	builder.WriteString(_m.OcrTikaURL)

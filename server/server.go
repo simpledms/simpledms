@@ -578,6 +578,10 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 				GotenbergURL:   os.Getenv("SIMPLEDMS_GOTENBERG_URL"),
 				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
 			},
+			appmodel.TurnstileConfig{
+				TurnstileSiteKey: os.Getenv("SIMPLEDMS_TURNSTILE_SITE_KEY"),
+				TurnstileSecret:  os.Getenv("SIMPLEDMS_TURNSTILE_SECRET"),
+			},
 		)
 		if err != nil {
 			erry := initAppTx.Rollback()
@@ -836,6 +840,13 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	}
 	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS"); set {
 		updateQuery.SetMailerUseImplicitSslTLS(val == "true")
+	}
+
+	if val, set := os.LookupEnv("SIMPLEDMS_TURNSTILE_SITE_KEY"); set {
+		updateQuery.SetTurnstileSiteKey(strings.TrimSpace(val))
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TURNSTILE_SECRET"); set {
+		updateQuery.SetTurnstileSecret(entx.NewEncryptedString(strings.TrimSpace(val)))
 	}
 
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {

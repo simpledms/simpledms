@@ -248,6 +248,26 @@ func (_c *SystemConfigCreate) SetNillableMailerUseImplicitSslTLS(v *bool) *Syste
 	return _c
 }
 
+// SetTurnstileSiteKey sets the "turnstile_site_key" field.
+func (_c *SystemConfigCreate) SetTurnstileSiteKey(v string) *SystemConfigCreate {
+	_c.mutation.SetTurnstileSiteKey(v)
+	return _c
+}
+
+// SetNillableTurnstileSiteKey sets the "turnstile_site_key" field if the given value is not nil.
+func (_c *SystemConfigCreate) SetNillableTurnstileSiteKey(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetTurnstileSiteKey(*v)
+	}
+	return _c
+}
+
+// SetTurnstileSecret sets the "turnstile_secret" field.
+func (_c *SystemConfigCreate) SetTurnstileSecret(v entx.EncryptedString) *SystemConfigCreate {
+	_c.mutation.SetTurnstileSecret(v)
+	return _c
+}
+
 // SetOcrTikaURL sets the "ocr_tika_url" field.
 func (_c *SystemConfigCreate) SetOcrTikaURL(v string) *SystemConfigCreate {
 	_c.mutation.SetOcrTikaURL(v)
@@ -654,6 +674,14 @@ func (_c *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.MailerUseImplicitSslTLS(); ok {
 		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
 		_node.MailerUseImplicitSslTLS = value
+	}
+	if value, ok := _c.mutation.TurnstileSiteKey(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSiteKey, field.TypeString, value)
+		_node.TurnstileSiteKey = value
+	}
+	if value, ok := _c.mutation.TurnstileSecret(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSecret, field.TypeBytes, value)
+		_node.TurnstileSecret = value
 	}
 	if value, ok := _c.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)

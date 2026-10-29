@@ -23,6 +23,8 @@ import (
 )
 
 func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
+	t.Setenv("SIMPLEDMS_TURNSTILE_SITE_KEY", "environment-site-secret")
+	t.Setenv("SIMPLEDMS_TURNSTILE_SECRET", "environment-turnstile-secret")
 	harness := newActionTestHarness(t)
 	harness.router.RegisterPage(
 		route.SystemStatusRoute(),
@@ -41,6 +43,10 @@ func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
 
 	if pageRR.Code != http.StatusOK {
 		t.Fatalf("expected status %d, got %d", http.StatusOK, pageRR.Code)
+	}
+	if strings.Contains(pageRR.Body.String(), "environment-turnstile-secret") ||
+		strings.Contains(pageRR.Body.String(), "environment-site-secret") {
+		t.Fatal("system status exposed Turnstile values from environment rather than stored configuration")
 	}
 	// the harness has no storage and no mail server configured
 	for _, want := range []string{
@@ -76,6 +82,10 @@ func TestSystemStatusPageAndRefreshRenderForAdmin(t *testing.T) {
 	}
 	if !strings.Contains(partialRR.Body.String(), `id="systemStatus"`) {
 		t.Fatalf("expected refreshed status island, body was: %s", partialRR.Body.String())
+	}
+	if strings.Contains(partialRR.Body.String(), "environment-turnstile-secret") ||
+		strings.Contains(partialRR.Body.String(), "environment-site-secret") {
+		t.Fatal("refreshed system status exposed Turnstile values from environment")
 	}
 }
 

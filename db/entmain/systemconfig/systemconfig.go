@@ -60,6 +60,10 @@ const (
 	FieldMailerInsecureSkipVerify = "mailer_insecure_skip_verify"
 	// FieldMailerUseImplicitSslTLS holds the string denoting the mailer_use_implicit_ssl_tls field in the database.
 	FieldMailerUseImplicitSslTLS = "mailer_use_implicit_ssl_tls"
+	// FieldTurnstileSiteKey holds the string denoting the turnstile_site_key field in the database.
+	FieldTurnstileSiteKey = "turnstile_site_key"
+	// FieldTurnstileSecret holds the string denoting the turnstile_secret field in the database.
+	FieldTurnstileSecret = "turnstile_secret"
 	// FieldOcrTikaURL holds the string denoting the ocr_tika_url field in the database.
 	FieldOcrTikaURL = "ocr_tika_url"
 	// FieldOcrXbergURL holds the string denoting the ocr_xberg_url field in the database.
@@ -120,6 +124,8 @@ var Columns = []string{
 	FieldMailerFrom,
 	FieldMailerInsecureSkipVerify,
 	FieldMailerUseImplicitSslTLS,
+	FieldTurnstileSiteKey,
+	FieldTurnstileSecret,
 	FieldOcrTikaURL,
 	FieldOcrXbergURL,
 	FieldGotenbergURL,
@@ -270,6 +276,11 @@ func ByMailerInsecureSkipVerify(opts ...sql.OrderTermOption) OrderOption {
 // ByMailerUseImplicitSslTLS orders the results by the mailer_use_implicit_ssl_tls field.
 func ByMailerUseImplicitSslTLS(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMailerUseImplicitSslTLS, opts...).ToFunc()
+}
+
+// ByTurnstileSiteKey orders the results by the turnstile_site_key field.
+func ByTurnstileSiteKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTurnstileSiteKey, opts...).ToFunc()
 }
 
 // ByOcrTikaURL orders the results by the ocr_tika_url field.

@@ -6489,6 +6489,8 @@ type SystemConfigMutation struct {
 	mailer_from                           *string
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
+	turnstile_site_key                    *string
+	turnstile_secret                      *entx.EncryptedString
 	ocr_tika_url                          *string
 	ocr_xberg_url                         *string
 	gotenberg_url                         *string
@@ -7513,6 +7515,104 @@ func (m *SystemConfigMutation) ResetMailerUseImplicitSslTLS() {
 	m.mailer_use_implicit_ssl_tls = nil
 }
 
+// SetTurnstileSiteKey sets the "turnstile_site_key" field.
+func (m *SystemConfigMutation) SetTurnstileSiteKey(s string) {
+	m.turnstile_site_key = &s
+}
+
+// TurnstileSiteKey returns the value of the "turnstile_site_key" field in the mutation.
+func (m *SystemConfigMutation) TurnstileSiteKey() (r string, exists bool) {
+	v := m.turnstile_site_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTurnstileSiteKey returns the old "turnstile_site_key" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldTurnstileSiteKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTurnstileSiteKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTurnstileSiteKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTurnstileSiteKey: %w", err)
+	}
+	return oldValue.TurnstileSiteKey, nil
+}
+
+// ClearTurnstileSiteKey clears the value of the "turnstile_site_key" field.
+func (m *SystemConfigMutation) ClearTurnstileSiteKey() {
+	m.turnstile_site_key = nil
+	m.clearedFields[systemconfig.FieldTurnstileSiteKey] = struct{}{}
+}
+
+// TurnstileSiteKeyCleared returns if the "turnstile_site_key" field was cleared in this mutation.
+func (m *SystemConfigMutation) TurnstileSiteKeyCleared() bool {
+	_, ok := m.clearedFields[systemconfig.FieldTurnstileSiteKey]
+	return ok
+}
+
+// ResetTurnstileSiteKey resets all changes to the "turnstile_site_key" field.
+func (m *SystemConfigMutation) ResetTurnstileSiteKey() {
+	m.turnstile_site_key = nil
+	delete(m.clearedFields, systemconfig.FieldTurnstileSiteKey)
+}
+
+// SetTurnstileSecret sets the "turnstile_secret" field.
+func (m *SystemConfigMutation) SetTurnstileSecret(es entx.EncryptedString) {
+	m.turnstile_secret = &es
+}
+
+// TurnstileSecret returns the value of the "turnstile_secret" field in the mutation.
+func (m *SystemConfigMutation) TurnstileSecret() (r entx.EncryptedString, exists bool) {
+	v := m.turnstile_secret
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTurnstileSecret returns the old "turnstile_secret" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldTurnstileSecret(ctx context.Context) (v entx.EncryptedString, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTurnstileSecret is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTurnstileSecret requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTurnstileSecret: %w", err)
+	}
+	return oldValue.TurnstileSecret, nil
+}
+
+// ClearTurnstileSecret clears the value of the "turnstile_secret" field.
+func (m *SystemConfigMutation) ClearTurnstileSecret() {
+	m.turnstile_secret = nil
+	m.clearedFields[systemconfig.FieldTurnstileSecret] = struct{}{}
+}
+
+// TurnstileSecretCleared returns if the "turnstile_secret" field was cleared in this mutation.
+func (m *SystemConfigMutation) TurnstileSecretCleared() bool {
+	_, ok := m.clearedFields[systemconfig.FieldTurnstileSecret]
+	return ok
+}
+
+// ResetTurnstileSecret resets all changes to the "turnstile_secret" field.
+func (m *SystemConfigMutation) ResetTurnstileSecret() {
+	m.turnstile_secret = nil
+	delete(m.clearedFields, systemconfig.FieldTurnstileSecret)
+}
+
 // SetOcrTikaURL sets the "ocr_tika_url" field.
 func (m *SystemConfigMutation) SetOcrTikaURL(s string) {
 	m.ocr_tika_url = &s
@@ -7909,7 +8009,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 29)
+	fields := make([]string, 0, 31)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -7978,6 +8078,12 @@ func (m *SystemConfigMutation) Fields() []string {
 	}
 	if m.mailer_use_implicit_ssl_tls != nil {
 		fields = append(fields, systemconfig.FieldMailerUseImplicitSslTLS)
+	}
+	if m.turnstile_site_key != nil {
+		fields = append(fields, systemconfig.FieldTurnstileSiteKey)
+	}
+	if m.turnstile_secret != nil {
+		fields = append(fields, systemconfig.FieldTurnstileSecret)
 	}
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
@@ -8051,6 +8157,10 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerInsecureSkipVerify()
 	case systemconfig.FieldMailerUseImplicitSslTLS:
 		return m.MailerUseImplicitSslTLS()
+	case systemconfig.FieldTurnstileSiteKey:
+		return m.TurnstileSiteKey()
+	case systemconfig.FieldTurnstileSecret:
+		return m.TurnstileSecret()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
 	case systemconfig.FieldOcrXbergURL:
@@ -8118,6 +8228,10 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerInsecureSkipVerify(ctx)
 	case systemconfig.FieldMailerUseImplicitSslTLS:
 		return m.OldMailerUseImplicitSslTLS(ctx)
+	case systemconfig.FieldTurnstileSiteKey:
+		return m.OldTurnstileSiteKey(ctx)
+	case systemconfig.FieldTurnstileSecret:
+		return m.OldTurnstileSecret(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
 	case systemconfig.FieldOcrXbergURL:
@@ -8300,6 +8414,20 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMailerUseImplicitSslTLS(v)
 		return nil
+	case systemconfig.FieldTurnstileSiteKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTurnstileSiteKey(v)
+		return nil
+	case systemconfig.FieldTurnstileSecret:
+		v, ok := value.(entx.EncryptedString)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTurnstileSecret(v)
+		return nil
 	case systemconfig.FieldOcrTikaURL:
 		v, ok := value.(string)
 		if !ok {
@@ -8420,6 +8548,12 @@ func (m *SystemConfigMutation) ClearedFields() []string {
 	if m.FieldCleared(systemconfig.FieldMailerPassword) {
 		fields = append(fields, systemconfig.FieldMailerPassword)
 	}
+	if m.FieldCleared(systemconfig.FieldTurnstileSiteKey) {
+		fields = append(fields, systemconfig.FieldTurnstileSiteKey)
+	}
+	if m.FieldCleared(systemconfig.FieldTurnstileSecret) {
+		fields = append(fields, systemconfig.FieldTurnstileSecret)
+	}
 	if m.FieldCleared(systemconfig.FieldOcrXbergURL) {
 		fields = append(fields, systemconfig.FieldOcrXbergURL)
 	}
@@ -8448,6 +8582,12 @@ func (m *SystemConfigMutation) ClearField(name string) error {
 		return nil
 	case systemconfig.FieldMailerPassword:
 		m.ClearMailerPassword()
+		return nil
+	case systemconfig.FieldTurnstileSiteKey:
+		m.ClearTurnstileSiteKey()
+		return nil
+	case systemconfig.FieldTurnstileSecret:
+		m.ClearTurnstileSecret()
 		return nil
 	case systemconfig.FieldOcrXbergURL:
 		m.ClearOcrXbergURL()
@@ -8531,6 +8671,12 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldMailerUseImplicitSslTLS:
 		m.ResetMailerUseImplicitSslTLS()
+		return nil
+	case systemconfig.FieldTurnstileSiteKey:
+		m.ResetTurnstileSiteKey()
+		return nil
+	case systemconfig.FieldTurnstileSecret:
+		m.ResetTurnstileSecret()
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()

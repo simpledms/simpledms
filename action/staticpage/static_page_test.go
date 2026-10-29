@@ -168,6 +168,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		appmodel.TLSConfig{},
 		appmodel.MailerConfig{},
 		appmodel.OCRConfig{},
+		appmodel.TurnstileConfig{},
 	)
 	if err != nil {
 		_ = tx.Rollback()

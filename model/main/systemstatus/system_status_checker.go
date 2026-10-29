@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/mail"
 	"github.com/simpledms/simpledms/internal/gotenberg"
 	"github.com/simpledms/simpledms/internal/xberg"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
 	mailermodel "github.com/simpledms/simpledms/model/main/mailer"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -87,6 +88,7 @@ func (qq *SystemStatusChecker) Check(
 
 	components := []*ComponentStatus{
 		qq.generalStatus(),
+		qq.turnstileStatus(),
 		qq.runtimeStatus.componentStatus(),
 		qq.requestStatus(req),
 		qq.storageStatus(storageProbe),
@@ -192,6 +194,69 @@ func (qq *SystemStatusChecker) requestStatus(req *httpx.Request) *ComponentStatu
 		widget.T("Received X-Forwarded-Proto"),
 		valueOrNotSet(req.Header.Get("X-Forwarded-Proto")),
 	)
+	return status
+}
+
+func (qq *SystemStatusChecker) turnstileStatus() *ComponentStatus {
+	status := NewComponentStatus(widget.T("Turnstile"))
+	config := qq.systemConfig.Turnstile()
+	if qq.isDevMode && qq.systemConfig.IsSaaSModeEnabled() {
+		config.TurnstileSiteKey = appmodel.TurnstileTestSiteKey
+		config.TurnstileSecret = appmodel.TurnstileTestSecret
+		status.AddSetting(widget.T("Mode"), widget.T("Development test keys"))
+	} else {
+		status.AddSetting(widget.T("Mode"), widget.T("Stored configuration"))
+	}
+	siteKey := strings.TrimSpace(config.TurnstileSiteKey)
+	secret := strings.TrimSpace(config.TurnstileSecret)
+	isEnabled := qq.systemConfig.IsSaaSModeEnabled() && siteKey != "" && secret != ""
+	status.AddSetting(widget.T("Signup bot protection"), enabledOrDisabled(isEnabled))
+	status.AddSetting(widget.T("Site key"), valueOrNotSet(siteKey))
+	status.AddSetting(widget.T("Secret key"), setOrNotSet(secret))
+	status.AddSetting(widget.T("Expected hostname"), valueOrNotSet(qq.systemConfig.CanonicalHost()))
+
+	if !qq.systemConfig.IsSaaSModeEnabled() {
+		status.AddFinding(StatusLevelDisabled, widget.T("Public signup is disabled."))
+		return status
+	}
+	if !isEnabled {
+		level := StatusLevelDisabled
+		if siteKey != "" || secret != "" {
+			level = StatusLevelWarning
+		}
+		status.AddFinding(level, widget.T(
+			"Turnstile requires both keys. Signup is available without bot verification.",
+		))
+		return status
+	}
+	if qq.isDevMode {
+		status.AddFinding(StatusLevelWarning, widget.T(
+			"Turnstile uses public test keys in development mode, not real bot protection.",
+		))
+		return status
+	}
+	for _, key := range []string{siteKey, secret} {
+		if strings.HasPrefix(key, "1x") || strings.HasPrefix(key, "2x") ||
+			strings.HasPrefix(key, "3x") {
+			status.AddFinding(StatusLevelError, widget.T(
+				"Turnstile test keys cannot be used in production. Public signup is blocked.",
+			))
+			return status
+		}
+	}
+	hostname := qq.systemConfig.CanonicalHost()
+	ip := net.ParseIP(hostname)
+	if hostname == "" || hostname == "localhost" || strings.HasSuffix(hostname, ".localhost") ||
+		(ip != nil && (ip.IsLoopback() || ip.IsUnspecified())) ||
+		strings.ContainsAny(hostname, "/: *") {
+		status.AddFinding(StatusLevelError, widget.T(
+			"Turnstile requires a non-local public origin. Public signup is blocked.",
+		))
+		return status
+	}
+	status.AddFinding(StatusLevelOK, widget.T(
+		"Turnstile is enabled. Tokens and credentials are validated during signup.",
+	))
 	return status
 }
 

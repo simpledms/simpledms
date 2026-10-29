@@ -64,6 +64,7 @@ func InitApp(
 	tlsConfig TLSConfig,
 	mailerConfig MailerConfig,
 	ocrConfig OCRConfig,
+	turnstileConfig TurnstileConfig,
 ) error {
 	return InitAppWithoutCustomContext(
 		ctx,
@@ -77,6 +78,7 @@ func InitApp(
 		tlsConfig,
 		mailerConfig,
 		ocrConfig,
+		turnstileConfig,
 	)
 }
 
@@ -90,6 +92,7 @@ func InitAppWithoutCustomContext(
 	tlsConfig TLSConfig,
 	mailerConfig MailerConfig,
 	ocrConfig OCRConfig,
+	turnstileConfig TurnstileConfig,
 ) error {
 	configCount := mainDB.SystemConfig.Query().CountX(ctx)
 	if configCount > 0 {
@@ -177,6 +180,9 @@ func InitAppWithoutCustomContext(
 		SetOcrXbergURL(ocrConfig.XbergURL).
 		SetGotenbergURL(ocrConfig.GotenbergURL).
 		SetOcrMaxFileSizeMib(maxFileSizeMiB).
+		// turnstile: keep production keys stored even when runtime uses dev test keys
+		SetTurnstileSiteKey(strings.TrimSpace(turnstileConfig.TurnstileSiteKey)).
+		SetTurnstileSecret(entx.NewEncryptedString(strings.TrimSpace(turnstileConfig.TurnstileSecret))).
 		// other
 		SetInitializedAt(time.Now()).
 		SaveX(ctx)

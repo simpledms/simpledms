@@ -24,6 +24,7 @@ type InitAppCmdData struct {
 	appmodel.TLSConfig
 	appmodel.MailerConfig
 	appmodel.OCRConfig
+	appmodel.TurnstileConfig
 }
 
 type InitAppCmd struct {
@@ -70,6 +71,7 @@ func (qq *InitAppCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		data.TLSConfig,
 		data.MailerConfig,
 		data.OCRConfig,
+		data.TurnstileConfig,
 	)
 	if err != nil {
 		log.Println(err)

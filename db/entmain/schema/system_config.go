@@ -45,6 +45,10 @@ func (SystemConfig) Fields() []ent.Field {
 		// before implicit SSL/TLS support was implemented
 		field.Bool("mailer_use_implicit_ssl_tls").Default(false),
 
+		// Nullable columns keep upgrades additive; existing installations have no keys.
+		field.String("turnstile_site_key").Optional(),
+		field.Bytes("turnstile_secret").Optional().Sensitive().GoType(entx.EncryptedString("")),
+
 		field.String("ocr_tika_url").Default(""),
 		// optional without default so that SQLite can add the column without rebuilding the
 		// table; NULL is read as empty string

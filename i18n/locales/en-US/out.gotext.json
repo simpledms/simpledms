@@ -6009,6 +6009,13 @@
             "fuzzy": true
         },
         {
+            "id": "Personal",
+            "message": "Personal",
+            "translation": "Personal",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Country",
             "message": "Country",
             "translation": "Country",
@@ -6037,6 +6044,20 @@
             "fuzzy": true
         },
         {
+            "id": "Turnstile site key",
+            "message": "Turnstile site key",
+            "translation": "Turnstile site key",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile secret",
+            "message": "Turnstile secret",
+            "translation": "Turnstile secret",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Legal",
             "message": "Legal",
             "translation": "Legal",
@@ -6061,6 +6082,55 @@
             "id": "Terms of service",
             "message": "Terms of service",
             "translation": "Terms of service",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification failed. Please try again.",
+            "message": "Verification failed. Please try again.",
+            "translation": "Verification failed. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please wait for verification to complete.",
+            "message": "Please wait for verification to complete.",
+            "translation": "Please wait for verification to complete.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification expired. Please try again.",
+            "message": "Verification expired. Please try again.",
+            "translation": "Verification expired. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification is temporarily unavailable. Please try again.",
+            "message": "Verification is temporarily unavailable. Please try again.",
+            "translation": "Verification is temporarily unavailable. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration is being submitted. Please wait.",
+            "message": "Registration is being submitted. Please wait.",
+            "translation": "Registration is being submitted. Please wait.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification timed out. Please try again.",
+            "message": "Verification timed out. Please try again.",
+            "translation": "Verification timed out. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "JavaScript is required for verification.",
+            "message": "JavaScript is required for verification.",
+            "translation": "JavaScript is required for verification.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6411,6 +6481,13 @@
             "fuzzy": true
         },
         {
+            "id": "An account with this email address already exists. Please sign in or reset your password.",
+            "message": "An account with this email address already exists. Please sign in or reset your password.",
+            "translation": "An account with this email address already exists. Please sign in or reset your password.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": "App is already unlocked.",
@@ -6666,6 +6743,104 @@
             "id": "Received X-Forwarded-Proto",
             "message": "Received X-Forwarded-Proto",
             "translation": "Received X-Forwarded-Proto",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile",
+            "message": "Turnstile",
+            "translation": "Turnstile",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Mode",
+            "message": "Mode",
+            "translation": "Mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Development test keys",
+            "message": "Development test keys",
+            "translation": "Development test keys",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Stored configuration",
+            "message": "Stored configuration",
+            "translation": "Stored configuration",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Signup bot protection",
+            "message": "Signup bot protection",
+            "translation": "Signup bot protection",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Site key",
+            "message": "Site key",
+            "translation": "Site key",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret key",
+            "message": "Secret key",
+            "translation": "Secret key",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Expected hostname",
+            "message": "Expected hostname",
+            "translation": "Expected hostname",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Public signup is disabled.",
+            "message": "Public signup is disabled.",
+            "translation": "Public signup is disabled.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires both keys. Signup is available without bot verification.",
+            "message": "Turnstile requires both keys. Signup is available without bot verification.",
+            "translation": "Turnstile requires both keys. Signup is available without bot verification.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "message": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "translation": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "message": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "translation": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "message": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "translation": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "message": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "translation": "Turnstile is enabled. Tokens and credentials are validated during signup.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6943,13 +7118,6 @@
             "id": "TLS",
             "message": "TLS",
             "translation": "TLS",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Mode",
-            "message": "Mode",
-            "translation": "Mode",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

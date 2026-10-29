@@ -20,6 +20,14 @@ func (qq EncryptedString) String() string {
 	return string(qq)
 }
 
+// Format redacts secrets in formatted output, including development SQL logs.
+// Call String explicitly when plaintext is required by a service client.
+func (qq EncryptedString) Format(state fmt.State, _ rune) {
+	if _, err := state.Write([]byte("[REDACTED]")); err != nil {
+		log.Println("could not format encrypted string")
+	}
+}
+
 func (qq EncryptedString) Value() (driver.Value, error) {
 	/*
 		if qq == nil {
@@ -39,6 +47,11 @@ func (qq EncryptedString) Value() (driver.Value, error) {
 }
 
 func (qq *EncryptedString) Scan(value interface{}) error {
+	// Newly added optional secrets are NULL on existing installations.
+	if value == nil {
+		*qq = nil
+		return nil
+	}
 	val, ok := value.([]byte)
 	if !ok {
 		return fmt.Errorf("failed to scan to EncryptedString, expected []byte, got %T, value was %v", value, value)

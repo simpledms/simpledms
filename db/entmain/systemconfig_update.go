@@ -311,6 +311,38 @@ func (_u *SystemConfigUpdate) SetNillableMailerUseImplicitSslTLS(v *bool) *Syste
 	return _u
 }
 
+// SetTurnstileSiteKey sets the "turnstile_site_key" field.
+func (_u *SystemConfigUpdate) SetTurnstileSiteKey(v string) *SystemConfigUpdate {
+	_u.mutation.SetTurnstileSiteKey(v)
+	return _u
+}
+
+// SetNillableTurnstileSiteKey sets the "turnstile_site_key" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableTurnstileSiteKey(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetTurnstileSiteKey(*v)
+	}
+	return _u
+}
+
+// ClearTurnstileSiteKey clears the value of the "turnstile_site_key" field.
+func (_u *SystemConfigUpdate) ClearTurnstileSiteKey() *SystemConfigUpdate {
+	_u.mutation.ClearTurnstileSiteKey()
+	return _u
+}
+
+// SetTurnstileSecret sets the "turnstile_secret" field.
+func (_u *SystemConfigUpdate) SetTurnstileSecret(v entx.EncryptedString) *SystemConfigUpdate {
+	_u.mutation.SetTurnstileSecret(v)
+	return _u
+}
+
+// ClearTurnstileSecret clears the value of the "turnstile_secret" field.
+func (_u *SystemConfigUpdate) ClearTurnstileSecret() *SystemConfigUpdate {
+	_u.mutation.ClearTurnstileSecret()
+	return _u
+}
+
 // SetOcrTikaURL sets the "ocr_tika_url" field.
 func (_u *SystemConfigUpdate) SetOcrTikaURL(v string) *SystemConfigUpdate {
 	_u.mutation.SetOcrTikaURL(v)
@@ -572,6 +604,18 @@ func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.MailerUseImplicitSslTLS(); ok {
 		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TurnstileSiteKey(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSiteKey, field.TypeString, value)
+	}
+	if _u.mutation.TurnstileSiteKeyCleared() {
+		_spec.ClearField(systemconfig.FieldTurnstileSiteKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.TurnstileSecret(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSecret, field.TypeBytes, value)
+	}
+	if _u.mutation.TurnstileSecretCleared() {
+		_spec.ClearField(systemconfig.FieldTurnstileSecret, field.TypeBytes)
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
@@ -933,6 +977,38 @@ func (_u *SystemConfigUpdateOne) SetNillableMailerUseImplicitSslTLS(v *bool) *Sy
 	return _u
 }
 
+// SetTurnstileSiteKey sets the "turnstile_site_key" field.
+func (_u *SystemConfigUpdateOne) SetTurnstileSiteKey(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetTurnstileSiteKey(v)
+	return _u
+}
+
+// SetNillableTurnstileSiteKey sets the "turnstile_site_key" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableTurnstileSiteKey(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetTurnstileSiteKey(*v)
+	}
+	return _u
+}
+
+// ClearTurnstileSiteKey clears the value of the "turnstile_site_key" field.
+func (_u *SystemConfigUpdateOne) ClearTurnstileSiteKey() *SystemConfigUpdateOne {
+	_u.mutation.ClearTurnstileSiteKey()
+	return _u
+}
+
+// SetTurnstileSecret sets the "turnstile_secret" field.
+func (_u *SystemConfigUpdateOne) SetTurnstileSecret(v entx.EncryptedString) *SystemConfigUpdateOne {
+	_u.mutation.SetTurnstileSecret(v)
+	return _u
+}
+
+// ClearTurnstileSecret clears the value of the "turnstile_secret" field.
+func (_u *SystemConfigUpdateOne) ClearTurnstileSecret() *SystemConfigUpdateOne {
+	_u.mutation.ClearTurnstileSecret()
+	return _u
+}
+
 // SetOcrTikaURL sets the "ocr_tika_url" field.
 func (_u *SystemConfigUpdateOne) SetOcrTikaURL(v string) *SystemConfigUpdateOne {
 	_u.mutation.SetOcrTikaURL(v)
@@ -1224,6 +1300,18 @@ func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConf
 	}
 	if value, ok := _u.mutation.MailerUseImplicitSslTLS(); ok {
 		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TurnstileSiteKey(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSiteKey, field.TypeString, value)
+	}
+	if _u.mutation.TurnstileSiteKeyCleared() {
+		_spec.ClearField(systemconfig.FieldTurnstileSiteKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.TurnstileSecret(); ok {
+		_spec.SetField(systemconfig.FieldTurnstileSecret, field.TypeBytes, value)
+	}
+	if _u.mutation.TurnstileSecretCleared() {
+		_spec.ClearField(systemconfig.FieldTurnstileSecret, field.TypeBytes)
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)

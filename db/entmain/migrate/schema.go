@@ -256,6 +256,8 @@ var (
 		{Name: "mailer_from", Type: field.TypeString, Default: ""},
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
+		{Name: "turnstile_site_key", Type: field.TypeString, Nullable: true},
+		{Name: "turnstile_secret", Type: field.TypeBytes, Nullable: true},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
 		{Name: "ocr_xberg_url", Type: field.TypeString, Nullable: true},
 		{Name: "gotenberg_url", Type: field.TypeString, Default: ""},
@@ -273,13 +275,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[28]},
+				Columns:    []*schema.Column{SystemConfigsColumns[30]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[29]},
+				Columns:    []*schema.Column{SystemConfigsColumns[31]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

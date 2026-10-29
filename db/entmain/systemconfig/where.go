@@ -166,6 +166,16 @@ func MailerUseImplicitSslTLS(v bool) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldMailerUseImplicitSslTLS, v))
 }
 
+// TurnstileSiteKey applies equality check predicate on the "turnstile_site_key" field. It's identical to TurnstileSiteKeyEQ.
+func TurnstileSiteKey(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSecret applies equality check predicate on the "turnstile_secret" field. It's identical to TurnstileSecretEQ.
+func TurnstileSecret(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldTurnstileSecret, v))
+}
+
 // OcrTikaURL applies equality check predicate on the "ocr_tika_url" field. It's identical to OcrTikaURLEQ.
 func OcrTikaURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrTikaURL, v))
@@ -1139,6 +1149,131 @@ func MailerUseImplicitSslTLSEQ(v bool) predicate.SystemConfig {
 // MailerUseImplicitSslTLSNEQ applies the NEQ predicate on the "mailer_use_implicit_ssl_tls" field.
 func MailerUseImplicitSslTLSNEQ(v bool) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldNEQ(FieldMailerUseImplicitSslTLS, v))
+}
+
+// TurnstileSiteKeyEQ applies the EQ predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyNEQ applies the NEQ predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyNEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyIn applies the In predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldTurnstileSiteKey, vs...))
+}
+
+// TurnstileSiteKeyNotIn applies the NotIn predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyNotIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldTurnstileSiteKey, vs...))
+}
+
+// TurnstileSiteKeyGT applies the GT predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyGT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyGTE applies the GTE predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyGTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyLT applies the LT predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyLT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyLTE applies the LTE predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyLTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyContains applies the Contains predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyContains(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContains(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyHasPrefix applies the HasPrefix predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyHasPrefix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasPrefix(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyHasSuffix applies the HasSuffix predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyHasSuffix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasSuffix(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyIsNil applies the IsNil predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyIsNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIsNull(FieldTurnstileSiteKey))
+}
+
+// TurnstileSiteKeyNotNil applies the NotNil predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyNotNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotNull(FieldTurnstileSiteKey))
+}
+
+// TurnstileSiteKeyEqualFold applies the EqualFold predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyEqualFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEqualFold(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSiteKeyContainsFold applies the ContainsFold predicate on the "turnstile_site_key" field.
+func TurnstileSiteKeyContainsFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContainsFold(FieldTurnstileSiteKey, v))
+}
+
+// TurnstileSecretEQ applies the EQ predicate on the "turnstile_secret" field.
+func TurnstileSecretEQ(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretNEQ applies the NEQ predicate on the "turnstile_secret" field.
+func TurnstileSecretNEQ(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretIn applies the In predicate on the "turnstile_secret" field.
+func TurnstileSecretIn(vs ...entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldTurnstileSecret, vs...))
+}
+
+// TurnstileSecretNotIn applies the NotIn predicate on the "turnstile_secret" field.
+func TurnstileSecretNotIn(vs ...entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldTurnstileSecret, vs...))
+}
+
+// TurnstileSecretGT applies the GT predicate on the "turnstile_secret" field.
+func TurnstileSecretGT(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretGTE applies the GTE predicate on the "turnstile_secret" field.
+func TurnstileSecretGTE(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretLT applies the LT predicate on the "turnstile_secret" field.
+func TurnstileSecretLT(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretLTE applies the LTE predicate on the "turnstile_secret" field.
+func TurnstileSecretLTE(v entx.EncryptedString) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldTurnstileSecret, v))
+}
+
+// TurnstileSecretIsNil applies the IsNil predicate on the "turnstile_secret" field.
+func TurnstileSecretIsNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIsNull(FieldTurnstileSecret))
+}
+
+// TurnstileSecretNotNil applies the NotNil predicate on the "turnstile_secret" field.
+func TurnstileSecretNotNil() predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotNull(FieldTurnstileSecret))
 }
 
 // OcrTikaURLEQ applies the EQ predicate on the "ocr_tika_url" field.

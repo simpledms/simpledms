@@ -5,10 +5,14 @@
 		data-sitekey="{{ .SiteKey }}"
 		data-action="{{ .Action }}"
 		data-error-message="{{ tr .GetContext "Verification failed. Please try again." }}"
+		data-wait-message="{{ tr .GetContext "Please wait for verification to complete." }}"
+		data-expired-message="{{ tr .GetContext "Verification expired. Please try again." }}"
+		data-unavailable-message="{{ tr .GetContext "Verification is temporarily unavailable. Please try again." }}"
+		data-submitting-message="{{ tr .GetContext "Registration is being submitted. Please wait." }}"
+		data-timeout-message="{{ tr .GetContext "Verification timed out. Please try again." }}"
 		style="display:block"
 	>
 		<div data-challenge></div>
-		<p data-error role="alert" hidden></p>
 		<noscript>{{ tr .GetContext "JavaScript is required for verification." }}</noscript>
 	</simpledms-turnstile>
 	<script>
@@ -19,15 +23,16 @@
 			function loadAPI() {
 				if (!apiPromise) {
 					apiPromise = new Promise((resolve, reject) => {
-						if (window.turnstile) {
-							window.turnstile.ready(() => resolve(window.turnstile));
+						if (window.turnstile && typeof window.turnstile.render === 'function') {
+							resolve(window.turnstile);
 							return;
 						}
 						const script = document.createElement('script');
 						script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 						script.async = true;
 						script.defer = true;
-						script.onload = () => window.turnstile.ready(() => resolve(window.turnstile));
+						// ready() is incompatible with async/defer loading. The load event is our barrier.
+						script.onload = () => resolve(window.turnstile);
 						script.onerror = () => {
 							apiPromise = null;
 							script.remove();
@@ -52,9 +57,14 @@
 					// HTMX owns transport. Prevent submissions while a token is missing or in use.
 					this.form.addEventListener('htmx:beforeRequest', event => {
 						if (event.detail.elt !== this.form) return;
-						if (!this.tokenReady || this.pending) {
+						if (this.pending) {
 							event.preventDefault();
-							this.showError();
+							this.showMessage(this.dataset.submittingMessage);
+							return;
+						}
+						if (!this.tokenReady) {
+							event.preventDefault();
+							this.showMessage(this.dataset.waitMessage);
 							return;
 						}
 						this.pending = true;
@@ -75,25 +85,46 @@
 							size: 'flexible',
 							callback: () => {
 								this.tokenReady = true;
-								this.querySelector('[data-error]').hidden = true;
+								this.dismissMessage?.();
 							},
-							'expired-callback': () => { this.tokenReady = false; },
+							'expired-callback': () => {
+								this.tokenReady = false;
+								this.showMessage(this.dataset.expiredMessage);
+							},
 							'error-callback': () => {
 								this.tokenReady = false;
-								this.showError();
+								this.showMessage(this.dataset.errorMessage);
+							},
+							'timeout-callback': () => {
+								this.tokenReady = false;
+								this.showMessage(this.dataset.timeoutMessage);
 							},
 						});
-					}).catch(() => this.showError());
+					}).catch(() => {
+						if (!lifecycle.signal.aborted && this.isConnected) {
+							this.showMessage(this.dataset.unavailableMessage);
+						}
+					});
 				}
 
-				showError() {
-					const error = this.querySelector('[data-error]');
-					if (!error) return;
-					error.textContent = this.dataset.errorMessage;
-					error.hidden = false;
+				showMessage(message) {
+					if (!this.lifecycle || this.lifecycle.signal.aborted || !this.isConnected) return;
+					const show = () => {
+						if (this.isConnected && (!this.tokenReady || this.pending) &&
+							typeof window.simpledmsShowClientSnackbar === 'function') {
+							this.dismissMessage = window.simpledmsShowClientSnackbar(message);
+						}
+					};
+					if (typeof window.simpledmsShowClientSnackbar === 'function') {
+						show();
+					} else {
+						// On a full page load the snackbar runtime is a deferred script.
+						window.addEventListener('load', show, {once: true, signal: this.lifecycle.signal});
+					}
 				}
 
 				disconnectedCallback() {
+					this.dismissMessage?.();
 					this.lifecycle?.abort();
 					this.lifecycle = null;
 					if (this.widgetId !== undefined && window.turnstile) {

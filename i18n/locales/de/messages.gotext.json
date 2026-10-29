@@ -2,6 +2,167 @@
     "language": "de",
     "messages": [
         {
+            "id": "An account with this email address already exists. Please sign in or reset your password.",
+            "message": "An account with this email address already exists. Please sign in or reset your password.",
+            "translation": "Ein Konto mit dieser E-Mail-Adresse ist bereits vorhanden. Bitte melde dich an oder setze dein Passwort zurück.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification failed. Please try again.",
+            "message": "Verification failed. Please try again.",
+            "translation": "Die Verifizierung ist fehlgeschlagen. Bitte versuche es erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please wait for verification to complete.",
+            "message": "Please wait for verification to complete.",
+            "translation": "Bitte warte, bis die Verifizierung abgeschlossen ist.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification expired. Please try again.",
+            "message": "Verification expired. Please try again.",
+            "translation": "Die Verifizierung ist abgelaufen. Bitte versuche es erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification is temporarily unavailable. Please try again.",
+            "message": "Verification is temporarily unavailable. Please try again.",
+            "translation": "Die Verifizierung ist vorübergehend nicht verfügbar. Bitte versuche es erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration is being submitted. Please wait.",
+            "message": "Registration is being submitted. Please wait.",
+            "translation": "Deine Registrierung wird übermittelt. Bitte warte.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Verification timed out. Please try again.",
+            "message": "Verification timed out. Please try again.",
+            "translation": "Die Zeit für die Verifizierung ist abgelaufen. Bitte versuche es erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "JavaScript is required for verification.",
+            "message": "JavaScript is required for verification.",
+            "translation": "Für die Verifizierung ist JavaScript erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile",
+            "message": "Turnstile",
+            "translation": "Turnstile",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile site key",
+            "message": "Turnstile site key",
+            "translation": "Turnstile-Website-Schlüssel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile secret",
+            "message": "Turnstile secret",
+            "translation": "Geheimer Turnstile-Schlüssel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Development test keys",
+            "message": "Development test keys",
+            "translation": "Testschlüssel für die Entwicklung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Stored configuration",
+            "message": "Stored configuration",
+            "translation": "Gespeicherte Konfiguration",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Signup bot protection",
+            "message": "Signup bot protection",
+            "translation": "Bot-Schutz bei der Registrierung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Site key",
+            "message": "Site key",
+            "translation": "Website-Schlüssel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret key",
+            "message": "Secret key",
+            "translation": "Geheimer Schlüssel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expected hostname",
+            "message": "Expected hostname",
+            "translation": "Erwarteter Hostname",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Public signup is disabled.",
+            "message": "Public signup is disabled.",
+            "translation": "Die öffentliche Registrierung ist deaktiviert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires both keys. Signup is available without bot verification.",
+            "message": "Turnstile requires both keys. Signup is available without bot verification.",
+            "translation": "Turnstile benötigt beide Schlüssel. Die Registrierung ist ohne Bot-Prüfung verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "message": "Turnstile uses public test keys in development mode, not real bot protection.",
+            "translation": "Turnstile verwendet im Entwicklungsmodus öffentliche Testschlüssel, keinen echten Bot-Schutz.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "message": "Turnstile test keys cannot be used in production. Public signup is blocked.",
+            "translation": "Turnstile-Testschlüssel können nicht im Produktivbetrieb verwendet werden. Die öffentliche Registrierung ist blockiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "message": "Turnstile requires a non-local public origin. Public signup is blocked.",
+            "translation": "Turnstile benötigt eine nicht-lokale öffentliche Herkunftsadresse. Die öffentliche Registrierung ist blockiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "message": "Turnstile is enabled. Tokens and credentials are validated during signup.",
+            "translation": "Turnstile ist aktiviert. Tokens und Zugangsdaten werden bei der Registrierung geprüft.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Personal",
             "message": "Personal",
             "translation": "Persönlich",
