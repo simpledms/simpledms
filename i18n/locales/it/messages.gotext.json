@@ -2,6 +2,13 @@
     "language": "it",
     "messages": [
         {
+            "id": "Personal",
+            "message": "Personal",
+            "translation": "Personale",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File types",
             "message": "File types",
             "translation": "Tipi di file",

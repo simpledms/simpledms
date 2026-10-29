@@ -1,0 +1,107 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Turnstile */ -}}
+{{- define "Turnstile" }}
+	<simpledms-turnstile
+		id="{{ .GetID }}"
+		data-sitekey="{{ .SiteKey }}"
+		data-action="{{ .Action }}"
+		data-error-message="{{ tr .GetContext "Verification failed. Please try again." }}"
+		style="display:block"
+	>
+		<div data-challenge></div>
+		<p data-error role="alert" hidden></p>
+		<noscript>{{ tr .GetContext "JavaScript is required for verification." }}</noscript>
+	</simpledms-turnstile>
+	<script>
+		(function() {
+			if (customElements.get('simpledms-turnstile')) return;
+
+			let apiPromise;
+			function loadAPI() {
+				if (!apiPromise) {
+					apiPromise = new Promise((resolve, reject) => {
+						if (window.turnstile) {
+							window.turnstile.ready(() => resolve(window.turnstile));
+							return;
+						}
+						const script = document.createElement('script');
+						script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+						script.async = true;
+						script.defer = true;
+						script.onload = () => window.turnstile.ready(() => resolve(window.turnstile));
+						script.onerror = () => {
+							apiPromise = null;
+							script.remove();
+							reject(new Error('Turnstile unavailable'));
+						};
+						document.head.append(script);
+					});
+				}
+				return apiPromise;
+			}
+
+			customElements.define('simpledms-turnstile', class extends HTMLElement {
+				connectedCallback() {
+					if (this.lifecycle) return;
+					const lifecycle = new AbortController();
+					this.lifecycle = lifecycle;
+					this.form = this.closest('form');
+					this.tokenReady = false;
+					this.pending = false;
+					if (!this.form) return;
+
+					// HTMX owns transport. Prevent submissions while a token is missing or in use.
+					this.form.addEventListener('htmx:beforeRequest', event => {
+						if (event.detail.elt !== this.form) return;
+						if (!this.tokenReady || this.pending) {
+							event.preventDefault();
+							this.showError();
+							return;
+						}
+						this.pending = true;
+						this.tokenReady = false;
+					}, {signal: lifecycle.signal});
+					this.form.addEventListener('htmx:afterRequest', event => {
+						if (event.detail.elt !== this.form || !this.pending) return;
+						this.pending = false;
+						this.tokenReady = false;
+						if (this.widgetId !== undefined) window.turnstile.reset(this.widgetId);
+					}, {signal: lifecycle.signal});
+
+					loadAPI().then(api => {
+						if (lifecycle.signal.aborted || !this.isConnected) return;
+						this.widgetId = api.render(this.querySelector('[data-challenge]'), {
+							sitekey: this.dataset.sitekey,
+							action: this.dataset.action,
+							size: 'flexible',
+							callback: () => {
+								this.tokenReady = true;
+								this.querySelector('[data-error]').hidden = true;
+							},
+							'expired-callback': () => { this.tokenReady = false; },
+							'error-callback': () => {
+								this.tokenReady = false;
+								this.showError();
+							},
+						});
+					}).catch(() => this.showError());
+				}
+
+				showError() {
+					const error = this.querySelector('[data-error]');
+					if (!error) return;
+					error.textContent = this.dataset.errorMessage;
+					error.hidden = false;
+				}
+
+				disconnectedCallback() {
+					this.lifecycle?.abort();
+					this.lifecycle = null;
+					if (this.widgetId !== undefined && window.turnstile) {
+						window.turnstile.remove(this.widgetId);
+						this.widgetId = undefined;
+					}
+				}
+			});
+		})();
+	</script>
+{{ end }}

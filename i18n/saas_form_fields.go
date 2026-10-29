@@ -14,6 +14,7 @@ func saasFormFieldsGotextHelper() {
 	pp.Sprintf("Sign up [subject]")
 	pp.Sprintf("Free 30-day trial, no credit card required.")
 	pp.Sprintf("Organization name")
+	pp.Sprintf("Personal")
 	pp.Sprintf("Country")
 	pp.Sprintf("Accept terms of service")
 	pp.Sprintf("Accept privacy policy")
