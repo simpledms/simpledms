@@ -74,6 +74,7 @@ func (qq *PasskeyRecoverySignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		ctx,
 		accountx,
 		data.TemporarySession,
+		qq.infra.SystemConfig().IsSaaSModeEnabled(),
 		qq.infra.SystemConfig().AllowInsecureCookies(),
 	)
 	if err != nil {

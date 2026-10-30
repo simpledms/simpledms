@@ -70,6 +70,7 @@ func (qq *PasskeySignInFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.Re
 		ctx,
 		accountx,
 		false,
+		qq.infra.SystemConfig().IsSaaSModeEnabled(),
 		qq.infra.SystemConfig().AllowInsecureCookies(),
 	)
 	if err != nil {

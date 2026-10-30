@@ -1322,6 +1322,9 @@ func TestPasskeyRecoverySignInCmdConsumesRecoveryCode(t *testing.T) {
 	recoveryCodeHash := accountutil.PasswordHash(normalizedCode, salt)
 
 	accountx := harness.mainDB.ReadWriteConn.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
+	// SaaS mode requires an active organization for every sign-in method.
+	tenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Recovery tenant", false, true)
+	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.User, true)
 	accountx.Update().
 		SetPasskeyLoginEnabled(true).
 		SetPasskeyRecoveryCodeSalt(salt).
@@ -1390,6 +1393,9 @@ func TestPasskeyRecoverySignInCmdRejectsInvalidRecoveryCode(t *testing.T) {
 	recoveryCodeHash := accountutil.PasswordHash(normalizedCode, salt)
 
 	accountx := harness.mainDB.ReadWriteConn.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
+	// SaaS mode requires an active organization for every sign-in method.
+	tenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Recovery tenant", false, true)
+	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.User, true)
 	accountx.Update().
 		SetPasskeyLoginEnabled(true).
 		SetPasskeyRecoveryCodeSalt(salt).
@@ -2710,3 +2716,48 @@ func TestCanonicalHostRedirectForAuthRoutes(t *testing.T) {
 	}
 }
 */
+
+// Backup code and passkey sign-in share the Session helper with password sign-in, so in SaaS
+// mode a user whose organizations are all deleted cannot sign in through them either.
+func TestPasskeyRecoverySignInCmdRejectsUserWithoutActiveOrganization(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "recovery-orphan@example.com"
+	recoveryCode := "ABCD-2345"
+	createAccount(t, harness.mainDB, email, "supersecret")
+	salt, ok := accountutil.RandomSalt()
+	if !ok {
+		t.Fatal("could not generate salt")
+	}
+	normalizedCode := strings.ToUpper(strings.ReplaceAll(recoveryCode, "-", ""))
+	harness.mainDB.ReadWriteConn.Account.Update().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		SetPasskeyLoginEnabled(true).
+		SetPasskeyRecoveryCodeSalt(salt).
+		SetPasskeyRecoveryCodeHashes([]string{accountutil.PasswordHash(normalizedCode, salt)}).
+		ExecX(context.Background())
+
+	form := url.Values{}
+	form.Set("Email", email)
+	form.Set("BackupCode", recoveryCode)
+	req := httptest.NewRequest(
+		http.MethodPost, "/-/auth/passkey-recovery-sign-in-cmd", strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, rr.Code)
+	}
+	if len(rr.Result().Cookies()) != 0 {
+		t.Fatal("expected no session cookie for an account without an active organization")
+	}
+	accountx := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText(email))).OnlyX(context.Background())
+	if count := harness.mainDB.ReadOnlyConn.Session.Query().
+		Where(session.AccountID(accountx.ID)).CountX(context.Background()); count != 0 {
+		t.Fatalf("expected no session rows, got %d", count)
+	}
+}

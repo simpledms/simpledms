@@ -121,8 +121,10 @@ func (qq *Text) StringUntranslated() string {
 
 func (qq *Text) String(ctx ctxx.Context) string {
 	if qq.NoTranslation {
-		// never has arguments, Sprintf just for robustness against future changes
-		// TODO does it have performance impact?
+		if len(qq.args) == 0 {
+			// Tu values are user input such as filenames; a '%' in them is not a format verb.
+			return qq.format
+		}
 		return fmt.Sprintf(qq.format, qq.args...)
 	}
 

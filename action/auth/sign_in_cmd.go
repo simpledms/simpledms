@@ -12,8 +12,6 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
-	"github.com/simpledms/simpledms/model/main/common/mainrole"
-	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -114,31 +112,13 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		return err
 	}
 
-	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
-		hasActiveTenantAssignment, err := tenantaccessmodel.NewTenantAccessService().HasActiveTenantAssignment(
-			ctx,
-			ctx.VisitorCtx().MainTx,
-			accountx.ID,
-		)
-		if err != nil {
-			log.Println(err)
-			return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
-		}
-
-		if !hasActiveTenantAssignment {
-			return e.NewHTTPErrorWithSnackbar(
-				http.StatusForbidden,
-				widget.NewSnackbarf("Your organization is no longer active. Please contact support."),
-			)
-		}
-	}
-
 	err = createAccountSession(
 		rw,
 		req,
 		ctx,
 		accountx,
 		data.TemporarySession || isTenantPasskeyEnrollmentRequired,
+		qq.infra.SystemConfig().IsSaaSModeEnabled(),
 		qq.infra.SystemConfig().AllowInsecureCookies(),
 	)
 	if err != nil {
