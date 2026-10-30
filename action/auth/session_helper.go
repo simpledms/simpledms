@@ -9,6 +9,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
@@ -41,7 +42,7 @@ func createAccountSession(
 	_, err = ctx.VisitorCtx().MainTx.Session.
 		Create().
 		SetAccountID(accountx.ID).
-		SetValue(cookie.Value).
+		SetValue(sessionmodel.HashValue(cookie.Value)).
 		SetIsTemporarySession(isTemporarySession).
 		SetDeletableAt(deletableAt).
 		SetExpiresAt(cookie.Expires).

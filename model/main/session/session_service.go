@@ -12,6 +12,6 @@ func NewSessionService() *SessionService {
 }
 
 func (qq *SessionService) DeleteByValue(ctx ctxx.Context, sessionValue string) error {
-	_, err := ctx.MainCtx().MainTx.Session.Delete().Where(session.Value(sessionValue)).Exec(ctx)
+	_, err := ctx.MainCtx().MainTx.Session.Delete().Where(session.Value(HashValue(sessionValue))).Exec(ctx)
 	return err
 }

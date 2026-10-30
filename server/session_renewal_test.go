@@ -11,6 +11,7 @@ import (
 
 	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
 	"github.com/simpledms/simpledms/db/entmain/session"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
@@ -23,7 +24,7 @@ func TestWriteCommandRenewsDueSessionWithinItsTransaction(t *testing.T) {
 	decisionCtx := mainprivacy.DecisionContext(context.Background(), mainprivacy.Allow)
 	dueExpiresAt := time.Now().Add(7 * 24 * time.Hour)
 	h.mainDB.ReadWriteConn.Session.Update().
-		Where(session.Value(fixture.session)).
+		Where(session.Value(sessionmodel.HashValue(fixture.session))).
 		SetExpiresAt(dueExpiresAt).
 		SetDeletableAt(dueExpiresAt).
 		ExecX(decisionCtx)
@@ -50,7 +51,7 @@ func TestWriteCommandRenewsDueSessionWithinItsTransaction(t *testing.T) {
 		t.Fatalf("expected status %d, got %d: %s", http.StatusOK, response.Code, response.Body.String())
 	}
 	renewed := h.mainDB.ReadOnlyConn.Session.Query().
-		Where(session.Value(fixture.session)).
+		Where(session.Value(sessionmodel.HashValue(fixture.session))).
 		OnlyX(decisionCtx)
 	if !renewed.ExpiresAt.After(time.Now().Add(13 * 24 * time.Hour)) {
 		t.Fatalf("expected renewed session expiry, got %s", renewed.ExpiresAt)

@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
 )
@@ -506,7 +507,7 @@ func (qq *Account) setPasswordAndSignOutOtherSessions(
 	_, err := ctx.MainCtx().MainTx.Session.Delete().
 		Where(
 			session.AccountID(qq.Data.ID),
-			session.ValueNEQ(currentSessionValue),
+			session.ValueNEQ(sessionmodel.HashValue(currentSessionValue)),
 		).
 		Exec(ctx)
 	if err != nil {

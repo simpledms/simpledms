@@ -14,6 +14,7 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 )
 
 const pprofPath = "adminreal1-sec"
@@ -133,7 +134,7 @@ func TestPprofHandlerRejectsUnauthorizedSessions(t *testing.T) {
 	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
 	cookie = signInAndGetSessionCookie(t, harness, email, password)
 	harness.mainDB.ReadWriteConn.Session.Update().
-		Where(session.Value(cookie.Value)).
+		Where(session.Value(sessionmodel.HashValue(cookie.Value))).
 		SetExpiresAt(time.Now().Add(-time.Minute)).
 		SaveX(t.Context())
 	expired := servePprofRequest(harness.router, cookie)
@@ -149,7 +150,7 @@ func TestPprofHandlerRejectsTemporaryAdminSession(t *testing.T) {
 	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
 	cookie := signInAndGetSessionCookie(t, harness, email, password)
 	harness.mainDB.ReadWriteConn.Session.Update().
-		Where(session.Value(cookie.Value)).
+		Where(session.Value(sessionmodel.HashValue(cookie.Value))).
 		SetIsTemporarySession(true).
 		SetDeletableAt(time.Now().Add(time.Hour)).
 		SaveX(t.Context())

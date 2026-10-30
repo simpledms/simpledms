@@ -30,6 +30,7 @@ import (
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/server/mcp"
@@ -910,7 +911,7 @@ func (qq *Router) authenticateAccount(
 	if err = cookie.Valid(); err != nil {
 		cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
 		qq.writableSessionClient(mainTx, isReadOnly).Delete().
-			Where(session.Value(cookie.Value)).
+			Where(session.Value(sessionmodel.HashValue(cookie.Value))).
 			ExecX(req.Context())
 		return nil, false, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but not valid.")
 	}
@@ -922,7 +923,7 @@ func (qq *Router) authenticateAccount(
 	sessionx, err := mainTx.Session.
 		Query().
 		Where(
-			session.Value(cookie.Value),
+			session.Value(sessionmodel.HashValue(cookie.Value)),
 			session.Or(
 				session.And(
 					session.IsTemporarySession(true),
@@ -985,7 +986,7 @@ func (qq *Router) authenticateAccount(
 		qq.writableSessionClient(mainTx, isReadOnly).Update().
 			SetDeletableAt(cookiex.DeletableAt(cookie)).
 			SetExpiresAt(cookie.Expires).
-			Where(session.Value(cookie.Value)).
+			Where(session.Value(sessionmodel.HashValue(cookie.Value))).
 			ExecX(req.Context())
 	}
 

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/simpledms/simpledms/db/entmain/session"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
 
@@ -39,7 +40,7 @@ func TestChangePasswordCmdSignsOutOtherSessions(t *testing.T) {
 	}
 	sessionExists := func(value string) bool {
 		return harness.mainDB.ReadWriteConn.Session.Query().
-			Where(session.Value(value)).
+			Where(session.Value(sessionmodel.HashValue(value))).
 			ExistX(context.Background())
 	}
 	if !sessionExists(currentSession) {

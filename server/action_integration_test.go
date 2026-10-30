@@ -40,6 +40,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/main/systemstatus"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -1072,7 +1073,7 @@ func TestSignOutCmdInvalidatesSessionAndDeletesSessionRow(t *testing.T) {
 	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
 
 	beforeCount := harness.mainDB.ReadWriteConn.Session.Query().
-		Where(session.Value(sessionCookie.Value)).
+		Where(session.Value(sessionmodel.HashValue(sessionCookie.Value))).
 		CountX(context.Background())
 	if beforeCount != 1 {
 		t.Fatalf("expected 1 session row before sign out, got %d", beforeCount)
@@ -1093,7 +1094,7 @@ func TestSignOutCmdInvalidatesSessionAndDeletesSessionRow(t *testing.T) {
 	}
 
 	afterCount := harness.mainDB.ReadWriteConn.Session.Query().
-		Where(session.Value(sessionCookie.Value)).
+		Where(session.Value(sessionmodel.HashValue(sessionCookie.Value))).
 		CountX(context.Background())
 	if afterCount != 0 {
 		t.Fatalf("expected 0 session rows after sign out, got %d", afterCount)
@@ -1469,7 +1470,7 @@ func TestSignInCmdAllowsBootstrapWhenTenantRequiresPasskeyAndNoPasskeyExists(t *
 	}
 
 	sessionx := harness.mainDB.ReadWriteConn.Session.Query().Where(
-		session.Value(sessionCookie.Value),
+		session.Value(sessionmodel.HashValue(sessionCookie.Value)),
 	).OnlyX(context.Background())
 	if !sessionx.IsTemporarySession {
 		t.Fatal("expected bootstrap sign-in to create temporary setup session")
@@ -1515,7 +1516,7 @@ func TestTemporarySetupSessionExpiresAtDeletableAt(t *testing.T) {
 	}
 
 	harness.mainDB.ReadWriteConn.Session.Update().
-		Where(session.Value(sessionCookie.Value)).
+		Where(session.Value(sessionmodel.HashValue(sessionCookie.Value))).
 		SetDeletableAt(time.Now().Add(-time.Minute)).
 		ExecX(context.Background())
 
@@ -2759,5 +2760,39 @@ func TestPasskeyRecoverySignInCmdRejectsUserWithoutActiveOrganization(t *testing
 	if count := harness.mainDB.ReadOnlyConn.Session.Query().
 		Where(session.AccountID(accountx.ID)).CountX(context.Background()); count != 0 {
 		t.Fatalf("expected no session rows, got %d", count)
+	}
+}
+
+// Only a hash of the Session cookie is stored, so a copy of the database cannot be used to
+// take over Sessions.
+func TestSignInStoresOnlyHashedSessionToken(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "hashed-session@example.com"
+	password := "supersecret"
+	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+
+	accountx := harness.mainDB.ReadOnlyConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText(email))).OnlyX(context.Background())
+	sessionx := harness.mainDB.ReadOnlyConn.Session.Query().
+		Where(session.AccountID(accountx.ID)).OnlyX(context.Background())
+	if sessionx.Value == sessionCookie.Value {
+		t.Fatal("session cookie value is stored in plaintext")
+	}
+	if sessionx.Value != sessionmodel.HashValue(sessionCookie.Value) {
+		t.Fatal("stored session value is not the hash of the cookie value")
+	}
+
+	// Any signed-in-only endpoint works; the harness registers actions, not pages.
+	req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-out-cmd", nil)
+	req.AddCookie(&http.Cookie{Name: cookiex.SessionCookieName(), Value: sessionx.Value})
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusSeeOther || rr.Header().Get("Location") != "/" {
+		t.Fatalf(
+			"expected a stored session value to be rejected with a redirect to sign in, got %d %q",
+			rr.Code, rr.Header().Get("Location"),
+		)
 	}
 }

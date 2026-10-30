@@ -11,6 +11,7 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain/session"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
 
@@ -122,5 +123,5 @@ func assertInitialPasswordCommandOutcome(
 
 func initialPasswordSessionExists(harness *actionTestHarness, value string) bool {
 	return harness.mainDB.ReadWriteConn.Session.Query().
-		Where(session.Value(value)).ExistX(context.Background())
+		Where(session.Value(sessionmodel.HashValue(value))).ExistX(context.Background())
 }

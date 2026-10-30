@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -832,7 +833,7 @@ func createBenchmarkSession(tb testing.TB, harness *actionTestHarness, accountID
 	expiresAt := time.Now().Add(14 * 24 * time.Hour)
 
 	_, err := harness.mainDB.ReadWriteConn.Session.Create().
-		SetValue(sessionValue).
+		SetValue(sessionmodel.HashValue(sessionValue)).
 		SetAccountID(accountID).
 		SetIsTemporarySession(false).
 		SetExpiresAt(expiresAt).

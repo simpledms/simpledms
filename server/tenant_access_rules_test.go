@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/accountutil"
@@ -694,7 +695,7 @@ func createSessionForAccountForRulesTest(
 	expiresAt := time.Now().Add(14 * 24 * time.Hour)
 
 	_, err := harness.mainDB.ReadWriteConn.Session.Create().
-		SetValue(sessionValue).
+		SetValue(sessionmodel.HashValue(sessionValue)).
 		SetAccountID(accountID).
 		SetIsTemporarySession(false).
 		SetExpiresAt(expiresAt).
