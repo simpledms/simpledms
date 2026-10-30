@@ -143,10 +143,17 @@ func NewRouter(
 }
 
 func (qq *Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	isHTTPS := req.TLS != nil
 	if strings.EqualFold(req.Header.Get("X-Forwarded-Proto"), "https") &&
 		qq.isTrustedProxy(req.RemoteAddr) {
 		req = req.Clone(req.Context())
 		req.URL.Scheme = "https"
+		isHTTPS = true
+	}
+	if isHTTPS {
+		// Browsers ignore HSTS over plain HTTP, so it is only sent when the browser's
+		// connection is HTTPS: terminated here or reported by a trusted proxy.
+		rw.Header().Set("Strict-Transport-Security", "max-age=31536000")
 	}
 	// Rate limits keyed on a reverse proxy address would be shared by all clients.
 	if clientIP, ok := httpx.ClientIPThroughTrustedProxies(req, qq.trustedProxies); ok {

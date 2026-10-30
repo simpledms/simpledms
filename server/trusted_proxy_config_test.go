@@ -1,6 +1,7 @@
 package server
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -218,6 +219,59 @@ func TestAuthRateLimitsArePerClientBehindTrustedProxy(t *testing.T) {
 			}
 			if send("203.0.113.2", 0) == http.StatusTooManyRequests {
 				t.Fatal("another client behind the same proxy must not share the rate limit")
+			}
+		})
+	}
+}
+
+// HSTS must reach browsers on every HTTPS connection, whether TLS terminates in the app or at
+// a trusted reverse proxy, and never on plain HTTP, where browsers ignore it anyway.
+func TestRouterSendsHSTSOnlyForHTTPSConnections(t *testing.T) {
+	router := NewRouter(
+		nil,
+		nil,
+		nil,
+		false,
+		"",
+		nil,
+		[]netip.Prefix{netip.MustParsePrefix("192.0.2.10/32")},
+	)
+	router.HandleFunc("/", func(rw http.ResponseWriter, _ *http.Request) {
+		rw.WriteHeader(http.StatusNoContent)
+	})
+
+	for _, tc := range []struct {
+		name       string
+		remoteAddr string
+		proto      string
+		tls        bool
+		wantHSTS   bool
+	}{
+		{name: "direct TLS", remoteAddr: "198.51.100.10:1234", tls: true, wantHSTS: true},
+		{name: "trusted proxy HTTPS", remoteAddr: "192.0.2.10:1234", proto: "https", wantHSTS: true},
+		{name: "untrusted proxy HTTPS", remoteAddr: "198.51.100.10:1234", proto: "https"},
+		{name: "trusted proxy HTTP", remoteAddr: "192.0.2.10:1234", proto: "http"},
+		{name: "plain HTTP", remoteAddr: "198.51.100.10:1234"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, "/", nil)
+			req.RemoteAddr = tc.remoteAddr
+			if tc.proto != "" {
+				req.Header.Set("X-Forwarded-Proto", tc.proto)
+			}
+			if tc.tls {
+				req.TLS = &tls.ConnectionState{}
+			}
+			rw := httptest.NewRecorder()
+
+			router.ServeHTTP(rw, req)
+
+			got := rw.Header().Get("Strict-Transport-Security")
+			if tc.wantHSTS && got != "max-age=31536000" {
+				t.Fatalf("Strict-Transport-Security = %q, want max-age=31536000", got)
+			}
+			if !tc.wantHSTS && got != "" {
+				t.Fatalf("Strict-Transport-Security = %q, want none", got)
 			}
 		})
 	}
