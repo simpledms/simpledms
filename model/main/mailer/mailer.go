@@ -89,6 +89,65 @@ func (qq *Mailer) CreateUser(
 	qq.queueMail(ctx, accountx, subject, template)
 }
 
+// CredentialCreated notifies the credential owner so that an unexpected credential can be revoked.
+func (qq *Mailer) CredentialCreated(
+	ctx ctxx.Context,
+	accountx *entmain.Account,
+	credentialType string,
+	label string,
+	tenantName string,
+	spaceName string,
+) {
+	subject := wx.Tf("New %s credential created", credentialType).String(ctx)
+	template := EmailTemplate{
+		Title:   subject,
+		Heading: subject,
+		Content: []ContentBlock{
+			TextBlock{Text: wx.Tf(
+				"The %s credential «%s» was created for your account. It grants access to the Space «%s» of the organization «%s».",
+				credentialType,
+				label,
+				spaceName,
+				tenantName,
+			).String(ctx)},
+			NoteBlock{Text: wx.T(
+				"If you did not create this credential, sign in and revoke it immediately.",
+			).String(ctx)},
+		},
+		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
+	}
+
+	qq.queueMail(ctx, accountx, subject, template)
+}
+
+// UserCreated notifies the creator so that an account created without their knowledge is noticed.
+func (qq *Mailer) UserCreated(
+	ctx ctxx.Context,
+	creatorx *entmain.Account,
+	accountEmail string,
+	tenantName string,
+) {
+	subject := wx.T("New user account created").String(ctx)
+	template := EmailTemplate{
+		Title:   subject,
+		Heading: subject,
+		Content: []ContentBlock{
+			TextBlock{Text: wx.Tf(
+				"A user account for %s was created by you in the organization «%s».",
+				accountEmail,
+				tenantName,
+			).String(ctx)},
+			TextBlock{Text: wx.T("The new user received an email with a temporary password.").String(ctx)},
+			NoteBlock{Text: wx.T(
+				"If you did not create this user account, sign in and delete it immediately.",
+			).String(ctx)},
+		},
+		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
+	}
+
+	qq.queueMail(ctx, creatorx, subject, template)
+}
+
 func (qq *Mailer) formatExpiresAt(ctx ctxx.Context, expiresAt time.Time) string {
 	layout := wx.T("02-01-2006 at 15:04 o'clock").String(ctx)
 	return expiresAt.In(ctx.VisitorCtx().Location).Format(layout)

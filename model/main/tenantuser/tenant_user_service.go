@@ -67,6 +67,7 @@ func Create(
 		expiresAt,
 		signInURL,
 	)
+	mailer.NewMailer().UserCreated(ctx, ctx.MainCtx().Account, email, tenantm.Name())
 
 	return nil
 }

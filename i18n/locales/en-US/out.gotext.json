@@ -6373,6 +6373,117 @@
             "fuzzy": true
         },
         {
+            "id": "New {CredentialType} credential created",
+            "message": "New {CredentialType} credential created",
+            "translation": "New {CredentialType} credential created",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "CredentialType",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialType"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "The {CredentialType} credential «{Label}» was created for your account. It grants access to the Space «{SpaceName}» of the organization «{TenantName}».",
+            "message": "The {CredentialType} credential «{Label}» was created for your account. It grants access to the Space «{SpaceName}» of the organization «{TenantName}».",
+            "translation": "The {CredentialType} credential «{Label}» was created for your account. It grants access to the Space «{SpaceName}» of the organization «{TenantName}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "CredentialType",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialType"
+                },
+                {
+                    "id": "Label",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "label"
+                },
+                {
+                    "id": "SpaceName",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "spaceName"
+                },
+                {
+                    "id": "TenantName",
+                    "string": "%[4]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 4,
+                    "expr": "tenantName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "If you did not create this credential, sign in and revoke it immediately.",
+            "message": "If you did not create this credential, sign in and revoke it immediately.",
+            "translation": "If you did not create this credential, sign in and revoke it immediately.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New user account created",
+            "message": "New user account created",
+            "translation": "New user account created",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A user account for {AccountEmail} was created by you in the organization «{TenantName}».",
+            "message": "A user account for {AccountEmail} was created by you in the organization «{TenantName}».",
+            "translation": "A user account for {AccountEmail} was created by you in the organization «{TenantName}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "AccountEmail",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountEmail"
+                },
+                {
+                    "id": "TenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "tenantName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "The new user received an email with a temporary password.",
+            "message": "The new user received an email with a temporary password.",
+            "translation": "The new user received an email with a temporary password.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "If you did not create this user account, sign in and delete it immediately.",
+            "message": "If you did not create this user account, sign in and delete it immediately.",
+            "translation": "If you did not create this user account, sign in and delete it immediately.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "02-01-2006 at 15:04 o'clock",
             "message": "02-01-2006 at 15:04 o'clock",
             "translation": "02-01-2006 at 15:04 o'clock",

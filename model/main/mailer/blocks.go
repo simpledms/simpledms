@@ -2,6 +2,7 @@ package mailer
 
 import (
 	"fmt"
+	"html"
 
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
@@ -19,7 +20,8 @@ type TextBlock struct {
 }
 
 func (qq TextBlock) ToHTML(ctx ctxx.Context) string {
-	return fmt.Sprintf("<p>%s</p>", qq.Text)
+	// Text may contain user-provided values such as names or labels.
+	return fmt.Sprintf("<p>%s</p>", html.EscapeString(qq.Text))
 }
 
 func (qq TextBlock) ToPlainText(ctx ctxx.Context) string {

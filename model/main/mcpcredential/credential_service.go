@@ -27,6 +27,8 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
+	"github.com/simpledms/simpledms/model/main/mailer"
+	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/util/e"
 )
 
@@ -68,6 +70,14 @@ func (qq *CredentialService) Create(
 		log.Println(err)
 		return "", err
 	}
+	mailer.NewMailer().CredentialCreated(
+		ctx,
+		ctx.Account,
+		"MCP",
+		label,
+		tenantmodel.NewTenant(spaceCtx.Tenant).Name(),
+		spaceCtx.Space.Name,
+	)
 	return "sdmcp_" + credential.PublicID.String() + "." + secret, nil
 }
 

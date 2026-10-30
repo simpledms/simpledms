@@ -17,6 +17,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainwebdavcredential "github.com/simpledms/simpledms/db/entmain/webdavcredential"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/mailer"
+	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
 )
@@ -77,6 +79,14 @@ func (qq *CredentialService) CreateOwnerCredential(
 	if err != nil {
 		return nil, credentialConstraintError(err)
 	}
+	mailer.NewMailer().CredentialCreated(
+		ctx,
+		ctx.Account,
+		"WebDAV",
+		label,
+		tenantmodel.NewTenant(ctx.Tenant).Name(),
+		ctx.Space.Name,
+	)
 
 	return &CreateResult{
 		URL:      endpointURL,
