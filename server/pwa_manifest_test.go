@@ -2,9 +2,26 @@ package server
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"testing/fstest"
 )
+
+func TestPWAManifestHandlerMarksManifestNoIndex(t *testing.T) {
+	rw := httptest.NewRecorder()
+	NewPWAManifestHandler(testManifestFS(), false).Handler(
+		rw,
+		httptest.NewRequest(http.MethodGet, "/assets/manifest.json", nil),
+	)
+
+	if rw.Code != http.StatusOK {
+		t.Fatalf("status %d", rw.Code)
+	}
+	if robotsTag := rw.Header().Get("X-Robots-Tag"); robotsTag != "noindex" {
+		t.Fatalf("X-Robots-Tag = %q, want noindex", robotsTag)
+	}
+}
 
 func TestPWAManifestBytesUsesDevNameOverrideInDevMode(t *testing.T) {
 	t.Setenv(devPWANameEnvVar, "SimpleDMS Local")

@@ -26,6 +26,8 @@ func NewPWAManifestHandler(assetsFS fs.FS, devMode bool) *PWAManifestHandler {
 }
 
 func (qq *PWAManifestHandler) Handler(rw http.ResponseWriter, _ *http.Request) {
+	setNoIndexHeader(rw)
+
 	manifestBytes, err := qq.manifestBytes()
 	if err != nil {
 		log.Println(err)

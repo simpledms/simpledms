@@ -23,7 +23,7 @@ type AssetHandler struct {
 func NewAssetHandler(assetsFS fs.FS, assetVersions *ui.AssetVersions) *AssetHandler {
 	return &AssetHandler{
 		assetVersions: assetVersions,
-		fileServer:    http.FileServer(http.FS(assetsFS)),
+		fileServer:    NewStaticFileHandler(assetsFS),
 	}
 }
 

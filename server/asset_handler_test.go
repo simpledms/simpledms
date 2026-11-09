@@ -76,6 +76,18 @@ func TestAssetHandlerLeavesMissingAssetsWithoutETag(t *testing.T) {
 	}
 }
 
+func TestAssetHandlerDoesNotListDirectories(t *testing.T) {
+	handler := newAssetHandlerForTest(fstest.MapFS{
+		"vendor/app.js": &fstest.MapFile{Data: []byte("console.log(1)")},
+	})
+
+	rw := httptest.NewRecorder()
+	handler.ServeHTTP(rw, httptest.NewRequest(http.MethodGet, "/vendor/", nil))
+	if rw.Code != http.StatusNotFound || strings.Contains(rw.Body.String(), "app.js") {
+		t.Fatalf("status %d, body %q", rw.Code, rw.Body.String())
+	}
+}
+
 func TestAssetHandlerCachesContentVersionedURLsImmutably(t *testing.T) {
 	assetsFS := fstest.MapFS{
 		"app.css":                  &fstest.MapFile{Data: []byte("a{}")},
