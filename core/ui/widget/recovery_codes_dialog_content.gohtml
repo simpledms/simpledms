@@ -21,16 +21,16 @@
 				return;
 			}
 
-			const backupCodesTitle = messages.dataset.backupCodesTitle || "{{ render .GetContext .BackupCodesTitle }}";
-			const accountLabel = messages.dataset.accountLabel || "{{ render .GetContext .AccountLabel }}";
-			const generatedLabel = messages.dataset.generatedLabel || "{{ render .GetContext .GeneratedLabel }}";
-			const keepSecureNotice = messages.dataset.keepSecureNotice || "{{ render .GetContext .KeepSecureNotice }}";
-			const shownOnceNotice = messages.dataset.shownOnceNotice || "{{ render .GetContext .ShownOnceNotice }}";
-			const codesHeading = messages.dataset.codesHeading || "{{ render .GetContext .CodesHeading }}";
-			const printOpenedMessage = messages.dataset.printOpenedMessage || "{{ render .GetContext .PrintOpenedMessage }}";
-			const copiedMessage = messages.dataset.copiedMessage || "{{ render .GetContext .CopiedMessage }}";
-			const copyFailedMessage = messages.dataset.copyFailedMessage || "{{ render .GetContext .CopyFailedMessage }}";
-			const downloadedMessage = messages.dataset.downloadedMessage || "{{ render .GetContext .DownloadedMessage }}";
+			const backupCodesTitle = messages.dataset.backupCodesTitle;
+			const accountLabel = messages.dataset.accountLabel;
+			const generatedLabel = messages.dataset.generatedLabel;
+			const keepSecureNotice = messages.dataset.keepSecureNotice;
+			const shownOnceNotice = messages.dataset.shownOnceNotice;
+			const codesHeading = messages.dataset.codesHeading;
+			const printOpenedMessage = messages.dataset.printOpenedMessage;
+			const copiedMessage = messages.dataset.copiedMessage;
+			const copyFailedMessage = messages.dataset.copyFailedMessage;
+			const downloadedMessage = messages.dataset.downloadedMessage;
 
 			const codesText = textarea.value;
 
@@ -39,13 +39,6 @@
 					URL.revokeObjectURL(downloadURL);
 					downloadURL = null;
 				}
-			}
-
-			function escapeHtml(text) {
-				return text
-					.replace(/&/g, '&amp;')
-					.replace(/</g, '&lt;')
-					.replace(/>/g, '&gt;');
 			}
 
 			function buildContextInfo() {
@@ -86,15 +79,22 @@
 				].join('\n');
 			}
 
-			function buildPrintDocumentHTML() {
-				return [
-					'<!doctype html>',
-					'<html><head><meta charset="utf-8"><title>' + escapeHtml(backupCodesTitle) + '</title></head><body>',
-					'<h1>' + escapeHtml(backupCodesTitle) + '</h1>',
-					'<pre style="font-family: monospace; font-size: 14px; line-height: 1.6;">' + escapeHtml(buildContextInfo()) + '</pre>',
-					'<pre style="font-family: monospace; font-size: 14px; line-height: 1.6;">' + escapeHtml(codesText.trim()) + '</pre>',
-					'</body></html>',
-				].join('');
+			// Built with DOM APIs because htmx strips head-like markup from swapped responses, scripts included.
+			function fillPrintDocument(printDocument) {
+				printDocument.title = backupCodesTitle;
+
+				const heading = printDocument.createElement('h1');
+				heading.textContent = backupCodesTitle;
+				printDocument.body.append(heading);
+
+				[buildContextInfo(), codesText.trim()].forEach(function(text) {
+					const block = printDocument.createElement('pre');
+					block.style.fontFamily = 'monospace';
+					block.style.fontSize = '14px';
+					block.style.lineHeight = '1.6';
+					block.textContent = text;
+					printDocument.body.append(block);
+				});
 			}
 
 			async function copyToClipboard(text) {
@@ -129,6 +129,7 @@
 				iframe.style.opacity = '0';
 				iframe.onload = function() {
 					if (iframe.contentWindow) {
+						fillPrintDocument(iframe.contentDocument);
 						iframe.contentWindow.focus();
 						iframe.contentWindow.print();
 					}
@@ -136,7 +137,6 @@
 						iframe.remove();
 					}, 1000);
 				};
-				iframe.srcdoc = buildPrintDocumentHTML();
 				document.body.appendChild(iframe);
 				notify(printOpenedMessage);
 			});

@@ -3,8 +3,8 @@
 	<div
 		id="{{ .GetID }}"
 		{{ if .Hidden }}hidden{{ end }}
-		{{- range $key, $value := .Values }}
-			data-{{ $key }}="{{ render $.GetContext $value }}"
+		{{- range .Attributes }}
+			data-{{ .Name }}="{{ render $.GetContext .Value }}"
 		{{- end }}
 	></div>
 {{ end }}
