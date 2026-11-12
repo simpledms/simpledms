@@ -10283,6 +10283,27 @@
             "translation": "Se non hai creato questo account utente, accedi ed eliminalo immediatamente.",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
+        },
+        {
+            "id": "Backup code used to sign in",
+            "message": "Backup code used to sign in",
+            "translation": "Codice Backup usato per accedere",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "message": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "translation": "È stato effettuato l'accesso al tuo account con un codice Backup. Ogni codice Backup può essere usato una sola volta.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+            "message": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+            "translation": "Se non hai effettuato l'accesso, rigenera immediatamente i tuoi codici Backup ed elimina i Passkey che non riconosci.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
         }
     ]
 }

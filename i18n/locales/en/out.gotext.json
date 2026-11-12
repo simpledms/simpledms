@@ -352,6 +352,16 @@
             "translation": ""
         },
         {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": ""
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": ""
+        },
+        {
             "id": "Set password",
             "message": "Set password",
             "translation": "Set password"
@@ -370,16 +380,6 @@
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again."
-        },
-        {
-            "id": "Could not verify organization access.",
-            "message": "Could not verify organization access.",
-            "translation": ""
-        },
-        {
-            "id": "Your organization is no longer active. Please contact support.",
-            "message": "Your organization is no longer active. Please contact support.",
-            "translation": ""
         },
         {
             "id": "Passkey setup is required by your organization. Register a passkey now.",
@@ -4861,6 +4861,21 @@
         {
             "id": "If you did not create this user account, sign in and delete it immediately.",
             "message": "If you did not create this user account, sign in and delete it immediately.",
+            "translation": ""
+        },
+        {
+            "id": "Backup code used to sign in",
+            "message": "Backup code used to sign in",
+            "translation": ""
+        },
+        {
+            "id": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "message": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "translation": ""
+        },
+        {
+            "id": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+            "message": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
             "translation": ""
         },
         {

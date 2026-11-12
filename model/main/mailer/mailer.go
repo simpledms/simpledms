@@ -42,11 +42,7 @@ func (qq *Mailer) SignUp(
 	expiresAt time.Time,
 	signInURL string,
 ) {
-	// Use the recipient's selected language without changing the request's language.
-	mailCtx := *ctx.VisitorCtx()
-	mailCtx.Printer = i18n.NewI18n().Printer(accountx.Language.Tag())
-	mailCtx.LanguageBCP47 = accountx.Language.Tag().String()
-	ctx = &mailCtx
+	ctx = qq.recipientLanguageCtx(ctx, accountx)
 
 	// wx.T for translations
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
@@ -146,6 +142,42 @@ func (qq *Mailer) UserCreated(
 	}
 
 	qq.queueMail(ctx, creatorx, subject, template)
+}
+
+// RecoveryCodeSignIn notifies the account owner so that a sign-in with a stolen backup code is noticed.
+func (qq *Mailer) RecoveryCodeSignIn(
+	ctx ctxx.Context,
+	accountx *entmain.Account,
+	recoveryCodesCount int,
+) {
+	// The person signing in may not be the owner, so use the owner's language.
+	ctx = qq.recipientLanguageCtx(ctx, accountx)
+
+	subject := wx.T("Backup code used to sign in").String(ctx)
+	template := EmailTemplate{
+		Title:   subject,
+		Heading: subject,
+		Content: []ContentBlock{
+			TextBlock{Text: wx.T(
+				"Your account was signed in with a backup code. Each backup code can be used only once.",
+			).String(ctx)},
+			TextBlock{Text: wx.Tf("%d backup codes left", recoveryCodesCount).String(ctx)},
+			NoteBlock{Text: wx.T(
+				"If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+			).String(ctx)},
+		},
+		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
+	}
+
+	qq.queueMail(ctx, accountx, subject, template)
+}
+
+// recipientLanguageCtx returns ctx with the recipient's selected language, leaving the request's language unchanged.
+func (qq *Mailer) recipientLanguageCtx(ctx ctxx.Context, accountx *entmain.Account) ctxx.Context {
+	mailCtx := *ctx.VisitorCtx()
+	mailCtx.Printer = i18n.NewI18n().Printer(accountx.Language.Tag())
+	mailCtx.LanguageBCP47 = accountx.Language.Tag().String()
+	return &mailCtx
 }
 
 func (qq *Mailer) formatExpiresAt(ctx ctxx.Context, expiresAt time.Time) string {

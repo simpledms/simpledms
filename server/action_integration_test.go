@@ -27,6 +27,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/mail"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	_ "github.com/simpledms/simpledms/db/entmain/runtime"
@@ -1421,6 +1422,66 @@ func TestPasskeyRecoverySignInCmdRejectsInvalidRecoveryCode(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 0 {
 		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+	if mailCount := harness.mainDB.ReadWriteConn.Mail.Query().CountX(context.Background()); mailCount != 0 {
+		t.Fatalf("expected a rejected backup code to send no mail, got %d", mailCount)
+	}
+}
+
+// Signing in with a backup code notifies the account owner, who may not have been the one signing in.
+func TestPasskeyRecoverySignInCmdNotifiesAccountOwnerByEmail(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "notified-recovery@example.com"
+	createAccount(t, harness.mainDB, email, "supersecret")
+
+	salt, ok := accountutil.RandomSalt()
+	if !ok {
+		t.Fatal("could not generate salt")
+	}
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
+	// SaaS mode requires an active organization for every sign-in method.
+	tenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Recovery tenant", false, true)
+	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.User, true)
+	accountx.Update().
+		SetPasskeyLoginEnabled(true).
+		SetPasskeyRecoveryCodeSalt(salt).
+		SetPasskeyRecoveryCodeHashes([]string{
+			accountutil.PasswordHash("ABCD2345", salt),
+			accountutil.PasswordHash("EFGH6789", salt),
+		}).
+		SaveX(context.Background())
+
+	form := url.Values{}
+	form.Set("Email", email)
+	form.Set("BackupCode", "ABCD-2345")
+	req := httptest.NewRequest(http.MethodPost, "/-/auth/passkey-recovery-sign-in-cmd", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+
+	mails := harness.mainDB.ReadWriteConn.Mail.Query().
+		Where(mail.HasReceiverWith(account.ID(accountx.ID))).
+		AllX(context.Background())
+	if len(mails) != 1 {
+		t.Fatalf("expected one mail to the account owner, got %d", len(mails))
+	}
+	if mails[0].Subject != "Backup code used to sign in" {
+		t.Fatalf("expected backup code notification, got subject %q", mails[0].Subject)
+	}
+	for _, body := range []string{mails[0].Body, mails[0].HTMLBody} {
+		for _, want := range []string{"1 backup codes left", "regenerate your backup codes"} {
+			if !strings.Contains(body, want) {
+				t.Errorf("expected notification to contain %q; body:\n%s", want, body)
+			}
+		}
+		if strings.Contains(body, "ABCD") || strings.Contains(body, "EFGH") {
+			t.Errorf("expected notification to contain no backup code; body:\n%s", body)
+		}
 	}
 }
 

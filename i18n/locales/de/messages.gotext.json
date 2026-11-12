@@ -10004,6 +10004,27 @@
             "translation": "Falls du dieses Benutzerkonto nicht erstellt hast, melde dich an und lösche es sofort.",
             "translatorComment": "Translated from English by Claude",
             "fuzzy": true
+        },
+        {
+            "id": "Backup code used to sign in",
+            "message": "Backup code used to sign in",
+            "translation": "Backup-Code zur Anmeldung verwendet",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "message": "Your account was signed in with a backup code. Each backup code can be used only once.",
+            "translation": "Dein Konto wurde mit einem Backup-Code angemeldet. Jeder Backup-Code kann nur einmal verwendet werden.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
+            "id": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+            "message": "If you did not sign in, immediately regenerate your backup codes and delete any passkeys you do not recognize.",
+            "translation": "Falls du dich nicht angemeldet hast, generiere sofort deine Backup-Codes neu und lösche Passkeys, die du nicht erkennst.",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
         }
     ]
 }

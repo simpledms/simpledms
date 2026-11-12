@@ -6,6 +6,7 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/mailer"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -87,6 +88,7 @@ func (qq *PasskeyRecoverySignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 	}
 
 	recoveryCodesCount := len(updatedAccountx.PasskeyRecoveryCodeHashes)
+	mailer.NewMailer().RecoveryCodeSignIn(ctx, updatedAccountx, recoveryCodesCount)
 	rw.AddRenderables(widget.NewSnackbarf("Signed in. %d backup codes left.", recoveryCodesCount))
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 
